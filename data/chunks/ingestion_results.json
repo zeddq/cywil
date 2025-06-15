@@ -1,0 +1,15 @@
+{
+  "start_time": "2025-06-14T23:02:55.784776",
+  "statutes": {
+    "KC": {
+      "status": "error",
+      "error": "[Errno 111] Connection refused"
+    },
+    "KPC": {
+      "status": "error",
+      "error": "[Errno 111] Connection refused"
+    }
+  },
+  "end_time": "2025-06-14T23:03:59.021375",
+  "total_duration": "0:01:03.236599"
+}
