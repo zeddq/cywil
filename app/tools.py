@@ -11,9 +11,15 @@ from sqlalchemy import select
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 import re
+import logging
+
+# Initialize logging
+logger = logging.getLogger(__name__)
 
 # Initialize clients
+logger.info("Loading SentenceTransformer model from Hugging Face")
 embedder = SentenceTransformer('paraphrase-multilingual-mpnet-base-v2')
+logger.info("Initializing ChatOpenAI client")
 llm = ChatOpenAI(model="gpt-4-turbo-preview", temperature=0.1)
 
 # Qdrant client initialization (will be configured from env)
@@ -22,6 +28,7 @@ qdrant_client = None
 def init_vector_db(host: str = "localhost", port: int = 6333):
     """Initialize Qdrant client"""
     global qdrant_client
+    logger.info(f"Connecting to Qdrant vector database at {host}:{port}")
     qdrant_client = QdrantClient(host=host, port=port)
 
 async def search_statute(query: str, top_k: int = 5, code: Optional[str] = None) -> List[Dict[str, Any]]:
@@ -29,7 +36,71 @@ async def search_statute(query: str, top_k: int = 5, code: Optional[str] = None)
     Hybrid BM25+vector search over KC/KPC chunks.
     Returns JSON with article, text, and citation.
     """
+    # Auto-initialize Qdrant client if not already done
+    global qdrant_client
+    if qdrant_client is None:
+        from .config import settings
+        logger.warning(f"Qdrant client not initialized, auto-initializing now (host: {settings.qdrant_host}, port: {settings.qdrant_port})")
+        init_vector_db(settings.qdrant_host, settings.qdrant_port)
+    
+    # Check if query is looking for a specific article
+    article_pattern = r'art\.?\s*(\d+[\w§]*)\s*(KC|KPC|k\.c\.|k\.p\.c\.)?'
+    article_match = re.search(article_pattern, query, re.IGNORECASE)
+    
+    if article_match:
+        article_num = article_match.group(1)
+        requested_code = article_match.group(2)
+        
+        # Normalize code if provided
+        if requested_code:
+            requested_code = requested_code.upper().replace('K.C.', 'KC').replace('K.P.C.', 'KPC')
+            code = requested_code
+        
+        # First try exact match
+        logger.info(f"Attempting exact match for article {article_num} {code or ''}")
+        
+        # Build filter for exact article match
+        must_conditions = [FieldCondition(key="article", match=MatchValue(value=article_num))]
+        if code:
+            must_conditions.append(FieldCondition(key="code", match=MatchValue(value=code)))
+        
+        exact_filter = Filter(must=must_conditions)
+        
+        # Try to find exact match
+        exact_results = qdrant_client.scroll(
+            collection_name="statutes",
+            scroll_filter=exact_filter,
+            limit=1,
+            with_payload=True
+        )
+        
+        if exact_results[0]:
+            # Found exact match, return it first
+            exact_match = exact_results[0][0]
+            formatted_exact = {
+                "article": exact_match.payload.get("article"),
+                "text": exact_match.payload.get("text"),
+                "citation": f"art. {exact_match.payload.get('article')} {exact_match.payload.get('code')}",
+                "score": 1.0  # Perfect match
+            }
+            
+            # If only one result requested, return just the exact match
+            if top_k == 1:
+                return [formatted_exact]
+            
+            # Otherwise, also get similar articles using vector search
+            remaining_k = top_k - 1
+            logger.info(f"Found exact match, searching for {remaining_k} similar articles")
+        else:
+            logger.info("No exact match found, falling back to vector search")
+            remaining_k = top_k
+            formatted_exact = None
+    else:
+        remaining_k = top_k
+        formatted_exact = None
+    
     # Generate embedding for the query
+    logger.info(f"Generating embedding for query: {query[:100]}...")
     query_embedding = embedder.encode(query).tolist()
     
     # Build filter if specific code requested
@@ -40,17 +111,28 @@ async def search_statute(query: str, top_k: int = 5, code: Optional[str] = None)
         )
     
     # Search in vector database
+    logger.info(f"Searching Qdrant vector database for {remaining_k} results")
     results = qdrant_client.search(
         collection_name="statutes",
         query_vector=query_embedding,
         query_filter=search_filter,
-        limit=top_k,
+        limit=remaining_k,
         with_payload=True
     )
     
     # Format results
     formatted_results = []
+    
+    # Add exact match first if found
+    if formatted_exact:
+        formatted_results.append(formatted_exact)
+    
+    # Add vector search results
     for result in results:
+        # Skip if this is the same as our exact match
+        if formatted_exact and result.payload.get("article") == formatted_exact["article"] and result.payload.get("code") == formatted_exact["citation"].split()[-1]:
+            continue
+            
         formatted_results.append({
             "article": result.payload.get("article"),
             "text": result.payload.get("text"),
@@ -58,7 +140,7 @@ async def search_statute(query: str, top_k: int = 5, code: Optional[str] = None)
             "score": result.score
         })
     
-    return formatted_results
+    return formatted_results[:top_k]
 
 async def summarize_passages(passages: List[Dict[str, Any]]) -> str:
     """
@@ -84,6 +166,7 @@ Podsumowanie:""",
         input_variables=["passages"]
     )
     
+    logger.info("Calling OpenAI API for passage summarization")
     response = await llm.ainvoke(prompt.format(passages=passages_text))
     return response.content
 
@@ -171,6 +254,7 @@ Wpłaty należy dokonać na rachunek bankowy:
     # Generate justification if needed
     if "{justification}" in filled_template:
         justification_prompt = f"Napisz uzasadnienie dla {doc_type} na podstawie: {json.dumps(facts, ensure_ascii=False)}"
+        logger.info("Calling OpenAI API to generate document justification")
         justification = await llm.ainvoke(justification_prompt)
         filled_template = filled_template.replace("{justification}", justification.content)
     
@@ -220,6 +304,7 @@ Cytowany przepis - {search_results[0]['citation']}: {article_text}
 
 Czy cytat jest prawidłowy? Odpowiedz TAK lub NIE i podaj krótkie uzasadnienie."""
             
+            logger.info("Calling OpenAI API to validate document citation")
             validation_response = await llm.ainvoke(validation_prompt)
             if "NIE" in validation_response.content:
                 validation_results["is_valid"] = False

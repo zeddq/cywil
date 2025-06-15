@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 class ArticleChunk:
     """Represents a single article or section from the legal code"""
     code: str  # KC or KPC
-    article_num: str  # e.g., "415", "415¹", "415§2"
+    article: str  # e.g., "415", "415¹", "415§2"
     title: Optional[str]  # Article title if present
     content: str  # Full text of the article
     section: Optional[str]  # Section/Book this article belongs to
@@ -125,7 +125,7 @@ class PolishStatuteParser:
             if len(preamble) > 100:  # Only if substantial
                 chunks.append(ArticleChunk(
                     code=self.code_type,
-                    article_num="Preambuła",
+                    article="Preambuła",
                     title="Preambuła",
                     content=preamble,
                     section=self._get_current_section_path(),
@@ -138,7 +138,7 @@ class PolishStatuteParser:
         # Process each article
         i = 1
         while i < len(article_splits) - 1:
-            article_num = article_splits[i]
+            article = article_splits[i]
             article_content = article_splits[i + 1]
             
             # Find the end of this article (start of next article or end of text)
@@ -168,10 +168,10 @@ class PolishStatuteParser:
             if paragraphs:
                 # Create separate chunks for each paragraph
                 for para_num, para_content in paragraphs.items():
-                    chunk_id = f"{article_num}§{para_num}" if para_num != "main" else article_num
+                    chunk_id = f"{article}§{para_num}" if para_num != "main" else article
                     chunks.append(ArticleChunk(
                         code=self.code_type,
-                        article_num=chunk_id,
+                        article=chunk_id,
                         title=self._extract_article_title(article_text),
                         content=para_content,
                         section=self._get_current_section_path(),
@@ -184,7 +184,7 @@ class PolishStatuteParser:
                 # Single chunk for the entire article
                 chunks.append(ArticleChunk(
                     code=self.code_type,
-                    article_num=article_num,
+                    article=article,
                     title=self._extract_article_title(article_text),
                     content=article_text.strip(),
                     section=self._get_current_section_path(),
@@ -372,7 +372,7 @@ class StatuteChunker:
         
         for article in articles:
             # Create chunk ID with hierarchy information
-            chunk_base_id = f"{article.code}_art_{article.article_num}"
+            chunk_base_id = f"{article.code}_art_{article.article}"
             
             # Include hierarchy in chunk for better search
             hierarchy_text = ""
@@ -386,7 +386,7 @@ class StatuteChunker:
                     "text": hierarchy_text + article.content,
                     "metadata": {
                         "code": article.code,
-                        "article_num": article.article_num,
+                        "article": article.article,
                         "title": article.title,
                         "section": article.section,
                         **article.metadata
@@ -402,7 +402,7 @@ class StatuteChunker:
                         "text": hierarchy_text + sub_chunk,
                         "metadata": {
                             "code": article.code,
-                            "article_num": article.article_num,
+                            "article": article.article,
                             "title": article.title,
                             "section": article.section,
                             "part": f"{i+1}/{len(sub_chunks)}",
@@ -530,7 +530,7 @@ if __name__ == "__main__":
     articles = parser._parse_text(test_text)
     
     for article in articles:
-        print(f"\nArticle {article.article_num}:")
+        print(f"\nArticle {article.article}:")
         print(f"  Section: {article.section}")
         print(f"  Hierarchy: {article.metadata.get('hierarchy', {})}")
         print(f"  Content preview: {article.content[:100]}...")

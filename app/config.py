@@ -15,19 +15,19 @@ class Settings(BaseSettings):
     openai_model: str = "gpt-4o"
     
     # Vector Database Configuration
-    qdrant_host: str = os.getenv("QDRANT_HOST", "qdrant")
+    qdrant_host: str = os.getenv("QDRANT_HOST", "localhost")
     qdrant_port: int = int(os.getenv("QDRANT_PORT", "6333"))
     qdrant_collection: str = "statutes"
     
     # PostgreSQL Configuration
-    postgres_host: str = os.getenv("POSTGRES_HOST", "postgres")
+    postgres_host: str = os.getenv("POSTGRES_HOST", "localhost")
     postgres_port: int = int(os.getenv("POSTGRES_PORT", "5432"))
     postgres_db: str = os.getenv("POSTGRES_DB", "paralegal")
     postgres_user: str = os.getenv("POSTGRES_USER", "paralegal")
     postgres_password: str = os.getenv("POSTGRES_PASSWORD", "paralegal")
     
     # Redis Configuration
-    redis_host: str = os.getenv("REDIS_HOST", "redis")
+    redis_host: str = os.getenv("REDIS_HOST", "localhost")
     redis_port: int = int(os.getenv("REDIS_PORT", "6379"))
     
     # Security

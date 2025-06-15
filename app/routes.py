@@ -4,7 +4,7 @@ from typing import List, Optional, Dict, Any
 from pydantic import BaseModel
 from datetime import datetime, timedelta
 import os
-from .orchestrator_simple import SimpleParalegalAgent as ParalegalAgent
+from .orchestrator import ParalegalAgent
 from .database import get_db, init_db
 from .models import Case, Document, Deadline, Note
 from .config import settings
@@ -87,7 +87,7 @@ async def chat(request: ChatRequest, db: AsyncSession = Depends(get_db)):
                 request.message = f"[Context for case {request.case_id}: {json.dumps(context)}]\n\n{request.message}"
         logger.info(f"Request message: {request.message}")
         # Process message
-        result = await agent.process_message(request.message, request.thread_id)
+        result = await agent.process_message(request.message, request.thread_id, request.case_id)
         logger.info(f"Result: {result}")
         # Save interaction to case if provided
         if request.case_id and result["status"] == "success":

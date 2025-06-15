@@ -7,6 +7,11 @@ import requests
 import json
 import argparse
 from typing import Dict, Any
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class ConversationRetriever:
     """Retrieve current conversation from the API"""
@@ -51,6 +56,7 @@ class ConversationRetriever:
                     "thread_id": thread_id
                 }
                 
+                logger.info(f"Making HTTP POST request to {self.base_url}/chat")
                 response = self.session.post(
                     f"{self.base_url}/chat",
                     json=payload,

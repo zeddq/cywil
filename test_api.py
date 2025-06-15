@@ -8,6 +8,11 @@ import json
 import argparse
 import sys
 from typing import Optional, Dict, Any
+import logging
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class ParalegalAPIClient:
     """Client for interacting with the AI Paralegal API"""
@@ -24,6 +29,7 @@ class ParalegalAPIClient:
             "case_id": case_id
         }
         
+        logger.info(f"Making HTTP POST request to {self.base_url}/chat")
         response = self.session.post(
             f"{self.base_url}/chat",
             json=payload,
@@ -35,6 +41,7 @@ class ParalegalAPIClient:
     
     def query_documents(self, query: str) -> Dict[str, Any]:
         """Query the document database"""
+        logger.info(f"Making HTTP POST request to {self.base_url}/query")
         response = self.session.post(
             f"{self.base_url}/query",
             params={"query": query},
@@ -46,6 +53,7 @@ class ParalegalAPIClient:
     
     def create_case(self, case_data: Dict[str, Any]) -> Dict[str, Any]:
         """Create a new legal case"""
+        logger.info(f"Making HTTP POST request to {self.base_url}/cases")
         response = self.session.post(
             f"{self.base_url}/cases",
             json=case_data,
@@ -59,6 +67,7 @@ class ParalegalAPIClient:
         """List all cases"""
         params = {"status": status} if status else {}
         
+        logger.info(f"Making HTTP GET request to {self.base_url}/cases")
         response = self.session.get(
             f"{self.base_url}/cases",
             params=params
@@ -161,6 +170,7 @@ def run_examples(client: ParalegalAPIClient):
         
         case = client.create_case(case_data)
         print(f"Created case: {case['case_number']} (ID: {case['id']})")
+        print(f"\nCase data: {case_data}")
         
         # Test chat with case context
         test_chat_api(

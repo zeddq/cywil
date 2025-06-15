@@ -59,7 +59,7 @@ check_services() {
 run_ingestion() {
     print_header "Running Data Ingestion Pipeline"
     
-    docker-compose exec api python ingest/ingest_pipeline.py
+    docker-compose exec -e POSTGRES_HOST=postgres -e REDIS_HOST=redis api python ingest/ingest_pipeline.py --qdrant-host=qdrant --qdrant-port=6333
     
     print_success "Ingestion completed"
 }
@@ -68,7 +68,7 @@ run_ingestion() {
 validate_ingestion() {
     print_header "Validating Ingestion"
     
-    docker-compose exec api python ingest/ingest_pipeline.py --validate-only
+    docker-compose exec -e POSTGRES_HOST=postgres -e REDIS_HOST=redis api python ingest/ingest_pipeline.py --validate-only --qdrant-host=qdrant --qdrant-port=6333
     
     print_success "Validation completed"
 }
@@ -135,6 +135,122 @@ quick_question_cli() {
     docker-compose exec api python test_cli.py -q "$1"
 }
 
+# Search documents using search_documents() function
+search_documents() {
+    if [ -z "$1" ]; then
+        echo "Usage: $0 search \"Your search query here\""
+        exit 1
+    fi
+    
+    print_header "Searching Documents"
+    
+    docker-compose exec -e POSTGRES_HOST=postgres -e REDIS_HOST=redis api python -c "
+import sys
+sys.path.append('/app')
+from app.tools import search_documents
+import json
+
+query = '$1'
+print(f'Searching for: {query}')
+print('-' * 50)
+
+results = search_documents(query)
+if results:
+    for i, result in enumerate(results, 1):
+        print(f'{i}. {result.get(\"citation\", \"N/A\")}')
+        print(f'   Score: {result.get(\"score\", \"N/A\"):.4f}')
+        print(f'   Text: {result.get(\"text\", \"N/A\")[:200]}...')
+        print()
+else:
+    print('No results found.')
+"
+}
+
+# Get audit records using orchestrator's get_audit_records() function
+get_audit_records() {
+    print_header "Getting Audit Records"
+    
+    # Parse optional arguments
+    THREAD_ID=""
+    CASE_ID=""
+    LIMIT=""
+    
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --thread-id)
+                THREAD_ID="$2"
+                shift 2
+                ;;
+            --case-id)
+                CASE_ID="$2"
+                shift 2
+                ;;
+            --limit)
+                LIMIT="$2"
+                shift 2
+                ;;
+            *)
+                echo "Unknown option: $1"
+                echo "Usage: $0 audit [--thread-id THREAD_ID] [--case-id CASE_ID] [--limit LIMIT]"
+                exit 1
+                ;;
+        esac
+    done
+    
+    docker-compose exec -e POSTGRES_HOST=postgres -e REDIS_HOST=redis api python -c "
+import sys
+import asyncio
+sys.path.append('/app')
+from app.orchestrator import ParalegalAgent
+import json
+
+async def get_audits():
+    agent = ParalegalAgent()
+    
+    # Build arguments dictionary
+    kwargs = {}
+    if '$THREAD_ID':
+        kwargs['thread_id'] = '$THREAD_ID'
+    if '$CASE_ID':
+        kwargs['case_id'] = '$CASE_ID'
+    if '$LIMIT':
+        kwargs['limit'] = int('$LIMIT')
+    
+    print('Getting audit records with arguments:', kwargs)
+    print('-' * 50)
+    
+    try:
+        records = await agent.get_audit_records(**kwargs)
+        
+        if records:
+            for i, record in enumerate(records, 1):
+                print(f'{i}. Interaction: {record.get(\"interaction_id\", \"N/A\")}')
+                print(f'   Status: {record.get(\"status\", \"N/A\")}')
+                print(f'   Duration: {record.get(\"duration_seconds\", 0):.2f}s')
+                print(f'   User Message: {record.get(\"user_message\", \"N/A\")[:100]}...')
+                print(f'   Case ID: {record.get(\"case_id\", \"None\")}')
+                print(f'   Thread ID: {record.get(\"thread_id\", \"N/A\")}')
+                
+                # Count tool calls in audit trail
+                tool_calls = [entry for entry in record.get('audit_trail', []) if entry.get('type') == 'tool_call']
+                print(f'   Tool Calls: {len(tool_calls)}')
+                
+                for tool in tool_calls:
+                    status = tool.get('status', 'unknown')
+                    exec_time = tool.get('execution_time_seconds', 0)
+                    print(f'     - {tool.get(\"tool_name\", \"unknown\")}: {status} ({exec_time:.2f}s)')
+                
+                print()
+        else:
+            print('No audit records found.')
+            
+    except Exception as e:
+        print(f'Error: {str(e)}')
+
+asyncio.run(get_audits())
+"
+}
+
 # Show usage
 show_usage() {
     echo "AI Paralegal Testing Script"
@@ -154,12 +270,18 @@ show_usage() {
     echo "  chat-cli           - Interactive chat via CLI"
     echo "  ask \"question\"     - Quick question via API"
     echo "  ask-cli \"question\" - Quick question via CLI"
+    echo "  search \"query\"     - Search documents using search_documents()"
+    echo "  audit [options]    - Get audit records from orchestrator"
     echo "  logs               - Show service logs"
     echo "  help               - Show this help"
     echo ""
     echo "Examples:"
     echo "  $0 start"
     echo "  $0 ask \"Jakie są terminy apelacji?\""
+    echo "  $0 search \"roszczenie o zapłatę\""
+    echo "  $0 audit --limit 5"
+    echo "  $0 audit --case-id case_123 --limit 10"
+    echo "  $0 audit --thread-id thread_abc"
     echo "  $0 chat-api"
     echo "  $0 test-api"
 }
@@ -217,6 +339,15 @@ case "${1:-help}" in
     "ask-cli")
         check_services
         quick_question_cli "$2"
+        ;;
+    "search")
+        check_services
+        search_documents "$2"
+        ;;
+    "audit")
+        check_services
+        shift  # Remove 'audit' from arguments
+        get_audit_records "$@"
         ;;
     "logs")
         docker-compose logs -f "${2:-api}"

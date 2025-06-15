@@ -3,6 +3,7 @@ import asyncio
 from openai import AsyncOpenAI
 import json
 from datetime import datetime
+import logging
 from .tools import (
     search_statute,
     summarize_passages, 
@@ -17,6 +18,9 @@ from .database import get_db, AsyncSessionLocal
 from .models import Case, Document, Deadline, Note
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+
+# Initialize logging
+logger = logging.getLogger(__name__)
 
 # Initialize OpenAI client
 client = AsyncOpenAI(api_key=settings.openai_api_key) if settings.openai_api_key else None
@@ -136,6 +140,7 @@ class SimpleParalegalAgent:
             messages.extend(self.conversation_history[-10:])
             
             # Call OpenAI Chat Completion with tools
+            logger.info("Calling OpenAI API for chat completion with tools")
             response = await client.chat.completions.create(
                 model=settings.openai_model,
                 messages=messages,
@@ -189,6 +194,7 @@ class SimpleParalegalAgent:
                 messages = [{"role": "system", "content": SYSTEM_PROMPT}]
                 messages.extend(self.conversation_history[-15:])  # Include more context with tool results
                 
+                logger.info("Calling OpenAI API for final response with tool results")
                 final_response = await client.chat.completions.create(
                     model=settings.openai_model,
                     messages=messages

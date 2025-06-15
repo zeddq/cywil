@@ -293,6 +293,7 @@ class StatuteIngestionPipeline:
                         code=test["code"]
                     )
                 )
+                print(f"Results: {results}")
                 
                 found_articles = [r["article"] for r in results]
                 expected_found = any(
@@ -340,7 +341,7 @@ def main():
     )
     parser.add_argument(
         "--qdrant-host",
-        default="qdrant",
+        default="localhost",
         help="Qdrant server host"
     )
     parser.add_argument(

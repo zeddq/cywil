@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 class ArticleChunk:
     """Represents a single article or section from the legal code"""
     code: str  # KC or KPC
-    article_num: str  # e.g., "415", "415¹", "415§2"
+    article: str  # e.g., "415", "415¹", "415§2"
     title: Optional[str]  # Article title if present
     content: str  # Full text of the article
     section: Optional[str]  # Section/Book this article belongs to
@@ -97,7 +97,7 @@ class PolishStatuteParser:
             if len(preamble) > 100:  # Only if substantial
                 chunks.append(ArticleChunk(
                     code=self.code_type,
-                    article_num="Preambuła",
+                    article="Preambuła",
                     title="Preambuła",
                     content=preamble,
                     section=None,
@@ -107,7 +107,7 @@ class PolishStatuteParser:
         # Process each article
         i = 1
         while i < len(article_splits) - 1:
-            article_num = article_splits[i]
+            article = article_splits[i]
             article_content = article_splits[i + 1]
             
             # Find the end of this article (start of next article or end of text)
@@ -134,10 +134,10 @@ class PolishStatuteParser:
             if paragraphs:
                 # Create separate chunks for each paragraph
                 for para_num, para_content in paragraphs.items():
-                    chunk_id = f"{article_num}§{para_num}" if para_num != "main" else article_num
+                    chunk_id = f"{article}§{para_num}" if para_num != "main" else article
                     chunks.append(ArticleChunk(
                         code=self.code_type,
-                        article_num=chunk_id,
+                        article=chunk_id,
                         title=self._extract_article_title(article_text),
                         content=para_content,
                         section=self.current_section,
@@ -152,7 +152,7 @@ class PolishStatuteParser:
                 # Single chunk for the entire article
                 chunks.append(ArticleChunk(
                     code=self.code_type,
-                    article_num=article_num,
+                    article=article,
                     title=self._extract_article_title(article_text),
                     content=article_text.strip(),
                     section=self.current_section,
@@ -260,7 +260,7 @@ class StatuteChunker:
     
     def _article_to_chunk(self, article: ArticleChunk, sub_index: int = 0) -> Dict:
         """Convert ArticleChunk to chunk dictionary"""
-        chunk_id = f"{article.code}_art_{article.article_num}"
+        chunk_id = f"{article.code}_art_{article.article}"
         if sub_index > 0:
             chunk_id += f"_part{sub_index}"
         
@@ -269,7 +269,7 @@ class StatuteChunker:
             "text": article.content,
             "metadata": {
                 "code": article.code,
-                "article": article.article_num,
+                "article": article.article,
                 "title": article.title,
                 "section": article.section,
                 **article.metadata,
@@ -295,7 +295,7 @@ class StatuteChunker:
                     # Save current chunk
                     chunk_article = ArticleChunk(
                         code=article.code,
-                        article_num=article.article_num,
+                        article=article.article,
                         title=article.title,
                         content=current_chunk.strip(),
                         section=article.section,
@@ -316,7 +316,7 @@ class StatuteChunker:
         if current_chunk.strip():
             chunk_article = ArticleChunk(
                 code=article.code,
-                article_num=article.article_num,
+                article=article.article,
                 title=article.title,
                 content=current_chunk.strip(),
                 section=article.section,

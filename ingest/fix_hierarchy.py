@@ -45,7 +45,7 @@ def compare_parsers(pdf_path: str):
         if chunk.section:
             old_sections.add(chunk.section)
         if 'chapter' in chunk.metadata:
-            print(f"  Article {chunk.article_num}: Chapter={chunk.metadata.get('chapter')}, Book={chunk.metadata.get('book')}")
+            print(f"  Article {chunk.article}: Chapter={chunk.metadata.get('chapter')}, Book={chunk.metadata.get('book')}")
     
     print("\nNew Parser Structure:")
     new_sections = set()
@@ -53,7 +53,7 @@ def compare_parsers(pdf_path: str):
         if chunk.section:
             new_sections.add(chunk.section)
         hierarchy = chunk.metadata.get('hierarchy', {})
-        print(f"  Article {chunk.article_num}: {chunk.section or 'No section'}")
+        print(f"  Article {chunk.article}: {chunk.section or 'No section'}")
         print(f"    Part: {hierarchy.get('part')} {hierarchy.get('part_name') or ''}")
         print(f"    Division: {hierarchy.get('division')} {hierarchy.get('division_name') or ''}")
         print(f"    Chapter: {hierarchy.get('chapter')} {hierarchy.get('chapter_name') or ''}")
@@ -80,7 +80,7 @@ def update_existing_chunks():
             # Group by article for efficient processing
             articles_map = {}
             for chunk in chunks:
-                article_key = f"{chunk.code}_{chunk.article_num}"
+                article_key = f"{chunk.code}_{chunk.article}"
                 if article_key not in articles_map:
                     articles_map[article_key] = []
                 articles_map[article_key].append(chunk)
