@@ -77,7 +77,7 @@ class StatuteIngestionPipeline:
         downloaded = {}
         
         for code, info in sources.items():
-            output_path = Path(self.config["pdfs_dir"]) / info["filename"]
+            output_path = Path(self.config["pdfs_dir"]) / "statutes" / info["filename"]
             
             if output_path.exists():
                 logger.info(f"{code} PDF already exists at {output_path}")

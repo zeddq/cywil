@@ -73,72 +73,11 @@ validate_ingestion() {
     print_success "Validation completed"
 }
 
-# Test CLI (direct Python)
-test_cli() {
-    print_header "Testing CLI Interface"
-    
-    echo -e "${YELLOW}Running example CLI queries...${NC}"
-    docker-compose exec api python test_cli.py --examples
-    
-    print_success "CLI tests completed"
-}
-
-# Test API endpoints
-test_api() {
-    print_header "Testing API Endpoints"
-    
-    echo -e "${YELLOW}Running API tests...${NC}"
-    python test_api.py --examples --base-url "$API_URL"
-    
-    print_success "API tests completed"
-}
-
-# Interactive chat via API
-interactive_api() {
-    print_header "Starting Interactive API Chat"
-    
-    echo -e "${YELLOW}Starting interactive mode...${NC}"
-    echo -e "${YELLOW}Use 'quit' to exit${NC}"
-    python test_api.py -i --base-url "$API_URL"
-}
-
-# Interactive chat via CLI
-interactive_cli() {
-    print_header "Starting Interactive CLI Chat"
-    
-    echo -e "${YELLOW}Starting interactive mode...${NC}"
-    echo -e "${YELLOW}Use 'quit' to exit${NC}"
-    docker-compose exec api python test_cli.py -i
-}
-
-# Quick question via API
-quick_question() {
-    if [ -z "$1" ]; then
-        echo "Usage: $0 ask \"Your question here\""
-        exit 1
-    fi
-    
-    print_header "Quick Question"
-    
-    python test_api.py -c "$1" --base-url "$API_URL"
-}
-
-# Quick question via CLI
-quick_question_cli() {
-    if [ -z "$1" ]; then
-        echo "Usage: $0 ask-cli \"Your question here\""
-        exit 1
-    fi
-    
-    print_header "Quick Question (CLI)"
-    
-    docker-compose exec api python test_cli.py -q "$1"
-}
-
-# Search documents using search_documents() function
+# Search documents using internal search_documents() function
+# This bypasses the API for direct testing
 search_documents() {
     if [ -z "$1" ]; then
-        echo "Usage: $0 search \"Your search query here\""
+        echo "Usage: $0 search "Your search query here""
         exit 1
     fi
     
@@ -163,6 +102,9 @@ if results:
         print()
 else:
     print('No results found.')
+
+print("For API testing, use the dedicated 'test_api.py' script.")
+echo "Example: python test_api.py --help"
 "
 }
 
@@ -264,12 +206,6 @@ show_usage() {
     echo "  status             - Check service status"
     echo "  ingest             - Run data ingestion pipeline"
     echo "  validate           - Validate ingestion results"
-    echo "  test-cli           - Test CLI interface"
-    echo "  test-api           - Test API endpoints"
-    echo "  chat-api           - Interactive chat via API"
-    echo "  chat-cli           - Interactive chat via CLI"
-    echo "  ask \"question\"     - Quick question via API"
-    echo "  ask-cli \"question\" - Quick question via CLI"
     echo "  search \"query\"     - Search documents using search_documents()"
     echo "  audit [options]    - Get audit records from orchestrator"
     echo "  logs               - Show service logs"
@@ -277,16 +213,18 @@ show_usage() {
     echo ""
     echo "Examples:"
     echo "  $0 start"
-    echo "  $0 ask \"Jakie są terminy apelacji?\""
     echo "  $0 search \"roszczenie o zapłatę\""
     echo "  $0 audit --limit 5"
     echo "  $0 audit --case-id case_123 --limit 10"
     echo "  $0 audit --thread-id thread_abc"
-    echo "  $0 chat-api"
-    echo "  $0 test-api"
 }
 
-# Main script logic
+# Main execution block
+if [ -z "$1" ]; then
+    show_usage
+    exit 1
+fi
+
 case "${1:-help}" in
     "start")
         print_header "Starting Services"
@@ -316,41 +254,17 @@ case "${1:-help}" in
         check_services
         validate_ingestion
         ;;
-    "test-cli")
-        check_services
-        test_cli
-        ;;
-    "test-api")
-        check_services
-        test_api
-        ;;
-    "chat-api")
-        check_services
-        interactive_api
-        ;;
-    "chat-cli")
-        check_services
-        interactive_cli
-        ;;
-    "ask")
-        check_services
-        quick_question "$2"
-        ;;
-    "ask-cli")
-        check_services
-        quick_question_cli "$2"
-        ;;
     "search")
-        check_services
-        search_documents "$2"
+        shift
+        search_documents "$@"
         ;;
     "audit")
-        check_services
-        shift  # Remove 'audit' from arguments
+        shift
         get_audit_records "$@"
         ;;
     "logs")
-        docker-compose logs -f "${2:-api}"
+        shift
+        docker-compose logs -f "$@"
         ;;
     "help"|*)
         show_usage

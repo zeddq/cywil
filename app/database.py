@@ -34,7 +34,8 @@ async def get_db():
         try:
             yield session
             await session.commit()
-        except Exception:
+        except Exception as e:
+            logger.error(f"Error in get_db: {e}")
             await session.rollback()
             raise
         finally:

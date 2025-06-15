@@ -170,14 +170,52 @@ Podsumowanie:""",
     response = await llm.ainvoke(prompt.format(passages=passages_text))
     return response.content
 
+async def find_template(template_type: str) -> Optional[Dict[str, Any]]:
+    """
+    Find template by type from database
+    """
+    from .database import sync_engine
+    from .models import Template
+    from sqlalchemy.orm import sessionmaker
+    
+    Session = sessionmaker(bind=sync_engine)
+    session = Session()
+    
+    try:
+        template = session.query(Template).filter_by(template_type=template_type).first()
+        if template:
+            return {
+                'id': template.id,
+                'name': template.name,
+                'type': template.template_type,
+                'content': template.content,
+                'variables': template.variables,
+                'description': template.description
+            }
+        return None
+    finally:
+        session.close()
+
 async def draft_document(doc_type: str, facts: Dict[str, Any], goals: List[str]) -> Dict[str, Any]:
     """
     Generate legal documents based on type, facts, and goals.
-    Supports: pozew, wezwanie do zapłaty, odpowiedź na pozew, etc.
+    First tries to use database templates, falls back to hardcoded ones.
     """
-    # Document templates
-    templates = {
-        "pozew_upominawczy": """POZEW W POSTĘPOWANIU UPOMINAWCZYM
+    # Try to find template in database first
+    db_template = await find_template(doc_type)
+    
+    if db_template:
+        logger.info(f"Using database template for {doc_type}")
+        template_content = db_template['content']
+        template_variables = db_template['variables']
+        
+        # Update usage tracking
+        await _update_template_usage(db_template['id'])
+    else:
+        # Fall back to hardcoded templates
+        logger.info(f"No database template found for {doc_type}, using hardcoded template")
+        hardcoded_templates = {
+            "pozew_upominawczy": """POZEW W POSTĘPOWANIU UPOMINAWCZYM
 
 Sąd Rejonowy w {court_location}
 Wydział {court_division} Cywilny
@@ -210,8 +248,8 @@ Załączniki:
 
 {signature}
 {date}""",
-        
-        "wezwanie_do_zaplaty": """WEZWANIE DO ZAPŁATY
+            
+            "wezwanie_do_zaplaty": """WEZWANIE DO ZAPŁATY
 
 {creditor_name}
 {creditor_address}
@@ -235,19 +273,20 @@ Wpłaty należy dokonać na rachunek bankowy:
 {bank_account}
 
 {signature}"""
-    }
+        }
+        
+        template_content = hardcoded_templates.get(doc_type, "")
+        template_variables = []
+        
+        if not template_content:
+            return {"error": f"No template found for document type: {doc_type}"}
     
     # Get relevant statutes for the document type
     statute_query = f"{doc_type} wymogi formalne przepisy"
     relevant_statutes = await search_statute(statute_query, top_k=3)
     
-    # Generate document content
-    template = templates.get(doc_type, "")
-    if not template:
-        return {"error": f"Unsupported document type: {doc_type}"}
-    
     # Fill template with facts
-    filled_template = template
+    filled_template = template_content
     for key, value in facts.items():
         filled_template = filled_template.replace(f"{{{key}}}", str(value))
     
@@ -262,12 +301,58 @@ Wpłaty należy dokonać na rachunek bankowy:
         "document_type": doc_type,
         "content": filled_template,
         "citations": [s["citation"] for s in relevant_statutes],
+        "template_variables": template_variables,
         "metadata": {
             "created_at": datetime.now().isoformat(),
             "facts": facts,
-            "goals": goals
+            "goals": goals,
+            "template_source": "database" if db_template else "hardcoded"
         }
     }
+
+async def _update_template_usage(template_id: str):
+    """Update template usage statistics"""
+    from .database import sync_engine
+    from .models import Template
+    from sqlalchemy.orm import sessionmaker
+    
+    Session = sessionmaker(bind=sync_engine)
+    session = Session()
+    
+    try:
+        template = session.query(Template).filter_by(id=template_id).first()
+        if template:
+            template.usage_count = (template.usage_count or 0) + 1
+            template.last_used = datetime.now()
+            session.commit()
+    finally:
+        session.close()
+
+async def list_available_templates() -> List[Dict[str, Any]]:
+    """List all available templates"""
+    from .database import sync_engine
+    from .models import Template
+    from sqlalchemy.orm import sessionmaker
+    
+    Session = sessionmaker(bind=sync_engine)
+    session = Session()
+    
+    try:
+        templates = session.query(Template).all()
+        return [
+            {
+                'id': t.id,
+                'name': t.name,
+                'type': t.template_type,
+                'description': t.description,
+                'variables': t.variables,
+                'usage_count': t.usage_count,
+                'last_used': t.last_used.isoformat() if t.last_used else None
+            }
+            for t in templates
+        ]
+    finally:
+        session.close()
 
 async def validate_against_statute(draft: str, citations: List[str]) -> Dict[str, Any]:
     """

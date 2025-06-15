@@ -144,17 +144,37 @@ async def upload_document(
 @app.post("/cases", response_model=Dict[str, Any])
 async def create_case(case: CaseCreate, db: AsyncSession = Depends(get_db)):
     """Create a new legal case"""
-    db_case = Case(**case.dict())
-    db.add(db_case)
-    await db.commit()
-    await db.refresh(db_case)
-    
-    return {
-        "id": db_case.id,
-        "case_number": db_case.case_number,
-        "title": db_case.title,
-        "created_at": db_case.created_at.isoformat()
-    }
+    db_case = Case(**case.model_dump(exclude_unset=True))
+    try:
+        db.add(db_case)
+        await db.commit()
+        await db.refresh(db_case)
+        logger.info(f"Created case: {db_case.id}")
+        return {
+            "id": db_case.id,
+            "case_number": db_case.case_number,
+            "title": db_case.title,
+            "created_at": db_case.created_at.isoformat()
+        }
+    except Exception as e:
+        # get the DB case and update the case
+        db_case = await db.execute(select(Case).where(Case.id == db_case.id))
+        db_case = db_case.scalar_one_or_none()
+        if db_case:
+            for key, value in case.model_dump(exclude_unset=True).items():
+                setattr(db_case, key, value)
+            await db.commit()
+            await db.refresh(db_case)
+            logger.info(f"Updated case: {db_case.id}")
+            return {
+                "id": db_case.id,
+                "case_number": db_case.case_number,
+                "title": db_case.title,
+                "created_at": db_case.created_at.isoformat()
+            }
+        else:
+            raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.get("/cases")
 async def list_cases(
@@ -239,7 +259,7 @@ async def get_case(case_id: str, db: AsyncSession = Depends(get_db)):
 @app.post("/documents", response_model=Dict[str, Any])
 async def create_document(document: DocumentCreate, db: AsyncSession = Depends(get_db)):
     """Create a new document"""
-    db_document = Document(**document.dict())
+    db_document = Document(**document.model_dump(exclude_unset=True))
     db.add(db_document)
     await db.commit()
     await db.refresh(db_document)
@@ -254,7 +274,7 @@ async def create_document(document: DocumentCreate, db: AsyncSession = Depends(g
 @app.post("/deadlines", response_model=Dict[str, Any])
 async def create_deadline(deadline: DeadlineCreate, db: AsyncSession = Depends(get_db)):
     """Create a new deadline"""
-    db_deadline = Deadline(**deadline.dict())
+    db_deadline = Deadline(**deadline.model_dump(exclude_unset=True))
     db.add(db_deadline)
     await db.commit()
     await db.refresh(db_deadline)
