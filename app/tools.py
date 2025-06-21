@@ -12,7 +12,7 @@ from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 import re
 import logging
-
+from app.config import settings
 # Initialize logging
 logger = logging.getLogger(__name__)
 
@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 logger.info("Loading SentenceTransformer model from Hugging Face")
 embedder = SentenceTransformer('paraphrase-multilingual-mpnet-base-v2')
 logger.info("Initializing ChatOpenAI client")
-llm = ChatOpenAI(model="gpt-4-turbo-preview", temperature=0.1)
+llm = ChatOpenAI(model=settings.openai_llm_model, temperature=0.1)
 
 # Qdrant client initialization (will be configured from env)
 qdrant_client = None
@@ -170,27 +170,27 @@ Podsumowanie:""",
     response = await llm.ainvoke(prompt.format(passages=passages_text))
     return response.content
 
-async def find_template(template_type: str) -> Optional[Dict[str, Any]]:
+async def find_template(template_name: str) -> Optional[Dict[str, Any]]:
     """
     Find template by type from database
     """
     from .database import sync_engine
-    from .models import Template
+    from .models import FormTemplate
     from sqlalchemy.orm import sessionmaker
     
     Session = sessionmaker(bind=sync_engine)
     session = Session()
     
     try:
-        template = session.query(Template).filter_by(template_type=template_type).first()
+        template = session.query(FormTemplate).filter_by(name=template_name).first()
         if template:
             return {
                 'id': template.id,
                 'name': template.name,
-                'type': template.template_type,
+                'category': template.category,
                 'content': template.content,
                 'variables': template.variables,
-                'description': template.description
+                'summary': template.summary
             }
         return None
     finally:
@@ -199,104 +199,38 @@ async def find_template(template_type: str) -> Optional[Dict[str, Any]]:
 async def draft_document(doc_type: str, facts: Dict[str, Any], goals: List[str]) -> Dict[str, Any]:
     """
     Generate legal documents based on type, facts, and goals.
-    First tries to use database templates, falls back to hardcoded ones.
+    Finds a template in the database and fills it.
     """
-    # Try to find template in database first
+    # Find template in database
     db_template = await find_template(doc_type)
-    
-    if db_template:
-        logger.info(f"Using database template for {doc_type}")
-        template_content = db_template['content']
-        template_variables = db_template['variables']
-        
-        # Update usage tracking
-        await _update_template_usage(db_template['id'])
-    else:
-        # Fall back to hardcoded templates
-        logger.info(f"No database template found for {doc_type}, using hardcoded template")
-        hardcoded_templates = {
-            "pozew_upominawczy": """POZEW W POSTĘPOWANIU UPOMINAWCZYM
 
-Sąd Rejonowy w {court_location}
-Wydział {court_division} Cywilny
+    if not db_template:
+        logger.error(f"No template found in database for doc_type: {doc_type}")
+        return {"error": f"No template found for document type: {doc_type}"}
 
-Powód: {plaintiff_name}
-{plaintiff_address}
-PESEL/NIP: {plaintiff_id}
+    logger.info(f"Using database template for {doc_type}")
+    template_content = db_template['content']
+    template_variables = db_template['variables']
 
-Pozwany: {defendant_name}
-{defendant_address}
-PESEL/NIP: {defendant_id}
+    # Update usage tracking
+    await _update_template_usage(db_template['id'])
 
-Wartość przedmiotu sporu: {amount} zł
-
-POZEW O ZAPŁATĘ
-
-Wnoszę o:
-1. Wydanie nakazu zapłaty w postępowaniu upominawczym i zasądzenie od pozwanego na rzecz powoda kwoty {amount} zł wraz z ustawowymi odsetkami za opóźnienie od dnia {due_date} do dnia zapłaty;
-2. Zasądzenie od pozwanego na rzecz powoda kosztów procesu według norm przepisanych.
-
-UZASADNIENIE
-
-{justification}
-
-Dowody:
-{evidence_list}
-
-Załączniki:
-{attachments}
-
-{signature}
-{date}""",
-            
-            "wezwanie_do_zaplaty": """WEZWANIE DO ZAPŁATY
-
-{creditor_name}
-{creditor_address}
-
-{debtor_name}
-{debtor_address}
-
-{city}, dnia {date}
-
-PRZEDSĄDOWE WEZWANIE DO ZAPŁATY
-
-Działając w imieniu {creditor_name}, wzywam Pana/Panią do zapłaty kwoty {amount} zł (słownie: {amount_words}) w terminie 7 dni od dnia otrzymania niniejszego wezwania.
-
-Powyższa kwota wynika z {debt_source}.
-
-{details}
-
-W przypadku bezskutecznego upływu wyznaczonego terminu, sprawa zostanie skierowana na drogę postępowania sądowego, co naraża Pana/Panią na dodatkowe koszty procesu, w tym koszty zastępstwa procesowego.
-
-Wpłaty należy dokonać na rachunek bankowy:
-{bank_account}
-
-{signature}"""
-        }
-        
-        template_content = hardcoded_templates.get(doc_type, "")
-        template_variables = []
-        
-        if not template_content:
-            return {"error": f"No template found for document type: {doc_type}"}
-    
     # Get relevant statutes for the document type
     statute_query = f"{doc_type} wymogi formalne przepisy"
     relevant_statutes = await search_statute(statute_query, top_k=3)
-    
+
     # Fill template with facts
     filled_template = template_content
     for key, value in facts.items():
-        filled_template = filled_template.replace(f"{{{key}}}", str(value))
-    
+        filled_template = filled_template.replace(f"[[{key}]]", str(value))
+
     # Generate justification if needed
-    if "{justification}" in filled_template:
+    if "[[justification]]" in filled_template:
         justification_prompt = f"Napisz uzasadnienie dla {doc_type} na podstawie: {json.dumps(facts, ensure_ascii=False)}"
         logger.info("Calling OpenAI API to generate document justification")
         justification = await llm.ainvoke(justification_prompt)
-        filled_template = filled_template.replace("{justification}", justification.content)
-    
+        filled_template = filled_template.replace("[[justification]]", justification.content)
+
     return {
         "document_type": doc_type,
         "content": filled_template,
@@ -306,21 +240,21 @@ Wpłaty należy dokonać na rachunek bankowy:
             "created_at": datetime.now().isoformat(),
             "facts": facts,
             "goals": goals,
-            "template_source": "database" if db_template else "hardcoded"
+            "template_source": "database"
         }
     }
 
 async def _update_template_usage(template_id: str):
     """Update template usage statistics"""
     from .database import sync_engine
-    from .models import Template
+    from .models import FormTemplate
     from sqlalchemy.orm import sessionmaker
     
     Session = sessionmaker(bind=sync_engine)
     session = Session()
     
     try:
-        template = session.query(Template).filter_by(id=template_id).first()
+        template = session.query(FormTemplate).filter_by(id=template_id).first()
         if template:
             template.usage_count = (template.usage_count or 0) + 1
             template.last_used = datetime.now()
@@ -331,20 +265,20 @@ async def _update_template_usage(template_id: str):
 async def list_available_templates() -> List[Dict[str, Any]]:
     """List all available templates"""
     from .database import sync_engine
-    from .models import Template
+    from .models import FormTemplate
     from sqlalchemy.orm import sessionmaker
     
     Session = sessionmaker(bind=sync_engine)
     session = Session()
     
     try:
-        templates = session.query(Template).all()
+        templates = session.query(FormTemplate).all()
         return [
             {
                 'id': t.id,
                 'name': t.name,
-                'type': t.template_type,
-                'description': t.description,
+                'category': t.category,
+                'summary': t.summary,
                 'variables': t.variables,
                 'usage_count': t.usage_count,
                 'last_used': t.last_used.isoformat() if t.last_used else None
@@ -367,9 +301,10 @@ async def validate_against_statute(draft: str, citations: List[str]) -> Dict[str
     # Extract article references from draft
     article_pattern = r'art\.\s*(\d+[\w§]*)\s*(KC|KPC|k\.c\.|k\.p\.c\.)'
     found_citations = re.findall(article_pattern, draft, re.IGNORECASE)
+    parsed_citations = re.findall(article_pattern, "\n".join(citations), re.IGNORECASE)
     
     # Verify each citation
-    for article, code in found_citations:
+    for article, code in found_citations+parsed_citations:
         # Search for the actual article text
         search_results = await search_statute(f"art. {article} {code}", top_k=1, code=code)
         
@@ -383,7 +318,7 @@ async def validate_against_statute(draft: str, citations: List[str]) -> Dict[str
             article_text = search_results[0]["text"]
             validation_prompt = f"""Sprawdź czy poniższy fragment dokumentu prawidłowo powołuje się na przepis:
 
-Fragment dokumentu: {draft[:500]}...
+Fragment dokumentu: {draft[:800]}...
 
 Cytowany przepis - {search_results[0]['citation']}: {article_text}
 
@@ -451,6 +386,69 @@ def compute_deadline(event_type: str, event_date: str) -> Dict[str, Any]:
         "description": deadline_info["description"],
         "is_business_days": event_type != "payment"
     }
+
+async def describe_case(case_id: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Describe a case based on its ID (or all cases if no ID is provided).
+    """
+    from .database import sync_engine
+    from .models import Case
+    from sqlalchemy.orm import sessionmaker
+    
+    Session = sessionmaker(bind=sync_engine)
+    session = Session()
+    
+    try:
+        if case_id:
+            case = session.query(Case).filter_by(id=case_id).first()
+            if case:
+                return {
+                    "id": case.id,
+                    "title": case.title,
+                    "description": case.description,
+                    "status": case.status,
+                    "created_at": case.created_at.isoformat(),
+                    "updated_at": case.updated_at.isoformat() if case.updated_at else None
+                }
+        else:
+            cases = session.query(Case).all()
+            return [
+                {
+                    "id": c.id,
+                    "title": c.title,   
+                    "description": c.description,
+                    "status": c.status,
+                    "created_at": c.created_at.isoformat(),
+                    "updated_at": c.updated_at.isoformat() if c.updated_at else None
+                }
+                for c in cases
+            ]
+    except Exception as e:
+        logger.error(f"Error describing case: {e}")
+        return {"error": str(e)}
+    finally:
+        session.close()
+
+async def update_case(case_id: str, description: str) -> Dict[str, Any]:
+    """
+    Update a case based on its ID and description.
+    """
+    from .database import sync_engine
+    from .models import Case
+    from sqlalchemy.orm import sessionmaker
+    
+    Session = sessionmaker(bind=sync_engine)
+    session = Session()
+
+    try:
+        case = session.query(Case).filter_by(id=case_id).first()
+        if case:
+            case.description = description
+            session.commit()
+            return {"success": True}
+        return {"error": "Case not found"}  
+    finally:
+        session.close()
 
 async def schedule_reminder(case_id: str, reminder_date: str, note: str) -> Dict[str, Any]:
     """

@@ -15,7 +15,7 @@ from datetime import datetime, timedelta
 # Database imports for audit log retrieval
 from sqlalchemy import select, desc, and_
 from app.database import AsyncSessionLocal, init_db
-from app.models import Note, Case
+from app.models import Note, Case, FormTemplate
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -301,6 +301,40 @@ async def run_log_retrieval(args: argparse.Namespace):
         for interaction in interactions:
             print(retriever.format_interaction(interaction, verbose=args.verbose))
 
+async def list_templates(args: argparse.Namespace):
+    """List all available templates from the database"""
+    await init_db()
+    
+    templates_data = []
+    async with AsyncSessionLocal() as session:
+        result = await session.execute(select(FormTemplate).order_by(FormTemplate.name))
+        templates = result.scalars().all()
+        
+        for t in templates:
+            templates_data.append({
+                'id': t.id,
+                'name': t.name,
+                'category': t.category,
+                'summary': t.summary,
+                'variables': t.variables,
+                'usage_count': t.usage_count,
+                'last_used': t.last_used.isoformat() if t.last_used else None,
+                'content': t.content
+            })
+
+    if not templates_data:
+        print("No templates found in the database.")
+        return
+
+    if args.json:
+        print(json.dumps(templates_data, indent=2, ensure_ascii=False))
+    else:
+        print(f"{'Name':<40} {'Category':<20} {'Variables':<30} {'Usage Count':<12}")
+        print(f"{'-'*40} {'-'*20} {'-'*30} {'-'*12}")
+        for t in templates_data:
+            variables_str = ", ".join(map(str, t.get('variables', [])))[:30]
+            print(f"{t['name'][:40]:<40} {t['category'][:20]:<20} {variables_str:<30} {t['usage_count']:<12}")
+
 # --- Main CLI ---
 
 def main():
@@ -340,6 +374,10 @@ def main():
 
     subparsers.add_parser("logs-summary", help="Show summary statistics of AI interactions")
 
+    # Template listing
+    p_list_templates = subparsers.add_parser("list-templates", help="List all available document templates from DB")
+    p_list_templates.add_argument("--json", action="store_true", help="Output as JSON")
+
     args = parser.parse_args()
     client = ParalegalAPIClient(base_url=args.base_url)
 
@@ -355,6 +393,8 @@ def main():
         test_query_api(client, args.query)
     elif args.command.startswith("logs-"):
         asyncio.run(run_log_retrieval(args))
+    elif args.command == "list-templates":
+        asyncio.run(list_templates(args))
     else:
         parser.print_help()
 

@@ -1,5 +1,5 @@
 {
-  "start_time": "2025-06-15T08:44:00.201052",
+  "start_time": "2025-06-22T01:30:36.022486",
   "statutes": {
     "KC": {
       "chunk_stats": {
@@ -19,7 +19,7 @@
         "embeddings_generated": 2103,
         "embedding_dimension": 768,
         "collection_name": "statutes",
-        "processing_date": "2025-06-15T08:45:57.653193"
+        "processing_date": "2025-06-22T01:32:29.164188"
       },
       "status": "success"
     },
@@ -41,11 +41,11 @@
         "embeddings_generated": 4182,
         "embedding_dimension": 768,
         "collection_name": "statutes",
-        "processing_date": "2025-06-15T08:49:47.728418"
+        "processing_date": "2025-06-22T01:36:11.308487"
       },
       "status": "success"
     }
   },
-  "end_time": "2025-06-15T08:49:48.428344",
-  "total_duration": "0:05:48.227292"
+  "end_time": "2025-06-22T01:36:11.383717",
+  "total_duration": "0:05:35.361231"
 }

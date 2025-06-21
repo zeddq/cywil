@@ -10,6 +10,8 @@ services:
     volumes:
       - ./data:/app/data
       - ./app:/app/app
+      - ./ingest:/app/ingest
+      - ./ui:/app/ui
     environment:
       - ENVIRONMENT=development
       - OPENAI_API_KEY=${OPENAI_API_KEY}
@@ -63,7 +65,37 @@ services:
     depends_on:
       - postgres
 
+  ui:
+    build:
+      context: ./ui
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - api
+    volumes:
+      - ./ui:/app
+      - /app/node_modules
+      - /app/.next
+
 volumes:
   postgres_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /Volumes/code/cywil/volumes/postgres
   redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /Volumes/code/cywil/volumes/redis
   qdrant_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /Volumes/code/cywil/volumes/qdrant

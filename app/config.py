@@ -12,7 +12,9 @@ class Settings(BaseSettings):
     
     # OpenAI Configuration
     openai_api_key: str = os.getenv("OPENAI_API_KEY", "")
-    openai_model: str = "gpt-4o"
+    openai_orchestrator_model: str = "gpt-4.1-2025-04-14"
+    openai_summary_model: str = "gpt-4o"
+    openai_llm_model: str = "o3-mini"
     
     # Vector Database Configuration
     qdrant_host: str = os.getenv("QDRANT_HOST", "localhost")
@@ -39,6 +41,7 @@ class Settings(BaseSettings):
     upload_dir: str = "data/uploads"
     embeddings_dir: str = "data/embeddings"
     chunks_dir: str = "data/chunks"
+    pdfs_dir: str = "data/pdfs"
     
     @property
     def database_url(self) -> str:

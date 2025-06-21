@@ -14,7 +14,9 @@ from .tools import (
     schedule_reminder,
     init_vector_db,
     list_available_templates,
-    find_template
+    find_template,
+    describe_case,
+    update_case
 )
 from .config import settings
 from .database import get_db, AsyncSessionLocal
@@ -119,7 +121,31 @@ TOOL_DEFINITIONS: List[Dict[str, Any]] = [
                 "draft": {"type": "string", "description": "Draft document text"},
                 "citations": {"type": "array", "items": {"type": "string"}, "description": "Legal citations to validate"}
             },
-            "required": ["draft", "citations"]
+            "required": ["draft", "citations"]  
+        }
+    },
+    {
+        "type": "function",
+        "name": "describe_case",
+        "description": "Describe a case based on its ID (or all cases if no ID is provided)",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "case_id": {"type": "string", "description": "ID of the case to describe (leave empty to describe all cases)"},     
+            },
+        }
+    },
+    {
+        "type": "function",
+        "name": "update_case",
+        "description": "Update a case based on its ID and description", # TODO: add more fields to update           
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "case_id": {"type": "string", "description": "ID of the case to update"},
+                "description": {"type": "string", "description": "New description of the case"},
+            },
+            "required": ["case_id", "description"]
         }
     }
 ]
@@ -136,6 +162,8 @@ class ParalegalAgent:
             "search_statute": search_statute,
             "draft_document": draft_document,
             "compute_deadline": compute_deadline,
+            "describe_case": describe_case,
+            "update_case": update_case,
             "validate_document": validate_against_statute,
             "list_available_templates": list_available_templates,
             "find_template": find_template,
@@ -147,25 +175,39 @@ class ParalegalAgent:
     # ────────────────────────────────────────────────────────────────────
     # PROMPTS
     # ────────────────────────────────────────────────────────────────────
-    def get_system_prompt(self) -> str:
-        return (
-            "You are an expert Polish legal assistant specializing in civil law (Kodeks cywilny) "
-            "and civil procedure (Kodeks postępowania cywilnego).\n\n"
-            "Your responsibilities:\n"
-            "1. Answer legal questions with precise citations to relevant articles\n"
-            "2. Draft legal documents following Polish legal standards\n"
-            "3. Calculate procedural deadlines accurately\n"
-            "4. Validate documents against current statutes\n\n"
-            "Always:\n"
-            "- Cite specific articles (e.g., \"art. 415 KC\")\n"
-            "- Use proper Polish legal terminology\n"
-            "- Consider both substantive and procedural aspects\n"
-            "- Provide practical, actionable advice\n\n"
-            "Never:\n"
-            "- Provide advice on criminal law cases\n"
-            "- Guarantee legal outcomes\n"
-            "- Replace the need for a licensed attorney in court"
-        )
+    def get_system_prompt(self) -> List[Dict[str, Any]]:
+        return {
+                "role": "developer",
+                "content": """
+# ROLE                
+You are an expert Polish legal assistant specializing in civil law (Kodeks cywilny) and civil procedure (Kodeks postępowania cywilnego).
+
+
+# RESPONSIBILITIES
+Your responsibilities (you can use tools to help you):
+- Answer legal questions with precise citations to relevant articles
+- Draft legal documents following Polish legal standards
+- Provide information about available templates and their usage
+- Provide information about user's cases
+- Calculate procedural deadlines accurately
+- Validate documents against current statutes
+
+## ALWAYS
+- Cite specific articles (e.g., \"art. 415 KC\")
+- Use proper Polish legal terminology
+- Consider both substantive and procedural aspects
+- Provide practical, actionable advice
+
+## NEVER
+- Provide advice on criminal law cases
+- Guarantee legal outcomes
+- Replace the need for a licensed attorney in court"
+
+
+# THINKING PROCESS
+- Your thinking should be thorough and so it's fine if it's very long. You can think step by step before and after each action you decide to take.
+- You MUST plan extensively before each function call, and reflect extensively on the outcomes of the previous function calls. DO NOT do this entire process by making function calls only, as this can impair your ability to solve the problem and think insightfully.
+"""}
 
     # ────────────────────────────────────────────────────────────────────
     # HANDLING FUNCTION CALLS
@@ -229,7 +271,6 @@ class ParalegalAgent:
         self,
         user_message: str,
         thread_id: Optional[str] = None,
-        case_id: Optional[str] = None,
     ) -> Dict[str, Any]:
         audit_trail: List[Dict[str, Any]] = []
         start_time = datetime.now()
@@ -241,27 +282,26 @@ class ParalegalAgent:
                 "type": "user_message",
                 "content": user_message,
                 "conversation_id": conversation_id,
-                "case_id": case_id,
             }
         )
 
         # Determine if we already have context for this conversation
         prev_resp_id = self.conversations.get(conversation_id)
         user_message_input = {"role": "user", "content": user_message}
-        all_inputs = [user_message_input]
+        all_inputs = [self.get_system_prompt(), user_message_input]
 
         # ── 1️⃣ FIRST/CONTINUATION CALL ────────────────────────────────
         try:
             logger.info("Calling OpenAI Responses API (initial)")
             response = await client.responses.create(
-                model=settings.openai_model,
-                instructions=self.get_system_prompt(),
+                model=settings.openai_orchestrator_model,
                 input=all_inputs,
                 previous_response_id=prev_resp_id,
                 tools=TOOL_DEFINITIONS,
                 tool_choice="auto",
                 temperature=0.1,
             )
+            prev_resp_id = response.id
 
             audit_trail.append(
                 {
@@ -272,41 +312,43 @@ class ParalegalAgent:
             )
 
             # Persist last response ID for the thread
-            self.conversations[conversation_id] = response.id
+            self.conversations[conversation_id] = prev_resp_id
 
-            # Split model output into text + function calls
-            function_calls = [item for item in response.output if item.type == "function_call"]
+            while True:
+                # Split model output into text + function calls
+                function_calls = [item for item in response.output if item.type == "function_call"]
 
-            # ── 2️⃣ IF TOOL CALLS PRESENT ──────────────────────────────
-            if function_calls:
-                tool_outputs = await self.handle_tool_calls(function_calls, audit_trail)
-                all_inputs.extend(tool_outputs)
-                logger.info(f"All inputs: {all_inputs}")
+                # ── 2️⃣ IF TOOL CALLS PRESENT ──────────────────────────────
+                if function_calls:
+                    tool_outputs = await self.handle_tool_calls(function_calls, audit_trail)
+                    all_inputs = tool_outputs
+                    logger.info(f"All inputs: {all_inputs}")
 
-                logger.info("Calling OpenAI Responses API (after tool outputs)")
-                follow_up = await client.responses.create(
-                    model=settings.openai_model,
-                    previous_response_id=response.id,
-                    input=all_inputs,
-                    instructions=self.get_system_prompt(),
-                    temperature=0.1,
-                )
+                    logger.info("Calling OpenAI Responses API (after tool outputs)")
+                    response = await client.responses.create(
+                        model=settings.openai_orchestrator_model,
+                        previous_response_id=prev_resp_id,
+                        input=all_inputs,
+                        temperature=0.1,
+                    )
+                    prev_resp_id = response.id
 
-                audit_trail.append(
-                    {
-                        "timestamp": datetime.now().isoformat(),
-                        "type": "api_call_follow_up",
-                        "usage": str(getattr(follow_up, "usage", None)),
-                    }
-                )
+                    audit_trail.append(
+                        {
+                            "timestamp": datetime.now().isoformat(),
+                            "type": "api_call_follow_up",
+                            "usage": str(getattr(response, "usage", None)),
+                        }
+                    )
 
-                # Update last response id
-                self.conversations[conversation_id] = follow_up.id
+                    # Update last response id
+                    self.conversations[conversation_id] = prev_resp_id
 
-                # Extract text from follow‑up
-                assistant_response_text = follow_up.output_text or ""
-            else:
-                assistant_response_text = response.output_text or ""
+                    # Extract text from follow‑up
+                    assistant_response_text = response.output_text or ""
+                else:
+                    assistant_response_text = response.output_text or ""
+                    break
 
             # ── 3️⃣ Persist audit log ──────────────────────────────────
             duration = (datetime.now() - start_time).total_seconds()
@@ -315,7 +357,6 @@ class ParalegalAgent:
             full_audit_record = {
                 "interaction_id": interaction_id,
                 "conversation_id": conversation_id,
-                "case_id": case_id,
                 "start_time": start_time.isoformat(),
                 "end_time": datetime.now().isoformat(),
                 "duration_seconds": duration,
@@ -377,10 +418,9 @@ class ParalegalAgent:
             await session.commit()
             logger.debug("Audit record saved: %s", record["interaction_id"])
 
-    async def save_case_context(self, case_id: str, context: Dict[str, Any]) -> None:
+    async def save_ai_interaction(self, context: Dict[str, Any]) -> None:
         async with AsyncSessionLocal() as session:
             note = Note(
-                case_id=case_id,
                 note_type="ai_interaction",
                 subject="AI Assistant Context",
                 content=json.dumps(context, ensure_ascii=False),
@@ -388,11 +428,10 @@ class ParalegalAgent:
             session.add(note)
             await session.commit()
 
-    async def load_case_context(self, case_id: str) -> Optional[Dict[str, Any]]:
+    async def load_ai_interaction(self) -> Optional[Dict[str, Any]]:
         async with AsyncSessionLocal() as session:
             result = await session.execute(
                 select(Note)
-                .where(Note.case_id == case_id)
                 .where(Note.note_type == "ai_interaction")
                 .order_by(Note.created_at.desc())
                 .limit(1)

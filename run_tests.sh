@@ -55,6 +55,13 @@ check_services() {
     fi
 }
 
+run_api() {
+    print_header "Running API"
+    source ../venv/bin/activate
+    POSTGRES_HOST=localhost QDRANT_HOST=localhost python test_api.py "$@"
+    print_success "API completed"
+}
+
 # Run ingestion pipeline
 run_ingestion() {
     print_header "Running Data Ingestion Pipeline"
@@ -62,6 +69,15 @@ run_ingestion() {
     docker-compose exec -e POSTGRES_HOST=postgres -e REDIS_HOST=redis api python ingest/ingest_pipeline.py --qdrant-host=qdrant --qdrant-port=6333
     
     print_success "Ingestion completed"
+}
+
+# Run ingestion pipeline for templates
+run_ingestion_templates() {
+    print_header "Running Data Ingestion Pipeline for Templates"
+    
+    docker-compose exec -e POSTGRES_HOST=postgres -e REDIS_HOST=redis -e QDRANT_HOST=qdrant -e QDRANT_PORT=6333 api python ingest/templates.py
+    
+    print_success "Ingestion for templates completed"
 }
 
 # Validate ingestion
@@ -193,6 +209,198 @@ asyncio.run(get_audits())
 "
 }
 
+# Create a case
+create_case() {
+    # Default values for optional fields
+    DESCRIPTION=""
+    OPPOSING_PARTY=""
+    AMOUNT_IN_DISPUTE="null"
+
+    # Parse named arguments
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --case-number)
+                CASE_NUMBER="$2"
+                shift 2
+                ;;
+            --title)
+                TITLE="$2"
+                shift 2
+                ;;
+            --description)
+                DESCRIPTION="$2"
+                shift 2
+                ;;
+            --case-type)
+                CASE_TYPE="$2"
+                shift 2
+                ;;
+            --client-name)
+                CLIENT_NAME="$2"
+                shift 2
+                ;;
+            --client-contact)
+                CLIENT_CONTACT="$2"
+                shift 2
+                ;;
+            --opposing-party)
+                OPPOSING_PARTY="$2"
+                shift 2
+                ;;
+            --amount-in-dispute)
+                AMOUNT_IN_DISPUTE="$2"
+                shift 2
+                ;;
+            *)
+                echo "Unknown option: $1"
+                show_usage
+                exit 1
+                ;;
+        esac
+    done
+
+    # Validate required arguments
+    if [ -z "$CASE_NUMBER" ] || [ -z "$TITLE" ] || [ -z "$CASE_TYPE" ] || [ -z "$CLIENT_NAME" ] || [ -z "$CLIENT_CONTACT" ]; then
+        echo "Error: Missing required arguments for create-case."
+        echo "Usage: $0 create-case --case-number <num> --title <title> --case-type <type> --client-name <name> --client-contact <json> [options]"
+        exit 1
+    fi
+
+    # Construct JSON payload
+    JSON_PAYLOAD=$(printf '{
+        "case_number": "%s",
+        "title": "%s",
+        "description": "%s",
+        "case_type": "%s",
+        "client_name": "%s",
+        "client_contact": %s,
+        "opposing_party": "%s",
+        "amount_in_dispute": %s
+    }' "$CASE_NUMBER" "$TITLE" "$DESCRIPTION" "$CASE_TYPE" "$CLIENT_NAME" "$CLIENT_CONTACT" "$OPPOSING_PARTY" "$AMOUNT_IN_DISPUTE")
+
+    print_header "Creating Case via API"
+    curl -X POST -H "Content-Type: application/json" -d "$JSON_PAYLOAD" "$API_URL/cases"
+    echo ""
+    print_success "Case creation request sent"
+}
+
+# Delete a case
+delete_case() {
+    if [ -z "$1" ]; then
+        echo "Usage: $0 delete-case <case_id>"
+        exit 1
+    fi
+    print_header "Deleting Case via API"
+    curl -X DELETE "$API_URL/cases/$1"
+    echo ""
+    print_success "Case deletion request sent"
+}
+
+# Create a document
+create_document() {
+    METADATA="{}" # Default to empty JSON object
+
+    # Parse named arguments
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --case-id)
+                CASE_ID="$2"
+                shift 2
+                ;;
+            --document-type)
+                DOCUMENT_TYPE="$2"
+                shift 2
+                ;;
+            --title)
+                TITLE="$2"
+                shift 2
+                ;;
+            --content)
+                CONTENT="$2"
+                shift 2
+                ;;
+            --metadata)
+                METADATA="$2"
+                shift 2
+                ;;
+            *)
+                echo "Unknown option: $1"
+                show_usage
+                exit 1
+                ;;
+        esac
+    done
+
+    # Validate required arguments
+    if [ -z "$CASE_ID" ] || [ -z "$DOCUMENT_TYPE" ] || [ -z "$TITLE" ] || [ -z "$CONTENT" ]; then
+        echo "Error: Missing required arguments for create-document."
+        echo "Usage: $0 create-document --case-id <id> --document-type <type> --title <title> --content <content> [options]"
+        exit 1
+    fi
+
+    # Construct JSON payload
+    JSON_PAYLOAD=$(printf '{
+        "case_id": "%s",
+        "document_type": "%s",
+        "title": "%s",
+        "content": "%s",
+        "metadata": %s
+    }' "$CASE_ID" "$DOCUMENT_TYPE" "$TITLE" "$CONTENT" "$METADATA")
+
+    print_header "Creating Document via API"
+    curl -X POST -H "Content-Type: application/json" -d "$JSON_PAYLOAD" "$API_URL/documents"
+    echo ""
+    print_success "Document creation request sent"
+}
+
+# Delete a document
+delete_document() {
+    if [ -z "$1" ]; then
+        echo "Usage: $0 delete-document <document_id>"
+        exit 1
+    fi
+    print_header "Deleting Document via API"
+    curl -X DELETE "$API_URL/documents/$1"
+    echo ""
+    print_success "Document deletion request sent"
+}
+
+# List cases
+list_cases() {
+    print_header "Listing Cases via API"
+    STATUS_PARAM=""
+    if [ -n "$1" ]; then
+        if [[ "$1" == --status ]]; then
+            STATUS_PARAM="?status=$2"
+        else
+            echo "Unknown option: $1"
+            show_usage
+            exit 1
+        fi
+    fi
+    curl -s -X GET "$API_URL/cases$STATUS_PARAM" | jq .
+    echo ""
+    print_success "List cases request sent"
+}
+
+# List documents
+list_documents() {
+    print_header "Listing Documents via API"
+    CASE_ID_PARAM=""
+    if [ -n "$1" ]; then
+        if [[ "$1" == --case-id ]]; then
+            CASE_ID_PARAM="?case_id=$2"
+        else
+            echo "Unknown option: $1"
+            show_usage
+            exit 1
+        fi
+    fi
+    curl -s -X GET "$API_URL/documents$CASE_ID_PARAM" | jq .
+    echo ""
+    print_success "List documents request sent"
+}
+
 # Show usage
 show_usage() {
     echo "AI Paralegal Testing Script"
@@ -204,10 +412,18 @@ show_usage() {
     echo "  stop               - Stop Docker services"
     echo "  restart            - Restart Docker services"
     echo "  status             - Check service status"
+    echo "  api                - Run test_api.py with correct env"
     echo "  ingest             - Run data ingestion pipeline"
+    echo "  ingest-templates   - Run data ingestion pipeline for templates"
     echo "  validate           - Validate ingestion results"
     echo "  search \"query\"     - Search documents using search_documents()"
     echo "  audit [options]    - Get audit records from orchestrator"
+    echo "  create-case [options] - Create a new case via API"
+    echo "  delete-case <id>   - Delete a case via API"
+    echo "  create-document [options] - Create a new document for a case via API"
+    echo "  delete-document <id> - Delete a document via API"
+    echo "  list-cases [--status <status>] - List cases via API"
+    echo "  list-documents [--case-id <id>] - List documents via API"
     echo "  logs               - Show service logs"
     echo "  help               - Show this help"
     echo ""
@@ -217,6 +433,12 @@ show_usage() {
     echo "  $0 audit --limit 5"
     echo "  $0 audit --case-id case_123 --limit 10"
     echo "  $0 audit --thread-id thread_abc"
+    echo "  $0 create-case --case-number \"2024/01\" --title \"Test Case\" --case-type \"litigation\" --client-name \"John Doe\" --client-contact '{\"email\": \"j.doe@example.com\"}'"
+    echo "  $0 create-document --case-id <case_id> --title \"My Doc\" --document-type \"pozew\" --content \"This is the document content.\""
+    echo "  $0 delete-case <case_id>"
+    echo "  $0 list-cases"
+    echo "  $0 list-cases --status active"
+    echo "  $0 list-documents --case-id <case_id>"
 }
 
 # Main execution block
@@ -246,9 +468,17 @@ case "${1:-help}" in
         docker-compose ps
         check_services
         ;;
+    "api")
+        shift
+        run_api "$@"
+        ;;        
     "ingest")
         check_services
         run_ingestion
+        ;;
+    "ingest-templates")
+        check_services
+        run_ingestion_templates
         ;;
     "validate")
         check_services
@@ -261,6 +491,30 @@ case "${1:-help}" in
     "audit")
         shift
         get_audit_records "$@"
+        ;;
+    "create-case")
+        shift
+        create_case "$@"
+        ;;
+    "delete-case")
+        shift
+        delete_case "$@"
+        ;;
+    "create-document")
+        shift
+        create_document "$@"
+        ;;
+    "delete-document")
+        shift
+        delete_document "$@"
+        ;;
+    "list-cases")
+        shift
+        list_cases "$@"
+        ;;
+    "list-documents")
+        shift
+        list_documents "$@"
         ;;
     "logs")
         shift

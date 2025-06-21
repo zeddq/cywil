@@ -91,25 +91,6 @@ TOOL_DEFINITIONS = [
     }
 ]
 
-SYSTEM_PROMPT = """You are an expert Polish legal assistant specializing in civil law (Kodeks cywilny) and civil procedure (Kodeks postępowania cywilnego). 
-
-Your responsibilities:
-1. Answer legal questions with precise citations to relevant articles
-2. Draft legal documents following Polish legal standards
-3. Calculate procedural deadlines accurately
-4. Validate documents against current statutes
-
-Always:
-- Cite specific articles (e.g., "art. 415 KC")
-- Use proper Polish legal terminology
-- Consider both substantive and procedural aspects
-- Provide practical, actionable advice
-
-Never:
-- Provide advice on criminal law cases
-- Guarantee legal outcomes
-- Replace the need for a licensed attorney in court"""
-
 class SimpleParalegalAgent:
     def __init__(self):
         self.tools_map = {
@@ -136,13 +117,30 @@ class SimpleParalegalAgent:
             self.conversation_history.append({"role": "user", "content": user_message})
             
             # Keep only last 10 messages for context
-            messages = [{"role": "system", "content": SYSTEM_PROMPT}]
+            messages = [{"role": "system", "content": """You are an expert Polish legal assistant specializing in civil law (Kodeks cywilny) and civil procedure (Kodeks postępowania cywilnego). 
+
+Your responsibilities:
+1. Answer legal questions with precise citations to relevant articles
+2. Draft legal documents following Polish legal standards
+3. Calculate procedural deadlines accurately
+4. Validate documents against current statutes
+
+Always:
+- Cite specific articles (e.g., "art. 415 KC")
+- Use proper Polish legal terminology
+- Consider both substantive and procedural aspects
+- Provide practical, actionable advice
+
+Never:
+- Provide advice on criminal law cases
+- Guarantee legal outcomes
+- Replace the need for a licensed attorney in court"""}]
             messages.extend(self.conversation_history[-10:])
             
             # Call OpenAI Chat Completion with tools
             logger.info("Calling OpenAI API for chat completion with tools")
             response = await client.chat.completions.create(
-                model=settings.openai_model,
+                model=settings.openai_orchestrator_model,
                 messages=messages,
                 tools=TOOL_DEFINITIONS,
                 tool_choice="auto"
@@ -196,7 +194,7 @@ class SimpleParalegalAgent:
                 
                 logger.info("Calling OpenAI API for final response with tool results")
                 final_response = await client.chat.completions.create(
-                    model=settings.openai_model,
+                    model=settings.openai_orchestrator_model,
                     messages=messages
                 )
                 
