@@ -1,5 +1,5 @@
 import re
-from typing import List, Dict, Tuple, Optional
+from typing import List, Dict, Tuple, Optional, Match
 import pdfplumber
 from pathlib import Path
 import json
@@ -15,55 +15,39 @@ class ArticleChunk:
     """Represents a single article or section from the legal code"""
     code: str  # KC or KPC
     article: str  # e.g., "415", "415¹", "415§2"
-    title: Optional[str]  # Article title if present
-    content: str  # Full text of the article
-    section: Optional[str]  # Section/Book this article belongs to
+    title: str  # Article title if present
+    path: str
     metadata: Dict  # Additional metadata
+    content: Optional[str] = None # Full text of the article
+    book: Optional[str] = None
+    part: Optional[str] = None
+    division: Optional[str] = None
+    chapter: Optional[str] = None
+    subdivision: Optional[str] = None
+
+@dataclass
+class HierarchyElement:
+    name: str
+    keyword: str
+    level: int
+    pattern: re.Pattern
+    is_optional: bool = False
+    current_name: Optional[str] = None
+    current_title: Optional[str] = None
 
 class PolishStatuteParser:
     """Parser specifically designed for Polish legal statutes with correct hierarchy"""
     
     # Polish legal document hierarchy:
-    # 1. Część (Part) - highest level
-    # 2. Dział (Division)
-    # 3. Rozdział (Chapter)
-    # 4. Artykuł (Article) - lowest level
+    # 1. Księga (Book) - highest level
+    # 2. Część (Part)
+    # 3. Tytuł (Title)
+    # 4. Dział (Division)
+    # 5. Rozdział (Chapter)
+    # 6. Oddział (Subdivision)
+    # 7. Artykuł (Article) - lowest level
     
-    # Regex patterns for Polish legal structure
-    PATTERNS = {
-        # Main article pattern: "Art. 123." or "Art. 123¹." or "Art. 123^2."
-        'article': re.compile(r'^Art\.\s*(\d+[¹²³⁴⁵⁶⁷⁸⁹]*)\s*\.', re.MULTILINE),
-        
-        # Section/paragraph pattern within articles: "§ 1." or "§ 2."
-        'paragraph': re.compile(r'^§\s*(\d+)\s*\.', re.MULTILINE),
-        
-        # Point pattern: "1)" or "2)" at start of line
-        'point': re.compile(r'^(\d+)\)', re.MULTILINE),
-        
-        # Part pattern: "CZĘŚĆ OGÓLNA", "CZĘŚĆ SZCZEGÓLNA", "CZĘŚĆ PIERWSZA", etc.
-        'part': re.compile(r'^CZĘŚĆ\s+(\w+)', re.MULTILINE),
-        
-        # Division pattern: "DZIAŁ I", "DZIAŁ II", etc.
-        'division': re.compile(r'^DZIAŁ\s+([IVXLCDM]+)(?:\s|$)', re.MULTILINE),
-        
-        # Chapter pattern: "Rozdział I", "Rozdział II", etc.
-        'chapter': re.compile(r'^Rozdział\s+([IVXLCDM]+)(?:\s|$)', re.MULTILINE),
-        
-        # Book pattern (some codes have this): "KSIĘGA PIERWSZA" etc.
-        'book': re.compile(r'^KSIĘGA\s+(\w+)', re.MULTILINE),
-        
-        # Title pattern (alternative structure): "TYTUŁ I"
-        'title': re.compile(r'^TYTUŁ\s+([IVXLCDM]+)(?:\s|$)', re.MULTILINE),
-        
-        # Deleted article pattern: "(uchylony)" or "(skreślony)"
-        'deleted': re.compile(r'\(uchylon[ya]\)|\(skreślon[ya]\)'),
-        
-        # Section headers with names (match on same line only)
-        'named_part': re.compile(r'^CZĘŚĆ\s+(\w+)(?:\s*[:\-\s]+(.+?))?$', re.MULTILINE),
-        'named_division': re.compile(r'^DZIAŁ\s+([IVXLCDM]+)(?:\s*[:\-\s]+(.+?))?$', re.MULTILINE),
-        'named_chapter': re.compile(r'^Rozdział\s+([IVXLCDM]+)(?:\s*[:\-\s]+(.+?))?$', re.MULTILINE),
-    }
-    
+
     def __init__(self, code_type: str = "KC"):
         """
         Initialize parser for specific code type
@@ -72,14 +56,108 @@ class PolishStatuteParser:
             code_type: Type of code (KC or KPC)
         """
         self.code_type = code_type
-        self.current_part = None
-        self.current_part_name = None
-        self.current_division = None
-        self.current_division_name = None
-        self.current_chapter = None
-        self.current_chapter_name = None
-        self.current_book = None  # Some codes use books
-        self.current_title = None  # Alternative to chapters
+        self.HIERARCHY_ELEMENTS = [
+            HierarchyElement(
+                name="book",
+                keyword="KSIĘGA",
+                level=1 if self.code_type == "KC" else 2,
+                pattern=re.compile(r'^KSIĘGA\s+(\w+)', re.MULTILINE),
+                is_optional=True
+            ),
+            HierarchyElement(
+                name="part",
+                keyword="CZĘŚĆ",
+                level=2 if self.code_type == "KC" else 1,
+                pattern=re.compile(r'^CZĘŚĆ\s+(\w+)', re.MULTILINE),
+                is_optional=True
+            ),
+            HierarchyElement(
+                name="title",
+                keyword="TYTUŁ",
+                level=3,
+                pattern=re.compile(r'^TYTUŁ\s+([IVXLCDM]+)(?:\s|$)', re.MULTILINE),
+            ),
+            HierarchyElement(
+                name="division",
+                keyword="DZIAŁ",
+                level=4,
+                pattern=re.compile(r'^DZIAŁ\s+([IVXLCDM]+)(?:\s|$)', re.MULTILINE),
+                is_optional=True
+            ),
+            HierarchyElement(
+                name="chapter",
+                keyword="ROZDZIAŁ",
+                level=5,
+                pattern=re.compile(r'^Rozdział\s+([IVXLCDM]+)(?:\s|$)', re.MULTILINE),
+                is_optional=True
+            ),
+            HierarchyElement(
+                name="subdivision",
+                keyword="ODDZIAŁ",
+                level=6,
+                pattern=re.compile(r'^Oddział\s+([IVXLCDM]+)(?:\s|$)', re.MULTILINE),
+                is_optional=True
+            ),
+            HierarchyElement(
+                name="article",
+                keyword="Art.",
+                level=7,
+                pattern=re.compile(r'^Art\.\s*(\d+[¹²³⁴⁵⁶⁷⁸⁹]*)\s*\.', re.MULTILINE),
+            ),
+            HierarchyElement(
+                name="deleted",
+                keyword="uchylony",
+                level=7,
+                pattern=re.compile(r'\(uchylon[ya]\)|\(skreślon[ya]\)'),
+                is_optional=True
+            ),
+            HierarchyElement(
+                name="paragraph",
+                keyword="§",
+                level=8,
+                pattern=re.compile(r'^§\s*(\d+)\s*\.', re.MULTILINE),
+                is_optional=True
+            ),
+            HierarchyElement(
+                name="point",
+                keyword="pkt.",
+                level=9,
+                pattern=re.compile(r'^(\d+)\)', re.MULTILINE),
+                is_optional=True
+            )
+        ]
+        self.HIERARCHY_MAP = {element.name: element for element in self.HIERARCHY_ELEMENTS}
+        self.KEYWORDS = [element.keyword for element in self.HIERARCHY_ELEMENTS]
+
+    def _match_hierarchy_element(self, text: str) -> Optional[Tuple[Match[str], HierarchyElement]]:
+        """Match a hierarchy element in the text"""
+        for element in self.HIERARCHY_ELEMENTS:
+            match = element.pattern.search(text)
+            if match:
+                return match, element
+        return None
+    
+    def _process_hierarchy_element(self, match: List[str], next_line: Optional[Match[str]], element: HierarchyElement):
+        """Process a hierarchy element"""
+        match_list = list(filter(lambda x: x is not None, match))
+        if len(match_list) == 1:
+            element.current_name = match_list[0]
+        elif len(match_list) == 2:
+            element.current_name = f"{element.keyword} {match_list[1]}"
+            if element.level < self.HIERARCHY_MAP['article'].level and not self._match_hierarchy_element(next_line):
+                element.current_title = next_line
+            else:
+                element.current_title = None
+        elif len(match_list) == 3:
+            element.current_name = f"{element.keyword} {match_list[1]}"
+            element.current_title = match_list[2]
+        else:
+            raise ValueError(f"Unexpected number of groups: {len(match_list)} for {match}, {next_line}, {element}")
+        
+        for el in self.HIERARCHY_ELEMENTS:
+            if el.name != element.name and el.level >= element.level:
+                el.current_name = None
+                el.current_title = None
     
     def parse_pdf(self, pdf_path: str) -> List[ArticleChunk]:
         """
@@ -114,35 +192,20 @@ class PolishStatuteParser:
         chunks = []
         
         # Split by articles
-        article_splits = self.PATTERNS['article'].split(text)
-        
-        # Process introduction/preamble if exists
-        if article_splits[0].strip():
-            preamble = article_splits[0].strip()
-            # Update structure context from preamble
-            self._update_structure_context(preamble)
-            
-            if len(preamble) > 100:  # Only if substantial
-                chunks.append(ArticleChunk(
-                    code=self.code_type,
-                    article="Preambuła",
-                    title="Preambuła",
-                    content=preamble,
-                    section=self._get_current_section_path(),
-                    metadata={
-                        "type": "preamble",
-                        "hierarchy": self._get_hierarchy_metadata()
-                    }
-                ))
-        
-        # Process each article
+        article_splits = self.HIERARCHY_MAP['article'].pattern.split(text)
+        if article_splits and article_splits[0].strip():
+            self._update_structure_context(article_splits[0])
+
+        # Process each article (article is a hierarchy element)
         i = 1
         while i < len(article_splits) - 1:
             article = article_splits[i]
             article_content = article_splits[i + 1]
+
+            self._process_hierarchy_element(["Art.", article], "", self.HIERARCHY_MAP['article'])
             
             # Find the end of this article (start of next article or end of text)
-            next_article_match = self.PATTERNS['article'].search(article_content)
+            next_article_match = self.HIERARCHY_MAP['article'].pattern.search(article_content)
             if next_article_match:
                 article_text = article_content[:next_article_match.start()]
                 remaining_text = article_content[next_article_match.start():]
@@ -151,10 +214,10 @@ class PolishStatuteParser:
                 article_text = article_content
             
             # Update current section/chapter if found
-            self._update_structure_context(article_text)
+            article_text = self._update_structure_context(article_text)
             
             # Check if article is deleted
-            if self.PATTERNS['deleted'].search(article_text[:100]):
+            if self.HIERARCHY_MAP['deleted'].pattern.search(article_text[:100]):
                 metadata = {"status": "deleted", "type": "article"}
             else:
                 metadata = {"status": "active", "type": "article"}
@@ -168,13 +231,19 @@ class PolishStatuteParser:
             if paragraphs:
                 # Create separate chunks for each paragraph
                 for para_num, para_content in paragraphs.items():
+                    self._process_hierarchy_element(["§", para_num], "", self.HIERARCHY_MAP['paragraph'])
                     chunk_id = f"{article}§{para_num}" if para_num != "main" else article
                     chunks.append(ArticleChunk(
                         code=self.code_type,
                         article=chunk_id,
-                        title=self._extract_article_title(article_text),
                         content=para_content,
-                        section=self._get_current_section_path(),
+                        book=self.HIERARCHY_MAP['book'].current_name,
+                        part=self.HIERARCHY_MAP['part'].current_name,
+                        title=self.HIERARCHY_MAP['title'].current_name,
+                        division=self.HIERARCHY_MAP['division'].current_name,
+                        chapter=self.HIERARCHY_MAP['chapter'].current_name,
+                        subdivision=self.HIERARCHY_MAP['subdivision'].current_name,
+                        path=self._get_current_section_path(),
                         metadata={
                             **metadata,
                             "paragraph": para_num
@@ -185,9 +254,14 @@ class PolishStatuteParser:
                 chunks.append(ArticleChunk(
                     code=self.code_type,
                     article=article,
-                    title=self._extract_article_title(article_text),
                     content=article_text.strip(),
-                    section=self._get_current_section_path(),
+                    book=self.HIERARCHY_MAP['book'].current_name,
+                    part=self.HIERARCHY_MAP['part'].current_name,
+                    title=self.HIERARCHY_MAP['title'].current_name,
+                    division=self.HIERARCHY_MAP['division'].current_name,
+                    chapter=self.HIERARCHY_MAP['chapter'].current_name,
+                    subdivision=self.HIERARCHY_MAP['subdivision'].current_name,
+                    path=self._get_current_section_path(),
                     metadata=metadata
                 ))
             
@@ -199,7 +273,7 @@ class PolishStatuteParser:
         """Parse paragraphs (§) within an article"""
         paragraphs = {}
         
-        para_splits = self.PATTERNS['paragraph'].split(article_text)
+        para_splits = self.HIERARCHY_MAP['paragraph'].pattern.split(article_text.strip())
         
         if len(para_splits) > 1:
             # Has explicit paragraphs
@@ -214,7 +288,7 @@ class PolishStatuteParser:
                 para_content = para_splits[i + 1]
                 
                 # Find end of this paragraph
-                next_para_match = self.PATTERNS['paragraph'].search(para_content)
+                next_para_match = self.HIERARCHY_MAP['paragraph'].pattern.search(para_content)
                 if next_para_match:
                     para_text = para_content[:next_para_match.start()]
                 else:
@@ -229,120 +303,60 @@ class PolishStatuteParser:
         
         return paragraphs
     
-    def _update_structure_context(self, text: str):
+    def _update_structure_context(self, text: str) -> str:
         """Update current hierarchy based on text"""
         
+        non_hierarchy_text = ""
+        hierarchy_found = False
         # Split text into lines for more accurate parsing
         lines = text.split('\n')
         
         for i, line in enumerate(lines):
             line = line.strip()
-            
-            # Check for part (highest level)
-            if line.startswith('CZĘŚĆ'):
-                part_match = self.PATTERNS['part'].match(line)
-                if part_match:
-                    self.current_part = part_match.group(1)
-                    # Look for part name on the same or next line
-                    self.current_part_name = None
-                    # Only check same line after colon or dash
-                    if ':' in line:
-                        self.current_part_name = line.split(':', 1)[1].strip()
-                    elif '-' in line:
-                        self.current_part_name = line.split('-', 1)[1].strip()
-                    # Reset lower levels when entering new part
-                    self.current_division = None
-                    self.current_division_name = None
-                    self.current_chapter = None
-                    self.current_chapter_name = None
-            
-            # Check for division (second level)
-            elif line.startswith('DZIAŁ'):
-                division_match = self.PATTERNS['division'].match(line)
-                if division_match:
-                    self.current_division = division_match.group(1)
-                    self.current_division_name = None
-                    # Reset lower levels
-                    self.current_chapter = None
-                    self.current_chapter_name = None
-                    # Check if there's a name on the next line
-                    if i + 1 < len(lines) and not any(pattern in lines[i + 1] for pattern in ['Art.', 'CZĘŚĆ', 'DZIAŁ', 'Rozdział', 'KSIĘGA', 'TYTUŁ']):
-                        next_line = lines[i + 1].strip()
-                        if next_line and not next_line[0].isdigit():
-                            self.current_division_name = next_line
-            
-            # Check for chapter (third level)
-            elif line.startswith('Rozdział'):
-                chapter_match = self.PATTERNS['chapter'].match(line)
-                if chapter_match:
-                    self.current_chapter = chapter_match.group(1)
-                    self.current_chapter_name = None
-                    # Check if there's a name on the next line
-                    if i + 1 < len(lines) and not any(pattern in lines[i + 1] for pattern in ['Art.', 'CZĘŚĆ', 'DZIAŁ', 'Rozdział', 'KSIĘGA', 'TYTUŁ']):
-                        next_line = lines[i + 1].strip()
-                        if next_line and not next_line[0].isdigit():
-                            self.current_chapter_name = next_line
-            
-            # Check for book (alternative structure, used between Part and Division)
-            elif line.startswith('KSIĘGA'):
-                book_match = self.PATTERNS['book'].match(line)
-                if book_match:
-                    self.current_book = book_match.group(1)
-                    # Reset lower levels
-                    self.current_division = None
-                    self.current_division_name = None
-                    self.current_chapter = None
-                    self.current_chapter_name = None
-            
-            # Check for title (alternative to chapter)
-            elif line.startswith('TYTUŁ'):
-                title_match = self.PATTERNS['title'].match(line)
-                if title_match:
-                    self.current_title = title_match.group(1)
+
+            # Check for book (first level)
+            match_element = self._match_hierarchy_element(line)
+            if match_element and match_element[1].level < self.HIERARCHY_MAP['article'].level:
+                self._process_hierarchy_element([match_element[0].group(0)] + list(match_element[0].groups()),
+                                                lines[i + 1].strip() if i + 1 < len(lines) else "", match_element[1])
+                hierarchy_found = True
+            elif not hierarchy_found:
+                non_hierarchy_text += line + "\n"
+
+        return non_hierarchy_text
     
     def _get_current_section_path(self) -> str:
         """Get the current section path as a string"""
         path_parts = []
         
-        if self.current_part:
-            part_str = f"Część {self.current_part}"
-            if self.current_part_name:
-                part_str += f": {self.current_part_name}"
-            path_parts.append(part_str)
-        
-        if self.current_division:
-            div_str = f"Dział {self.current_division}"
-            if self.current_division_name:
-                div_str += f": {self.current_division_name}"
-            path_parts.append(div_str)
-        
-        if self.current_chapter:
-            chap_str = f"Rozdział {self.current_chapter}"
-            if self.current_chapter_name:
-                chap_str += f": {self.current_chapter_name}"
-            path_parts.append(chap_str)
+        elems = sorted(self.HIERARCHY_ELEMENTS, key=lambda x: x.level)
+        for elem in elems:
+            part = ""
+            if elem.current_name:
+                part = elem.current_name
+            if elem.current_title:
+                part += f": {elem.current_title}"
+            if part:
+                path_parts.append(part)
         
         return " > ".join(path_parts) if path_parts else None
     
     def _get_hierarchy_metadata(self) -> Dict:
         """Get current hierarchy as metadata dictionary"""
         return {
-            "part": self.current_part,
-            "part_name": self.current_part_name,
-            "division": self.current_division,
-            "division_name": self.current_division_name,
-            "chapter": self.current_chapter,
-            "chapter_name": self.current_chapter_name,
-            "book": self.current_book,
-            "title": self.current_title
+            "book": self.HIERARCHY_MAP['book'].current_name,
+            "book_name": self.HIERARCHY_MAP['book'].current_title,
+            "part": self.HIERARCHY_MAP['part'].current_name,
+            "part_name": self.HIERARCHY_MAP['part'].current_title,
+            "title": self.HIERARCHY_MAP['title'].current_name,
+            "title_name": self.HIERARCHY_MAP['title'].current_title,
+            "division": self.HIERARCHY_MAP['division'].current_name,
+            "division_name": self.HIERARCHY_MAP['division'].current_title,
+            "chapter": self.HIERARCHY_MAP['chapter'].current_name,
+            "chapter_name": self.HIERARCHY_MAP['chapter'].current_title,
+            "subdivision": self.HIERARCHY_MAP['subdivision'].current_name,
+            "subdivision_name": self.HIERARCHY_MAP['subdivision'].current_title
         }
-    
-    def _extract_article_title(self, text: str) -> Optional[str]:
-        """Extract article title if present (usually in square brackets)"""
-        title_match = re.search(r'\[([^\]]+)\]', text[:200])
-        if title_match:
-            return title_match.group(1)
-        return None
 
 class StatuteChunker:
     """Intelligent chunking for legal documents"""
@@ -376,8 +390,8 @@ class StatuteChunker:
             
             # Include hierarchy in chunk for better search
             hierarchy_text = ""
-            if article.section:
-                hierarchy_text = f"[{article.section}]\n"
+            if article.path:
+                hierarchy_text = f"[{article.path}]\n"
             
             # For small articles, keep as single chunk
             if len(article.content) <= self.max_chunk_size:
@@ -388,7 +402,7 @@ class StatuteChunker:
                         "code": article.code,
                         "article": article.article,
                         "title": article.title,
-                        "section": article.section,
+                        "path": article.path,
                         **article.metadata
                     }
                 })
@@ -404,7 +418,7 @@ class StatuteChunker:
                             "code": article.code,
                             "article": article.article,
                             "title": article.title,
-                            "section": article.section,
+                            "path": article.path,
                             "part": f"{i+1}/{len(sub_chunks)}",
                             **article.metadata
                         }
@@ -487,7 +501,7 @@ def process_statute_pdf(
         "deleted_articles": sum(1 for a in articles if a.metadata.get("status") == "deleted"),
         "articles_with_paragraphs": sum(1 for a in articles if "paragraph" in a.metadata),
         "average_chunk_size": sum(len(c["text"]) for c in chunks) / len(chunks) if chunks else 0,
-        "sections_found": len(set(a.section for a in articles if a.section)),
+        "sections_found": len(set(a.path for a in articles if a.path)),
         "parts_found": len(set(a.metadata.get("hierarchy", {}).get("part") for a in articles if a.metadata.get("hierarchy", {}).get("part"))),
         "divisions_found": len(set(a.metadata.get("hierarchy", {}).get("division") for a in articles if a.metadata.get("hierarchy", {}).get("division"))),
         "chapters_found": len(set(a.metadata.get("hierarchy", {}).get("chapter") for a in articles if a.metadata.get("hierarchy", {}).get("chapter")))
@@ -531,6 +545,6 @@ if __name__ == "__main__":
     
     for article in articles:
         print(f"\nArticle {article.article}:")
-        print(f"  Section: {article.section}")
+        print(f"  Section: {article.path}")
         print(f"  Hierarchy: {article.metadata.get('hierarchy', {})}")
         print(f"  Content preview: {article.content[:100]}...")

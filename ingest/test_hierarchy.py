@@ -103,7 +103,7 @@ Art. 56. Czynność prawna wywołuje nie tylko skutki w niej wyrażone, lecz ró
     
     for article in kc_articles:
         print(f"\nArticle: {article.article}")
-        print(f"Section Path: {article.section}")
+        print(f"Section Path: {article.path}")
         hierarchy = article.metadata.get('hierarchy', {})
         if hierarchy:
             print(f"Hierarchy Details:")
@@ -126,7 +126,7 @@ Art. 56. Czynność prawna wywołuje nie tylko skutki w niej wyrażone, lecz ró
     
     for article in kpc_articles:
         print(f"\nArticle: {article.article}")
-        print(f"Section Path: {article.section}")
+        print(f"Section Path: {article.path}")
         hierarchy = article.metadata.get('hierarchy', {})
         if hierarchy:
             print(f"Hierarchy Details:")

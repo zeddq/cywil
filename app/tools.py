@@ -429,7 +429,21 @@ async def describe_case(case_id: Optional[str] = None) -> Dict[str, Any]:
     finally:
         session.close()
 
-async def update_case(case_id: str, description: str) -> Dict[str, Any]:
+async def update_case(case_id: str,
+                       case_number: Optional[str] = None,
+                       title: Optional[str] = None,
+                       description: Optional[str] = None,
+                       status: Optional[str] = None,
+                       case_type: Optional[str] = None,
+                       client_name: Optional[str] = None,
+                       client_contact: Optional[str] = None,
+                       opposing_party: Optional[str] = None,
+                       opposing_party_contact: Optional[str] = None,
+                       court_name: Optional[str] = None,
+                       court_case_number: Optional[str] = None,
+                       judge_name: Optional[str] = None,
+                       amount_in_dispute: Optional[str] = None,
+                       currency: Optional[str] = None) -> Dict[str, Any]:
     """
     Update a case based on its ID and description.
     """
@@ -437,13 +451,31 @@ async def update_case(case_id: str, description: str) -> Dict[str, Any]:
     from .models import Case
     from sqlalchemy.orm import sessionmaker
     
+    if not any([case_number, title, description, status, case_type, client_name,
+                 client_contact, opposing_party, opposing_party_contact, court_name,
+                 court_case_number, judge_name, amount_in_dispute, currency]):
+        return {"error": "No fields to update"}
+
     Session = sessionmaker(bind=sync_engine)
     session = Session()
 
     try:
         case = session.query(Case).filter_by(id=case_id).first()
         if case:
-            case.description = description
+            case.case_number = case_number if case_number else case.case_number
+            case.title = title if title else case.title
+            case.description = description if description else case.description
+            case.status = status if status else case.status
+            case.case_type = case_type if case_type else case.case_type
+            case.client_name = client_name if client_name else case.client_name
+            case.client_contact = client_contact if client_contact else case.client_contact
+            case.opposing_party = opposing_party if opposing_party else case.opposing_party
+            case.opposing_party_contact = opposing_party_contact if opposing_party_contact else case.opposing_party_contact
+            case.court_name = court_name if court_name else case.court_name
+            case.court_case_number = court_case_number if court_case_number else case.court_case_number
+            case.judge_name = judge_name if judge_name else case.judge_name
+            case.amount_in_dispute = amount_in_dispute if amount_in_dispute else case.amount_in_dispute
+            case.currency = currency if currency else case.currency
             session.commit()
             return {"success": True}
         return {"error": "Case not found"}  
@@ -472,12 +504,6 @@ async def schedule_reminder(case_id: str, reminder_date: str, note: str) -> Dict
     # )
     
     return reminder
-
-# Legacy functions for backward compatibility
-def search_documents(query: str) -> List[Dict]:
-    """Search through processed legal documents"""
-    # Redirect to new search_statute function
-    return asyncio.run(search_statute(query))
 
 def analyze_contract(text: str) -> Dict:
     """Analyze a contract for key terms and potential issues"""
@@ -510,26 +536,3 @@ def analyze_contract(text: str) -> Dict:
         ] if issues else []
     }
 
-def extract_case_citations(text: str) -> List[str]:
-    """Extract case citations from legal text"""
-    citations = []
-    
-    # Pattern for Polish case citations
-    patterns = [
-        r'sygn\.\s*akt\s*([IVX]+\s*[A-Z]+\s*\d+/\d+)',  # Court signatures
-        r'wyrok\s+z\s+dnia\s+\d+\s+\w+\s+\d{4}\s*r\.',  # Judgment dates
-        r'uchwała\s+SN\s+z\s+dnia\s+\d+\s+\w+\s+\d{4}\s*r\.'  # Supreme Court resolutions
-    ]
-    
-    for pattern in patterns:
-        matches = re.findall(pattern, text, re.IGNORECASE)
-        citations.extend(matches)
-    
-    return list(set(citations))
-
-def summarize_document(text: str) -> str:
-    """Generate a summary of a legal document"""
-    # For now, return a simple extraction
-    # In production, this would use LLM for summarization
-    sentences = text.split('.')[:3]
-    return '. '.join(sentences) + '...'

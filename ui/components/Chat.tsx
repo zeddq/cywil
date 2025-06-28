@@ -27,34 +27,112 @@ export default function Chat() {
       role: 'user',
       content: input,
       timestamp: new Date(),
+      thread_id: undefined,
     }
 
+    if (messages.length !== 0) {
+      userMessage.thread_id = messages[messages.length - 1].thread_id
+    }
     setMessages(prev => [...prev, userMessage])
     setInput('')
     setIsLoading(true)
 
-    try {
-      const response = await api.chat.send({ message: input })
-      
-      const assistantMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: response.response,
-        timestamp: new Date(),
-        citations: response.citations,
-        documents: response.documents,
-      }
+    // Create assistant message placeholder for streaming
+    const assistantMessageId = (Date.now() + 1).toString()
+    const assistantMessage: ChatMessage = {
+      id: assistantMessageId,
+      role: 'assistant',
+      content: '',
+      timestamp: new Date(),
+    }
+    setMessages(prev => [...prev, assistantMessage])
 
-      setMessages(prev => [...prev, assistantMessage])
-    } catch (error) {
-      console.error('Chat error:', error)
-      const errorMessage: ChatMessage = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: 'Przepraszam, wystąpił błąd. Spróbuj ponownie.',
-        timestamp: new Date(),
+    try {
+      let accumulatedContent = ''
+      let finalThreadId = userMessage.thread_id
+      let toolCallsActive = false
+
+      for await (const chunk of api.chat.stream({ message: input, thread_id: finalThreadId })) {
+        // console.log('Stream chunk received:', chunk)
+        finalThreadId = chunk.thread_id
+
+        if (chunk.status === 'streaming') {
+          if (chunk.type === 'text_chunk' && chunk.content) {
+            if (chunk.content.includes('null')) {
+              console.log('Stream chunk received null content:', chunk)
+              continue
+            }
+            accumulatedContent += chunk.content
+            // Update the assistant message with accumulated content
+            setMessages(prev => prev.map(m => 
+              m.id === assistantMessageId 
+                ? { ...m, content: accumulatedContent, thread_id: chunk.thread_id }
+                : m
+            ))
+          } else if (chunk.type === 'tool_call_start') {
+            toolCallsActive = true
+            // Add a visual indicator that tools are being processed
+            setMessages(prev => prev.map(m => 
+              m.id === assistantMessageId 
+                ? { ...m, content: accumulatedContent + '\n\n🔧 Przetwarzam narzędzia...', thread_id: chunk.thread_id }
+                : m
+            ))
+          } else if (chunk.type === 'tool_call_complete') {
+            toolCallsActive = false
+            // Remove the tool processing indicator 
+            setMessages(prev => prev.map(m => 
+              m.id === assistantMessageId 
+                ? { ...m, content: accumulatedContent, thread_id: chunk.thread_id }
+                : m
+            ))
+          } else if (chunk.type === 'full_message') {
+            if (accumulatedContent.trim() !== chunk.content.toString()) {
+              console.log('Full message: ', chunk.content)
+              console.log('Accumulated content: ', accumulatedContent)
+              accumulatedContent = chunk.content.toString()
+            }
+            setMessages(prev => prev.map(m => 
+              m.id === assistantMessageId 
+                ? { ...m, content: accumulatedContent, thread_id: chunk.thread_id }
+                : m
+            ))
+          }
+      } else if (chunk.status === 'error') {
+        setMessages(prev => prev.map(m => {
+          if (m.id === userMessage.id) {
+            return { ...m, thread_id: finalThreadId }
+          } else if (m.id === assistantMessageId) {
+            return { 
+              ...m, 
+              content: String(chunk.content),
+              thread_id: finalThreadId,
+            }
+          }
+          return m
+        }))
+      } else if (chunk.status === 'success') {
+          // Update user message with thread_id and final assistant message
+          setMessages(prev => prev.map(m => {
+            if (m.id === userMessage.id) {
+              return { ...m, thread_id: finalThreadId }
+            } else if (m.id === assistantMessageId) {
+              return { 
+                ...m, 
+                content: accumulatedContent,
+                thread_id: finalThreadId,
+              }
+            }
+            return m
+          }))
+        }
       }
-      setMessages(prev => [...prev, errorMessage])
+    } catch (error) {
+      console.error('Chat streaming error:', error)
+      setMessages(prev => prev.map(m => 
+        m.id === assistantMessageId 
+          ? { ...m, content: 'Przepraszam, wystąpił błąd podczas przesyłania wiadomości. Spróbuj ponownie.' }
+          : m
+      ))
     } finally {
       setIsLoading(false)
     }
@@ -140,10 +218,10 @@ export default function Chat() {
                   {message.documents.map((doc, idx) => (
                     <a
                       key={idx}
-                      href={doc.url}
+                      href={doc.file_path}
                       className="text-sm text-blue-600 hover:underline block"
                     >
-                      📄 {doc.name}
+                      📄 {doc.title}
                     </a>
                   ))}
                 </div>

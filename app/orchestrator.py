@@ -1,7 +1,12 @@
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, AsyncGenerator, Literal
 import asyncio
-from openai import AsyncOpenAI
-from openai.types.responses import ResponseFunctionToolCall
+from openai import AsyncOpenAI, AsyncStream
+from langchain.tools import tool
+from langchain_openai import ChatOpenAI, 
+from openai.types.responses import ResponseFunctionToolCall, ResponseInProgressEvent, ResponseCompletedEvent, \
+    ResponseCreatedEvent, ResponseOutputItemAddedEvent, ResponseOutputItemDoneEvent, ResponseFunctionCallArgumentsDeltaEvent, \
+        ResponseFunctionCallArgumentsDoneEvent, ResponseStreamEvent, ResponseOutputMessage, ResponseTextDeltaEvent, ResponseTextDoneEvent
+from openai.types.responses.response_input_param import FunctionCallOutput
 import json
 from datetime import datetime
 import logging
@@ -23,7 +28,9 @@ from .database import get_db, AsyncSessionLocal
 from .models import Case, Document, Deadline, Note
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-
+from pydantic import BaseModel
+from langchain_core.messages import BaseMessageChunk, ToolMessage
+from typing import AsyncIterator
 """
 ───────────────────────────────────────────────────────────────────────────────
 FIX NOTES
@@ -31,7 +38,7 @@ FIX NOTES
 * Upgraded to **Responses API** semantics.
   * Replaced `response.choices[0].message` access with `response.output` / `response.output_text`.
   * Added `previous_response_id` chaining instead of resending full history after the 1st turn.
-  * Updated function‑calling flow:
+  * Updated function calling flow:
       • Model returns `type == "function_call"` items ➔ we execute the mapped Python function.
       • We answer with a `type == "function_call_output"` item.
   * `handle_tool_calls` now emits `function_call_output` items, matching the new spec.
@@ -44,7 +51,7 @@ FIX NOTES
 logger = logging.getLogger(__name__)
 
 # Initialize OpenAI client
-client = AsyncOpenAI(api_key=settings.openai_api_key)
+client = ChatOpenAI(api_key=settings.openai_api_key, model=settings.openai_orchestrator_model)
 
 # Tool definitions for OpenAI Function Calling
 TOOL_DEFINITIONS: List[Dict[str, Any]] = [
@@ -144,14 +151,47 @@ TOOL_DEFINITIONS: List[Dict[str, Any]] = [
             "properties": {
                 "case_id": {"type": "string", "description": "ID of the case to update"},
                 "description": {"type": "string", "description": "New description of the case"},
+                "status": {"type": "string", "description": "New status of the case"},
+                "case_type": {"type": "string", "description": "New type of the case"},
+                "client_name": {"type": "string", "description": "New name of the client"},
+                "client_contact": {"type": "string", "description": "New contact of the client"},
+                "opposing_party": {"type": "string", "description": "New name of the opposing party"},
+                "opposing_party_contact": {"type": "string", "description": "New contact of the opposing party"},
+                "court_name": {"type": "string", "description": "New name of the court"},
+                "court_case_number": {"type": "string", "description": "New case number of the court"},
+                "judge_name": {"type": "string", "description": "New name of the judge"},
+                "amount_in_dispute": {"type": "string", "description": "New amount in dispute"},
+                "currency": {"type": "string", "description": "New currency of the case"},
             },
-            "required": ["case_id", "description"]
+            "required": ["case_id"]
+        }
+    },
+    {
+        "type": "function",
+        "name": "recover_from_tool_error",
+        "description": "Recover from a tool error",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "conversation_history": {"type": "array", "items": {"type": "object"}, "description": "The conversation history leading up to the error"},
+                "failed_function_call": {"type": "object", "description": "The function call that failed (full function_tool object)"},
+                "error_message": {"type": "string", "description": "The error message returned by the tool"},
+            },
+            "required": ["conversation_history", "failed_function_call", "error_message"]
         }
     }
 ]
 
+client.bind_tools(TOOL_DEFINITIONS)
+
 def flatten_tool_outputs(tool_outputs: List[Dict[str, Any]]) -> str:
     return "\n".join([json.dumps(output) for output in tool_outputs])
+
+class ChatStreamResponse(BaseModel):
+    type: Literal["text_chunk", "tool_call_start", "tool_call_complete", "full_message"]
+    content: str | List[Dict[str, Any]] | None = None
+    thread_id: str | None = None
+    status: Literal["streaming", "error", "success"]
 
 class ParalegalAgent:
     """Chat agent powered by the OpenAI *Responses* endpoint."""
@@ -181,7 +221,11 @@ class ParalegalAgent:
                 "content": """
 # ROLE                
 You are an expert Polish legal assistant specializing in civil law (Kodeks cywilny) and civil procedure (Kodeks postępowania cywilnego).
+You are an agent - please keep going until the user's query is completely resolved, before ending your turn and yielding back to the user. Only terminate your turn when you are sure that the problem is solved.
 
+# THINKING PROCESS
+- Your thinking should be thorough and so it's fine if it's very long. You can think step by step before and after each action you decide to take.
+- You MUST plan extensively before each function call, and reflect extensively on the outcomes of the previous function calls. DO NOT do this entire process by making function calls only, as this can impair your ability to solve the problem and think insightfully.
 
 # RESPONSIBILITIES
 Your responsibilities (you can use tools to help you):
@@ -202,11 +246,6 @@ Your responsibilities (you can use tools to help you):
 - Provide advice on criminal law cases
 - Guarantee legal outcomes
 - Replace the need for a licensed attorney in court"
-
-
-# THINKING PROCESS
-- Your thinking should be thorough and so it's fine if it's very long. You can think step by step before and after each action you decide to take.
-- You MUST plan extensively before each function call, and reflect extensively on the outcomes of the previous function calls. DO NOT do this entire process by making function calls only, as this can impair your ability to solve the problem and think insightfully.
 """}
 
     # ────────────────────────────────────────────────────────────────────
@@ -214,17 +253,17 @@ Your responsibilities (you can use tools to help you):
     # ────────────────────────────────────────────────────────────────────
     async def handle_tool_calls(
         self,
-        function_calls: List[ResponseFunctionToolCall],
+        function_calls: List[Any],
         audit_trail: List[Dict[str, Any]],
-    ) -> List[Dict[str, Any]]:
+    ) -> List[ToolMessage]:
         """Execute model-requested functions and return *function_call_output* items."""
-        outputs: List[Dict[str, Any]] = []
+        outputs: List[ToolMessage] = []
 
         for fc in function_calls:
-            call_id = fc.call_id
+            call_id = fc.id
             name = fc.name
             try:
-                args = json.loads(fc.arguments)
+                args = json.loads(fc.arguments) if fc.arguments else {}
             except json.JSONDecodeError:
                 args = {}
 
@@ -254,15 +293,16 @@ Your responsibilities (you can use tools to help you):
             audit_trail.append(trail_entry)
             logger.info("Tool call audit: %s", json.dumps(trail_entry, ensure_ascii=False))
 
-            outputs.append(
-                {
-                    "type": "function_call_output",
-                    "call_id": call_id,
-                    "output": str(result),
-                }
-            )
+            outputs.append(ToolMessage(content=str(result), tool_call_id=call_id))
 
         return outputs
+
+
+    def _handle_chunk(self, chunk: BaseMessageChunk) -> ChatStreamResponse | None:
+        if chunk.content:
+            return ChatStreamResponse(type="text_chunk", content=chunk.content, status="streaming")
+        
+        return None
 
     # ────────────────────────────────────────────────────────────────────
     # MAIN MESSAGE HANDLER
@@ -272,6 +312,20 @@ Your responsibilities (you can use tools to help you):
         user_message: str,
         thread_id: Optional[str] = None,
     ) -> Dict[str, Any]:
+        """Process a message and return complete response."""
+        async for chunk in self.process_message_stream(user_message, thread_id):
+            pass  # Consume the stream
+        return chunk  # Return the final result
+
+    # ────────────────────────────────────────────────────────────────────
+    # MAIN MESSAGE STREAMING HANDLER
+    # ────────────────────────────────────────────────────────────────────
+    async def process_message_stream(
+        self,
+        user_message: str,
+        db: AsyncSession,
+        thread_id: Optional[str] = None,
+    ) -> AsyncGenerator[ChatStreamResponse, None]:
         audit_trail: List[Dict[str, Any]] = []
         start_time = datetime.now()
         conversation_id = thread_id or f"conv_{start_time.timestamp()}"
@@ -290,90 +344,117 @@ Your responsibilities (you can use tools to help you):
         user_message_input = {"role": "user", "content": user_message}
         all_inputs = [self.get_system_prompt(), user_message_input]
 
-        # ── 1️⃣ FIRST/CONTINUATION CALL ────────────────────────────────
+        # ── 1️⃣ FIRST/CONTINUATION CALL WITH STREAMING ────────────────────────────────
         try:
-            logger.info("Calling OpenAI Responses API (initial)")
-            response = await client.responses.create(
-                model=settings.openai_orchestrator_model,
-                input=all_inputs,
+            logger.info("Calling OpenAI Responses API (initial) with streaming")
+
+            response: AsyncIterator[BaseMessageChunk] = await client.astream(all_inputs,
+                use_responses_api=True,
                 previous_response_id=prev_resp_id,
-                tools=TOOL_DEFINITIONS,
-                tool_choice="auto",
-                temperature=0.1,
-            )
-            prev_resp_id = response.id
+                temperature=0.0,
+            )            
+            logger.info(response)
+            
+            accumulated_response = ""
+            current_tool_calls: List[Any] = []
+            
+            first_chunk = True
+            last_chunk = False
+            async for chunk in response:
+                logger.info(chunk)
+                if first_chunk:
+                    merged_chunks = chunk
+                else:
+                    merged_chunks = merged_chunks + chunk
+                parsed = self._handle_chunk(chunk)
+                if parsed:
+                    if parsed.thread_id:
+                        prev_resp_id = parsed.thread_id
+                        self.conversations[conversation_id] = prev_resp_id
+                    if parsed.status == "streaming":
+                        parsed.thread_id = conversation_id
+                        yield parsed
+                    last_chunk = parsed.status == "success"
+                    first_chunk = False
 
-            audit_trail.append(
-                {
-                    "timestamp": datetime.now().isoformat(),
-                    "type": "api_call_initial",
-                    "usage": str(getattr(response, "usage", None)),
-                }
-            )
+            if merged_chunks:
+                for tool_call in merged_chunks.additional_kwargs.get("tool_calls", []):
+                    current_tool_calls.append(tool_call)
 
-            # Persist last response ID for the thread
-            self.conversations[conversation_id] = prev_resp_id
+            if not last_chunk or current_tool_calls:
+                audit_trail.append(
+                    {
+                        "timestamp": datetime.now().isoformat(),
+                        "type": "api_call_initial",
+                        "streaming": True,
+                    }
+                )
 
-            while True:
-                # Split model output into text + function calls
-                function_calls = [item for item in response.output if item.type == "function_call"]
-
-                # ── 2️⃣ IF TOOL CALLS PRESENT ──────────────────────────────
-                if function_calls:
-                    tool_outputs = await self.handle_tool_calls(function_calls, audit_trail)
+                while current_tool_calls:
+                    # ── 2️⃣ HANDLE TOOL CALLS ──────────────────────────────
+                    yield ChatStreamResponse(type="tool_call_start",
+                                             content=[{"name": tc.name, "call_id": tc.call_id} for tc in current_tool_calls],
+                                            thread_id=conversation_id, status="streaming")
+                    
+                    tool_outputs = await self.handle_tool_calls(current_tool_calls, audit_trail)
                     all_inputs = tool_outputs
-                    logger.info(f"All inputs: {all_inputs}")
+                    
+                    yield ChatStreamResponse(type="tool_call_complete",
+                                             content=[{"output": tc['output'], "call_id": tc['call_id']} for tc in tool_outputs],
+                                             thread_id=conversation_id, status="streaming")
 
-                    logger.info("Calling OpenAI Responses API (after tool outputs)")
-                    response = await client.responses.create(
-                        model=settings.openai_orchestrator_model,
+                    logger.info("Calling OpenAI Responses API (after tool outputs) with streaming")
+                    response = await client.astream(
+                        all_inputs,
+                        use_responses_api=True,
                         previous_response_id=prev_resp_id,
-                        input=all_inputs,
-                        temperature=0.1,
+                        temperature=0.0,
                     )
-                    prev_resp_id = response.id
+                    
+                    current_tool_calls = []
+                    
+                    last_chunk = False
+                    async for chunk in response:
+                        parsed = self._handle_chunk(chunk, current_tool_calls)
+                        if parsed:
+                            if parsed.thread_id:
+                                prev_resp_id = parsed.thread_id
+                                self.conversations[conversation_id] = prev_resp_id
+                            if parsed.status == "streaming":
+                                yield parsed
+                            last_chunk = parsed.status == "success"
 
                     audit_trail.append(
                         {
                             "timestamp": datetime.now().isoformat(),
                             "type": "api_call_follow_up",
-                            "usage": str(getattr(response, "usage", None)),
+                            "streaming": True,
                         }
                     )
+                    if last_chunk and not current_tool_calls:
+                        break
 
-                    # Update last response id
-                    self.conversations[conversation_id] = prev_resp_id
 
-                    # Extract text from follow‑up
-                    assistant_response_text = response.output_text or ""
-                else:
-                    assistant_response_text = response.output_text or ""
-                    break
+                # ── 3️⃣ Persist audit log ──────────────────────────────────
+                duration = (datetime.now() - start_time).total_seconds()
+                interaction_id = f"{conversation_id}_{datetime.now().timestamp()}"
 
-            # ── 3️⃣ Persist audit log ──────────────────────────────────
-            duration = (datetime.now() - start_time).total_seconds()
-            interaction_id = f"{conversation_id}_{datetime.now().timestamp()}"
+                full_audit_record = {
+                    "interaction_id": interaction_id,
+                    "conversation_id": conversation_id,
+                    "start_time": start_time.isoformat(),
+                    "end_time": datetime.now().isoformat(),
+                    "duration_seconds": duration,
+                    "status": "success",
+                    "user_message": user_message,
+                    "assistant_response": accumulated_response,
+                    "audit_trail": audit_trail,
+                }
 
-            full_audit_record = {
-                "interaction_id": interaction_id,
-                "conversation_id": conversation_id,
-                "start_time": start_time.isoformat(),
-                "end_time": datetime.now().isoformat(),
-                "duration_seconds": duration,
-                "status": "success",
-                "user_message": user_message,
-                "assistant_response": assistant_response_text,
-                "audit_trail": audit_trail,
-            }
+                await self.save_audit_record(full_audit_record, db)
 
-            await self.save_audit_record(full_audit_record)
-
-            return {
-                "response": assistant_response_text,
-                "thread_id": conversation_id,
-                "status": "success",
-                "audit_id": interaction_id,
-            }
+                # Final complete response
+                yield ChatStreamResponse(type="text_chunk", content=accumulated_response, thread_id=conversation_id, status="success")
 
         except Exception as e:
             logger.exception("Error processing message: %s", e)
@@ -385,7 +466,6 @@ Your responsibilities (you can use tools to help you):
             error_record = {
                 "interaction_id": interaction_id,
                 "conversation_id": conversation_id,
-                "case_id": case_id,
                 "start_time": start_time.isoformat(),
                 "end_time": datetime.now().isoformat(),
                 "duration_seconds": duration,
@@ -395,49 +475,43 @@ Your responsibilities (you can use tools to help you):
                 "error": str(e),
                 "audit_trail": audit_trail,
             }
-            await self.save_audit_record(error_record)
-            return {
-                "response": f"Nie mogłem przetworzyć zapytania. Błąd: {e}",
-                "thread_id": conversation_id,
-                "status": "error",
-                "audit_id": interaction_id,
-            }
+            await self.save_audit_record(error_record, db)
+            yield ChatStreamResponse(type="text_chunk", content=f"Nie mogłem przetworzyć zapytania. Błąd: {e}",
+                                     thread_id=conversation_id, status="error")
 
     # ────────────────────────────────────────────────────────────────────
     # DATABASE HELPERS (unchanged except for small typing tweaks)
     # ────────────────────────────────────────────────────────────────────
-    async def save_audit_record(self, record: Dict[str, Any]) -> None:
-        async with AsyncSessionLocal() as session:
-            note = Note(
-                case_id=record.get("case_id"),
-                note_type="ai_audit",
-                subject=f"AI Interaction Audit - {record['interaction_id']}",
-                content=json.dumps(record, ensure_ascii=False, indent=2),
-            )
-            session.add(note)
-            await session.commit()
-            logger.debug("Audit record saved: %s", record["interaction_id"])
+    async def save_audit_record(self, record: Dict[str, Any], db: AsyncSession) -> None:
+        note = Note(
+            note_type="ai_audit",
+            subject=f"AI Interaction Audit - {record['interaction_id']}",
+            content=json.dumps(record, ensure_ascii=False, indent=2),
+        )
+        if record.get("case_id"):
+            note.case_id = record["case_id"]
+        db.add(note)
+        await db.commit()
+        logger.debug("Audit record saved: %s", record["interaction_id"])
 
-    async def save_ai_interaction(self, context: Dict[str, Any]) -> None:
-        async with AsyncSessionLocal() as session:
-            note = Note(
-                note_type="ai_interaction",
-                subject="AI Assistant Context",
-                content=json.dumps(context, ensure_ascii=False),
-            )
-            session.add(note)
-            await session.commit()
+    async def save_ai_interaction(self, context: Dict[str, Any], db: AsyncSession) -> None:
+        note = Note(
+            note_type="ai_interaction",
+            subject="AI Assistant Context",
+            content=json.dumps(context, ensure_ascii=False),
+        )
+        db.add(note)
+        await db.commit()
 
-    async def load_ai_interaction(self) -> Optional[Dict[str, Any]]:
-        async with AsyncSessionLocal() as session:
-            result = await session.execute(
+    async def load_ai_interaction(self, db: AsyncSession) -> Optional[Dict[str, Any]]:
+        result = await db.execute(
                 select(Note)
                 .where(Note.note_type == "ai_interaction")
                 .order_by(Note.created_at.desc())
                 .limit(1)
-            )
-            note = result.scalar_one_or_none()
-            return json.loads(note.content) if note else None
+        )
+        note = result.scalar_one_or_none()
+        return json.loads(note.content) if note else None
 
     async def get_audit_records(
         self, *, conversation_id: Optional[str] = None, case_id: Optional[str] = None, limit: int = 10

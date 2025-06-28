@@ -31,6 +31,10 @@ ENV ENVIRONMENT=production
 
 # Expose port
 EXPOSE 8000
+# EXPOSE 5678
+
+# RUN pip install debugpy
 
 # Run the application
 CMD ["uvicorn", "app.routes:app", "--host", "0.0.0.0", "--port", "8000"]
+# CMD ["python", "-m", "debugpy", "--listen", "0.0.0.0:5678", "-m", "uvicorn", "app.routes:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./app:/app/app
+      - ./ingest:/app/ingest
+      - /app/app/__pycache__
+    environment:
+      - ENVIRONMENT=development
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - POSTGRES_HOST=127.0.0.1
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=paralegal
+      - POSTGRES_USER=paralegal
+      - POSTGRES_PASSWORD=paralegal
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - QDRANT_HOST=127.0.0.1
+      - QDRANT_PORT=6333
+    depends_on:
+      - redis
+    command: uvicorn app.routes:app --host 0.0.0.0 --port 8000 --reload
+    network_mode: host
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+
+volumes:
+  redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /Volumes/code/cywil/volumes/redis

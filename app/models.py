@@ -4,12 +4,10 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from datetime import datetime
-import uuid
+from datetime import datetime, UTC
+import uuid     
 from typing import Optional, List, Dict, Any
 from sqlmodel import SQLModel, Field, Relationship
-
-Base = declarative_base()
 
 def generate_uuid():
     return str(uuid.uuid4())
@@ -78,8 +76,8 @@ class FormTemplateBase(SQLModel):
 class Case(CaseBase, table=True):
     __tablename__ = "cases"
     id: Optional[str] = Field(default_factory=generate_uuid, primary_key=True)
-    created_at: Optional[datetime] = Field(default_factory=datetime.now(datetime.UTC))
-    updated_at: Optional[datetime] = Field(default_factory=datetime.now(datetime.UTC), sa_column_kwargs={"onupdate": datetime.now(datetime.UTC)})
+    created_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
+    updated_at: Optional[datetime] = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow})
     closed_at: Optional[datetime] = Field(default=None)
 
     documents: List["Document"] = Relationship(back_populates="case")
@@ -90,8 +88,8 @@ class Document(DocumentBase, table=True):
     __tablename__ = "documents"
     id: Optional[str] = Field(default_factory=generate_uuid, primary_key=True)
     case_id: str = Field(foreign_key="cases.id")
-    created_at: Optional[datetime] = Field(default_factory=datetime.now(datetime.UTC))
-    updated_at: Optional[datetime] = Field(default_factory=datetime.now(datetime.UTC), sa_column_kwargs={"onupdate": datetime.now(datetime.UTC)})
+    created_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
+    updated_at: Optional[datetime] = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow})
 
     case: Case = Relationship(back_populates="documents")
 
@@ -99,19 +97,19 @@ class Deadline(DeadlineBase, table=True):
     __tablename__ = "deadlines"
     id: Optional[str] = Field(default_factory=generate_uuid, primary_key=True)
     case_id: str = Field(foreign_key="cases.id")
-    created_at: Optional[datetime] = Field(default_factory=datetime.now(datetime.UTC))
-    updated_at: Optional[datetime] = Field(default_factory=datetime.now(datetime.UTC), sa_column_kwargs={"onupdate": datetime.now(datetime.UTC)})
+    created_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
+    updated_at: Optional[datetime] = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow})
 
     case: Case = Relationship(back_populates="deadlines")
 
 class Note(NoteBase, table=True):
     __tablename__ = "notes"
     id: Optional[str] = Field(default_factory=generate_uuid, primary_key=True)
-    case_id: str = Field(foreign_key="cases.id")
-    created_at: Optional[datetime] = Field(default_factory=datetime.now(datetime.UTC))
-    updated_at: Optional[datetime] = Field(default_factory=datetime.now(datetime.UTC), sa_column_kwargs={"onupdate": datetime.now(datetime.UTC)})
+    case_id: Optional[str] = Field(foreign_key="cases.id", default=None)
+    created_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
+    updated_at: Optional[datetime] = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow})
 
-    case: Case = Relationship(back_populates="notes")
+    case: Optional[Case] = Relationship(back_populates="notes")
 
 class StatuteChunk(SQLModel, table=True):
     __tablename__ = "statute_chunks"
@@ -124,11 +122,11 @@ class StatuteChunk(SQLModel, table=True):
     effective_date: Optional[datetime] = Field(default=None)
     last_amendment: Optional[datetime] = Field(default=None)
     statute_metadata: Dict[str, Any] = Field(default={}, sa_column=Column(JSON))
-    created_at: Optional[datetime] = Field(default_factory=datetime.now(datetime.UTC))
-    updated_at: Optional[datetime] = Field(default_factory=datetime.now(datetime.UTC), sa_column_kwargs={"onupdate": datetime.now(datetime.UTC)})
+    created_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
+    updated_at: Optional[datetime] = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow})
 
 class FormTemplate(FormTemplateBase, table=True):
     __tablename__ = "form_templates"
-    id: Optional[str] = Field(default_factory=generate_uuid, primary_key=True, index=True)
-    created_at: Optional[datetime] = Field(default_factory=datetime.now(datetime.UTC))
-    updated_at: Optional[datetime] = Field(default_factory=datetime.now(datetime.UTC), sa_column_kwargs={"onupdate": datetime.now(datetime.UTC)})
+    id: Optional[str] = Field(default_factory=generate_uuid, primary_key=True)
+    created_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
+    updated_at: Optional[datetime] = Field(default_factory=datetime.utcnow, sa_column_kwargs={"onupdate": datetime.utcnow})

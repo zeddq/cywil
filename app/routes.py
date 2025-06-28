@@ -1,10 +1,12 @@
 from fastapi import FastAPI, UploadFile, File, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.responses import StreamingResponse
 from typing import List, Optional, Dict, Any, Type
 from pydantic import BaseModel, create_model
 from datetime import datetime, timedelta
 import os
-from .orchestrator import ParalegalAgent
+import json
+from .orchestrator import ParalegalAgent, ChatStreamResponse
 from .database import get_db, init_db
 from .models import Case, CaseBase, Document, DocumentBase, Deadline, DeadlineBase, Note
 from .config import settings
@@ -70,8 +72,12 @@ class DeadlineCreate(DeadlineBase):
 # This is needed to allow the frontend (running on localhost:3000)
 # to communicate with the backend (running on localhost:8000)
 origins = [
-    "http://localhost",
     "http://localhost:3000",
+    "https://localhost:3000",
+    "https://localhost",
+    "https://localhost:443",
+    "https://localhost:80",
+    "http://localhost",
 ]
 
 app.add_middleware(
@@ -114,7 +120,7 @@ async def chat(request: ChatRequest, db: AsyncSession = Depends(get_db)):
                 "last_response": result["response"],
                 "thread_id": result["thread_id"],
                 "timestamp": datetime.now().isoformat()
-            })
+            }, db)
         
         response = ChatResponse(**result)
         logger.info(f"Chat request returning: {response.model_dump_json()}")
@@ -123,6 +129,49 @@ async def chat(request: ChatRequest, db: AsyncSession = Depends(get_db)):
     except Exception as e:
         logger.error(f"Error in chat endpoint: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/chat/stream")
+async def chat_stream(request: ChatRequest, db: AsyncSession = Depends(get_db)):
+    """
+    Streaming chat endpoint for real-time responses
+    """
+    logger.info(f"Chat stream request received: {request.model_dump_json()}")
+    
+    async def generate_stream():
+        thread_id = request.thread_id or "unknown"
+        try:
+            final_result = None
+            async for chunk in agent.process_message_stream(request.message, db, request.thread_id):
+                if chunk.thread_id:
+                    thread_id = chunk.thread_id
+                chunk_json = json.dumps(chunk.model_dump(), ensure_ascii=False) + "\n"
+                yield chunk_json
+                if chunk.type == "text_chunk":
+                    final_result = chunk
+            
+            # Save interaction after streaming is complete
+            if final_result and final_result.status == "success":
+                await agent.save_ai_interaction({
+                    "last_query": request.message,
+                    "last_response": final_result.content,
+                    "thread_id": final_result.thread_id,
+                    "timestamp": datetime.now().isoformat()
+                }, db)
+                
+        except Exception as e:
+            logger.error(f"Error in chat stream endpoint: {e}", exc_info=True)
+            error_chunk = ChatStreamResponse(type="text_chunk", content=f"Przepraszam, wystąpił błąd: {str(e)}", thread_id=thread_id, status="error")
+            yield json.dumps(error_chunk.model_dump(), ensure_ascii=False) + "\n"
+    
+    return StreamingResponse(
+        generate_stream(),
+        media_type="application/x-ndjson",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no"
+        }
+    )
 
 @app.post("/upload")
 async def upload_document(
@@ -169,7 +218,7 @@ async def create_case(case: CaseCreate, db: AsyncSession = Depends(get_db)):
     """Create a new legal case"""
     logger.info(f"Create case request received: {case.model_dump_json()}")
     
-    db_case = Case.model_validate(case)
+    db_case = Case(**case.model_dump())
     try:
         db.add(db_case)
         await db.commit()

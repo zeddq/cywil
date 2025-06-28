@@ -7,20 +7,18 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
-      - "5678:5678"
     volumes:
       - ./data:/app/data
       - ./app:/app/app
       - ./ingest:/app/ingest
-      - /app/app/__pycache__
     environment:
-      - ENVIRONMENT=development
+      - ENVIRONMENT=production
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - POSTGRES_DB=paralegal
       - POSTGRES_USER=paralegal
-      - POSTGRES_PASSWORD=paralegal
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-paralegal}
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - QDRANT_HOST=qdrant
@@ -29,14 +27,14 @@ services:
       - postgres
       - redis
       - qdrant
-    command: python -m debugpy --listen 0.0.0.0:5678 -m uvicorn app.routes:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn app.routes:app --host 0.0.0.0 --port 8000
 
   postgres:
     image: postgres:15-alpine
     environment:
       - POSTGRES_DB=paralegal
       - POSTGRES_USER=paralegal
-      - POSTGRES_PASSWORD=paralegal
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-paralegal}
     ports:
       - "5432:5432"
     volumes:
@@ -44,8 +42,6 @@ services:
 
   redis:
     image: redis:alpine
-    ports:
-      - "6379:6379"
     volumes:
       - redis_data:/data
 
@@ -56,34 +52,17 @@ services:
     volumes:
       - qdrant_data:/qdrant/storage
 
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=zeddq1@gmail.com
-      - PGADMIN_DEFAULT_PASSWORD=admin
-    ports:
-      - "5050:80"
-    depends_on:
-      - postgres
-
   ui:
     build:
       context: ./ui
-      dockerfile: Dockerfile.dev
-    ports:
-      - "3000:3000"
-      - "9229:9229"
-      - "9230:9230"
+      dockerfile: Dockerfile.prod
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000
-      - CHOKIDAR_USEPOLLING=true
-      - NODE_ENV=development
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=/api
+    volumes:
+      - ./certificates:/app/certificates:ro
     depends_on:
       - api
-    volumes:
-      - ./ui:/app
-      - /app/node_modules
-      - /app/.next
 
 volumes:
   postgres_data:
@@ -91,16 +70,16 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /Volumes/code/cywil/volumes/postgres
+      device: /home/zeddq1/volumes/postgres
   redis_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /Volumes/code/cywil/volumes/redis
+      device: /home/zeddq1/volumes/redis
   qdrant_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /Volumes/code/cywil/volumes/qdrant
+      device: /home/zeddq1/volumes/qdrant

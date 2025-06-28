@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  ui-https:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev.https
+    ports:
+      - "3443:3443"
+      - "9229:9229"
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - NODE_ENV=development
+      - NEXT_TELEMETRY_DISABLED=1
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

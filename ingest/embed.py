@@ -100,19 +100,28 @@ class PolishLegalEmbedder:
         Returns:
             Numpy array of embeddings
         """
-        embeddings = []
+        # embeddings = []
         
-        for i in tqdm(range(0, len(texts), batch_size), desc="Generating embeddings"):
-            batch = texts[i:i + batch_size]
-            batch_embeddings = self.model.encode(
-                batch,
+        # for i in tqdm(range(0, len(texts), batch_size), desc="Generating embeddings"):
+        #     batch = texts[i:i + batch_size]
+        #     batch_embeddings = self.model.encode(
+        #         batch,
+        #         convert_to_numpy=True,
+        #         normalize_embeddings=True,  # Cosine similarity
+        #         show_progress_bar=True
+        #     )
+        #     embeddings.append(batch_embeddings)
+        
+        batch_embeddings = self.model.encode(
+                texts,
                 convert_to_numpy=True,
                 normalize_embeddings=True,  # Cosine similarity
-                show_progress_bar=False
+                show_progress_bar=True,
+                batch_size=batch_size,
             )
-            embeddings.append(batch_embeddings)
-        
-        return np.vstack(embeddings)
+        # embeddings.append(batch_embeddings)
+
+        return batch_embeddings
     
     def prepare_statute_texts(self, chunks: List[Dict]) -> List[str]:
         """
@@ -175,9 +184,9 @@ class PolishLegalEmbedder:
         
         for i, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
             # Generate unique ID
-            chunk_id = chunk.get("chunk_id", f"chunk_{i}")
+            chunk_id: str = chunk.get("chunk_id", f"chunk_{i}")
             # Use hash as integer to avoid UUID format issues
-            point_id = int(hashlib.md5(chunk_id.encode()).hexdigest()[:8], 16)
+            point_id = int(hashlib.md5(chunk_id.encode()).hexdigest()[:8], base=16)
             
             # Prepare payload
             payload = {
@@ -198,7 +207,7 @@ class PolishLegalEmbedder:
             if len(points) >= batch_size:
                 self.client.upsert(
                     collection_name=collection_name,
-                    points=points
+                    points=points,
                 )
                 logger.info(f"Uploaded batch of {len(points)} points")
                 points = []

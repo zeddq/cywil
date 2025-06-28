@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-from .models import Base
+from .models import SQLModel
 from .config import settings
 import logging
 
@@ -45,8 +45,8 @@ async def init_db():
     """Initialize database tables"""
     logger.info("Connecting to PostgreSQL database to initialize tables")
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
+        await conn.run_sync(SQLModel.metadata.create_all)
 
 def init_db_sync():
     """Initialize database tables synchronously (for scripts)"""
-    Base.metadata.create_all(bind=sync_engine)
+    SQLModel.metadata.create_all(bind=sync_engine)

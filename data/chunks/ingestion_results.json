@@ -1,51 +1,51 @@
 {
-  "start_time": "2025-06-22T01:30:36.022486",
+  "start_time": "2025-07-02T01:35:02.217735",
   "statutes": {
     "KC": {
       "chunk_stats": {
-        "total_articles": 2098,
-        "total_chunks": 2103,
+        "total_articles": 2097,
+        "total_chunks": 2101,
         "deleted_articles": 113,
         "articles_with_paragraphs": 2097,
-        "average_chunk_size": 272.91107941036614,
-        "sections_found": 60,
+        "average_chunk_size": 322.07615421227985,
+        "sections_found": 2097,
         "parts_found": 1,
         "divisions_found": 6,
         "chapters_found": 4
       },
       "embed_stats": {
         "code": "KC",
-        "chunks_processed": 2103,
-        "embeddings_generated": 2103,
+        "chunks_processed": 2101,
+        "embeddings_generated": 2101,
         "embedding_dimension": 768,
         "collection_name": "statutes",
-        "processing_date": "2025-06-22T01:32:29.164188"
+        "processing_date": "2025-07-02T01:35:40.719153"
       },
       "status": "success"
     },
     "KPC": {
       "chunk_stats": {
-        "total_articles": 4136,
-        "total_chunks": 4182,
+        "total_articles": 4135,
+        "total_chunks": 4180,
         "deleted_articles": 182,
         "articles_with_paragraphs": 4135,
-        "average_chunk_size": 320.60760401721666,
-        "sections_found": 53,
+        "average_chunk_size": 421.1162679425837,
+        "sections_found": 4135,
         "parts_found": 5,
         "divisions_found": 8,
         "chapters_found": 0
       },
       "embed_stats": {
         "code": "KPC",
-        "chunks_processed": 4182,
-        "embeddings_generated": 4182,
+        "chunks_processed": 4180,
+        "embeddings_generated": 4180,
         "embedding_dimension": 768,
         "collection_name": "statutes",
-        "processing_date": "2025-06-22T01:36:11.308487"
+        "processing_date": "2025-07-02T01:36:55.664667"
       },
       "status": "success"
     }
   },
-  "end_time": "2025-06-22T01:36:11.383717",
-  "total_duration": "0:05:35.361231"
+  "end_time": "2025-07-02T01:36:56.921619",
+  "total_duration": "0:01:54.703884"
 }

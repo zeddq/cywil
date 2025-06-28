@@ -5,6 +5,7 @@ import sys
 import functools
 import hashlib
 import uuid
+from typing import Any, Awaitable, Callable
 
 import openai
 from dotenv import load_dotenv
@@ -72,7 +73,7 @@ async def generate_summary(template_text: str, file_name: str) -> str:
         print(f"Error generating summary for {file_name}: {e}")
         return f"Nie udało się wygenerować podsumowania dla {file_name}."
 
-async def with_session(func):
+async def with_session(func: Callable[[AsyncSession], Awaitable[Any]]) -> Awaitable[Any]:
     async with sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)() as session:
         try:
             return await func(session)
@@ -108,13 +109,13 @@ async def process_template_file(file_path: Path, session: AsyncSession):
 
     summary = await generate_summary(template_text, file_path.name)
     embedding = embedding_model.encode(template_text).tolist()
-    qdrant_id = uuid.uuid5(uuid.NAMESPACE_URL, hashlib.sha1(str(file_path).encode()).hexdigest())
+    qdrant_id = str(uuid.uuid5(uuid.NAMESPACE_URL, hashlib.sha1(str(file_path).encode()).hexdigest()))
 
     qdrant_client.upsert(
         collection_name=QDRANT_COLLECTION_NAME,
         points=[
             models.PointStruct(
-                id=str(qdrant_id),
+                id=qdrant_id,
                 vector=embedding,
                 payload={"name": template_name, "summary": summary, "file_name": file_path.name},
             )
@@ -123,16 +124,6 @@ async def process_template_file(file_path: Path, session: AsyncSession):
         ordering=models.WriteOrdering.MEDIUM,
     )
     print(f"  -> Upserted '{template_name}' to Qdrant with ID {qdrant_id}")
-
-    try:
-        qdrant_client.create_payload_index(
-            collection_name=QDRANT_COLLECTION_NAME,
-            field_name="name",
-            field_schema="keyword"
-        )
-        print("Created name search index")
-    except Exception as e:
-        print(f"Name index may already exist: {e}")
     
     # Create additional metadata indexes
     for field in ["name", "summary", "category"]:

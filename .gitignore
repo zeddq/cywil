@@ -1,2 +1,10 @@
 data/
 **/__pycache__/
+ui/certificates/
+ui/.next/
+ui/node_modules/
+certificates/
+nginx/certificates/
+.env
+.env.local
+.env.production

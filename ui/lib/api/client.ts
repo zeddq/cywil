@@ -1,7 +1,7 @@
 import axios from 'axios'
-import type { ChatRequest, ChatResponse, Case, Document, Deadline } from '@/lib/types'
+import type { ChatRequest, ChatResponse, Case, Document, Deadline, ChatStreamResponse } from '@/lib/types'
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api'
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -9,6 +9,7 @@ const apiClient = axios.create({
     'Content-Type': 'application/json',
   },
 })
+
 
 export const api = {
   // Chat endpoints
@@ -18,6 +19,55 @@ export const api = {
       const { data } = await apiClient.post<ChatResponse>('/chat', request)
       console.log('API Response: chat.send', { data });
       return data
+    },
+    
+    stream: async function* (request: ChatRequest): AsyncGenerator<ChatStreamResponse, void, unknown> {
+      console.log('API Call: chat.stream', { request });
+      
+      const response = await fetch(`${API_BASE_URL}/chat/stream`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(request),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error('No response body reader available');
+      }
+
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          buffer += decoder.decode(value, { stream: true });
+          const lines = buffer.split('}\n');
+          buffer = lines.pop() || ''; // Keep incomplete line in buffer
+
+          for (const line of lines) {
+            if (line.trim()) {
+              try {
+                const chunk: ChatStreamResponse = JSON.parse(line + '}');
+                // console.log('API Stream chunk:', chunk);
+                yield chunk;
+              } catch (e) {
+                console.error('Failed to parse stream chunk:', line, e);
+              }
+            }
+          }
+        }
+      } finally {
+        reader.releaseLock();
+      }
     },
   },
 
@@ -37,15 +87,15 @@ export const api = {
       console.log('API Response: cases.get', data);
       return data;
     },
-    create: async (caseData: Partial<Case>): Promise<Case> => {
+    create: async (caseData: Omit<Case, 'id' | 'created_at' | 'updated_at'>): Promise<Case> => {
       console.log('API Call: cases.create with payload:', caseData);
-      const { data } = await apiClient.post<{ case: Case }>('/cases', caseData)
+      const { data } = await apiClient.post<Case>('/cases', caseData)
       console.log('API Response: cases.create', data);
-      return data.case
+      return data
     },
-    update: async (id: string, updatedCase: Case): Promise<Object> => {
+    update: async (id: string, updatedCase: Case): Promise<Case> => {
       console.log(`API Call: cases.update for id: ${id} with payload:`, updatedCase);
-      const { data } = await apiClient.put<{ caseData: Object }>(`/cases/${id}`, updatedCase)
+      const { data } = await apiClient.put<Case>(`/cases/${id}`, updatedCase)
       console.log('API Response: cases.update', data);
       return data
     },

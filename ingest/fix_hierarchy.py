@@ -42,8 +42,8 @@ def compare_parsers(pdf_path: str):
     print("\nOld Parser Structure:")
     old_sections = set()
     for chunk in old_chunks[:10]:  # Show first 10
-        if chunk.section:
-            old_sections.add(chunk.section)
+        if chunk.path:
+            old_sections.add(chunk.path)
         if 'chapter' in chunk.metadata:
             print(f"  Article {chunk.article}: Chapter={chunk.metadata.get('chapter')}, Book={chunk.metadata.get('book')}")
     

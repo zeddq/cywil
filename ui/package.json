@@ -4,9 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:debug": "NODE_OPTIONS='--inspect=0.0.0.0:9229' next dev",
+    "dev:https": "node server.js",
+    "dev:https:debug": "node --inspect=0.0.0.0:9229 server.js",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-certs": "./generate-certificates.sh"
   },
   "dependencies": {
     "next": "15.1.0",

@@ -66,7 +66,7 @@ run_api() {
 run_ingestion() {
     print_header "Running Data Ingestion Pipeline"
     
-    docker-compose exec -e POSTGRES_HOST=postgres -e REDIS_HOST=redis api python ingest/ingest_pipeline.py --qdrant-host=qdrant --qdrant-port=6333
+    docker-compose exec -e POSTGRES_HOST=localhost -e REDIS_HOST=redis api python ingest/ingest_pipeline.py --qdrant-host=localhost --qdrant-port=6333
     
     print_success "Ingestion completed"
 }
@@ -450,10 +450,20 @@ fi
 case "${1:-help}" in
     "start")
         print_header "Starting Services"
-        docker-compose up -d
+        docker-compose -f docker-compose.prod.yml up -d
+        print_success "Services started"
+        ;;
+    "start-dev")
+        print_header "Starting Services"
+        docker-compose -f docker-compose.yml up -d
         print_success "Services started"
         ;;
     "stop")
+        print_header "Stopping Services"
+        docker-compose -f docker-compose.prod.yml down
+        print_success "Services stopped"
+        ;;
+    "stop-dev")
         print_header "Stopping Services"
         docker-compose down
         print_success "Services stopped"

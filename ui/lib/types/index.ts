@@ -1,5 +1,6 @@
 export interface ChatMessage {
   id: string
+  thread_id?: string
   role: 'user' | 'assistant' | 'system'
   content: string
   timestamp: Date
@@ -56,16 +57,16 @@ export interface Case {
 export interface Deadline {
   id: string
   case_id: string
-  deadline_type?: string
+  deadline_type: string
   description?: string
   due_date: string
   legal_basis?: string
-  is_court_deadline?: boolean
-  is_extendable?: boolean
+  is_court_deadline: boolean
+  is_extendable: boolean
   status: 'pending' | 'completed' | 'missed'
   completed_at?: string
-  reminder_days_before?: number
-  reminder_sent?: boolean
+  reminder_days_before: number
+  reminder_sent: boolean
   created_at: string
   updated_at?: string
 }
@@ -73,11 +74,11 @@ export interface Deadline {
 export interface Note {
   id: string
   case_id: string
-  note_type?: string
+  note_type: string
   subject?: string
-  content?: string
+  content: string
   duration_minutes?: number
-  billable?: boolean
+  billable: boolean
   created_at: string
   updated_at?: string
 }
@@ -95,4 +96,15 @@ export interface ChatResponse {
   citations?: Citation[]
   documents?: Document[]
   suggested_actions?: string[]
+}
+
+export interface ChatStreamResponse {
+  type: 'text_chunk' | 'tool_call_start' | 'tool_call_complete' | 'full_message'
+  content: {
+    name?: string
+    call_id?: string
+    output?: string
+  }[] | string
+  thread_id: string
+  status: 'streaming' | 'error' | 'success'
 }

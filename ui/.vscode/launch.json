@@ -1,0 +1,17 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Chrome against localhost (Next.js client)",
+            "type": "chrome", // Or "msedge" for Microsoft Edge
+            "request": "launch",
+            "url": "http://localhost:3000", // The URL where your Next.js app is accessible
+            "webRoot": "${workspaceFolder}", // The root of your Next.js project on your local machine
+            "sourceMaps": true,
+            "skipFiles": ["<node_internals>/**"]
+          }
+    ]
+}

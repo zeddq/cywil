@@ -56,3 +56,4 @@ sentry-sdk==2.30.0
 # Progress bars and utilities
 tqdm==4.67.1
 SQLModel==0.0.24
+debugpy==1.8.14

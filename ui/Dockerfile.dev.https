@@ -1,0 +1,22 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install OpenSSL for certificate generation
+RUN apk add --no-cache bash openssl
+
+COPY package.json package-lock.json* ./
+RUN npm install
+
+# Copy certificate generation script
+COPY generate-certificates.sh ./
+
+# Generate certificates during build
+RUN chmod +x generate-certificates.sh && ./generate-certificates.sh
+
+# Expose HTTPS and Debugger ports
+EXPOSE 3443
+EXPOSE 9229
+
+# Use the HTTPS server with debugger
+CMD ["npm", "run", "dev:https:debug"]

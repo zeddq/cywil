@@ -7,6 +7,11 @@ RUN npm install
 
 RUN apk add --no-cache bash
 
-EXPOSE 3000
+COPY . .
 
-CMD ["npm", "run", "dev"]
+# Expose app and debugger ports
+EXPOSE 3000
+EXPOSE 9229
+EXPOSE 9230
+
+CMD ["npm", "run", "dev:debug"]

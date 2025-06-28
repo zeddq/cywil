@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react'
 import { api } from '@/lib/api/client'
 import type { Case } from '@/lib/types'
 import CaseDetails from './CaseDetails'
-import { ChevronDown } from 'lucide-react'
+import NewCaseForm from './NewCaseForm'
+import { ChevronDown, Plus } from 'lucide-react'
 
 export default function CasesView() {
   const [cases, setCases] = useState<Case[]>([])
@@ -12,6 +13,8 @@ export default function CasesView() {
   const [error, setError] = useState<string | null>(null)
   const [expandedCaseId, setExpandedCaseId] = useState<string | null>(null)
   const [updatingCaseId, setUpdatingCaseId] = useState<string | null>(null)
+  const [isCreating, setIsCreating] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
 
   useEffect(() => {
     const fetchCases = async () => {
@@ -50,14 +53,11 @@ export default function CasesView() {
     setUpdatingCaseId(caseId)
 
     try {
-      await api.cases.update(caseId, updatedCase)
-      // The API response might contain more updated fields from the backend
-      // so we will update the case data with the response
-      const freshlyUpdatedCase = await api.cases.get(caseId);
+      const freshUpdatedCase = await api.cases.update(caseId, updatedCase)
       setCases((prevCases) =>
-        prevCases.map((c) => (c.id === caseId ? freshlyUpdatedCase : c))
+        prevCases.map((c) => (c.id === caseId ? freshUpdatedCase : c))
       )
-      console.log('Handler: handleUpdateCase success', { caseId });
+      console.log('Handler: handleUpdateCase success', freshUpdatedCase);
     } catch (err) {
       setError('Failed to update case. Please try again later.')
       console.error(err)
@@ -66,6 +66,22 @@ export default function CasesView() {
       console.log('Handler: handleUpdateCase reverted after error', { caseId });
     } finally {
       setUpdatingCaseId(null)
+    }
+  }
+
+  const handleSaveNewCase = async (newCaseData: Omit<Case, 'id' | 'created_at' | 'updated_at'>) => {
+    console.log('Handler: handleSaveNewCase', { newCaseData });
+    setIsSaving(true)
+    try {
+      const newCase = await api.cases.create(newCaseData as Case)
+      setCases((prevCases) => [newCase, ...prevCases])
+      setIsCreating(false)
+      setError(null)
+    } catch (err) {
+      setError('Failed to create case. Please try again later.')
+      console.error(err)
+    } finally {
+      setIsSaving(false)
     }
   }
 
@@ -79,8 +95,26 @@ export default function CasesView() {
 
   return (
     <div className="p-4 bg-white rounded-lg shadow-lg">
-      <h1 className="text-2xl font-bold mb-4">Zarządzanie sprawami</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">Zarządzanie sprawami</h1>
+        <button
+          onClick={() => setIsCreating(!isCreating)}
+          className="flex items-center px-4 py-2 text-sm font-medium text-white bg-primary rounded-md hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+        >
+          <Plus className="w-5 h-5 mr-2" />
+          {isCreating ? 'Anuluj' : 'Nowa sprawa'}
+        </button>
+      </div>
+
+      {isCreating && (
+        <NewCaseForm
+          onSave={handleSaveNewCase}
+          onCancel={() => setIsCreating(false)}
+          isSaving={isSaving}
+        />
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 items-start mt-6">
         {cases.map((caseItem) => (
           <div key={caseItem.id} className="border rounded-lg p-4 shadow flex flex-col justify-between">
             <div onClick={() => handleToggleExpand(caseItem.id)} className="cursor-pointer">
@@ -122,7 +156,7 @@ export default function CasesView() {
             </div>
             {expandedCaseId === caseItem.id && (
               <CaseDetails 
-                caseItem={caseItem} 
+                caseItem={caseItem}
                 onUpdate={handleUpdateCase}
                 isUpdating={updatingCaseId === caseItem.id}
               />
@@ -130,7 +164,7 @@ export default function CasesView() {
           </div>
         ))}
       </div>
-      {cases.length === 0 && <p>No cases found.</p>}
+      {cases.length === 0 && !isCreating && <p>No cases found.</p>}
     </div>
   )
 } 
