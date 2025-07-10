@@ -36,12 +36,20 @@ class Settings(BaseSettings):
     secret_key: str = os.getenv("SECRET_KEY", "dev-secret-key-change-in-production")
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "dev-secret-key-change-in-production")  # For JWT compatibility
+    ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    
+    # Registration Secret Keys - comma separated list of valid keys
+    registration_secret_keys: str = os.getenv("REGISTRATION_SECRET_KEYS", "default-registration-key-change-in-production")
+    registration_enabled: bool = os.getenv("REGISTRATION_ENABLED", "True").lower() == "true"
     
     # File Storage
     upload_dir: str = "data/uploads"
     embeddings_dir: str = "data/embeddings"
     chunks_dir: str = "data/chunks"
     pdfs_dir: str = "data/pdfs"
+    jsonl_dir: str = "data/jsonl"
     
     @property
     def database_url(self) -> str:

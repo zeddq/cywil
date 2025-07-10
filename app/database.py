@@ -1,9 +1,14 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy import create_engine
+from sqlmodel import Session as SQLModelSession
 from .models import SQLModel
 from .config import settings
 import logging
+# import alembic
+from pathlib import Path
+from alembic import command
+from alembic.config import Config
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +33,13 @@ AsyncSessionLocal = sessionmaker(
     expire_on_commit=False
 )
 
+# Sync session factory for auth
+SessionLocal = sessionmaker(
+    sync_engine,
+    class_=Session,
+    expire_on_commit=False
+)
+
 async def get_db():
     """Dependency for FastAPI routes"""
     async with AsyncSessionLocal() as session:
@@ -49,4 +61,31 @@ async def init_db():
 
 def init_db_sync():
     """Initialize database tables synchronously (for scripts)"""
+    #run_migrations()
     SQLModel.metadata.create_all(bind=sync_engine)
+
+def get_session():
+    """Dependency for synchronous database sessions (used by auth)"""
+    with SQLModelSession(sync_engine) as session:
+        yield session
+
+# def run_migrations() -> None:
+#     """
+#     Apply all Alembic migrations up to 'head'.
+#     This is intended for local development only.
+#     """
+#     if not settings.debug:        # or any flag that means "production"
+#         return                    # skip in prod / CI
+
+#     # Path to alembic.ini (adjust if it lives elsewhere)
+#     alembic_ini = Path(__file__).parent / "alembic.ini"
+
+#     cfg = Config(str(alembic_ini))
+
+#     # Override URL so it always matches your settings
+#     cfg.set_main_option("sqlalchemy.url", settings.sync_database_url)
+
+#     # Optionally silence output in tests
+#     # cfg.print_stdout = lambda *args, **kw: None
+
+#     command.upgrade(cfg, "head")  # equivalent to `alembic upgrade head`

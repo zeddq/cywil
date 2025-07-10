@@ -10,11 +10,13 @@ interface NewCaseFormProps {
   isSaving: boolean
 }
 
+
+
 export default function NewCaseForm({ onSave, onCancel, isSaving }: NewCaseFormProps) {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const [clientName, setClientName] = useState('')
-  const [caseNumber, setCaseNumber] = useState('')
+  const [referenceNumber, setReferenceNumber] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -22,7 +24,7 @@ export default function NewCaseForm({ onSave, onCancel, isSaving }: NewCaseFormP
       title,
       description,
       client_name: clientName,
-      case_number: caseNumber,
+      reference_number: referenceNumber,
       status: 'active',
       client_contact: {},
     })
@@ -71,14 +73,14 @@ export default function NewCaseForm({ onSave, onCancel, isSaving }: NewCaseFormP
           />
         </div>
         <div>
-          <label htmlFor="caseNumber" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="referenceNumber" className="block text-sm font-medium text-gray-700">
             Sygnatura
           </label>
           <input
             type="text"
-            id="caseNumber"
-            value={caseNumber}
-            onChange={(e) => setCaseNumber(e.target.value)}
+            id="referenceNumber"
+            value={referenceNumber}
+            onChange={(e) => setReferenceNumber(e.target.value)}
             className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm"
             required
           />

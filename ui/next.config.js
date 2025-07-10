@@ -16,6 +16,7 @@ const nextConfig = {
       allowedOrigins: ['https://localhost:3443'],
     },
   },
+  productionBrowserSourceMaps: true,
   // Enable standalone output for Docker
   output: 'standalone',
 }

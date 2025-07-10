@@ -1,3 +1,27 @@
+// User types
+export type UserRole = 'admin' | 'lawyer' | 'paralegal' | 'client'
+
+export interface User {
+  id: string
+  email: string
+  full_name: string
+  role: UserRole
+  is_active: boolean
+  is_verified: boolean
+  created_at: string
+}
+
+export interface UserUpdate {
+  is_active?: boolean
+  is_verified?: boolean
+  role?: UserRole
+}
+
+export interface UserListResponse {
+  users: User[]
+  total: number
+}
+
 export interface ChatMessage {
   id: string
   thread_id?: string
@@ -32,8 +56,8 @@ export interface Document {
 
 export interface Case {
   id: string
-  case_number: string
-  title: string
+  reference_number: string
+  title?: string
   description?: string
   status: 'active' | 'closed' | 'archived'
   case_type?: string

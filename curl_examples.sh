@@ -35,7 +35,7 @@ echo ""
 echo "4. Create Case"
 echo "----------------"
 CASE_DATA='{
-  "case_number": "CURL/2025/001",
+  "reference_number": "CURL/2025/001",
   "title": "Test Case via Curl",
   "description": "Test case created via curl",
   "case_type": "contract_dispute",

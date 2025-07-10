@@ -1,10 +1,10 @@
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Literal
 import json
 from datetime import datetime, timedelta
 from pathlib import Path
 import asyncio
-from qdrant_client import QdrantClient
-from qdrant_client.models import Filter, FieldCondition, MatchValue
+from qdrant_client import AsyncQdrantClient
+from qdrant_client.models import Filter, FieldCondition, MatchValue, Range
 import numpy as np
 from sentence_transformers import SentenceTransformer
 from sqlalchemy import select
@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 
 # Initialize clients
 logger.info("Loading SentenceTransformer model from Hugging Face")
-embedder = SentenceTransformer('paraphrase-multilingual-mpnet-base-v2')
 logger.info("Initializing ChatOpenAI client")
 llm = ChatOpenAI(model=settings.openai_llm_model, temperature=0.1)
 
@@ -29,7 +28,7 @@ def init_vector_db(host: str = "localhost", port: int = 6333):
     """Initialize Qdrant client"""
     global qdrant_client
     logger.info(f"Connecting to Qdrant vector database at {host}:{port}")
-    qdrant_client = QdrantClient(host=host, port=port)
+    qdrant_client = AsyncQdrantClient(host=host, port=port)
 
 async def search_statute(query: str, top_k: int = 5, code: Optional[str] = None) -> List[Dict[str, Any]]:
     """
@@ -67,7 +66,7 @@ async def search_statute(query: str, top_k: int = 5, code: Optional[str] = None)
         exact_filter = Filter(must=must_conditions)
         
         # Try to find exact match
-        exact_results = qdrant_client.scroll(
+        exact_results = await qdrant_client.scroll(
             collection_name="statutes",
             scroll_filter=exact_filter,
             limit=1,
@@ -101,6 +100,7 @@ async def search_statute(query: str, top_k: int = 5, code: Optional[str] = None)
     
     # Generate embedding for the query
     logger.info(f"Generating embedding for query: {query[:100]}...")
+    embedder = SentenceTransformer('paraphrase-multilingual-mpnet-base-v2')
     query_embedding = embedder.encode(query).tolist()
     
     # Build filter if specific code requested
@@ -112,7 +112,7 @@ async def search_statute(query: str, top_k: int = 5, code: Optional[str] = None)
     
     # Search in vector database
     logger.info(f"Searching Qdrant vector database for {remaining_k} results")
-    results = qdrant_client.search(
+    results = await qdrant_client.search(
         collection_name="statutes",
         query_vector=query_embedding,
         query_filter=search_filter,
@@ -429,8 +429,9 @@ async def describe_case(case_id: Optional[str] = None) -> Dict[str, Any]:
     finally:
         session.close()
 
-async def update_case(case_id: str,
-                       case_number: Optional[str] = None,
+async def update_case(key: Literal['reference_number', 'id'],
+                       id: Optional[str] = None,
+                       reference_number: Optional[str] = None,
                        title: Optional[str] = None,
                        description: Optional[str] = None,
                        status: Optional[str] = None,
@@ -450,8 +451,8 @@ async def update_case(case_id: str,
     from .database import sync_engine
     from .models import Case
     from sqlalchemy.orm import sessionmaker
-    
-    if not any([case_number, title, description, status, case_type, client_name,
+    from sqlalchemy.exc import NoResultFound
+    if not any([title, description, status, case_type, client_name,
                  client_contact, opposing_party, opposing_party_contact, court_name,
                  court_case_number, judge_name, amount_in_dispute, currency]):
         return {"error": "No fields to update"}
@@ -460,10 +461,23 @@ async def update_case(case_id: str,
     session = Session()
 
     try:
-        case = session.query(Case).filter_by(id=case_id).first()
+        if key == 'reference_number':
+            if not reference_number:
+                raise ValueError("Reference number is required")
+            try:
+                case = session.query(Case).filter_by(reference_number=reference_number).first()
+            except NoResultFound:
+                raise ValueError(f"Case with reference number {reference_number} not found")
+        elif key == 'id':
+            if not id:
+                raise ValueError("Case ID is required")
+            try:
+                case = session.query(Case).filter_by(id=id).first()
+            except NoResultFound:
+                raise ValueError(f"Case with id {id} not found")
+
         if case:
-            case.case_number = case_number if case_number else case.case_number
-            case.title = title if title else case.title
+            case.reference_number = reference_number if reference_number else case.reference_number
             case.description = description if description else case.description
             case.status = status if status else case.status
             case.case_type = case_type if case_type else case.case_type
@@ -479,6 +493,9 @@ async def update_case(case_id: str,
             session.commit()
             return {"success": True}
         return {"error": "Case not found"}  
+    except Exception as e:
+        session.rollback()
+        raise e
     finally:
         session.close()
 
@@ -504,6 +521,236 @@ async def schedule_reminder(case_id: str, reminder_date: str, note: str) -> Dict
     # )
     
     return reminder
+
+async def search_sn_rulings(query: str, top_k: int = 5, filters: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+    """
+    Semantic search over Polish Supreme Court (Sąd Najwyższy) rulings.
+    Returns relevant case law with docket numbers, dates, and text excerpts.
+    
+    Args:
+        query: Search query in Polish
+        top_k: Number of results to return
+        filters: Optional filters (e.g., {"date_from": 20200101, "date_to": 20231231})
+    
+    Returns:
+        List of rulings with metadata and relevance scores
+    """
+    # Auto-initialize Qdrant client if not already done
+    global qdrant_client
+    if qdrant_client is None:
+        from .config import settings
+        logger.warning(f"Qdrant client not initialized, auto-initializing now (host: {settings.qdrant_host}, port: {settings.qdrant_port})")
+        init_vector_db(settings.qdrant_host, settings.qdrant_port)
+    
+    # Check if query mentions specific docket number
+    docket_pattern = r'([IVX]+\s+[A-Z]+\s+\d+/\d+)'
+    docket_match = re.search(docket_pattern, query)
+    
+    if docket_match:
+        docket_num = docket_match.group(1)
+        logger.info(f"Attempting exact match for docket number {docket_num}")
+        
+        # Build filter for exact docket match
+        exact_filter = Filter(must=[FieldCondition(key="docket", match=MatchValue(value=docket_num))])
+        
+        # Try to find exact match
+        exact_results = await qdrant_client.scroll(
+            collection_name="sn_rulings",
+            scroll_filter=exact_filter,
+            limit=10,  # Get all paragraphs from this ruling
+            with_payload=True
+        )
+        
+        if exact_results[0]:
+            # Group paragraphs by ruling
+            formatted_results = []
+            ruling_paragraphs = {}
+            
+            for point in exact_results[0]:
+                docket = point.payload.get("docket")
+                if docket not in ruling_paragraphs:
+                    ruling_paragraphs[docket] = {
+                        "docket": docket,
+                        "date": point.payload.get("date"),
+                        "panel": point.payload.get("panel", []),
+                        "paragraphs": []
+                    }
+                
+                ruling_paragraphs[docket]["paragraphs"].append({
+                    "section": point.payload.get("section"),
+                    "para_no": point.payload.get("para_no"),
+                    "text": point.payload.get("text"),
+                    "entities": point.payload.get("entities", [])
+                })
+            
+            # Format the exact match result
+            for docket, data in ruling_paragraphs.items():
+                # Sort paragraphs by para_no
+                data["paragraphs"].sort(key=lambda x: x.get("para_no", 0))
+                
+                # Combine key paragraphs for preview
+                key_sections = ["legal_question", "reasoning", "disposition"]
+                preview_text = ""
+                for para in data["paragraphs"]:
+                    if para["section"] in key_sections:
+                        preview_text += para["text"][:500] + "... "
+                        if len(preview_text) > 1000:
+                            break
+                
+                formatted_results.append({
+                    "docket": docket,
+                    "date": str(data["date"]) if data["date"] else None,
+                    "panel": data["panel"],
+                    "preview": preview_text.strip(),
+                    "full_paragraphs": data["paragraphs"],
+                    "score": 1.0,  # Perfect match
+                    "match_type": "exact_docket"
+                })
+            
+            if top_k == 1 or len(formatted_results) >= top_k:
+                return formatted_results[:top_k]
+            
+            # Get more similar rulings if needed
+            remaining_k = top_k - len(formatted_results)
+            logger.info(f"Found exact match, searching for {remaining_k} similar rulings")
+        else:
+            logger.info("No exact match found, falling back to vector search")
+            remaining_k = top_k
+            formatted_results = []
+    else:
+        remaining_k = top_k
+        formatted_results = []
+    
+    # Generate embedding for the query
+    logger.info(f"Generating embedding for query: {query[:100]}...")
+    embedder = SentenceTransformer('Stern5497/sbert-legal-xlm-roberta-base')
+    query_embedding = embedder.encode(query).tolist()
+    
+    # Build filters if provided
+    search_filter = None
+    must_conditions = []
+    
+    if filters:
+        if "date_from" in filters:
+            must_conditions.append(FieldCondition(
+                key="date",
+                range={"gte": filters["date_from"]}
+            ))
+        if "date_to" in filters:
+            must_conditions.append(FieldCondition(
+                key="date",
+                range={"lte": filters["date_to"]}
+            ))
+        if "section" in filters:
+            must_conditions.append(FieldCondition(
+                key="section",
+                match=MatchValue(value=filters["section"])
+            ))
+    
+    if must_conditions:
+        search_filter = Filter(must=must_conditions)
+    
+    # Search in vector database
+    logger.info(f"Searching Qdrant sn_rulings collection for {remaining_k} results")
+    results = await qdrant_client.search(
+        collection_name="sn_rulings",
+        query_vector=query_embedding,
+        query_filter=search_filter,
+        limit=remaining_k * 3,  # Get more to group by ruling
+        with_payload=True
+    )
+    
+    # Group results by ruling (docket number)
+    rulings_map = {}
+    for result in results:
+        docket = result.payload.get("docket")
+        if docket not in rulings_map:
+            rulings_map[docket] = {
+                "docket": docket,
+                "date": result.payload.get("date"),
+                "panel": result.payload.get("panel", []),
+                "paragraphs": [],
+                "max_score": result.score
+            }
+        
+        rulings_map[docket]["paragraphs"].append({
+            "section": result.payload.get("section"),
+            "para_no": result.payload.get("para_no"),
+            "text": result.payload.get("text"),
+            "entities": result.payload.get("entities", []),
+            "score": result.score
+        })
+        
+        # Keep track of highest score for this ruling
+        if result.score > rulings_map[docket]["max_score"]:
+            rulings_map[docket]["max_score"] = result.score
+    
+    # Format grouped results
+    for docket, data in rulings_map.items():
+        # Skip if we already have this as exact match
+        if any(r["docket"] == docket for r in formatted_results):
+            continue
+        
+        # Sort paragraphs by score then para_no
+        data["paragraphs"].sort(key=lambda x: (-x["score"], x.get("para_no", 0)))
+        
+        # Create preview from top-scoring paragraphs
+        preview_text = ""
+        for para in data["paragraphs"][:3]:  # Top 3 paragraphs
+            preview_text += f"[{para['section']}] {para['text'][:300]}... "
+            if len(preview_text) > 800:
+                break
+        
+        formatted_results.append({
+            "docket": docket,
+            "date": str(data["date"]) if data["date"] else None,
+            "panel": data["panel"],
+            "preview": preview_text.strip(),
+            "relevant_paragraphs": data["paragraphs"][:5],  # Top 5 most relevant
+            "score": data["max_score"],
+            "match_type": "semantic"
+        })
+    
+    # Sort by score and return top_k
+    formatted_results.sort(key=lambda x: -x["score"])
+    return formatted_results[:top_k]
+
+async def summarize_sn_rulings(rulings: List[Dict[str, Any]]) -> str:
+    """
+    Summarize Supreme Court rulings with focus on legal principles and precedents.
+    """
+    # Prepare rulings text
+    rulings_text = ""
+    for ruling in rulings:
+        rulings_text += f"\n\nWyrok {ruling['docket']}"
+        if ruling.get('date'):
+            rulings_text += f" z dnia {ruling['date']}"
+        rulings_text += "\n"
+        
+        if ruling.get('preview'):
+            rulings_text += ruling['preview']
+        elif ruling.get('relevant_paragraphs'):
+            for para in ruling['relevant_paragraphs'][:3]:
+                rulings_text += f"\n[{para['section']}] {para['text'][:500]}..."
+    
+    prompt = PromptTemplate(
+        template="""Jako ekspert prawa cywilnego, przeanalizuj poniższe orzeczenia Sądu Najwyższego:
+
+{rulings}
+
+Podsumowanie powinno zawierać:
+1. Kluczowe tezy prawne z każdego orzeczenia
+2. Ustalone precedensy i ich znaczenie
+3. Praktyczne zastosowanie w kontekście prawnym
+4. Cytowanie sygnatur akt
+
+Podsumowanie:""",
+        input_variables=["rulings"]
+    )
+    
+    logger.info("Calling OpenAI API for Supreme Court rulings summarization")
+    response = await llm.ainvoke(prompt.format(rulings=rulings_text))
+    return response.content
 
 def analyze_contract(text: str) -> Dict:
     """Analyze a contract for key terms and potential issues"""

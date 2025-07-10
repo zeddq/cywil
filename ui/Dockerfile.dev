@@ -7,7 +7,7 @@ RUN npm install
 
 RUN apk add --no-cache bash
 
-COPY . .
+# COPY . .
 
 # Expose app and debugger ports
 EXPOSE 3000

@@ -6,20 +6,27 @@ from pydantic import BaseModel, create_model
 from datetime import datetime, timedelta
 import os
 import json
+import asyncio
 from .orchestrator import ParalegalAgent, ChatStreamResponse
 from .database import get_db, init_db
-from .models import Case, CaseBase, Document, DocumentBase, Deadline, DeadlineBase, Note
+from .models import Case, CaseBase, Document, DocumentBase, Deadline, DeadlineBase, Note, User
 from .config import settings
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, delete
 import json
 import logging
 from fastapi.middleware.cors import CORSMiddleware
+from .auth import get_current_user, get_current_active_user, require_lawyer, require_paralegal
+from .auth_routes import router as auth_router
+from .task_processors import get_document_processor
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title="AI Paralegal API", version="1.0.0")
+
+# Document processing queue
+document_processing_queue: asyncio.Queue = asyncio.Queue()
 
 # --- Model Factory ---
 def make_optional(model: Type[BaseModel]) -> Type[BaseModel]:
@@ -88,10 +95,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Include authentication routes
+app.include_router(auth_router)
+
 @app.on_event("startup")
 async def startup_event():
-    """Initialize database on startup"""
+    """Initialize database and start background tasks on startup"""
     await init_db()
+    
+    # Start document processor
+    processor = get_document_processor(document_processing_queue)
+    await processor.start()
+    logger.info("Background task processors started")
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Stop background tasks on shutdown"""
+    processor = get_document_processor(document_processing_queue)
+    await processor.stop()
+    logger.info("Background task processors stopped")
 
 @app.get("/")
 async def root():
@@ -105,7 +127,11 @@ async def root():
     return response
 
 @app.post("/chat", response_model=ChatResponse)
-async def chat(request: ChatRequest, db: AsyncSession = Depends(get_db)):
+async def chat(
+    request: ChatRequest, 
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
+):
     """
     Main chat endpoint for interacting with the AI paralegal
     """
@@ -131,7 +157,11 @@ async def chat(request: ChatRequest, db: AsyncSession = Depends(get_db)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/chat/stream")
-async def chat_stream(request: ChatRequest, db: AsyncSession = Depends(get_db)):
+async def chat_stream(
+    request: ChatRequest, 
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
+):
     """
     Streaming chat endpoint for real-time responses
     """
@@ -173,10 +203,10 @@ async def chat_stream(request: ChatRequest, db: AsyncSession = Depends(get_db)):
         }
     )
 
-@app.post("/upload")
+@app.post("/upload/{case_id}")
 async def upload_document(
-    file: UploadFile = File(...),
-    case_id: Optional[str] = None,
+    case_id: str,
+    file: UploadFile,
     db: AsyncSession = Depends(get_db)
 ):
     """Upload a legal document for processing"""
@@ -188,7 +218,6 @@ async def upload_document(
         content = await file.read()
         file_object.write(content)
     
-    if case_id:
         document = Document(
             case_id=case_id,
             document_type="uploaded",
@@ -200,6 +229,11 @@ async def upload_document(
         await db.commit()
         await db.refresh(document)
         
+        # Add document ID to processing queue
+        processor = get_document_processor(document_processing_queue)
+        await processor.put(document.id)
+        logger.info(f"Added document {document.id} to processing queue")
+        
         response = {
             "filename": file.filename,
             "status": "uploaded",
@@ -208,10 +242,7 @@ async def upload_document(
         }
         logger.info(f"Upload document returning: {response}")
         return response
-    
-    response = {"filename": file.filename, "status": "uploaded"}
-    logger.info(f"Upload document returning: {response}")
-    return response
+
 
 @app.post("/cases", response_model=Case)
 async def create_case(case: CaseCreate, db: AsyncSession = Depends(get_db)):

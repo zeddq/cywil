@@ -97,7 +97,7 @@ docker-compose exec postgres psql -U paralegal -d paralegal
 # SQL query to get recent AI interactions
 SELECT 
     n.created_at,
-    m.case_number,
+    m.reference_number,
     m.title as case_title,
     n.content::json->>'last_query' as user_query,
     n.content::json->>'last_response' as ai_response

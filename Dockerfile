@@ -13,11 +13,11 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY trimmed-requirements.txt .
+RUN pip install --no-cache-dir -r trimmed-requirements.txt
 
 # Download spaCy Polish model
-RUN python -m spacy download pl_core_news_sm
+# RUN python -m spacy download pl_core_news_sm
 
 # Copy application code
 COPY . .

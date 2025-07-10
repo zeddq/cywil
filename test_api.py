@@ -29,10 +29,18 @@ class ParalegalAPIClient:
     def __init__(self, base_url: str = "http://localhost:8000"):
         self.base_url = base_url.rstrip('/')
         self.session = requests.Session()
+        self.token = None
 
     def _request(self, method: str, endpoint: str, **kwargs) -> Dict[str, Any]:
         """Generic request handler"""
         url = f"{self.base_url}/{endpoint}"
+        
+        # Add authorization header if token is available
+        if self.token and 'headers' in kwargs:
+            kwargs['headers']['Authorization'] = f'Bearer {self.token}'
+        elif self.token:
+            kwargs['headers'] = {'Authorization': f'Bearer {self.token}'}
+            
         logger.info(f"Making HTTP {method} request to {url}")
         try:
             response = self.session.request(method, url, **kwargs)
@@ -72,6 +80,46 @@ class ParalegalAPIClient:
     def health_check(self) -> Dict[str, Any]:
         """Check API health"""
         return self._request("GET", "health")
+    
+    # Authentication methods
+    def register(self, email: str, password: str, full_name: str, secret_key: str) -> Dict[str, Any]:
+        """Register a new user with secret key"""
+        payload = {
+            "email": email,
+            "password": password,
+            "full_name": full_name,
+            "secret_key": secret_key
+        }
+        return self._request("POST", "api/auth/register", json=payload, headers={"Content-Type": "application/json"})
+    
+    def login(self, email: str, password: str) -> Dict[str, Any]:
+        """Login and set token"""
+        data = {
+            "username": email,  # OAuth2 expects 'username'
+            "password": password
+        }
+        response = self._request("POST", "api/auth/login", data=data, headers={"Content-Type": "application/x-www-form-urlencoded"})
+        if 'access_token' in response:
+            self.token = response['access_token']
+        return response
+    
+    def logout(self) -> Dict[str, Any]:
+        """Logout and clear token"""
+        response = self._request("POST", "api/auth/logout")
+        self.token = None
+        return response
+    
+    def get_current_user(self) -> Dict[str, Any]:
+        """Get current user info"""
+        return self._request("GET", "api/auth/me")
+    
+    def generate_registration_key(self) -> Dict[str, Any]:
+        """Generate a new registration key (admin only)"""
+        return self._request("POST", "api/auth/admin/registration-keys/generate")
+    
+    def get_registration_status(self) -> Dict[str, Any]:
+        """Get registration configuration status (admin only)"""
+        return self._request("GET", "api/auth/admin/registration-keys/status")
 
 # --- Log Retriever ---
 
@@ -100,7 +148,7 @@ class AuditLogRetriever:
                         "id": str(note.id),
                         "created_at": note.created_at.isoformat() if note.created_at else None,
                         "case_id": str(note.case_id) if note.case_id else None,
-                        "case_number": case.case_number if case else None,
+                        "reference_number": case.reference_number if case else None,
                         "case_title": case.title if case else None,
                         "thread_id": content.get("thread_id", ""),
                         "last_query": content.get("last_query", ""),
@@ -132,7 +180,7 @@ class AuditLogRetriever:
 
         cases = {}
         for interaction in all_interactions:
-            case = interaction.get('case_number', 'No Case')
+            case = interaction.get('reference_number', 'No Case')
             cases[case] = cases.get(case, 0) + 1
         
         return {
@@ -148,7 +196,7 @@ class AuditLogRetriever:
             "=" * 80,
             f"Interaction ID: {interaction['id']}",
             f"Date/Time: {interaction['created_at']}",
-            f"Case: {interaction.get('case_number', 'N/A')} - {interaction.get('case_title', 'N/A')}",
+            f"Case: {interaction.get('reference_number', 'N/A')} - {interaction.get('case_title', 'N/A')}",
             f"Thread ID: {interaction.get('thread_id', 'N/A')}",
             "-" * 40,
             "USER QUERY:",
@@ -185,6 +233,100 @@ def test_query_api(client: ParalegalAPIClient, query: str):
     except Exception as e:
         print(f"Error: {e}")
 
+def test_registration_with_key(client: ParalegalAPIClient, secret_key: str = "default-registration-key-change-in-production"):
+    """Test user registration with secret key"""
+    print(f"\n{'='*60}\nTesting Registration with Secret Key\n{'='*60}")
+    
+    test_user = {
+        "email": f"test_{datetime.now().strftime('%Y%m%d%H%M%S')}@example.com",
+        "password": "TestPassword123!",
+        "full_name": "Test User",
+        "secret_key": secret_key
+    }
+    
+    try:
+        response = client.register(**test_user)
+        print("✅ Registration successful!")
+        print(json.dumps(response, indent=2))
+        return response
+    except Exception as e:
+        print(f"❌ Registration failed: {e}")
+        return None
+
+def test_auth_flow(client: ParalegalAPIClient):
+    """Test complete authentication flow"""
+    print("\n--- Testing Authentication Flow ---")
+    
+    # 1. Register a new user
+    print("\n1. Registering new user with secret key...")
+    user_data = test_registration_with_key(client)
+    if not user_data:
+        print("Skipping rest of auth flow due to registration failure")
+        return
+    
+    # 2. Login with the new user
+    print("\n2. Logging in...")
+    try:
+        login_response = client.login(
+            email=user_data['email'],
+            password="TestPassword123!"  # Using the password from registration
+        )
+        print("✅ Login successful!")
+        print(f"Token: {login_response['access_token'][:20]}...")
+    except Exception as e:
+        print(f"❌ Login failed: {e}")
+        return
+    
+    # 3. Get current user info
+    print("\n3. Getting current user info...")
+    try:
+        current_user = client.get_current_user()
+        print("✅ Got user info:")
+        print(json.dumps(current_user, indent=2))
+    except Exception as e:
+        print(f"❌ Failed to get user info: {e}")
+    
+    # 4. Logout
+    print("\n4. Logging out...")
+    try:
+        client.logout()
+        print("✅ Logged out successfully")
+    except Exception as e:
+        print(f"❌ Logout failed: {e}")
+
+def test_admin_registration_keys(client: ParalegalAPIClient):
+    """Test admin registration key management"""
+    print("\n--- Testing Admin Registration Key Management ---")
+    
+    # First, login as admin
+    print("\n1. Logging in as admin...")
+    try:
+        client.login("zeddq1@gmail.com", "ahciwd123")
+        print("✅ Admin login successful")
+    except Exception as e:
+        print(f"❌ Admin login failed: {e}")
+        print("Note: This test requires an admin user to exist")
+        return
+    
+    # Check registration status
+    print("\n2. Checking registration status...")
+    try:
+        status = client.get_registration_status()
+        print("✅ Registration status:")
+        print(json.dumps(status, indent=2))
+    except Exception as e:
+        print(f"❌ Failed to get status: {e}")
+    
+    # Generate new registration key
+    print("\n3. Generating new registration key...")
+    try:
+        new_key = client.generate_registration_key()
+        print("✅ Generated new key:")
+        print(json.dumps(new_key, indent=2))
+        print("\n💡 To use this key, add it to REGISTRATION_SECRET_KEYS environment variable")
+    except Exception as e:
+        print(f"❌ Failed to generate key: {e}")
+
 def run_api_examples(client: ParalegalAPIClient):
     """Run a sequence of example API calls"""
     print("--- Running API Examples ---")
@@ -193,9 +335,15 @@ def run_api_examples(client: ParalegalAPIClient):
         health = client.health_check()
         print(json.dumps(health, indent=2, ensure_ascii=False))
 
-        print("\n2. Create Case")
+        print("\n2. Authentication Tests")
+        test_auth_flow(client)
+        
+        print("\n3. Admin Registration Key Tests")
+        test_admin_registration_keys(client)
+
+        print("\n4. Create Case")
         case_data = {
-            "case_number": f"TEST/{datetime.now().strftime('%Y%m%d%H%M%S')}",
+            "reference_number": f"TEST/{datetime.now().strftime('%Y%m%d%H%M%S')}",
             "title": "Test Case - API Example", "description": "A test case created via the API.",
             "case_type": "litigation", "client_name": "Example Corp",
         }
@@ -203,14 +351,14 @@ def run_api_examples(client: ParalegalAPIClient):
         case_id = case['id']
         print(json.dumps(case, indent=2, ensure_ascii=False))
 
-        print("\n3. Chat with Case Context")
+        print("\n5. Chat with Case Context")
         test_chat_api(client, "Jakie są następne kroki w tej sprawie?", case_id=case_id)
         
-        print("\n4. List Cases")
+        print("\n6. List Cases")
         cases = client.list_cases()
         print(json.dumps(cases, indent=2, ensure_ascii=False))
         
-        print("\n5. Document Query")
+        print("\n7. Document Query")
         test_query_api(client, "odpowiedzialność cywilna")
 
     except Exception as e:
@@ -355,6 +503,20 @@ def main():
 
     p_query = subparsers.add_parser("query", help="Query the document database")
     p_query.add_argument("query", help="The query string")
+    
+    # Authentication commands
+    p_register = subparsers.add_parser("register", help="Register a new user with secret key")
+    p_register.add_argument("email", help="Email address")
+    p_register.add_argument("password", help="Password")
+    p_register.add_argument("full_name", help="Full name")
+    p_register.add_argument("--secret-key", default="default-registration-key-change-in-production", help="Registration secret key")
+    
+    p_login = subparsers.add_parser("login", help="Login a user")
+    p_login.add_argument("email", help="Email address")
+    p_login.add_argument("password", help="Password")
+    
+    subparsers.add_parser("test-auth", help="Test complete authentication flow")
+    subparsers.add_parser("test-registration-keys", help="Test admin registration key management")
 
     # Log retrieval commands
     p_logs_all = subparsers.add_parser("logs-all", help="Get all AI interaction logs from DB")
@@ -391,6 +553,24 @@ def main():
         test_chat_api(client, args.message, args.case_id)
     elif args.command == "query":
         test_query_api(client, args.query)
+    elif args.command == "register":
+        try:
+            response = client.register(args.email, args.password, args.full_name, args.secret_key)
+            print("✅ Registration successful!")
+            print(json.dumps(response, indent=2))
+        except Exception as e:
+            print(f"❌ Registration failed: {e}")
+    elif args.command == "login":
+        try:
+            response = client.login(args.email, args.password)
+            print("✅ Login successful!")
+            print(f"Token: {response['access_token'][:20]}...")
+        except Exception as e:
+            print(f"❌ Login failed: {e}")
+    elif args.command == "test-auth":
+        test_auth_flow(client)
+    elif args.command == "test-registration-keys":
+        test_admin_registration_keys(client)
     elif args.command.startswith("logs-"):
         asyncio.run(run_log_retrieval(args))
     elif args.command == "list-templates":

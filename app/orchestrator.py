@@ -1,8 +1,6 @@
 from typing import List, Dict, Any, Optional, AsyncGenerator, Literal
 import asyncio
 from openai import AsyncOpenAI, AsyncStream
-from langchain.tools import tool
-from langchain_openai import ChatOpenAI, 
 from openai.types.responses import ResponseFunctionToolCall, ResponseInProgressEvent, ResponseCompletedEvent, \
     ResponseCreatedEvent, ResponseOutputItemAddedEvent, ResponseOutputItemDoneEvent, ResponseFunctionCallArgumentsDeltaEvent, \
         ResponseFunctionCallArgumentsDoneEvent, ResponseStreamEvent, ResponseOutputMessage, ResponseTextDeltaEvent, ResponseTextDoneEvent
@@ -12,7 +10,9 @@ from datetime import datetime
 import logging
 from .tools import (
     search_statute,
-    summarize_passages, 
+    search_sn_rulings,
+    summarize_passages,
+    summarize_sn_rulings,
     draft_document,
     validate_against_statute,
     compute_deadline,
@@ -23,14 +23,15 @@ from .tools import (
     describe_case,
     update_case
 )
+from .validator import recover_from_tool_error, ValidatorResponse
 from .config import settings
 from .database import get_db, AsyncSessionLocal
-from .models import Case, Document, Deadline, Note
+from .models import Case, Document, Deadline, Note, ResponseHistory
 from sqlalchemy import select
+from typing import Sequence
 from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel
-from langchain_core.messages import BaseMessageChunk, ToolMessage
-from typing import AsyncIterator
+import itertools
 """
 ───────────────────────────────────────────────────────────────────────────────
 FIX NOTES
@@ -38,7 +39,7 @@ FIX NOTES
 * Upgraded to **Responses API** semantics.
   * Replaced `response.choices[0].message` access with `response.output` / `response.output_text`.
   * Added `previous_response_id` chaining instead of resending full history after the 1st turn.
-  * Updated function calling flow:
+  * Updated function‑calling flow:
       • Model returns `type == "function_call"` items ➔ we execute the mapped Python function.
       • We answer with a `type == "function_call_output"` item.
   * `handle_tool_calls` now emits `function_call_output` items, matching the new spec.
@@ -51,7 +52,7 @@ FIX NOTES
 logger = logging.getLogger(__name__)
 
 # Initialize OpenAI client
-client = ChatOpenAI(api_key=settings.openai_api_key, model=settings.openai_orchestrator_model)
+client = AsyncOpenAI(api_key=settings.openai_api_key)
 
 # Tool definitions for OpenAI Function Calling
 TOOL_DEFINITIONS: List[Dict[str, Any]] = [
@@ -65,6 +66,28 @@ TOOL_DEFINITIONS: List[Dict[str, Any]] = [
                 "query": {"type": "string", "description": "Search query in Polish"},
                 "top_k": {"type": "integer", "description": "Number of results to return", "default": 5},
                 "code": {"type": "string", "description": "Specific code to search (KC or KPC)", "enum": ["KC", "KPC"]}
+            },
+            "required": ["query"]
+        }
+    },
+    {
+        "type": "function",
+        "name": "search_sn_rulings",
+        "description": "Search Polish Supreme Court (Sąd Najwyższy) rulings using semantic search",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "Search query in Polish"},
+                "top_k": {"type": "integer", "description": "Number of results to return", "default": 5},
+                "filters": {
+                    "type": "object",
+                    "description": "Optional filters",
+                    "properties": {
+                        "date_from": {"type": "integer", "description": "Start date in YYYYMMDD format"},
+                        "date_to": {"type": "integer", "description": "End date in YYYYMMDD format"},
+                        "section": {"type": "string", "description": "Section type (e.g., legal_question, reasoning, disposition)"}
+                    }
+                }
             },
             "required": ["query"]
         }
@@ -145,11 +168,13 @@ TOOL_DEFINITIONS: List[Dict[str, Any]] = [
     {
         "type": "function",
         "name": "update_case",
-        "description": "Update a case based on its ID and description", # TODO: add more fields to update           
+        "description": "Update a case with the given key and value",
         "parameters": {
             "type": "object",
             "properties": {
-                "case_id": {"type": "string", "description": "ID of the case to update"},
+                "key": {"type": "string", "description": "Key name of the case to update", "enum": ["id", "reference_number"]},
+                "id": {"type": "string", "description": "ID of the case (if key is 'id')"},
+                "reference_number": {"type": "string", "description": "Reference number of the case (if key is 'reference_number')"},
                 "description": {"type": "string", "description": "New description of the case"},
                 "status": {"type": "string", "description": "New status of the case"},
                 "case_type": {"type": "string", "description": "New type of the case"},
@@ -163,26 +188,10 @@ TOOL_DEFINITIONS: List[Dict[str, Any]] = [
                 "amount_in_dispute": {"type": "string", "description": "New amount in dispute"},
                 "currency": {"type": "string", "description": "New currency of the case"},
             },
-            "required": ["case_id"]
-        }
-    },
-    {
-        "type": "function",
-        "name": "recover_from_tool_error",
-        "description": "Recover from a tool error",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "conversation_history": {"type": "array", "items": {"type": "object"}, "description": "The conversation history leading up to the error"},
-                "failed_function_call": {"type": "object", "description": "The function call that failed (full function_tool object)"},
-                "error_message": {"type": "string", "description": "The error message returned by the tool"},
-            },
-            "required": ["conversation_history", "failed_function_call", "error_message"]
+            "required": ["key"]
         }
     }
 ]
-
-client.bind_tools(TOOL_DEFINITIONS)
 
 def flatten_tool_outputs(tool_outputs: List[Dict[str, Any]]) -> str:
     return "\n".join([json.dumps(output) for output in tool_outputs])
@@ -193,6 +202,15 @@ class ChatStreamResponse(BaseModel):
     thread_id: str | None = None
     status: Literal["streaming", "error", "success"]
 
+class InternalError(Exception):
+    pass
+
+class ToolError(Exception):
+    def __init__(self, call_id: str, message: str):
+        self.call_id = call_id
+        self.message = message
+        super().__init__(self.message)
+
 class ParalegalAgent:
     """Chat agent powered by the OpenAI *Responses* endpoint."""
 
@@ -200,6 +218,7 @@ class ParalegalAgent:
         # Map function names → callables we execute locally
         self.tools_map = {
             "search_statute": search_statute,
+            "search_sn_rulings": search_sn_rulings,
             "draft_document": draft_document,
             "compute_deadline": compute_deadline,
             "describe_case": describe_case,
@@ -220,7 +239,7 @@ class ParalegalAgent:
                 "role": "developer",
                 "content": """
 # ROLE                
-You are an expert Polish legal assistant specializing in civil law (Kodeks cywilny) and civil procedure (Kodeks postępowania cywilnego).
+You are an expert Polish legal assistant specializing in civil law (Kodeks cywilny), civil procedure (Kodeks postępowania cywilnego), and Supreme Court (Sąd Najwyższy) jurisprudence.
 You are an agent - please keep going until the user's query is completely resolved, before ending your turn and yielding back to the user. Only terminate your turn when you are sure that the problem is solved.
 
 # THINKING PROCESS
@@ -230,14 +249,50 @@ You are an agent - please keep going until the user's query is completely resolv
 # RESPONSIBILITIES
 Your responsibilities (you can use tools to help you):
 - Answer legal questions with precise citations to relevant articles
+- Search and analyze Supreme Court (Sąd Najwyższy) rulings for precedents
 - Draft legal documents following Polish legal standards
 - Provide information about available templates and their usage
 - Provide information about user's cases
 - Calculate procedural deadlines accurately
 - Validate documents against current statutes
 
+# INSTRUCTIONS
+- Most of the time the input will be a question/instruction from the user.
+- If the user's input is not clear, ask for clarification.
+- If the tool call fails, you should try to recover from the error. The recovery process will result in a follow-up call to the OpenAI reasoning model. It will return to you the following input:
+## Scenario 1: The error is correctable with high confidence.
+If the reasoning model can deduce the correct function call from the context.
+
+{
+  "action": "RETRY",
+  "new_function_call": {
+    "name": "<corrected_function_name>",
+    "arguments": {
+      "<argument_name>": "<corrected_argument_value>",
+      "<another_argument>": "<corrected_value>"
+    }
+  },
+  "explanation": "A brief, user-facing explanation of the correction. Example: 'Spróbuję ponownie edytować sprawę o sygnaturze '1234567890'."
+}
+
+## Scenario 2: The user's intent is ambiguous and clarification is needed.
+
+{
+  "action": "ASK_USER",
+  "question": "A clear, specific, and concise question for the user that will resolve the ambiguity. Example: 'Nie znalazłem sprawy z ID '1234567890'. Czy możesz potwierdzić ID sprawy, ze numer '1234567890' odnosi się do ID tej sprawy?'",
+  "explanation": "A brief, user-facing explanation of why you need clarification. Example: 'Potrzebuję więcej informacji, aby kontynuować Twoją prośbę.'"
+}
+
+## Scenario 3: The error is unrecoverable or requires a different approach.
+If the error cannot be fixed with a simple retry or clarification.
+
+{
+  "action": "FAIL",
+  "reason": "A concise, technical explanation of why the task cannot be completed as requested. Example: 'Nie udało mi się znaleźć sprawy z ID '1234567890' (problem z API). Spróbuj ponownie później.'"
+}
+
 ## ALWAYS
-- Cite specific articles (e.g., \"art. 415 KC\")
+- Cite specific articles (e.g., "art. 415 KC")
 - Use proper Polish legal terminology
 - Consider both substantive and procedural aspects
 - Provide practical, actionable advice
@@ -253,54 +308,89 @@ Your responsibilities (you can use tools to help you):
     # ────────────────────────────────────────────────────────────────────
     async def handle_tool_calls(
         self,
-        function_calls: List[Any],
+        fc: ResponseFunctionToolCall,
         audit_trail: List[Dict[str, Any]],
-    ) -> List[ToolMessage]:
+        ) -> FunctionCallOutput:
         """Execute model-requested functions and return *function_call_output* items."""
-        outputs: List[ToolMessage] = []
 
-        for fc in function_calls:
-            call_id = fc.id
-            name = fc.name
-            try:
-                args = json.loads(fc.arguments) if fc.arguments else {}
-            except json.JSONDecodeError:
-                args = {}
+        call_id = fc.call_id
+        name = fc.name
+        try:
+            args = json.loads(fc.arguments)
+        except json.JSONDecodeError:
+            args = {}
 
-            trail_entry = {
-                "timestamp": datetime.now().isoformat(),
-                "type": "tool_call",
-                "tool_name": name,
-                "tool_call_id": call_id,
-                "arguments": args,
-            }
+        trail_entry = {
+            "timestamp": datetime.now().isoformat(),
+            "type": "tool_call",
+            "tool_name": name,
+            "tool_call_id": call_id,
+            "arguments": args,
+        }
 
-            # Execute matching python function, sync or async
-            try:
-                start = datetime.now()
-                func = self.tools_map.get(name)
-                if func is None:
-                    raise ValueError(f"Unknown tool: {name}")
+        # Execute matching python function, sync or async
+        try:
+            start = datetime.now()
+            func = self.tools_map.get(name)
+            if func is None:
+                raise InternalError(f"Unknown tool: {name}")
+        except InternalError as exc:
+            duration = (datetime.now() - start).total_seconds()
+            result = {"error": str(exc)}
+            trail_entry.update(status="error", execution_time_seconds=duration, error=str(exc))
 
-                result = await func(**args) if asyncio.iscoroutinefunction(func) else func(**args)
-                duration = (datetime.now() - start).total_seconds()
-                trail_entry.update(status="success", execution_time_seconds=duration, result=result)
-            except Exception as exc:
-                duration = (datetime.now() - start).total_seconds()
-                result = {"error": str(exc)}
-                trail_entry.update(status="error", execution_time_seconds=duration, error=str(exc))
+        try:
+            result = await func(**args) if asyncio.iscoroutinefunction(func) else func(**args)
+        except Exception as exc:
+            duration = (datetime.now() - start).total_seconds()
+            trail_entry.update(status="error", execution_time_seconds=duration, error=str(exc))
+            raise ToolError(call_id, str(exc))
 
-            audit_trail.append(trail_entry)
-            logger.info("Tool call audit: %s", json.dumps(trail_entry, ensure_ascii=False))
+        duration = (datetime.now() - start).total_seconds()
+        trail_entry.update(status="success", execution_time_seconds=duration, result=result)
+        audit_trail.append(trail_entry)
+        logger.info("Tool call audit: %s", json.dumps(trail_entry, ensure_ascii=False))
 
-            outputs.append(ToolMessage(content=str(result), tool_call_id=call_id))
-
-        return outputs
+        return FunctionCallOutput(call_id=call_id, output=str(result), type="function_call_output")
 
 
-    def _handle_chunk(self, chunk: BaseMessageChunk) -> ChatStreamResponse | None:
-        if chunk.content:
-            return ChatStreamResponse(type="text_chunk", content=chunk.content, status="streaming")
+    def _handle_chunk(self, chunk: ResponseStreamEvent, tool_calls: List[ResponseFunctionToolCall]) -> ChatStreamResponse | None:
+        if chunk.type == "response.created":
+            chunk_typed = ResponseCreatedEvent.model_validate(chunk)
+            id = chunk_typed.response.id
+            return ChatStreamResponse(type="text_chunk", thread_id=id, status="streaming")
+        
+        elif chunk.type == "response.output_item.added":
+            chunk_typed = ResponseOutputItemAddedEvent.model_validate(chunk)
+            if chunk_typed.item.type == "message":
+                message_typed = ResponseOutputMessage.model_validate(chunk_typed.item)
+                return ChatStreamResponse(type="text_chunk", content="".join([c.text for c in message_typed.content]), status="streaming")
+        
+        elif chunk.type == "response.output_item.done":
+            chunk_typed = ResponseOutputItemDoneEvent.model_validate(chunk)
+            item = chunk_typed.item
+            if item.type == "message":
+                message_typed = ResponseOutputMessage.model_validate(item)
+                return ChatStreamResponse(type="full_message", content="".join([c.text for c in message_typed.content]), status="streaming")
+            elif item.type == "function_call":
+                item_typed = ResponseFunctionToolCall.model_validate(item)
+                logger.info("Tool call: %s", json.dumps(item_typed.model_dump(), ensure_ascii=False))
+                tool_calls.append(item_typed)
+            return None
+        
+        elif chunk.type == "response.output_text.delta":
+            chunk_typed = ResponseTextDeltaEvent.model_validate(chunk)
+            return ChatStreamResponse(type="text_chunk", content=chunk_typed.delta, status="streaming")
+        
+        elif chunk.type == "response.output_text.done":
+            chunk_typed = ResponseTextDoneEvent.model_validate(chunk)
+            return ChatStreamResponse(type="full_message", content=chunk_typed.text, status="streaming")
+        
+        elif chunk.type == "response.completed":
+            chunk_typed = ResponseCompletedEvent.model_validate(chunk)
+            logger.info("Response completed: %s", json.dumps(chunk_typed.model_dump(), ensure_ascii=False))
+            id = chunk_typed.response.id
+            return ChatStreamResponse(type="full_message", thread_id=id, status="success")
         
         return None
 
@@ -347,39 +437,36 @@ Your responsibilities (you can use tools to help you):
         # ── 1️⃣ FIRST/CONTINUATION CALL WITH STREAMING ────────────────────────────────
         try:
             logger.info("Calling OpenAI Responses API (initial) with streaming")
-
-            response: AsyncIterator[BaseMessageChunk] = await client.astream(all_inputs,
-                use_responses_api=True,
+            response: AsyncStream[ResponseStreamEvent] = await client.responses.create(
+                model=settings.openai_orchestrator_model,
+                input=all_inputs,
                 previous_response_id=prev_resp_id,
-                temperature=0.0,
+                stream=True,
+                tools=TOOL_DEFINITIONS,
+                tool_choice="auto",
+                temperature=0.1,
             )            
             logger.info(response)
             
             accumulated_response = ""
-            current_tool_calls: List[Any] = []
+            current_tool_calls: List[ResponseFunctionToolCall] = []
             
-            first_chunk = True
             last_chunk = False
             async for chunk in response:
-                logger.info(chunk)
-                if first_chunk:
-                    merged_chunks = chunk
-                else:
-                    merged_chunks = merged_chunks + chunk
-                parsed = self._handle_chunk(chunk)
+                # logger.info(chunk)
+                parsed = self._handle_chunk(chunk, current_tool_calls)
                 if parsed:
                     if parsed.thread_id:
-                        prev_resp_id = parsed.thread_id
-                        self.conversations[conversation_id] = prev_resp_id
+                        resp_id = parsed.thread_id
+                        self.conversations[conversation_id] = resp_id
                     if parsed.status == "streaming":
                         parsed.thread_id = conversation_id
                         yield parsed
-                    last_chunk = parsed.status == "success"
-                    first_chunk = False
-
-            if merged_chunks:
-                for tool_call in merged_chunks.additional_kwargs.get("tool_calls", []):
-                    current_tool_calls.append(tool_call)
+                    last_chunk = (parsed.status == "success" or parsed.status == "error")
+                    if last_chunk:
+                        db.add(ResponseHistory(thread_id=conversation_id, response_id=resp_id,
+                                               input=all_inputs, output=parsed.content, previous_response_id=prev_resp_id))
+                        await db.commit()
 
             if not last_chunk or current_tool_calls:
                 audit_trail.append(
@@ -396,19 +483,41 @@ Your responsibilities (you can use tools to help you):
                                              content=[{"name": tc.name, "call_id": tc.call_id} for tc in current_tool_calls],
                                             thread_id=conversation_id, status="streaming")
                     
-                    tool_outputs = await self.handle_tool_calls(current_tool_calls, audit_trail)
+                    tool_outputs = []
+                    for fc in current_tool_calls:
+                        try:
+                            tool_output = await self.handle_tool_calls(fc, audit_trail)
+                            tool_outputs.append(tool_output)
+                        except ToolError as exc:
+                            failed_tool_call = next((x for x in current_tool_calls if x.call_id == exc.call_id), None)
+                            if not failed_tool_call:
+                                raise exc
+                            history: Sequence[ResponseHistory] = (await db.execute(
+                                select(ResponseHistory)
+                                .where(ResponseHistory.thread_id == conversation_id)
+                                .order_by(ResponseHistory.created_at.desc())
+                            )).scalars().all()
+                            history_list = map(lambda x: [x.input, x.output], history)
+                            history_flat = list(itertools.chain.from_iterable(history_list))
+                            logger.info("History: %s", history_flat)
+                            recovered_response = recover_from_tool_error(history_flat, failed_tool_call, str(exc))
+                            tool_outputs.append(recovered_response.model_dump())
                     all_inputs = tool_outputs
                     
                     yield ChatStreamResponse(type="tool_call_complete",
                                              content=[{"output": tc['output'], "call_id": tc['call_id']} for tc in tool_outputs],
                                              thread_id=conversation_id, status="streaming")
 
+                    prev_resp_id = resp_id
                     logger.info("Calling OpenAI Responses API (after tool outputs) with streaming")
-                    response = await client.astream(
-                        all_inputs,
-                        use_responses_api=True,
+                    response = await client.responses.create(
+                        model=settings.openai_orchestrator_model,
                         previous_response_id=prev_resp_id,
-                        temperature=0.0,
+                        input=all_inputs,
+                        temperature=0.1,
+                        stream=True,
+                        tools=TOOL_DEFINITIONS,
+                        tool_choice="auto",
                     )
                     
                     current_tool_calls = []
@@ -422,7 +531,11 @@ Your responsibilities (you can use tools to help you):
                                 self.conversations[conversation_id] = prev_resp_id
                             if parsed.status == "streaming":
                                 yield parsed
-                            last_chunk = parsed.status == "success"
+                            last_chunk = (parsed.status == "success" or parsed.status == "error")
+                            if last_chunk:
+                                db.add(ResponseHistory(thread_id=conversation_id, response_id=prev_resp_id,
+                                                       input=all_inputs, output=parsed.content, previous_response_id=prev_resp_id))
+                                await db.commit()
 
                     audit_trail.append(
                         {

@@ -29,7 +29,7 @@ services:
       - postgres
       - redis
       - qdrant
-    command: python -m debugpy --listen 0.0.0.0:5678 -m uvicorn app.routes:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn app.routes:app --host 0.0.0.0 --port 8000 --reload
 
   postgres:
     image: postgres:15-alpine
@@ -78,6 +78,7 @@ services:
       - NEXT_PUBLIC_API_URL=http://localhost:8000
       - CHOKIDAR_USEPOLLING=true
       - NODE_ENV=development
+      - NODE_OPTIONS=--enable-source-maps
     depends_on:
       - api
     volumes:

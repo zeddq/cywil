@@ -290,7 +290,7 @@ class TemplateParser:
             # Court and case information
             ('court_name', r'(?:sąd|do\s+sądu|trybunal)\s*(?:rejonowy|okręgowy)?\s*(?:w|we)?\s*(?:__+|\.{3,})'),
             ('court_division', r'(?:wydział)\s*(?:cywilny|karny|rodzinny)?\s*:?\s*(?:__+|\.{3,})'),
-            ('case_number', r'(?:sygnatura|numer\s+sprawy|sygn\.)\s*:?\s*(?:__+|\.{3,})'),
+            ('reference_number', r'(?:sygnatura|numer\s+sprawy|sygn\.)\s*:?\s*(?:__+|\.{3,})'),
             ('case_type', r'(?:rodzaj\s+sprawy|typ\s+postepowania)\s*:?\s*(?:__+|\.{3,})'),
             
             # Financial information

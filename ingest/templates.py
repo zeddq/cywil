@@ -96,11 +96,13 @@ async def process_template_file(file_path: Path, session: AsyncSession):
     template_text = data["template"]
     template_variables: list[str] = data["variables"]
 
+    id = None
     result_db = await session.execute(select(FormTemplate).where(FormTemplate.name == template_name))
     result = result_db.scalars().first()
     if result:
         if template_text.strip() != result.content.strip():
             print(f"Template '{template_name}' already exists in the database but has different content. Updating.")
+            id = result.id
         else:
             print(f"Template '{template_name}' already exists in the database and has the same content. Skipping.")
             return
@@ -145,7 +147,9 @@ async def process_template_file(file_path: Path, session: AsyncSession):
         content=template_text,
         category=data.get("category", "other"),
     )
-    session.add(form_template_entry)
+    if id:
+        form_template_entry.id = id
+    await session.merge(form_template_entry)
     print(f"  -> Added '{template_name}' to PostgreSQL.")
     await session.commit()
     print(f"  -> Committed changes to PostgreSQL.")

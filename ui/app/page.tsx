@@ -3,11 +3,17 @@
 import { useState } from 'react'
 import Chat from '@/components/Chat'
 import CasesView from '@/components/CasesView'
-import { MessageSquare, Briefcase, FileText, Calendar, Menu, X } from 'lucide-react'
+import { UserMenu } from '@/components/auth/user-menu'
+import { ProtectedRoute } from '@/components/auth/protected-route'
+import { useAuth } from '@/lib/auth-context'
+import { MessageSquare, Briefcase, FileText, Calendar, Menu, X, Shield } from 'lucide-react'
+import DocumentsPage from './documents/page'
+import AdminPage from './admin/page'
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('chat')
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
+  const { user } = useAuth()
 
   const navigationItems = [
     { id: 'chat', label: 'Chat', icon: MessageSquare },
@@ -15,6 +21,11 @@ export default function Home() {
     { id: 'documents', label: 'Dokumenty', icon: FileText },
     { id: 'deadlines', label: 'Terminy', icon: Calendar },
   ]
+  
+  // Add admin panel for admin users
+  if (user?.role === 'admin') {
+    navigationItems.push({ id: 'admin', label: 'Panel Admina', icon: Shield })
+  }
 
   const handleTabClick = (tabId: string) => {
     console.log('Handler: handleTabClick', { tabId });
@@ -27,7 +38,8 @@ export default function Home() {
   };
 
   return (
-    <div className="flex h-screen">
+    <ProtectedRoute>
+      <div className="flex h-screen">
       {/* Sidebar */}
       <aside
         className={`${
@@ -69,10 +81,7 @@ export default function Home() {
             {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
           
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-600">Jan Kowalski</span>
-            <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
-          </div>
+          <UserMenu />
         </header>
 
         {/* Content Area */}
@@ -85,12 +94,7 @@ export default function Home() {
           
           {activeTab === 'cases' && <CasesView />}
           
-          {activeTab === 'documents' && (
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-semibold mb-4">Dokumenty</h2>
-              <p className="text-gray-600">Funkcja w przygotowaniu...</p>
-            </div>
-          )}
+          {activeTab === 'documents' && <DocumentsPage />}
           
           {activeTab === 'deadlines' && (
             <div className="bg-white rounded-lg shadow-lg p-6">
@@ -98,8 +102,11 @@ export default function Home() {
               <p className="text-gray-600">Funkcja w przygotowaniu...</p>
             </div>
           )}
+          
+          {activeTab === 'admin' && <AdminPage />}
         </main>
       </div>
     </div>
+    </ProtectedRoute>
   )
 }

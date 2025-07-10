@@ -86,7 +86,7 @@ export default function Chat() {
                 : m
             ))
           } else if (chunk.type === 'full_message') {
-            if (accumulatedContent.trim() !== chunk.content.toString()) {
+            if (!accumulatedContent.trim().endsWith(chunk.content.toString().trim())) {
               console.log('Full message: ', chunk.content)
               console.log('Accumulated content: ', accumulatedContent)
               accumulatedContent = chunk.content.toString()

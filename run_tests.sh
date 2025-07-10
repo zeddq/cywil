@@ -80,6 +80,15 @@ run_ingestion_templates() {
     print_success "Ingestion for templates completed"
 }
 
+# Run ingestion pipeline for templates
+run_ingestion_rulings() {
+    print_header "Running Data Ingestion Pipeline for Rulings"
+    
+    docker-compose exec -e POSTGRES_HOST=postgres -e REDIS_HOST=redis -e QDRANT_HOST=qdrant -e QDRANT_PORT=6333 api python ingest/sn.py
+    
+    print_success "Ingestion for rulings completed"
+}
+
 # Validate ingestion
 validate_ingestion() {
     print_header "Validating Ingestion"
@@ -220,7 +229,7 @@ create_case() {
     while [[ $# -gt 0 ]]; do
         case $1 in
             --case-number)
-                CASE_NUMBER="$2"
+                reference_number="$2"
                 shift 2
                 ;;
             --title)
@@ -260,7 +269,7 @@ create_case() {
     done
 
     # Validate required arguments
-    if [ -z "$CASE_NUMBER" ] || [ -z "$TITLE" ] || [ -z "$CASE_TYPE" ] || [ -z "$CLIENT_NAME" ] || [ -z "$CLIENT_CONTACT" ]; then
+    if [ -z "$reference_number" ] || [ -z "$TITLE" ] || [ -z "$CASE_TYPE" ] || [ -z "$CLIENT_NAME" ] || [ -z "$CLIENT_CONTACT" ]; then
         echo "Error: Missing required arguments for create-case."
         echo "Usage: $0 create-case --case-number <num> --title <title> --case-type <type> --client-name <name> --client-contact <json> [options]"
         exit 1
@@ -268,7 +277,7 @@ create_case() {
 
     # Construct JSON payload
     JSON_PAYLOAD=$(printf '{
-        "case_number": "%s",
+        "reference_number": "%s",
         "title": "%s",
         "description": "%s",
         "case_type": "%s",
@@ -276,7 +285,7 @@ create_case() {
         "client_contact": %s,
         "opposing_party": "%s",
         "amount_in_dispute": %s
-    }' "$CASE_NUMBER" "$TITLE" "$DESCRIPTION" "$CASE_TYPE" "$CLIENT_NAME" "$CLIENT_CONTACT" "$OPPOSING_PARTY" "$AMOUNT_IN_DISPUTE")
+    }' "$reference_number" "$TITLE" "$DESCRIPTION" "$CASE_TYPE" "$CLIENT_NAME" "$CLIENT_CONTACT" "$OPPOSING_PARTY" "$AMOUNT_IN_DISPUTE")
 
     print_header "Creating Case via API"
     curl -X POST -H "Content-Type: application/json" -d "$JSON_PAYLOAD" "$API_URL/cases"
@@ -415,6 +424,7 @@ show_usage() {
     echo "  api                - Run test_api.py with correct env"
     echo "  ingest             - Run data ingestion pipeline"
     echo "  ingest-templates   - Run data ingestion pipeline for templates"
+    echo "  ingest-rulings     - Run data ingestion pipeline for rulings"
     echo "  validate           - Validate ingestion results"
     echo "  search \"query\"     - Search documents using search_documents()"
     echo "  audit [options]    - Get audit records from orchestrator"
@@ -455,7 +465,7 @@ case "${1:-help}" in
         ;;
     "start-dev")
         print_header "Starting Services"
-        docker-compose -f docker-compose.yml up -d
+        docker-compose -f docker-compose.yml up --build
         print_success "Services started"
         ;;
     "stop")
@@ -467,6 +477,12 @@ case "${1:-help}" in
         print_header "Stopping Services"
         docker-compose down
         print_success "Services stopped"
+        ;;
+    "restart-dev")
+        print_header "Restarting Services"
+        docker-compose -f docker-compose.yml down
+        docker-compose -f docker-compose.yml up --build
+        print_success "Services restarted"
         ;;
     "restart")
         print_header "Restarting Services"
@@ -489,6 +505,10 @@ case "${1:-help}" in
     "ingest-templates")
         check_services
         run_ingestion_templates
+        ;;
+    "ingest-rulings")
+        check_services
+        run_ingestion_rulings
         ;;
     "validate")
         check_services

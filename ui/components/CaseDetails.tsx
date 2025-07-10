@@ -23,49 +23,49 @@ export default function CaseDetails({ caseItem, onUpdate, isUpdating }: CaseDeta
       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4">
         <EditableField
           label="Tytuł"
-          value={caseItem.title}
+          value={caseItem.title || ''}
           onSave={(value) => handleSave('title', value)}
           disabled={isUpdating}
         />
         <EditableField
           label="Klient"
-          value={caseItem.client_name}
+          value={caseItem.client_name || ''}
           onSave={(value) => handleSave('client_name', value)}
           disabled={isUpdating}
         />
         <EditableField
           label="Sygnatura"
-          value={caseItem.case_number}
-          onSave={(value) => handleSave('case_number', value)}
+          value={caseItem.reference_number || ''}
+          onSave={(value) => handleSave('reference_number', value)}
           disabled={isUpdating}
         />
         <EditableField
           label="Status"
-          value={caseItem.status}
+          value={caseItem.status || ''}
           onSave={(value) => handleSave('status', value)}
           disabled={isUpdating}
         />
         <EditableField
           label="Typ sprawy"
-          value={caseItem.case_type || ''}
+          value={caseItem.case_type || ''} // TODO: add default value
           onSave={(value) => handleSave('case_type', value)}
           disabled={isUpdating}
         />
         <EditableField
           label="Sąd"
-          value={caseItem.court_name || ''}
+          value={caseItem.court_name || ''} // TODO: add default value
           onSave={(value) => handleSave('court_name', value)}
           disabled={isUpdating}
         />
         <EditableField
           label="Sygnatura sądowa"
-          value={caseItem.court_case_number || ''}
+          value={caseItem.court_case_number || ''} // TODO: add default value
           onSave={(value) => handleSave('court_case_number', value)}
           disabled={isUpdating}
         />
         <EditableField
           label="Sędzia"
-          value={caseItem.judge_name || ''}
+          value={caseItem.judge_name || ''} // TODO: add default value
           onSave={(value) => handleSave('judge_name', value)}
           disabled={isUpdating}
         />
@@ -73,7 +73,7 @@ export default function CaseDetails({ caseItem, onUpdate, isUpdating }: CaseDeta
           <EditableField
             label="Opis"
             as="textarea"
-            value={caseItem.description || ''}
+            value={caseItem.description || ''} // TODO: add default value
             onSave={(value) => handleSave('description', value)}
             disabled={isUpdating}
           />

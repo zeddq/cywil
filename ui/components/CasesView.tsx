@@ -148,7 +148,7 @@ export default function CasesView() {
                 <strong>Klient:</strong> {caseItem.client_name}
               </p>
               <p className="text-sm text-gray-500 mt-2">
-                <strong>Sygnatura:</strong> {caseItem.case_number}
+                <strong>Sygnatura:</strong> {caseItem.reference_number}
               </p>
               <p className="text-xs text-gray-400 mt-4">
                 Utworzono: {new Date(caseItem.created_at).toLocaleDateString()}
