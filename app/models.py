@@ -6,6 +6,7 @@ from sqlmodel import SQLModel, Field, Relationship
 from enum import Enum
 from pydantic import BaseModel
 from typing_extensions import TypedDict
+from .core.database_manager import DatabaseManager
 
 def generate_uuid():
     return str(uuid.uuid4())
@@ -79,6 +80,7 @@ class LegalEntity(TypedDict):
     label: Literal["ORG", "PERSON", "LOC", "DATE", "MNY", "OTH", "LAW_REF", "DOCKET"]
     start: int
     end: int
+
 class RulingMetadata(TypedDict):
     docket: Optional[str]
     date: Optional[str]
@@ -207,3 +209,23 @@ class UserSession(SQLModel, table=True):
     created_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
     
     user: User = Relationship(back_populates="sessions")
+
+# Pydantic models for request/response
+class ChatRequest(BaseModel):
+    message: str
+    thread_id: Optional[str] = None
+    
+class ToolResult(BaseModel):
+    name: str
+    status: str
+    call_id: str
+
+class ChatResponse(BaseModel):
+    response: str
+    thread_id: str
+    status: str
+    tool_results: List[ToolResult]
+
+def init_db(db_manager: DatabaseManager):
+    """Initialize the database"""
+    SQLModel.metadata.create_all(db_manager.sync_engine)

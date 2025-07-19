@@ -3,12 +3,14 @@
 import { useState, useRef, useEffect } from 'react'
 import { Send, Loader2, FileText, Calendar, Briefcase } from 'lucide-react'
 import { api } from '@/lib/api/client'
-import type { ChatMessage, ChatResponse } from '@/lib/types'
+import type { ChatMessage, ChatStreamResponse, Citation } from '@/lib/types'
+import LegalResearchView from './LegalResearchView'
 
 export default function Chat() {
   const [messages, setMessages] = useState<ChatMessage[]>([])
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [researchCitations, setResearchCitations] = useState<Citation[]>([])
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -145,6 +147,18 @@ export default function Chat() {
     }
   }
 
+  const handleAddToCase = (citation: Citation) => {
+    // Placeholder function
+    console.log('Adding citation to case:', citation)
+    // Here you would typically make an API call to add the citation to the current case
+  }
+
+  const handleRateCitation = (citation: Citation, rating: 'good' | 'bad') => {
+    // Placeholder function
+    console.log(`Rating citation as ${rating}:`, citation)
+    // Here you would typically make an API call to record the rating
+  }
+
   return (
     <div className="flex flex-col h-full bg-white rounded-lg shadow-lg">
       {/* Header */}
@@ -229,6 +243,12 @@ export default function Chat() {
             </div>
           </div>
         ))}
+
+        <LegalResearchView 
+          citations={researchCitations}
+          onAddToCase={handleAddToCase}
+          onRate={handleRateCitation}
+        />
 
         {isLoading && (
           <div className="flex justify-start">

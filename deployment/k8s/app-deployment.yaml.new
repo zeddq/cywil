@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-paralegal-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ai-paralegal
+  template:
+    metadata:
+      labels:
+        app: ai-paralegal
+    spec:
+      containers:
+      - name: app
+        image: your-registry/ai-paralegal:your-tag
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8000
+        envFrom:
+        - configMapRef:
+            name: ai-paralegal-config
+        - secretRef:
+            name: ai-paralegal-secrets
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "4Gi"
+            cpu: "2000m"
+        
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 60
+          periodSeconds: 15
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        
+        volumeMounts:
+        - name: app-logs
+          mountPath: /app/logs
+      
+      volumes:
+      - name: app-logs
+        emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-paralegal-service
+spec:
+  selector:
+    app: ai-paralegal
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 8000
+  type: ClusterIP 

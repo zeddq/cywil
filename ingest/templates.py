@@ -41,7 +41,7 @@ engine = create_async_engine(DATABASE_URL)
 
 # --- CLIENTS ---
 aclient = openai.AsyncOpenAI(api_key=OPENAI_API_KEY)
-qdrant_client = QdrantClient(url=QDRANT_URL)
+qdrant_client = QdrantClient(url=QDRANT_URL, https=False)
 embedding_model = SentenceTransformer(EMBEDDING_MODEL)
 
 

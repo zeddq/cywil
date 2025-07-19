@@ -35,6 +35,12 @@ print_warning() {
     echo -e "${YELLOW}⚠ $1${NC}"
 }
 
+login() {
+    print_header "Logging in"
+    curl -d "username=zeddq1@gmail.com&password=ahciwd123" "$API_URL/api/auth/login" | jq -r .access_token | tee auth_token.txt
+    print_success "Logged in"
+}
+
 # Check if Docker services are running
 check_services() {
     print_header "Checking Services"
@@ -44,9 +50,11 @@ check_services() {
         docker-compose up -d
         sleep 10
     fi
+
+    login
     
     # Check API health
-    if curl -s "$API_URL/health" > /dev/null 2>&1; then
+    if curl -H "Authorization: Bearer $(cat auth_token.txt)" "$API_URL/health" | jq . ; then
         print_success "API is responding at $API_URL"
     else
         print_error "API is not responding at $API_URL"
@@ -287,8 +295,10 @@ create_case() {
         "amount_in_dispute": %s
     }' "$reference_number" "$TITLE" "$DESCRIPTION" "$CASE_TYPE" "$CLIENT_NAME" "$CLIENT_CONTACT" "$OPPOSING_PARTY" "$AMOUNT_IN_DISPUTE")
 
+    login
+
     print_header "Creating Case via API"
-    curl -X POST -H "Content-Type: application/json" -d "$JSON_PAYLOAD" "$API_URL/cases"
+    curl -H "Authorization: Bearer $(cat auth_token.txt)" -X POST -H "Content-Type: application/json" -d "$JSON_PAYLOAD" "$API_URL/cases"
     echo ""
     print_success "Case creation request sent"
 }
@@ -300,7 +310,8 @@ delete_case() {
         exit 1
     fi
     print_header "Deleting Case via API"
-    curl -X DELETE "$API_URL/cases/$1"
+    login
+    curl -H "Authorization: Bearer $(cat auth_token.txt)" -X DELETE "$API_URL/cases/$1"
     echo ""
     print_success "Case deletion request sent"
 }
@@ -357,7 +368,8 @@ create_document() {
     }' "$CASE_ID" "$DOCUMENT_TYPE" "$TITLE" "$CONTENT" "$METADATA")
 
     print_header "Creating Document via API"
-    curl -X POST -H "Content-Type: application/json" -d "$JSON_PAYLOAD" "$API_URL/documents"
+    login
+    curl -H "Authorization: Bearer $(cat auth_token.txt)" -X POST -H "Content-Type: application/json" -d "$JSON_PAYLOAD" "$API_URL/documents"
     echo ""
     print_success "Document creation request sent"
 }
@@ -369,7 +381,8 @@ delete_document() {
         exit 1
     fi
     print_header "Deleting Document via API"
-    curl -X DELETE "$API_URL/documents/$1"
+    login
+    curl -H "Authorization: Bearer $(cat auth_token.txt)" -X DELETE "$API_URL/documents/$1"
     echo ""
     print_success "Document deletion request sent"
 }
@@ -387,7 +400,8 @@ list_cases() {
             exit 1
         fi
     fi
-    curl -s -X GET "$API_URL/cases$STATUS_PARAM" | jq .
+    login
+    curl -H "Authorization: Bearer $(cat auth_token.txt)" -s -X GET "$API_URL/cases$STATUS_PARAM" | jq .
     echo ""
     print_success "List cases request sent"
 }
@@ -405,7 +419,8 @@ list_documents() {
             exit 1
         fi
     fi
-    curl -s -X GET "$API_URL/documents$CASE_ID_PARAM" | jq .
+    login
+    curl -H "Authorization: Bearer $(cat auth_token.txt)" -s -X GET "$API_URL/documents$CASE_ID_PARAM" | jq .
     echo ""
     print_success "List documents request sent"
 }

@@ -1,0 +1,56 @@
+# Testing requirements for AI Paralegal POC
+
+# Core testing framework
+pytest==7.4.3
+pytest-asyncio==0.21.1
+pytest-cov==4.1.0
+pytest-timeout==2.2.0
+pytest-mock==3.12.0
+
+# Property-based testing
+hypothesis==6.92.1
+
+# Test utilities
+faker==20.1.0
+factory-boy==3.3.0
+
+# Mocking
+responses==0.24.1
+aioresponses==0.7.6
+
+# Code quality
+mypy==1.7.1
+black==23.12.0
+isort==5.13.2
+flake8==6.1.0
+pylint==3.0.3
+
+# Type stubs
+types-redis==4.6.0.11
+types-requests==2.31.0.10
+
+# Performance testing
+locust==2.17.0
+
+# Test reporting
+pytest-html==4.1.1
+pytest-json-report==1.5.0
+
+# Development dependencies (should also be in main requirements)
+python-dotenv==1.0.0
+pydantic==2.5.2
+sqlalchemy[asyncio]==2.0.23
+
+opentelemetry-api==1.35.0
+opentelemetry-exporter-otlp==1.35.0
+opentelemetry-exporter-otlp-proto-common==1.35.0
+opentelemetry-exporter-otlp-proto-grpc==1.35.0
+opentelemetry-exporter-otlp-proto-http==1.35.0
+opentelemetry-instrumentation==0.56b0
+opentelemetry-instrumentation-logging==0.56b0
+opentelemetry-proto==1.35.0
+opentelemetry-sdk==1.35.0
+opentelemetry-semantic-conventions==0.56b0
+
+openai==1.97.0
+openai-agents==0.2.2

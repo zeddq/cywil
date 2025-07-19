@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ai-paralegal-config
+  namespace: ai-paralegal
+data:
+  # Application Configuration
+  APP_ENV: "production"
+  APP_HOST: "0.0.0.0"
+  APP_PORT: "8000"
+  LOG_LEVEL: "DEBUG"
+  LOG_FORMAT: "json"
+  
+  # Model Configuration
+  OPENAI_ORCHESTRATOR_MODEL: "gpt-4.1"
+  OPENAI_VALIDATOR_MODEL: "o3"
+  OPENAI_REASONER_MODEL: "o3"
+  OPENAI_EMBEDDING_MODEL: "text-embedding-3-large"
+  OPENAI_RULING_EMBEDDING_MODEL: "text-embedding-3-large"
+  OPENAI_SUMMARY_MODEL: "o3-mini"
+  
+  # Database Configuration (non-sensitive)
+  POSTGRES_HOST: "postgres-service"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "paralegal_prod"
+  CONNECTION_POOL_SIZE: "20"
+  CONNECTION_POOL_MAX_OVERFLOW: "10"
+  
+  # Redis Configuration
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+  REDIS_DB: "0"
+  
+  # Qdrant Configuration
+  QDRANT_HOST: "qdrant-service"
+  QDRANT_PORT: "6333"
+  QDRANT_COLLECTION_STATUTES: "statutes_prod"
+  QDRANT_COLLECTION_RULINGS: "rulings_prod"
+  
+  # Performance Configuration
+  CACHE_TTL_MINUTES: "30"
+  EMBEDDING_CACHE_SIZE: "1000"
+  BATCH_SIZE: "10"
+  REQUEST_TIMEOUT: "30"
+  
+  # Circuit Breaker Configuration
+  CIRCUIT_BREAKER_FAILURE_THRESHOLD: "5"
+  CIRCUIT_BREAKER_RECOVERY_TIMEOUT: "60"
+  CIRCUIT_BREAKER_SUCCESS_THRESHOLD: "3"

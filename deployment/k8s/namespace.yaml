@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ai-paralegal
+  labels:
+    name: ai-paralegal
+    environment: production

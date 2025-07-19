@@ -180,6 +180,12 @@ export const api = {
       console.log('API Response: documents.get', { data });
       return data
     },
+    create: async (documentData: Partial<Document>): Promise<Document> => {
+      console.log('API Call: documents.create', { documentData });
+      const { data } = await axiosInstance.post<Document>('/documents', documentData)
+      console.log('API Response: documents.create', { data });
+      return data
+    },
   },
 
   // Deadline management

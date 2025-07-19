@@ -2,13 +2,17 @@ from datetime import datetime, timedelta, UTC
 from typing import Optional, Dict, Any
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-from fastapi import Depends, HTTPException, status
+from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer
 from sqlmodel import Session, select
-from .database import get_session
-from .models import User, UserSession
+from .dependencies import get_db
+from .models import User, UserSession   
 from .config import settings
 import secrets
+from .core.logger_manager import get_logger
+
+logger = get_logger(__name__)
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -41,8 +45,9 @@ def create_session_token() -> str:
     return secrets.token_urlsafe(32)
 
 async def get_current_user(
+    request: Request,
     token: str = Depends(oauth2_scheme),
-    session: Session = Depends(get_session)
+    session: AsyncSession = Depends(get_db)
 ) -> User:
     """Get the current authenticated user from JWT token."""
     credentials_exception = HTTPException(
@@ -53,15 +58,19 @@ async def get_current_user(
     
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
-        user_id: str = payload.get("sub")
+        logger.debug(f"Decoded token: {payload}")
+        user_id: Optional[str] = payload.get("user_id")
         if user_id is None:
             raise credentials_exception
     except JWTError:
         raise credentials_exception
     
-    user = session.get(User, user_id)
+    user = await session.get(User, user_id)
     if user is None:
+        logger.error(f"User not found: {user_id}")
         raise credentials_exception
+    logger.debug(f"User found: {user.model_dump_json(indent=2)}")
+    request.headers["X-User-ID"] = str(user.id)
     
     if not user.is_active:
         raise HTTPException(
@@ -104,6 +113,11 @@ def check_user_permissions(
     return permission_checker
 
 # Commonly used permission dependencies
-require_admin = check_user_permissions(required_roles=["admin"])
-require_lawyer = check_user_permissions(required_roles=["admin", "lawyer"])
-require_paralegal = check_user_permissions(required_roles=["admin", "lawyer", "paralegal"])
+def require_admin(current_user: User = Depends(get_current_active_user)):
+    check_user_permissions(required_roles=["admin"], current_user=current_user)
+
+def require_lawyer(current_user: User = Depends(get_current_active_user)):
+    check_user_permissions(required_roles=["admin", "lawyer"], current_user=current_user)
+
+def require_paralegal(current_user: User = Depends(get_current_active_user)):
+    check_user_permissions(required_roles=["admin", "lawyer", "paralegal"], current_user=current_user)

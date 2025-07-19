@@ -12,14 +12,16 @@ from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 import re
 import logging
-from app.config import settings
+from dataclasses import dataclass
+from .config import settings
+from .models import SNRuling
 # Initialize logging
 logger = logging.getLogger(__name__)
 
 # Initialize clients
 logger.info("Loading SentenceTransformer model from Hugging Face")
 logger.info("Initializing ChatOpenAI client")
-llm = ChatOpenAI(model=settings.openai_llm_model, temperature=0.1)
+llm = ChatOpenAI(model=settings.openai_llm_model)
 
 # Qdrant client initialization (will be configured from env)
 qdrant_client = None
@@ -196,6 +198,22 @@ async def find_template(template_name: str) -> Optional[Dict[str, Any]]:
     finally:
         session.close()
 
+@dataclass
+class RulingParagraphPayload:
+    section: str
+    para_no: int
+    text: str
+    entities: List[Dict[str, Any]]
+
+@dataclass
+class RulingPayload:
+    docket: str
+    date: int
+    panel: List[str]
+    paragraphs: RulingParagraphPayload
+    match_type: str = "exact_docket"
+    score: float = 1.0
+
 async def draft_document(doc_type: str, facts: Dict[str, Any], goals: List[str]) -> Dict[str, Any]:
     """
     Generate legal documents based on type, facts, and goals.
@@ -224,16 +242,38 @@ async def draft_document(doc_type: str, facts: Dict[str, Any], goals: List[str])
     for key, value in facts.items():
         filled_template = filled_template.replace(f"[[{key}]]", str(value))
 
-    # Generate justification if needed
-    if "[[justification]]" in filled_template:
-        justification_prompt = f"Napisz uzasadnienie dla {doc_type} na podstawie: {json.dumps(facts, ensure_ascii=False)}"
-        logger.info("Calling OpenAI API to generate document justification")
-        justification = await llm.ainvoke(justification_prompt)
-        filled_template = filled_template.replace("[[justification]]", justification.content)
+    near_sn_rulings = await search_sn_rulings(filled_template, top_k=3)
+    db_rulings: Dict[str, SNRuling] = {}
+    for ruling in near_sn_rulings:
+        if ruling.docket not in db_rulings:
+            db_rulings[ruling.docket] = await get_sn_ruling(ruling.docket)
+            # argumentation_query = await summarize_sn_rulings(db_rulings[ruling.docket])
+
+    justification_prompt = f"""
+Jako ekspert prawa cywilnego pomagający w tworzeniu dokumentów profesjonalnym prawnikom uzupełnij poniższe pismo przy pomocy wyroków Sądu Najwyższego.
+Wyroki Sądu Najwyższego zostały wybrane na podstawie zawartości dokumentu. Użyj tylko tych wyroków, które są istotne dla dokumentu. Wyroki występują w kolejności od najbardziej istotnych do najmniej istotnych.
+
+Wymagania:
+1. Uzupełnienie powinno być integralną częścią dokumentu.
+2. Uzupełnienie powinno być dokładne i zawierać wszystkie istotne informacje dla danego dokumentu.
+3. Uzupełnienie powinno być oparte na wyrokach Sądu Najwyzszego.
+4. Zwrócony tekst powinien być finalną wersją dokumentu.
+5. Uzupełnienie powinno być zgodne z prawem.
+6. Pamiętaj o zachowaniu oryginalnej struktury dokumentu.
+7. Postaraj się naprawić wszystkie błedy w dokumencie (np. błędy w cytowaniu przepisów, błędy w strukturze dokumentu, błędy w ortografii i gramatyce).
+
+Wyroki Sądu Najwyzszego:
+{db_rulings}
+
+Dokument:
+{filled_template}
+"""
+    logger.info("Calling OpenAI API to generate document justification")
+    final_document = await llm.ainvoke(justification_prompt)
 
     return {
         "document_type": doc_type,
-        "content": filled_template,
+        "content": final_document.content,
         "citations": [s["citation"] for s in relevant_statutes],
         "template_variables": template_variables,
         "metadata": {
@@ -522,7 +562,7 @@ async def schedule_reminder(case_id: str, reminder_date: str, note: str) -> Dict
     
     return reminder
 
-async def search_sn_rulings(query: str, top_k: int = 5, filters: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+async def search_sn_rulings(query: str, top_k: int = 5, filters: Optional[Dict[str, Any]] = None) -> List[RulingPayload]:
     """
     Semantic search over Polish Supreme Court (Sąd Najwyższy) rulings.
     Returns relevant case law with docket numbers, dates, and text excerpts.
@@ -545,6 +585,7 @@ async def search_sn_rulings(query: str, top_k: int = 5, filters: Optional[Dict[s
     # Check if query mentions specific docket number
     docket_pattern = r'([IVX]+\s+[A-Z]+\s+\d+/\d+)'
     docket_match = re.search(docket_pattern, query)
+    formatted_results: List[RulingPayload] = []
     
     if docket_match:
         docket_num = docket_match.group(1)
@@ -554,60 +595,35 @@ async def search_sn_rulings(query: str, top_k: int = 5, filters: Optional[Dict[s
         exact_filter = Filter(must=[FieldCondition(key="docket", match=MatchValue(value=docket_num))])
         
         # Try to find exact match
-        exact_results = await qdrant_client.scroll(
+        exact_results, _ = await qdrant_client.scroll(
             collection_name="sn_rulings",
             scroll_filter=exact_filter,
-            limit=10,  # Get all paragraphs from this ruling
+            limit=1,  # Get all paragraphs from this ruling
             with_payload=True
         )
         
-        if exact_results[0]:
-            # Group paragraphs by ruling
-            formatted_results = []
-            ruling_paragraphs = {}
-            
-            for point in exact_results[0]:
+        if exact_results:            
+            for point in exact_results:
                 docket = point.payload.get("docket")
-                if docket not in ruling_paragraphs:
-                    ruling_paragraphs[docket] = {
-                        "docket": docket,
-                        "date": point.payload.get("date"),
-                        "panel": point.payload.get("panel", []),
-                        "paragraphs": []
-                    }
                 
-                ruling_paragraphs[docket]["paragraphs"].append({
-                    "section": point.payload.get("section"),
-                    "para_no": point.payload.get("para_no"),
-                    "text": point.payload.get("text"),
-                    "entities": point.payload.get("entities", [])
-                })
+                formatted_results.append(RulingPayload(
+                    docket=docket,
+                    date=point.payload.get("date"),
+                    panel=point.payload.get("panel", []),
+                    paragraphs=RulingParagraphPayload(
+                        section=point.payload.get("section"),
+                        para_no=point.payload.get("para_no"),
+                        text=point.payload.get("text"),
+                        entities=point.payload.get("entities", []),
+                    ),
+                    score=0.0,
+                    match_type="exact_docket"
+                ))
             
             # Format the exact match result
-            for docket, data in ruling_paragraphs.items():
-                # Sort paragraphs by para_no
-                data["paragraphs"].sort(key=lambda x: x.get("para_no", 0))
-                
-                # Combine key paragraphs for preview
-                key_sections = ["legal_question", "reasoning", "disposition"]
-                preview_text = ""
-                for para in data["paragraphs"]:
-                    if para["section"] in key_sections:
-                        preview_text += para["text"][:500] + "... "
-                        if len(preview_text) > 1000:
-                            break
-                
-                formatted_results.append({
-                    "docket": docket,
-                    "date": str(data["date"]) if data["date"] else None,
-                    "panel": data["panel"],
-                    "preview": preview_text.strip(),
-                    "full_paragraphs": data["paragraphs"],
-                    "score": 1.0,  # Perfect match
-                    "match_type": "exact_docket"
-                })
+            formatted_results.sort(key=lambda x: x.score)
             
-            if top_k == 1 or len(formatted_results) >= top_k:
+            if len(formatted_results) >= top_k:
                 return formatted_results[:top_k]
             
             # Get more similar rulings if needed
@@ -634,12 +650,12 @@ async def search_sn_rulings(query: str, top_k: int = 5, filters: Optional[Dict[s
         if "date_from" in filters:
             must_conditions.append(FieldCondition(
                 key="date",
-                range={"gte": filters["date_from"]}
+                range=Range(gte=filters["date_from"])
             ))
         if "date_to" in filters:
             must_conditions.append(FieldCondition(
                 key="date",
-                range={"lte": filters["date_to"]}
+                range=Range(lte=filters["date_to"])
             ))
         if "section" in filters:
             must_conditions.append(FieldCondition(
@@ -660,94 +676,77 @@ async def search_sn_rulings(query: str, top_k: int = 5, filters: Optional[Dict[s
         with_payload=True
     )
     
-    # Group results by ruling (docket number)
-    rulings_map = {}
     for result in results:
         docket = result.payload.get("docket")
-        if docket not in rulings_map:
-            rulings_map[docket] = {
-                "docket": docket,
-                "date": result.payload.get("date"),
-                "panel": result.payload.get("panel", []),
-                "paragraphs": [],
-                "max_score": result.score
-            }
-        
-        rulings_map[docket]["paragraphs"].append({
-            "section": result.payload.get("section"),
-            "para_no": result.payload.get("para_no"),
-            "text": result.payload.get("text"),
-            "entities": result.payload.get("entities", []),
-            "score": result.score
-        })
-        
-        # Keep track of highest score for this ruling
-        if result.score > rulings_map[docket]["max_score"]:
-            rulings_map[docket]["max_score"] = result.score
-    
-    # Format grouped results
-    for docket, data in rulings_map.items():
-        # Skip if we already have this as exact match
-        if any(r["docket"] == docket for r in formatted_results):
-            continue
-        
-        # Sort paragraphs by score then para_no
-        data["paragraphs"].sort(key=lambda x: (-x["score"], x.get("para_no", 0)))
-        
-        # Create preview from top-scoring paragraphs
-        preview_text = ""
-        for para in data["paragraphs"][:3]:  # Top 3 paragraphs
-            preview_text += f"[{para['section']}] {para['text'][:300]}... "
-            if len(preview_text) > 800:
-                break
-        
-        formatted_results.append({
-            "docket": docket,
-            "date": str(data["date"]) if data["date"] else None,
-            "panel": data["panel"],
-            "preview": preview_text.strip(),
-            "relevant_paragraphs": data["paragraphs"][:5],  # Top 5 most relevant
-            "score": data["max_score"],
-            "match_type": "semantic"
-        })
-    
+        formatted_results.append(RulingPayload(
+                docket=docket,
+                date=result.payload.get("date"),
+                panel=result.payload.get("panel", []),
+                paragraphs=RulingParagraphPayload(
+                    section=result.payload.get("section"),
+                    para_no=result.payload.get("para_no"),
+                    text=result.payload.get("text"),
+                    entities=result.payload.get("entities", []),
+                ),
+                score=result.score,
+                match_type="semantic"
+            ))
     # Sort by score and return top_k
-    formatted_results.sort(key=lambda x: -x["score"])
+    formatted_results.sort(key=lambda x: x.score)
     return formatted_results[:top_k]
 
-async def summarize_sn_rulings(rulings: List[Dict[str, Any]]) -> str:
+async def get_sn_ruling(docket: str) -> SNRuling:
+    """
+    Get a Supreme Court ruling by docket number.
+    """
+    from .database import sync_engine
+    from .models import SNRuling, RulingParagraph
+    from sqlalchemy.orm import sessionmaker
+    from qdrant_client import AsyncQdrantClient
+    from qdrant_client.models import Filter, FieldCondition, MatchValue, Range
+    from sentence_transformers import SentenceTransformer
+    from .config import settings
+    from .tools import init_vector_db
+    
+    Session = sessionmaker(bind=sync_engine)
+    session = Session()
+    try:
+        ruling = session.query(SNRuling).filter_by(docket=docket).first()
+        return ruling
+    except Exception as e:
+        logger.error(f"Error getting Supreme Court ruling: {e}")
+        return None
+    
+async def summarize_sn_rulings(rulings: List[RulingPayload]) -> str:
     """
     Summarize Supreme Court rulings with focus on legal principles and precedents.
     """
     # Prepare rulings text
     rulings_text = ""
     for ruling in rulings:
-        rulings_text += f"\n\nWyrok {ruling['docket']}"
-        if ruling.get('date'):
-            rulings_text += f" z dnia {ruling['date']}"
+        rulings_text += f"\n\nWyrok {ruling.docket}"
+        if ruling.date:
+            rulings_text += f" z dnia {ruling.date}"
         rulings_text += "\n"
         
-        if ruling.get('preview'):
-            rulings_text += ruling['preview']
-        elif ruling.get('relevant_paragraphs'):
-            for para in ruling['relevant_paragraphs'][:3]:
-                rulings_text += f"\n[{para['section']}] {para['text'][:500]}..."
-    
+        if ruling.paragraphs.text:
+            rulings_text += ruling.paragraphs.text
+
     prompt = PromptTemplate(
         template="""Jako ekspert prawa cywilnego, przeanalizuj poniższe orzeczenia Sądu Najwyższego:
 
-{rulings}
+  {rulings}
 
-Podsumowanie powinno zawierać:
-1. Kluczowe tezy prawne z każdego orzeczenia
-2. Ustalone precedensy i ich znaczenie
-3. Praktyczne zastosowanie w kontekście prawnym
-4. Cytowanie sygnatur akt
+  Podsumowanie powinno zawierać:
+  1. Kluczowe tezy prawne z każdego orzeczenia
+  2. Ustalone precedensy i ich znaczenie
+  3. Praktyczne zastosowanie w kontekście prawnym
+  4. Cytowanie sygnatur akt
 
-Podsumowanie:""",
+  Podsumowanie:""",
         input_variables=["rulings"]
     )
-    
+
     logger.info("Calling OpenAI API for Supreme Court rulings summarization")
     response = await llm.ainvoke(prompt.format(rulings=rulings_text))
     return response.content
@@ -783,3 +782,9 @@ def analyze_contract(text: str) -> Dict:
         ] if issues else []
     }
 
+async def main():
+    draft = await draft_document("Wezwanie do zaplaty", {"text": "Wezwanie do zapłaty", "powód": "Jan Kowalski", "pozwany": "Jan Nowak", "termin": "2025-01-01", "kwota": "100000"}, ["Wezwanie do zapłaty", "Zapłata za wykonanie usługi budowlanej"])
+    print(draft)
+
+if __name__ == "__main__":
+    asyncio.run(main())

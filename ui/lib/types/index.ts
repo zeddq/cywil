@@ -35,7 +35,8 @@ export interface ChatMessage {
 export interface Citation {
   article: string
   text: string
-  source: 'KC' | 'KPC'
+  source: string
+  score?: number
 }
 
 export interface Document {

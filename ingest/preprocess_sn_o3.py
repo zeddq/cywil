@@ -729,7 +729,7 @@ async def main():
         
     else:
         # Process all PDFs in directory
-        pdf_files = list(args.input_dir.glob("*.pdf"))
+        pdf_files = list(args.input_dir.glob("*-ocrd.pdf"))
         pdf_files = [p for p in pdf_files if p.is_file() and not p.name.endswith("123_05.pdf")]
         logger.info(f"Found {len(pdf_files)} PDF files to process")
         

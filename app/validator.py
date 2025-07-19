@@ -1,7 +1,10 @@
 from typing import Any, Dict, List
-from langchain_openai import ChatOpenAI
+from openai import AsyncOpenAI
 from pydantic import BaseModel
 from typing import Literal
+from .config import settings
+
+client = AsyncOpenAI(api_key=settings.openai_api_key)
 
 VALIDATOR_SYSTEM_PROMPT = """
 # Role and Goal:
@@ -40,7 +43,7 @@ You will receive the following information in a structured format:
 # Required Output Format:
 You MUST respond in a single, clean JSON object with one of the following structures. Do not include any explanatory text outside of the JSON object.
 
-# Scenario 1: The error is correctable with high confidence.
+## Scenario 1: The error is correctable with high confidence.
 If you can deduce the correct function call from the context.
 
 {
@@ -56,7 +59,7 @@ If you can deduce the correct function call from the context.
   "explanation": "A brief, user-facing explanation of the correction. Example: 'Spróbuję ponownie edytować sprawę o sygnaturze '1234567890'."
 }
 
-# Scenario 2: The user's intent is ambiguous and clarification is needed.
+## Scenario 2: The user's intent is ambiguous and clarification is needed.
 If you cannot proceed without more information from the user.
 
 {
@@ -66,7 +69,7 @@ If you cannot proceed without more information from the user.
   "explanation": "A brief, user-facing explanation of why you need clarification. Example: 'Potrzebuję więcej informacji, aby kontynuować Twoją prośbę.'"
 }
 
-# Scenario 3: The error is unrecoverable or requires a different approach.
+## Scenario 3: The error is unrecoverable or requires a different approach.
 If the error cannot be fixed with a simple retry or clarification.
 
 {
@@ -75,8 +78,7 @@ If the error cannot be fixed with a simple retry or clarification.
   "reason": "A concise, technical explanation of why the task cannot be completed as requested. Example: 'Nie udało mi się znaleźć sprawy z ID '1234567890' (problem z API). Spróbuj ponownie później.'"
 }
 
----
-# Example Invocation (for illustration):
+## Example Invocation (for illustration):
 
 {
   "conversation_history": [
@@ -95,7 +97,7 @@ If the error cannot be fixed with a simple retry or clarification.
   "error_message": "Nie udało mi się znaleźć sprawy z ID '1234567890'. Sprawdź, czy numer jest poprawny i czy istnieje sprawa o takim ID."
 }
 
-# Example Output:
+## Example Output:
 
 {
   "call_id": "call_id_123",
@@ -155,22 +157,27 @@ class ValidatorResponse(BaseModel):
 #     "schema": openai_schema     # ✔ validated by the server
 # }
 
-def recover_from_tool_error(conversation_history: List[Dict[str, Any]], failed_function_call: Dict[str, Any], error_message: str) -> ValidatorResponse:
+async def recover_from_tool_error(conversation_history: List[Dict[str, Any]], failed_function_call: Dict[str, Any], error_message: str) -> ValidatorResponse:
     # TODO: Implement the logic to recover from the tool error
     # For now, we'll just return a dummy response
-    llm = ChatOpenAI(
-        model="gpt-4o-mini",
-        temperature=0.1,
-        # response_format=response_format
-    )
-    llm_structured = llm.with_structured_output(ValidatorResponse)
-    reply = llm_structured.invoke(
-        VALIDATOR_SYSTEM_PROMPT,
+
+    input_message = {
+        "conversation_history": conversation_history,
+        "failed_function_call": failed_function_call,
+        "error_message": error_message
+    }
+
+    response = await client.responses.parse(
+        model="o3-mini",
+        input=[{
+            "role": "system",
+            "content": VALIDATOR_SYSTEM_PROMPT
+        },
         {
-            "conversation_history": conversation_history,
-            "failed_function_call": failed_function_call,
-            "error_message": error_message
-        }
+            "role": "user",
+            "content": input_message
+        }],
+        text_format=ValidatorResponse
     )
-    return reply
+    return response.output_parsed
 
