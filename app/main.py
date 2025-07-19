@@ -12,7 +12,7 @@ from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
-from .orchestrator_refactored import RefactoredParalegalAgent
+from .paralegal_agents.refactored_agent_sdk import ParalegalAgentSDK
 from .core.config_service import ConfigService
 from .core.logger_manager import get_logger, correlation_context, set_user_id, trace, log_api_middleware
 from .auth import get_current_user, get_current_active_user
@@ -118,7 +118,7 @@ async def lifespan(app: FastAPI):
                 
                 # Initialize agent
                 logger.info("LIFESPAN: Initializing agent...")
-                app.state.agent = RefactoredParalegalAgent(app.state.manager.inject_service(ConfigService))
+                app.state.agent = ParalegalAgentSDK(app.state.manager.inject_service(ConfigService))
                 await app.state.agent.initialize()
                 logger.info("LIFESPAN: Agent initialization complete.")
                 

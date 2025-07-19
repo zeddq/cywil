@@ -20,13 +20,15 @@ from openai.types.responses import ResponseStreamEvent, ResponseFunctionToolCall
 
 from ..core import (
     ConfigService,
-    inject_service,
+    ServiceLifecycleManager,    
     ToolExecutionError,
     ServiceError,
 )
 from ..core.streaming_handler import StreamingHandler, StreamEventType, MetricsCollector
-from ..core.conversation_manager import ConversationManager
-from ..core.tool_executor import ToolExecutor, CircuitBreakerConfig, RetryConfig
+from ..core.conversation_manager import ConversationManager, get_conversation_manager
+from ..core.tool_executor import ToolExecutor, CircuitBreakerConfig, RetryConfig, logging_middleware, timing_middleware
+from ..core.service_interface import ServiceInterface, HealthCheckResult, ServiceStatus
+from ..core.database_manager import get_database_manager, DatabaseManager
 from ..services import initialize_services, get_tool_schemas
 from ..validator import recover_from_tool_error
 from .tool_wrappers import get_all_tools, summarize_sn_rulings_tool, search_statute_tool, search_sn_rulings_tool
@@ -43,23 +45,69 @@ def always_failing_tool(some_arg: str) -> str:
     raise ValueError(f"This tool failed intentionally with argument: {some_arg}")
 
 
-class ParalegalAgentSDK:
-    """Agent wrapper built on the OpenAI Agent SDK."""
+class ParalegalAgentSDK(ServiceInterface):
+    """Agent wrapper built on the OpenAI Agent SDK with service interface."""
 
     def __init__(self, config_service: ConfigService) -> None:
+        super().__init__("ParalegalAgentSDK")
         self._config = config_service.config
         self._client = AsyncOpenAI(api_key=self._config.openai.api_key.get_secret_value())
 
         # Dependency-injected helpers
-        self._conversation_manager = inject_service(ConversationManager)
-        self._tool_executor = inject_service(ToolExecutor)
+        self._conversation_manager: ConversationManager = ServiceLifecycleManager.inject_service(ConversationManager)
+        self._tool_executor: ToolExecutor = ServiceLifecycleManager.inject_service(ToolExecutor)
         self._streaming_handler = StreamingHandler()
         self._metrics_collector = MetricsCollector()
         self._streaming_handler.add_processor(self._metrics_collector)
 
         self._initialized: bool = False
         self._agent: Optional[Agent] = None
+        self._tool_schemas = None
+        
+        logger.info("ParalegalAgentSDK created")
 
+    # ---------------------------------------------------------------------
+    # ServiceInterface implementation
+    # ---------------------------------------------------------------------
+    async def _health_check_impl(self) -> HealthCheckResult:
+        """Check agent and tool executor health."""
+        if not self._initialized:
+            return HealthCheckResult(
+                status=ServiceStatus.INITIALIZING,
+                message="Agent not yet initialized"
+            )
+        
+        # Check tool executor health
+        executor_healthy = self._tool_executor is not None
+        agent_healthy = self._agent is not None
+        
+        if executor_healthy and agent_healthy:
+            return HealthCheckResult(
+                status=ServiceStatus.HEALTHY,
+                message="Agent is healthy",
+                details={
+                    "tool_count": len(self._tool_schemas) if self._tool_schemas else 0,
+                    "agent_ready": True
+                }
+            )
+        else:
+            return HealthCheckResult(
+                status=ServiceStatus.UNHEALTHY,
+                message="Agent components not ready",
+                details={
+                    "executor_ready": executor_healthy,
+                    "agent_ready": agent_healthy
+                }
+            )
+    
+    async def _initialize_impl(self) -> None:
+        """Initialize the agent and all services."""
+        await self.initialize()
+        
+    async def _shutdown_impl(self) -> None:
+        """Shutdown the agent and clean up resources."""
+        logger.info("ParalegalAgentSDK shutdown complete")
+    
     # ---------------------------------------------------------------------
     # Public API (matches previous orchestrator)
     # ---------------------------------------------------------------------
@@ -69,12 +117,15 @@ class ParalegalAgentSDK:
             return
         # Configure ToolExecutor similarly to old orchestrator
         self._configure_tool_executor()
+        
+        # Get tool schemas
+        self._tool_schemas = get_tool_schemas()
 
         # Build SDK agent
         self._agent = self._build_agent()
 
         self._initialized = True
-        logger.info("ParalegalAgentSDK initialized")
+        logger.info(f"ParalegalAgentSDK initialized with {len(self._tool_schemas)} tools")
 
     async def process_message_stream(
         self,
@@ -92,90 +143,111 @@ class ParalegalAgentSDK:
 
         conversation_id = thread_id or f"conv_{uuid.uuid4()}"
 
-        # The Agent SDK manages context internally; we still track our DB history
-        async with self._conversation_manager.conversation_context(conversation_id) as conv_state:
-            if case_id and not conv_state.case_id:
-                conv_state.case_id = case_id
-                await self._conversation_manager.link_to_case(conversation_id, case_id)
-            if user_id:
-                conv_state.user_id = user_id
+        # Reset streaming handler for new conversation
+        self._streaming_handler.reset()
+        self._metrics_collector.reset()
+        
+        try:
+            # The Agent SDK manages context internally; we still track our DB history
+            async with self._conversation_manager.conversation_context(conversation_id) as conv_state:
+                if case_id and not conv_state.case_id:
+                    conv_state.case_id = case_id
+                    await self._conversation_manager.link_to_case(conversation_id, case_id)
+                if user_id:
+                    conv_state.user_id = user_id
 
-            # We directly run the agent via Runner.run() with streaming=True
-            result = await Runner.run(
-                starting_agent=self._agent,
-                input=user_message,
-                stream=True,
-            )
-
-            # The SDK returns a StreamedRunResult when stream=True
-            accumulated_content = ""
-            
-            async for event in result:
-                # The SDK emits different event types than the raw OpenAI API
-                # Based on the SDK docs, events have properties like:
-                # - event_type: "agent", "message", "tool_call", etc.
-                # - data: the actual event data
+                # Yield stream start event
+                yield {
+                    "type": "stream_start",
+                    "thread_id": conversation_id,
+                    "response_id": conversation_id
+                }
                 
-                if hasattr(event, 'event_type'):
-                    if event.event_type == "message":
-                        # Text content from the agent
-                        if hasattr(event, 'data') and hasattr(event.data, 'content'):
-                            content = event.data.content
-                            accumulated_content += content
+                # We directly run the agent via Runner.run() with streaming=True
+                result = await Runner.run(
+                    starting_agent=self._agent,
+                    input=user_message,
+                    stream=True,
+                )
+
+                # The SDK returns a StreamedRunResult when stream=True
+                accumulated_content = ""
+                
+                async for event in result:
+                    # The SDK emits different event types than the raw OpenAI API
+                    # Based on the SDK docs, events have properties like:
+                    # - event_type: "agent", "message", "tool_call", etc.
+                    # - data: the actual event data
+                    
+                    if hasattr(event, 'event_type'):
+                        if event.event_type == "message":
+                            # Text content from the agent
+                            if hasattr(event, 'data') and hasattr(event.data, 'content'):
+                                content = event.data.content
+                                accumulated_content += content
+                                yield {
+                                    "type": "text_delta",
+                                    "content": content,
+                                    "thread_id": conversation_id
+                                }
+                        
+                        elif event.event_type == "tool_call":
+                            # Tool is being called
+                            if hasattr(event, 'data'):
+                                yield {
+                                    "type": "tool_calls",
+                                    "tools": [{
+                                        "name": event.data.name if hasattr(event.data, 'name') else "unknown",
+                                        "id": event.data.id if hasattr(event.data, 'id') else "",
+                                        "status": "executing"
+                                    }],
+                                    "thread_id": conversation_id
+                                }
+                        
+                        elif event.event_type == "completion":
+                            # Stream completed
                             yield {
-                                "type": "text_delta",
-                                "content": content,
+                                "type": "message_complete",
+                                "content": accumulated_content,
                                 "thread_id": conversation_id
                             }
-                    
-                    elif event.event_type == "tool_call":
-                        # Tool is being called
-                        if hasattr(event, 'data'):
                             yield {
-                                "type": "tool_calls",
-                                "tools": [{
-                                    "name": event.data.name if hasattr(event.data, 'name') else "unknown",
-                                    "id": event.data.id if hasattr(event.data, 'id') else "",
-                                    "status": "executing"
-                                }],
-                                "thread_id": conversation_id
+                                "type": "stream_complete",
+                                "thread_id": conversation_id,
+                                "metrics": self._metrics_collector.get_metrics()
                             }
                     
-                    elif event.event_type == "completion":
-                        # Stream completed
+                    else:
+                        # Fallback for unknown event types
                         yield {
-                            "type": "message_complete",
-                            "content": accumulated_content,
+                            "type": "unknown",
+                            "raw": str(event),
                             "thread_id": conversation_id
                         }
-                        yield {
-                            "type": "stream_complete",
-                            "thread_id": conversation_id,
-                            "metrics": self._metrics_collector.get_metrics()
-                        }
-                
-                else:
-                    # Fallback for unknown event types
-                    yield {
-                        "type": "unknown",
-                        "raw": str(event),
-                        "thread_id": conversation_id
-                    }
 
-            # Save conversation history
-            await self._conversation_manager.save_response_history(
-                conversation_id,
-                conversation_id,  # Using conversation_id as response_id for now
-                [{"role": "user", "content": user_message}],
-                accumulated_content,
-                conv_state.last_response_id
-            )
+                # Save conversation history
+                await self._conversation_manager.save_response_history(
+                    conversation_id,
+                    conversation_id,  # Using conversation_id as response_id for now
+                    [{"role": "user", "content": user_message}],
+                    accumulated_content,
+                    conv_state.last_response_id
+                )
             
-            # Update conversation state
-            await self._conversation_manager.update_conversation(
-                conv_state,
-                conversation_id
-            )
+                # Update conversation state
+                conv_state.last_response_id = conversation_id
+                await self._conversation_manager.update_conversation(
+                    conversation_id,
+                    conv_state
+                )
+                
+        except Exception as e:
+            logger.error(f"Error processing message stream: {e}", exc_info=True)
+            yield {
+                "type": "error",
+                "content": str(e),
+                "thread_id": conversation_id
+            }
 
     # ------------------------------------------------------------------
     # Internal helpers
@@ -278,7 +350,27 @@ class ParalegalAgentSDK:
         self._tool_executor.configure_retry(
             RetryConfig(max_retries=2, initial_delay=0.5, exponential_base=2)
         )
+        
+        # Add middleware
+        self._tool_executor.add_middleware(logging_middleware)
+        self._tool_executor.add_middleware(timing_middleware)
 
+    async def _recover_from_error(self, tool_name: str, tool_args: str, error: Exception) -> Dict[str, Any]:
+        """Attempt to recover from a tool execution error."""
+        error_message = f"Error in {tool_name}: {str(error)}"
+        
+        # Use a validator model to get a sensible default
+        recovery_result = await recover_from_tool_error(
+            tool_name=tool_name,
+            tool_args=tool_args,
+            error_message=error_message
+        )
+        
+        return {
+            "error": error_message,
+            "recovery": recovery_result.recovery_suggestion
+        }
+    
     # --------------------------------------------------------------
     def _convert_stream_event(self, event: Any, conversation_id: str) -> Dict[str, Any]:
         """Map internal streaming events to legacy format expected by callers."""
@@ -294,11 +386,46 @@ class ParalegalAgentSDK:
         return {"type": "other", "raw": event, "thread_id": conversation_id}
 
 
+    async def get_tool_metrics(self) -> Dict[str, Any]:
+        """Get metrics from tool executor."""
+        return self._tool_executor.get_metrics()
+
+    async def reset_circuit(self, tool_name: str):
+        """Reset circuit breaker for a specific tool."""
+        self._tool_executor.reset_circuit(tool_name)
+    
+    async def shutdown(self):
+        """Shutdown the agent and all services."""
+        await self._shutdown_impl()
+
+    def get_system_prompt(self) -> str:
+        """Get the system prompt for the agent."""
+        return (
+            "# ROLE\n"
+            "You are an expert Polish legal assistant specializing in civil law (Kodeks cywilny), "
+            "civil procedure (Kodeks postępowania cywilnego), and Supreme Court (Sąd Najwyższy) jurisprudence.\n\n"
+            "# RESPONSIBILITIES\n"
+            "- Answer legal questions with precise citations to relevant articles\n"
+            "- Search and analyze Supreme Court rulings for precedents\n"
+            "- Draft legal documents following Polish legal standards\n"
+            "- Calculate procedural deadlines accurately\n"
+            "- Validate documents against current statutes\n\n"
+            "# INSTRUCTIONS\n"
+            "- Always cite specific articles (e.g., 'art. 415 KC')\n"
+            "- Use proper Polish legal terminology\n"
+            "- Consider both substantive and procedural aspects\n"
+            "- Provide practical, actionable advice\n"
+            "- Track conversation context and case information"
+        )
+
+
 # ---------------------------------------------------------------------
 # Quick CLI test (optional)
 # ---------------------------------------------------------------------
 async def _demo() -> None:  # pragma: no cover
-    agent = ParalegalAgentSDK()
+    from ..core import ConfigService
+    config_service = ConfigService()
+    agent = ParalegalAgentSDK(config_service)
     await agent.initialize()
 
     async for chunk in agent.process_message_stream("Jakie są terminy na apelację w sprawie cywilnej?"):
