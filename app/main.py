@@ -106,19 +106,17 @@ async def lifespan(app: FastAPI):
         with tracer.start_as_current_span("initialize_services", attributes={"correlation_id": correlation_id}):
             try:
                 logger.info("LIFESPAN: Starting AI Paralegal application")
-                # Initialize database
+                
                 logger.info("LIFESPAN: Initializing lifecycle manager...")
                 app.state.manager = initialize_services()
                 await app.state.manager.startup()
                 logger.info("LIFESPAN: Lifecycle manager initialization complete.")
                 
-                logger.info("LIFESPAN: Initializing database...")
-                init_db(app.state.manager.inject_service(DatabaseManager))
-                logger.info("LIFESPAN: Database initialization complete.")
-                
                 # Initialize agent
                 logger.info("LIFESPAN: Initializing agent...")
-                app.state.agent = ParalegalAgentSDK(app.state.manager.inject_service(ConfigService))
+                app.state.agent = ParalegalAgentSDK(app.state.manager.inject_service(ConfigService),
+                                                    app.state.manager.inject_service(ConversationManager), 
+                                                    app.state.manager.inject_service(ToolExecutor))
                 await app.state.agent.initialize()
                 logger.info("LIFESPAN: Agent initialization complete.")
                 
@@ -163,7 +161,7 @@ app.include_router(case_management_router)
 
 
 @app.get("/health")
-async def health_check(req: Request, current_user: Optional[User] = Depends(get_current_user)):
+async def health_check(req: Request):
     """Health check endpoint with service status"""
     agent = req.app.state.agent
     with correlation_context() as correlation_id:
@@ -174,7 +172,7 @@ async def health_check(req: Request, current_user: Optional[User] = Depends(get_
             tool_metrics = await agent.get_tool_metrics()
             
             return {
-                "user": current_user.model_dump_json(),
+                "user": "anonymous",
                 "status": "healthy",
                 "tool_metrics": tool_metrics,
                 "version": "2.0.0"

@@ -13,7 +13,7 @@ RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # Copy requirements
-WORKDIR /tmp
+WORKDIR /app
 COPY requirements.txt requirements.txt
 
 # Install Python dependencies
@@ -31,6 +31,7 @@ RUN apt-get update && apt-get install -y \
 
 # Copy virtual environment from builder
 COPY --from=builder /opt/venv /opt/venv
+COPY --from=builder /app /app
 
 # Set up environment
 ENV PATH="/opt/venv/bin:$PATH"
@@ -44,11 +45,10 @@ RUN useradd -m -u 1000 appuser
 WORKDIR /app
 
 # Copy application code
-COPY --chown=appuser:appuser app/ ./app/
+COPY --chown=appuser:appuser . .
 
-# Create directories for logs and data
-RUN mkdir -p /app/logs /app/data && \
-    chown -R appuser:appuser /app
+# # Create directories for logs and data
+RUN chown -R appuser:appuser /app
 
 # Switch to non-root user
 USER appuser
@@ -61,4 +61,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD curl -f http://localhost:8000/health || exit 1
 
 # Run the application
-CMD ["python", "-m", "app.main_refactored"]
+CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+

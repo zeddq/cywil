@@ -267,9 +267,10 @@ EOF
     # Update deployment
     print_status "Updating Kubernetes deployment..."
 
+    kubectl delete deployment/ai-paralegal-app -n "$NAMESPACE"
     kubectl apply -f "$PROJECT_ROOT/deployment/k8s/app-deployment.yaml"
-    kubectl rollout restart deployment/ai-paralegal-app -n "$NAMESPACE"
-    kubectl rollout status deployment/ai-paralegal-app -n "$NAMESPACE"
+    # kubectl rollout restart deployment/ai-paralegal-app -n "$NAMESPACE"
+    # kubectl rollout status deployment/ai-paralegal-app -n "$NAMESPACE"
     
     print_status "Update completed successfully!"
 }

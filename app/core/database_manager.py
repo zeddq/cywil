@@ -19,6 +19,7 @@ from fastapi import Request, Depends
 from typing import Annotated
 from .config_service import get_config, ConfigService
 from .service_interface import ServiceInterface, HealthCheckResult, ServiceStatus
+from ..models import init_db
 
 logger = logging.getLogger(__name__)
 
@@ -46,8 +47,7 @@ class DatabaseManager(ServiceInterface):
             pool_size=self._config.postgres.pool_size,
             max_overflow=self._config.postgres.max_overflow,
             pool_pre_ping=True,  # Verify connections before using
-            pool_recycle=3600,   # Recycle connections after 1 hour
-        )
+            pool_recycle=3600)
         
         # Create sync engine for migrations and scripts
         self._sync_engine = create_engine(
@@ -74,9 +74,14 @@ class DatabaseManager(ServiceInterface):
         
         # Test connection
         try:
+            with self._sync_engine.begin() as engine:
+                init_db(engine)
             async with self._async_engine.begin() as conn:
                 from sqlalchemy import text
-                await conn.execute(text("SELECT 1"))
+                await conn.execute(text("""SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'public'
+ORDER BY table_name;"""))
             logger.info("Database connection established")
             self._initialized = True
         except Exception as e:

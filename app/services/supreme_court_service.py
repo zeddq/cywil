@@ -247,6 +247,15 @@ class SupremeCourtService(ServiceInterface):
         
         return results
     
+    @tool_registry.register(
+        name="get_sn_ruling",
+        description="Retrieve a complete Supreme Court ruling by its docket number",
+        category=ToolCategory.SEARCH,
+        parameters=[
+            ToolParameter("docket", "string", "The docket number of the Supreme Court ruling (e.g., 'III CZP 2/18')", True),
+        ],
+        returns="Complete Supreme Court ruling object or None if not found"
+    )
     async def get_sn_ruling(self, docket: str) -> Optional[SNRuling]:
         """Get complete Supreme Court ruling by docket number"""
         if not self._initialized:

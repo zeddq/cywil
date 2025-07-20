@@ -243,7 +243,59 @@ Dokument:
                 await session.commit()
     
     @tool_registry.register(
-        name="validate_document",
+        name="analyze_contract",
+        description="Analyze a legal contract to extract key information, summarize clauses, or identify potential issues",
+        category=ToolCategory.ANALYSIS,
+        parameters=[
+            ToolParameter("contract_content", "string", "The full text content of the contract to analyze", True),
+            ToolParameter("analysis_type", "string", "Type of analysis requested ('summary', 'key_clauses', 'risk_assessment')", False, "summary", enum=["summary", "key_clauses", "risk_assessment"]),
+        ],
+        returns="Detailed analysis of the contract based on the requested type"
+    )
+    async def analyze_contract(self, contract_content: str, analysis_type: str = "summary") -> Dict[str, Any]:
+        if not self._initialized:
+            raise RuntimeError("Service not initialized")
+        
+        logger.info(f"Analyzing contract with type: {analysis_type}")
+        
+        prompt_template = """
+        Jako doświadczony prawnik specjalizujący się w analizie umów, przeanalizuj poniższą treść umowy.
+        
+        Treść umowy:
+        ---
+        {contract_content}
+        ---
+        
+        Rodzaj analizy: {analysis_type}
+        
+        W zależności od rodzaju analizy:
+        - Jeśli 'summary': Podsumuj kluczowe postanowienia umowy, jej cel oraz główne zobowiązania stron.
+        - Jeśli 'key_clauses': Wypisz najważniejsze klauzule umowy (np. dotyczące płatności, odpowiedzialności, rozwiązania umowy) i krótko opisz ich znaczenie.
+        - Jeśli 'risk_assessment': Zidentyfikuj potencjalne ryzyka prawne lub niejasności w umowie i zasugeruj, jak można je zminimalizować.
+        
+        Zwróć wynik analizy w języku polskim.
+        """
+        
+        prompt = prompt_template.format(contract_content=contract_content, analysis_type=analysis_type)
+        
+        try:
+            response = await self._llm.ainvoke(prompt)
+            return {
+                "status": "success",
+                "analysis_type": analysis_type,
+                "contract_analysis": response.content,
+                "analyzed_at": datetime.now().isoformat()
+            }
+        except Exception as e:
+            logger.error(f"Error during contract analysis: {e}", exc_info=True)
+            return {
+                "status": "error",
+                "message": f"Failed to analyze contract: {str(e)}",
+                "analysis_type": analysis_type
+            }
+    
+    @tool_registry.register(
+        name="validate_against_statute",
         description="Validate legal document against statutes",
         category=ToolCategory.DOCUMENT,
         parameters=[

@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 class OpenAIConfig(BaseSettings):
     """OpenAI-specific configuration"""
     api_key: SecretStr = Field(default="", env='OPENAI_API_KEY')
-    orchestrator_model: str = Field(default="gpt-4.1-2025-04-14", env='OPENAI_ORCHESTRATOR_MODEL')
+    orchestrator_model: str = Field(default="gpt-4.1", env='OPENAI_ORCHESTRATOR_MODEL')
     summary_model: str = Field(default="gpt-4o", env='OPENAI_SUMMARY_MODEL')
     llm_model: str = Field(default="o3-mini", env='OPENAI_LLM_MODEL')
     max_retries: int = Field(default=3, env='OPENAI_MAX_RETRIES')

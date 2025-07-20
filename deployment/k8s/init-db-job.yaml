@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-database
+  namespace: ai-paralegal
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: init-db
+        image: localhost:5000/ai-paralegal:latest
+        command: ["python", "/app/init_database.py"]
+        envFrom:
+        - configMapRef:
+            name: ai-paralegal-config
+        - secretRef:
+            name: ai-paralegal-secrets
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: DATABASE_URL

@@ -7,14 +7,14 @@ wrappers will be added in follow-up commits.
 """
 from __future__ import annotations
 
-from typing import AsyncGenerator, Dict, Any, Optional, List
+from typing import AsyncGenerator, Dict, Any, Optional, List, Callable
 import asyncio
 import logging
 import json
 import uuid
 from datetime import timedelta
 
-from agents import Agent, Runner, tool  # type: ignore
+from agents import Agent, Runner, function_tool, RunContextWrapper, RunHooks, Usage, Tool  # type: ignore
 from openai import AsyncOpenAI
 from openai.types.responses import ResponseStreamEvent, ResponseFunctionToolCall
 
@@ -28,15 +28,13 @@ from ..core.streaming_handler import StreamingHandler, StreamEventType, MetricsC
 from ..core.conversation_manager import ConversationManager, get_conversation_manager
 from ..core.tool_executor import ToolExecutor, CircuitBreakerConfig, RetryConfig, logging_middleware, timing_middleware
 from ..core.service_interface import ServiceInterface, HealthCheckResult, ServiceStatus
-from ..core.database_manager import get_database_manager, DatabaseManager
-from ..services import initialize_services, get_tool_schemas
-from ..validator import recover_from_tool_error
+from ..services import get_tool_schemas
 from .tool_wrappers import get_all_tools, summarize_sn_rulings_tool, search_statute_tool, search_sn_rulings_tool
 
 logger = logging.getLogger(__name__)
 
 
-@tool
+@function_tool
 def always_failing_tool(some_arg: str) -> str:
     """
     This tool always fails, for demonstration purposes of the error recovery agent.
@@ -45,17 +43,61 @@ def always_failing_tool(some_arg: str) -> str:
     raise ValueError(f"This tool failed intentionally with argument: {some_arg}")
 
 
+class ExampleHooks(RunHooks):
+    def __init__(self):
+        self.event_counter = 0
+
+    def _usage_to_str(self, usage: Usage) -> str:
+        return f"{usage.requests} requests, {usage.input_tokens} input tokens, {usage.output_tokens} output tokens, {usage.total_tokens} total tokens"
+
+    async def on_agent_start(self, context: RunContextWrapper, agent: Agent) -> None:
+        self.event_counter += 1
+        logger.info(
+            f"### {self.event_counter}: Agent {agent.name} started. Usage: {self._usage_to_str(context.usage)}"
+        )
+
+    async def on_agent_end(self, context: RunContextWrapper, agent: Agent, output: Any) -> None:
+        self.event_counter += 1
+        logger.info(
+            f"### {self.event_counter}: Agent {agent.name} ended with output {output}. Usage: {self._usage_to_str(context.usage)}"
+        )
+
+    async def on_tool_start(self, context: RunContextWrapper, agent: Agent, tool: Tool) -> None:
+        self.event_counter += 1
+        logger.info(
+            f"### {self.event_counter}: Tool {tool.name} started. Usage: {self._usage_to_str(context.usage)}"
+        )
+
+    async def on_tool_end(
+        self, context: RunContextWrapper, agent: Agent, tool: Tool, result: str
+    ) -> None:
+        self.event_counter += 1
+        logger.info(
+            f"### {self.event_counter}: Tool {tool.name} ended with result {result}. Usage: {self._usage_to_str(context.usage)}"
+        )
+
+    async def on_handoff(
+        self, context: RunContextWrapper, from_agent: Agent, to_agent: Agent
+    ) -> None:
+        self.event_counter += 1
+        logger.info(
+            f"### {self.event_counter}: Handoff from {from_agent.name} to {to_agent.name}. Usage: {self._usage_to_str(context.usage)}"
+        )
+
+
+hooks = ExampleHooks()
+
 class ParalegalAgentSDK(ServiceInterface):
     """Agent wrapper built on the OpenAI Agent SDK with service interface."""
 
-    def __init__(self, config_service: ConfigService) -> None:
+    def __init__(self, config_service: ConfigService, conversation_manager: ConversationManager, tool_executor: ToolExecutor) -> None:
         super().__init__("ParalegalAgentSDK")
         self._config = config_service.config
         self._client = AsyncOpenAI(api_key=self._config.openai.api_key.get_secret_value())
 
         # Dependency-injected helpers
-        self._conversation_manager: ConversationManager = ServiceLifecycleManager.inject_service(ConversationManager)
-        self._tool_executor: ToolExecutor = ServiceLifecycleManager.inject_service(ToolExecutor)
+        self._conversation_manager = conversation_manager
+        self._tool_executor = tool_executor
         self._streaming_handler = StreamingHandler()
         self._metrics_collector = MetricsCollector()
         self._streaming_handler.add_processor(self._metrics_collector)
@@ -168,6 +210,7 @@ class ParalegalAgentSDK(ServiceInterface):
                     starting_agent=self._agent,
                     input=user_message,
                     stream=True,
+                    hooks=hooks,
                 )
 
                 # The SDK returns a StreamedRunResult when stream=True
@@ -261,10 +304,6 @@ class ParalegalAgentSDK(ServiceInterface):
                 "legal questions, find obscure precedents, and provide detailed research memos. "
                 "Focus on jurisprudence and comparative law."
             ),
-            handoff_description=(
-                "Delegate complex legal research tasks that require in-depth analysis of "
-                "jurisprudence or comparative law to this agent."
-            ),
             model="o3",
             tools=[summarize_sn_rulings_tool, search_statute_tool, search_sn_rulings_tool]
         )
@@ -280,12 +319,7 @@ class ParalegalAgentSDK(ServiceInterface):
                 "root cause and provide a solution. This could be corrected arguments for the "
                 "tool, a suggestion to use a different tool, or a clarification question."
             ),
-            handoff_description=(
-                "Use this agent when a tool call fails. Provide the name of the tool, the "
-                "arguments you used, and the error message you received. This agent will help "
-                "you fix the tool call and proceed with the user's request."
-            ),
-            model=self._config.openai.orchestrator_model,
+            model="o3-mini",
         )
 
     def _build_agent(self) -> Agent:
@@ -320,7 +354,7 @@ class ParalegalAgentSDK(ServiceInterface):
 
         # Get all wrapped tools
         tools = get_all_tools()
-        tools.append(always_failing_tool)
+        # tools.append(always_failing_tool)
 
         # Build handoff agents
         research_agent = self._build_legal_research_agent()
@@ -329,8 +363,7 @@ class ParalegalAgentSDK(ServiceInterface):
         agent = Agent(
             name="ParalegalAgent",
             instructions=system_prompt,
-            tools=tools,
-            handoffs=[research_agent, recovery_agent],
+            tools=tools + [research_agent, recovery_agent],
             model=self._config.openai.orchestrator_model,
         )
         return agent
@@ -355,21 +388,21 @@ class ParalegalAgentSDK(ServiceInterface):
         self._tool_executor.add_middleware(logging_middleware)
         self._tool_executor.add_middleware(timing_middleware)
 
-    async def _recover_from_error(self, tool_name: str, tool_args: str, error: Exception) -> Dict[str, Any]:
-        """Attempt to recover from a tool execution error."""
-        error_message = f"Error in {tool_name}: {str(error)}"
+    # async def _recover_from_error(self, tool_name: str, tool_args: str, error: Exception) -> Dict[str, Any]:
+        # """Attempt to recover from a tool execution error."""
+        # error_message = f"Error in {tool_name}: {str(error)}"
         
-        # Use a validator model to get a sensible default
-        recovery_result = await recover_from_tool_error(
-            tool_name=tool_name,
-            tool_args=tool_args,
-            error_message=error_message
-        )
+        # # Use a validator model to get a sensible default
+        # recovery_result = await recover_from_tool_error(
+        #     tool_name=tool_name,
+        #     tool_args=tool_args,
+        #     error_message=error_message
+        # )
         
-        return {
-            "error": error_message,
-            "recovery": recovery_result.recovery_suggestion
-        }
+        # return {
+        #     "error": error_message,
+        #     "recovery": recovery_result.recovery_suggestion
+        # }
     
     # --------------------------------------------------------------
     def _convert_stream_event(self, event: Any, conversation_id: str) -> Dict[str, Any]:

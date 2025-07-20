@@ -111,7 +111,7 @@ class SupremeCourtIngestService(ServiceInterface):
     @tool_registry.register(
         name="process_sn_ruling",
         description="Process a single Supreme Court ruling PDF using o3 model",
-        category=ToolCategory.DOCUMENT,
+        category=ToolCategory.VECTOR_DB,
         parameters=[
             ToolParameter("pdf_path", "string", "Path to the PDF file to process"),
             ToolParameter("use_batch", "boolean", "Whether to use batch processing for efficiency", False, False)
@@ -175,7 +175,7 @@ class SupremeCourtIngestService(ServiceInterface):
     @tool_registry.register(
         name="process_sn_rulings_batch",
         description="Process multiple Supreme Court ruling PDFs in batch using o3 model",
-        category=ToolCategory.DOCUMENT,
+        category=ToolCategory.VECTOR_DB,
         parameters=[
             ToolParameter("pdf_directory", "string", "Directory containing PDF files to process"),
             ToolParameter("max_workers", "integer", "Maximum number of concurrent workers", False, 3),

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, JSON
+from sqlalchemy import Column, JSON, Engine 
 from datetime import datetime
 import uuid     
 from typing import Optional, List, Dict, Any, Literal
@@ -6,7 +6,6 @@ from sqlmodel import SQLModel, Field, Relationship
 from enum import Enum
 from pydantic import BaseModel
 from typing_extensions import TypedDict
-from .core.database_manager import DatabaseManager
 
 def generate_uuid():
     return str(uuid.uuid4())
@@ -226,6 +225,6 @@ class ChatResponse(BaseModel):
     status: str
     tool_results: List[ToolResult]
 
-def init_db(db_manager: DatabaseManager):
+def init_db(sync_engine: Engine):
     """Initialize the database"""
-    SQLModel.metadata.create_all(db_manager.sync_engine)
+    SQLModel.metadata.create_all(sync_engine)

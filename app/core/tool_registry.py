@@ -300,10 +300,15 @@ tool_registry = ToolRegistry()
 
 
 # Middleware example: logging
-async def logging_middleware(tool_name: str, kwargs: Dict[str, Any]) -> Dict[str, Any]:
+async def logging_middleware(tool_name: str) -> Callable[[Callable], Callable]:
     """Log all tool executions"""
-    logger.debug(f"Executing tool '{tool_name}' with args: {list(kwargs.keys())}")
-    return kwargs
+    def wrapper(func: Callable) -> Callable:
+        @wraps(func)
+        async def wrapped(*args, **kwargs):
+            logger.debug(f"Executing tool '{tool_name}' with args: {list(kwargs.keys())}")
+            return await func(*args, **kwargs)
+        return wrapped
+    return wrapper
 
 
 # Middleware example: parameter validation
