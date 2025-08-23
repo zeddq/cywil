@@ -52,7 +52,14 @@ This guide provides instructions for deploying the AI Paralegal POC application 
 
 3. **Build and deploy:**
    ```bash
+   # Deploy both backend and UI
    ./build-and-deploy.sh -h VM_HOSTNAME full
+   
+   # Deploy only backend
+   ./build-and-deploy.sh -h VM_HOSTNAME -c backend full
+   
+   # Deploy only UI
+   ./build-and-deploy.sh -h VM_HOSTNAME -c ui full
    ```
 
 ## Deployment Architecture
@@ -64,18 +71,21 @@ This guide provides instructions for deploying the AI Paralegal POC application 
 │  Namespace: ai-paralegal                        │
 │                                                 │
 │  ┌─────────────┐  ┌─────────────┐             │
-│  │   App Pod   │  │   App Pod   │  (Replicas) │
-│  │  Port 8000  │  │  Port 8000  │             │
+│  │   App Pod   │  │   UI Pod    │             │
+│  │  Port 8000  │  │  Port 3000  │             │
 │  └──────┬──────┘  └──────┬──────┘             │
 │         │                 │                     │
 │  ┌──────┴─────────────────┴──────┐            │
-│  │        Load Balancer          │            │
-│  │     (ai-paralegal-service)    │            │
+│  │        Services               │            │
+│  │  ai-paralegal-service (80)    │            │
+│  │  ai-paralegal-ui-service (80) │            │
 │  └───────────────┬───────────────┘            │
 │                  │                             │
 │  ┌───────────────┴───────────────┐            │
 │  │          Ingress              │            │
-│  │    (paralegal.local:80)       │            │
+│  │    paralegal.local:80         │            │
+│  │    /api/* → backend           │            │
+│  │    /*     → ui                │            │
 │  └───────────────────────────────┘            │
 │                                                │
 │  Databases:                                    │
@@ -125,21 +135,32 @@ This script will:
    - Model names (GPT-4, embeddings)
    - Performance settings
    - Circuit breaker thresholds
+   - UI configuration (port, timeouts, analytics)
 
 3. **Update ingress** (deployment/k8s/ingress.yaml):
    - Change `paralegal.local` to your domain
    - Add TLS configuration if HTTPS is needed
+   - Routes are preconfigured: `/api/*` → backend, `/*` → UI
 
 ### 3. Build and Deploy
 
 The `build-and-deploy.sh` script provides several operations:
 
 ```bash
-# Build Docker image locally
+# Build Docker images locally (both backend and UI)
 ./deployment/scripts/build-and-deploy.sh build
 
-# Deploy to Kubernetes
+# Build only backend
+./deployment/scripts/build-and-deploy.sh -c backend build
+
+# Build only UI
+./deployment/scripts/build-and-deploy.sh -c ui build
+
+# Deploy to Kubernetes (all components)
 ./deployment/scripts/build-and-deploy.sh deploy
+
+# Deploy only UI (useful for UI updates)
+./deployment/scripts/build-and-deploy.sh -c ui deploy
 
 # Full build and deploy
 ./deployment/scripts/build-and-deploy.sh full

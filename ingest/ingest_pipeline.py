@@ -18,15 +18,10 @@ sys.path.append(str(Path(__file__).parent.parent))
 from ingest.pdf2chunks import process_statute_pdf
 from ingest.embed import process_and_embed_statutes, create_hybrid_search_index
 from app.config import settings
-from app.database import init_db_sync
 from app.models import StatuteChunk
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
 logger = logging.getLogger(__name__)
 
 class StatuteIngestionPipeline:
@@ -42,6 +37,7 @@ class StatuteIngestionPipeline:
         self.config = config or {
             "qdrant_host": settings.qdrant_host,
             "qdrant_port": settings.qdrant_port,
+            "qdrant_api_key": settings.qdrant_api_key,
             "collection_name": "statutes",
             "chunks_dir": "data/chunks",
             "pdfs_dir": "data/pdfs"
@@ -185,10 +181,6 @@ class StatuteIngestionPipeline:
             "statutes": {}
         }
         
-        # Initialize database
-        logger.info("Initializing database...")
-        init_db_sync()
-        
         # Download statutes
         logger.info("Checking for statute PDFs...")
         pdf_paths = self.download_statutes()
@@ -229,7 +221,8 @@ class StatuteIngestionPipeline:
         create_hybrid_search_index(
             collection_name=self.config["collection_name"],
             qdrant_host=self.config["qdrant_host"],
-            qdrant_port=self.config["qdrant_port"]
+            qdrant_port=self.config["qdrant_port"],
+            qdrant_api_key=self.config["qdrant_api_key"]
         )
         
         # Calculate total time
@@ -355,8 +348,9 @@ def main():
     
     # Configure pipeline
     config = {
-        "qdrant_host": args.qdrant_host,
-        "qdrant_port": args.qdrant_port,
+        "qdrant_host": settings.qdrant_host,
+        "qdrant_port": settings.qdrant_port,
+        "qdrant_api_key": settings.qdrant_api_key,
         "collection_name": "statutes",
         "chunks_dir": "data/chunks",
         "pdfs_dir": "data/pdfs"

@@ -1,0 +1,168 @@
+{
+  "total_files": 16,
+  "succeeded": 0,
+  "failed": 16,
+  "aggregate_duration_seconds": 2.535233497619629,
+  "files": [
+    {
+      "test_file": "/Volumes/code/cywil/ai-paralegal-poc/test_api.py",
+      "exit_code": 4,
+      "duration_seconds": 0.31966114044189453,
+      "stdout": "",
+      "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --html=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_api/test_api.html --json-report --json-report-file=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_api/test_api.json\n  inifile: None\n  rootdir: /Volumes/code/cywil/ai-paralegal-poc\n\n",
+      "junit_xml": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_api/test_api.xml",
+      "html_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_api/test_api.html",
+      "json_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_api/test_api.json"
+    },
+    {
+      "test_file": "/Volumes/code/cywil/ai-paralegal-poc/test_celery_integration.py",
+      "exit_code": 4,
+      "duration_seconds": 0.1442420482635498,
+      "stdout": "",
+      "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --html=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_celery_integration/test_celery_integration.html --json-report --json-report-file=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_celery_integration/test_celery_integration.json\n  inifile: None\n  rootdir: /Volumes/code/cywil/ai-paralegal-poc\n\n",
+      "junit_xml": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_celery_integration/test_celery_integration.xml",
+      "html_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_celery_integration/test_celery_integration.html",
+      "json_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_celery_integration/test_celery_integration.json"
+    },
+    {
+      "test_file": "/Volumes/code/cywil/ai-paralegal-poc/test_celery_tasks.py",
+      "exit_code": 4,
+      "duration_seconds": 0.14657306671142578,
+      "stdout": "",
+      "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --html=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_celery_tasks/test_celery_tasks.html --json-report --json-report-file=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_celery_tasks/test_celery_tasks.json\n  inifile: None\n  rootdir: /Volumes/code/cywil/ai-paralegal-poc\n\n",
+      "junit_xml": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_celery_tasks/test_celery_tasks.xml",
+      "html_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_celery_tasks/test_celery_tasks.html",
+      "json_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_celery_tasks/test_celery_tasks.json"
+    },
+    {
+      "test_file": "/Volumes/code/cywil/ai-paralegal-poc/test_migration.py",
+      "exit_code": 4,
+      "duration_seconds": 0.14717483520507812,
+      "stdout": "",
+      "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --html=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_migration/test_migration.html --json-report --json-report-file=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_migration/test_migration.json\n  inifile: None\n  rootdir: /Volumes/code/cywil/ai-paralegal-poc\n\n",
+      "junit_xml": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_migration/test_migration.xml",
+      "html_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_migration/test_migration.html",
+      "json_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_migration/test_migration.json"
+    },
+    {
+      "test_file": "/Volumes/code/cywil/ai-paralegal-poc/test_registration_key.py",
+      "exit_code": 4,
+      "duration_seconds": 0.14434194564819336,
+      "stdout": "",
+      "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --html=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_registration_key/test_registration_key.html --json-report --json-report-file=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_registration_key/test_registration_key.json\n  inifile: None\n  rootdir: /Volumes/code/cywil/ai-paralegal-poc\n\n",
+      "junit_xml": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_registration_key/test_registration_key.xml",
+      "html_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_registration_key/test_registration_key.html",
+      "json_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_registration_key/test_registration_key.json"
+    },
+    {
+      "test_file": "/Volumes/code/cywil/ai-paralegal-poc/test_streaming.py",
+      "exit_code": 4,
+      "duration_seconds": 0.14577007293701172,
+      "stdout": "",
+      "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --html=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_streaming/test_streaming.html --json-report --json-report-file=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_streaming/test_streaming.json\n  inifile: None\n  rootdir: /Volumes/code/cywil/ai-paralegal-poc\n\n",
+      "junit_xml": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_streaming/test_streaming.xml",
+      "html_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_streaming/test_streaming.html",
+      "json_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_streaming/test_streaming.json"
+    },
+    {
+      "test_file": "/Volumes/code/cywil/ai-paralegal-poc/tests/test_agent_sdk.py",
+      "exit_code": 4,
+      "duration_seconds": 0.15187406539916992,
+      "stdout": "",
+      "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --cov=app --cov-report=term-missing --cov-report=html:htmlcov --cov-fail-under=80 --html=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_agent_sdk/test_agent_sdk.html --json-report --json-report-file=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_agent_sdk/test_agent_sdk.json\n  inifile: /Volumes/code/cywil/ai-paralegal-poc/tests/pytest.ini\n  rootdir: /Volumes/code/cywil/ai-paralegal-poc/tests\n\n",
+      "junit_xml": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_agent_sdk/test_agent_sdk.xml",
+      "html_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_agent_sdk/test_agent_sdk.html",
+      "json_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_agent_sdk/test_agent_sdk.json"
+    },
+    {
+      "test_file": "/Volumes/code/cywil/ai-paralegal-poc/tests/test_conversation_manager.py",
+      "exit_code": 4,
+      "duration_seconds": 0.14789915084838867,
+      "stdout": "",
+      "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --cov=app --cov-report=term-missing --cov-report=html:htmlcov --cov-fail-under=80 --html=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_conversation_manager/test_conversation_manager.html --json-report --json-report-file=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_conversation_manager/test_conversation_manager.json\n  inifile: /Volumes/code/cywil/ai-paralegal-poc/tests/pytest.ini\n  rootdir: /Volumes/code/cywil/ai-paralegal-poc/tests\n\n",
+      "junit_xml": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_conversation_manager/test_conversation_manager.xml",
+      "html_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_conversation_manager/test_conversation_manager.html",
+      "json_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_conversation_manager/test_conversation_manager.json"
+    },
+    {
+      "test_file": "/Volumes/code/cywil/ai-paralegal-poc/tests/test_database_manager.py",
+      "exit_code": 4,
+      "duration_seconds": 0.14779901504516602,
+      "stdout": "",
+      "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --cov=app --cov-report=term-missing --cov-report=html:htmlcov --cov-fail-under=80 --html=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_database_manager/test_database_manager.html --json-report --json-report-file=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_database_manager/test_database_manager.json\n  inifile: /Volumes/code/cywil/ai-paralegal-poc/tests/pytest.ini\n  rootdir: /Volumes/code/cywil/ai-paralegal-poc/tests\n\n",
+      "junit_xml": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_database_manager/test_database_manager.xml",
+      "html_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_database_manager/test_database_manager.html",
+      "json_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_database_manager/test_database_manager.json"
+    },
+    {
+      "test_file": "/Volumes/code/cywil/ai-paralegal-poc/tests/test_integration.py",
+      "exit_code": 4,
+      "duration_seconds": 0.14589810371398926,
+      "stdout": "",
+      "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --cov=app --cov-report=term-missing --cov-report=html:htmlcov --cov-fail-under=80 --html=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_integration/test_integration.html --json-report --json-report-file=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_integration/test_integration.json\n  inifile: /Volumes/code/cywil/ai-paralegal-poc/tests/pytest.ini\n  rootdir: /Volumes/code/cywil/ai-paralegal-poc/tests\n\n",
+      "junit_xml": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_integration/test_integration.xml",
+      "html_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_integration/test_integration.html",
+      "json_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_integration/test_integration.json"
+    },
+    {
+      "test_file": "/Volumes/code/cywil/ai-paralegal-poc/tests/test_integration_refactored.py",
+      "exit_code": 4,
+      "duration_seconds": 0.14522504806518555,
+      "stdout": "",
+      "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --cov=app --cov-report=term-missing --cov-report=html:htmlcov --cov-fail-under=80 --html=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_integration_refactored/test_integration_refactored.html --json-report --json-report-file=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_integration_refactored/test_integration_refactored.json\n  inifile: /Volumes/code/cywil/ai-paralegal-poc/tests/pytest.ini\n  rootdir: /Volumes/code/cywil/ai-paralegal-poc/tests\n\n",
+      "junit_xml": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_integration_refactored/test_integration_refactored.xml",
+      "html_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_integration_refactored/test_integration_refactored.html",
+      "json_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_integration_refactored/test_integration_refactored.json"
+    },
+    {
+      "test_file": "/Volumes/code/cywil/ai-paralegal-poc/tests/test_performance_utils.py",
+      "exit_code": 4,
+      "duration_seconds": 0.15094208717346191,
+      "stdout": "",
+      "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --cov=app --cov-report=term-missing --cov-report=html:htmlcov --cov-fail-under=80 --html=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_performance_utils/test_performance_utils.html --json-report --json-report-file=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_performance_utils/test_performance_utils.json\n  inifile: /Volumes/code/cywil/ai-paralegal-poc/tests/pytest.ini\n  rootdir: /Volumes/code/cywil/ai-paralegal-poc/tests\n\n",
+      "junit_xml": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_performance_utils/test_performance_utils.xml",
+      "html_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_performance_utils/test_performance_utils.html",
+      "json_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_performance_utils/test_performance_utils.json"
+    },
+    {
+      "test_file": "/Volumes/code/cywil/ai-paralegal-poc/tests/test_refactored_services.py",
+      "exit_code": 4,
+      "duration_seconds": 0.15147900581359863,
+      "stdout": "",
+      "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --cov=app --cov-report=term-missing --cov-report=html:htmlcov --cov-fail-under=80 --html=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_refactored_services/test_refactored_services.html --json-report --json-report-file=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_refactored_services/test_refactored_services.json\n  inifile: /Volumes/code/cywil/ai-paralegal-poc/tests/pytest.ini\n  rootdir: /Volumes/code/cywil/ai-paralegal-poc/tests\n\n",
+      "junit_xml": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_refactored_services/test_refactored_services.xml",
+      "html_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_refactored_services/test_refactored_services.html",
+      "json_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_refactored_services/test_refactored_services.json"
+    },
+    {
+      "test_file": "/Volumes/code/cywil/ai-paralegal-poc/tests/test_streaming_handler.py",
+      "exit_code": 4,
+      "duration_seconds": 0.14830994606018066,
+      "stdout": "",
+      "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --cov=app --cov-report=term-missing --cov-report=html:htmlcov --cov-fail-under=80 --html=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_streaming_handler/test_streaming_handler.html --json-report --json-report-file=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_streaming_handler/test_streaming_handler.json\n  inifile: /Volumes/code/cywil/ai-paralegal-poc/tests/pytest.ini\n  rootdir: /Volumes/code/cywil/ai-paralegal-poc/tests\n\n",
+      "junit_xml": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_streaming_handler/test_streaming_handler.xml",
+      "html_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_streaming_handler/test_streaming_handler.html",
+      "json_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_streaming_handler/test_streaming_handler.json"
+    },
+    {
+      "test_file": "/Volumes/code/cywil/ai-paralegal-poc/tests/test_tool_executor.py",
+      "exit_code": 4,
+      "duration_seconds": 0.14943194389343262,
+      "stdout": "",
+      "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --cov=app --cov-report=term-missing --cov-report=html:htmlcov --cov-fail-under=80 --html=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_tool_executor/test_tool_executor.html --json-report --json-report-file=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_tool_executor/test_tool_executor.json\n  inifile: /Volumes/code/cywil/ai-paralegal-poc/tests/pytest.ini\n  rootdir: /Volumes/code/cywil/ai-paralegal-poc/tests\n\n",
+      "junit_xml": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_tool_executor/test_tool_executor.xml",
+      "html_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_tool_executor/test_tool_executor.html",
+      "json_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_tool_executor/test_tool_executor.json"
+    },
+    {
+      "test_file": "/Volumes/code/cywil/ai-paralegal-poc/tests/test_tool_registry.py",
+      "exit_code": 4,
+      "duration_seconds": 0.14861202239990234,
+      "stdout": "",
+      "stderr": "ERROR: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]\n__main__.py: error: unrecognized arguments: --cov=app --cov-report=term-missing --cov-report=html:htmlcov --cov-fail-under=80 --html=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_tool_registry/test_tool_registry.html --json-report --json-report-file=/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_tool_registry/test_tool_registry.json\n  inifile: /Volumes/code/cywil/ai-paralegal-poc/tests/pytest.ini\n  rootdir: /Volumes/code/cywil/ai-paralegal-poc/tests\n\n",
+      "junit_xml": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_tool_registry/test_tool_registry.xml",
+      "html_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_tool_registry/test_tool_registry.html",
+      "json_report": "/Volumes/code/cywil/ai-paralegal-poc/reports/20250823-060743/test_tool_registry/test_tool_registry.json"
+    }
+  ]
+}

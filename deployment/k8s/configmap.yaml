@@ -11,6 +11,11 @@ data:
   LOG_LEVEL: "DEBUG"
   LOG_FORMAT: "json"
   
+  # UI Configuration
+  UI_PORT: "3000"
+  UI_API_TIMEOUT: "30000"
+  UI_ENABLE_ANALYTICS: "false"
+  
   # Model Configuration
   OPENAI_ORCHESTRATOR_MODEL: "gpt-4.1"
   OPENAI_VALIDATOR_MODEL: "o3"

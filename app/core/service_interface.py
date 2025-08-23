@@ -248,5 +248,5 @@ class ServiceLifecycleManager:
         logger.info("All services shut down successfully")
 
     def inject_service(self, service_type: Type[T]) -> T:
-        """Dependency injection decorator/function"""
+        """Dependency injection function"""
         return self.container.get(service_type)

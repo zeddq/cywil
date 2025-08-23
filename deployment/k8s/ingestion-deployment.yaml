@@ -1,0 +1,326 @@
+# Ingestion API Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingestion-api
+  namespace: ai-paralegal
+  labels:
+    app: ingestion-api
+    component: ingestion
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ingestion-api
+      component: ingestion
+  template:
+    metadata:
+      labels:
+        app: ingestion-api
+        component: ingestion
+    spec:
+      containers:
+      - name: ingestion-api
+        image: ai-paralegal/ingestion:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8001
+          name: http
+        env:
+        - name: PYTHONPATH
+          value: "/app"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: DATABASE_URL
+        - name: REDIS_URL
+          value: "redis://:$(REDIS_PASSWORD)@redis-service:6379/0"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: REDIS_PASSWORD
+        - name: QDRANT_URL
+          value: "http://qdrant-service:6333"
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: OPENAI_API_KEY
+        - name: JWT_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: JWT_SECRET_KEY
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "50m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8001
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8001
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        volumeMounts:
+        - name: data-volume
+          mountPath: /app/data
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: ingestion-data-pvc
+
+---
+# Ingestion API Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingestion-api-service
+  namespace: ai-paralegal
+  labels:
+    app: ingestion-api
+    component: ingestion
+spec:
+  selector:
+    app: ingestion-api
+    component: ingestion
+  ports:
+  - port: 8001
+    targetPort: 8001
+    name: http
+  type: ClusterIP
+
+---
+# Celery Worker Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-worker
+  namespace: ai-paralegal
+  labels:
+    app: celery-worker
+    component: ingestion
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: celery-worker
+      component: ingestion
+  template:
+    metadata:
+      labels:
+        app: celery-worker
+        component: ingestion
+    spec:
+      containers:
+      - name: celery-worker
+        image: ai-paralegal/ingestion:latest
+        imagePullPolicy: Always
+        command: ["celery", "-A", "app.worker.celery_app", "worker", "--loglevel=info", "--concurrency=1"]
+        env:
+        - name: PYTHONPATH
+          value: "/app"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: DATABASE_URL
+        - name: REDIS_URL
+          value: "redis://:$(REDIS_PASSWORD)@redis-service:6379/0"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: REDIS_PASSWORD
+        - name: QDRANT_URL
+          value: "http://qdrant-service:6333"
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: OPENAI_API_KEY
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        volumeMounts:
+        - name: data-volume
+          mountPath: /app/data
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: ingestion-data-pvc
+
+---
+# Celery Beat Deployment (for scheduled tasks)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-beat
+  namespace: ai-paralegal
+  labels:
+    app: celery-beat
+    component: ingestion
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: celery-beat
+      component: ingestion
+  template:
+    metadata:
+      labels:
+        app: celery-beat
+        component: ingestion
+    spec:
+      containers:
+      - name: celery-beat
+        image: ai-paralegal/ingestion:latest
+        imagePullPolicy: Always
+        command: ["celery", "-A", "app.worker.celery_app", "beat", "--loglevel=info"]
+        env:
+        - name: PYTHONPATH
+          value: "/app"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: DATABASE_URL
+        - name: REDIS_URL
+          value: "redis://:$(REDIS_PASSWORD)@redis-service:6379/0"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: REDIS_PASSWORD
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "25m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+
+---
+# Flower Deployment (Celery monitoring)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-flower
+  namespace: ai-paralegal
+  labels:
+    app: celery-flower
+    component: ingestion
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: celery-flower
+      component: ingestion
+  template:
+    metadata:
+      labels:
+        app: celery-flower
+        component: ingestion
+    spec:
+      containers:
+      - name: celery-flower
+        image: ai-paralegal/ingestion:latest
+        imagePullPolicy: Always
+        command: ["celery", "-A", "app.worker.celery_app", "flower", "--port=5555"]
+        ports:
+        - containerPort: 5555
+          name: http
+        env:
+        - name: PYTHONPATH
+          value: "/app"
+        - name: REDIS_URL
+          value: "redis://:$(REDIS_PASSWORD)@redis-service:6379/0"
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: REDIS_PASSWORD
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "25m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+
+---
+# Flower Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: celery-flower-service
+  namespace: ai-paralegal
+  labels:
+    app: celery-flower
+    component: ingestion
+spec:
+  selector:
+    app: celery-flower
+    component: ingestion
+  ports:
+  - port: 5555
+    targetPort: 5555
+    name: http
+  type: ClusterIP
+
+---
+# PVC for shared data
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ingestion-data-pvc
+  namespace: ai-paralegal
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: local-path
+
+---
+# HPA for Celery Workers
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: celery-worker-hpa
+  namespace: ai-paralegal
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: celery-worker
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 80
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 85

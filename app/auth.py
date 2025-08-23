@@ -10,7 +10,7 @@ from .dependencies import get_db
 from .models import User, UserSession   
 from .config import settings
 import secrets
-from .core.logger_manager import get_logger
+from .core.logger_manager import get_logger, set_user_id
 
 logger = get_logger(__name__)
 
@@ -70,7 +70,7 @@ async def get_current_user(
         logger.error(f"User not found: {user_id}")
         raise credentials_exception
     logger.debug(f"User found: {user.model_dump_json(indent=2)}")
-    request.headers["X-User-ID"] = str(user.id)
+    set_user_id(request, str(user.id))
     
     if not user.is_active:
         raise HTTPException(

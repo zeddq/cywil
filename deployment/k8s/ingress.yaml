@@ -11,10 +11,19 @@ spec:
   - host: paralegal.local
     http:
       paths:
-      - path: /
+      # Backend API routes
+      - path: /api
         pathType: Prefix
         backend:
           service:
             name: ai-paralegal-service
+            port:
+              number: 80
+      # UI routes (everything else)
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: ai-paralegal-ui-service
             port:
               number: 80

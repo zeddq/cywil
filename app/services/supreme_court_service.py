@@ -9,8 +9,7 @@ import logging
 from qdrant_client import AsyncQdrantClient
 from qdrant_client.models import Filter, FieldCondition, MatchValue, Range
 from sentence_transformers import SentenceTransformer
-from langchain_openai import ChatOpenAI
-from langchain.prompts import PromptTemplate
+from openai import AsyncOpenAI
 from sqlalchemy import select
 from fastapi import Request, Depends
 from typing import Annotated
@@ -55,7 +54,7 @@ class SupremeCourtService(ServiceInterface):
         self._db_manager = db_manager
         self._qdrant_client: Optional[AsyncQdrantClient] = None
         self._embedder: Optional[SentenceTransformer] = None
-        self._llm: Optional[ChatOpenAI] = None
+        self._openai_client: Optional[AsyncOpenAI] = None
         
     async def _initialize_impl(self) -> None:
         """Initialize Qdrant client and models"""
@@ -73,9 +72,8 @@ class SupremeCourtService(ServiceInterface):
         logger.info("Loading legal embedding model")
         self._embedder = SentenceTransformer('Stern5497/sbert-legal-xlm-roberta-base')
         
-        # Initialize LLM for summarization
-        self._llm = ChatOpenAI(
-            model=self._config.openai.summary_model,
+        # Initialize OpenAI client for summarization
+        self._openai_client = AsyncOpenAI(
             api_key=self._config.openai.api_key.get_secret_value()
         )
         
@@ -360,11 +358,15 @@ Oceń:
 
 Analiza:"""
         
-        response = await self._llm.ainvoke(prompt)
+        response = await self._openai_client.chat.completions.create(
+            model=self._config.openai.summary_model,
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=1000
+        )
         
         return {
             "docket": ruling_docket,
-            "relevance_analysis": response.content,
+            "relevance_analysis": response.choices[0].message.content,
             "analyzed_at": datetime.now().isoformat()
         }
 

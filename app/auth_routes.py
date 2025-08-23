@@ -5,7 +5,7 @@ from datetime import datetime, timedelta, UTC
 from typing import Optional
 from pydantic import BaseModel, EmailStr
 
-from .database import get_session
+from .core.database_manager import DatabaseManager
 from .models import User, UserSession, UserRole
 from .auth import (
     verify_password,
@@ -48,7 +48,7 @@ class UserResponse(BaseModel):
 @router.post("/register", response_model=UserResponse)
 async def register(
     user_data: UserRegister,
-    session: Session = Depends(get_session)
+    session: Session = Depends(DatabaseManager.get_session)
 ):
     """Register a new user."""
     # Check if registration is enabled
@@ -102,7 +102,7 @@ async def register(
 @router.post("/login", response_model=Token)
 async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
-    session: Session = Depends(get_session)
+    session: Session = Depends(DatabaseManager.get_session)
 ):
     """Login and receive an access token."""
     # Find user by email
@@ -153,7 +153,7 @@ async def login(
 @router.post("/logout")
 async def logout(
     current_user: User = Depends(get_current_user),
-    session: Session = Depends(get_session)
+    session: Session = Depends(DatabaseManager.get_session)
 ):
     """Logout the current user by invalidating their sessions."""
     # Delete all user sessions
@@ -184,7 +184,7 @@ async def read_users_me(current_user: User = Depends(get_current_active_user)):
 @router.post("/refresh", response_model=Token)
 async def refresh_token(
     current_user: User = Depends(get_current_user),
-    session: Session = Depends(get_session)
+    session: Session = Depends(DatabaseManager.get_session)
 ):
     """Refresh the access token."""
     # Create new access token
@@ -215,7 +215,7 @@ async def get_all_users(
     skip: int = 0,
     limit: int = 100,
     current_user: User = Depends(require_admin),
-    session: Session = Depends(get_session)
+    session: Session = Depends(DatabaseManager.get_session)
 ):
     """Get all users (admin only)."""
     from sqlmodel import func
@@ -253,7 +253,7 @@ async def update_user(
     user_id: str,
     user_update: UserUpdate,
     current_user: User = Depends(require_admin),
-    session: Session = Depends(get_session)
+    session: Session = Depends(DatabaseManager.get_session)
 ):
     """Update user details (admin only)."""
     user = session.get(User, user_id)
@@ -292,7 +292,7 @@ async def update_user(
 async def delete_user(
     user_id: str,
     current_user: User = Depends(require_admin),
-    session: Session = Depends(get_session)
+    session: Session = Depends(DatabaseManager.get_session)
 ):
     """Delete a user (admin only)."""
     user = session.get(User, user_id)

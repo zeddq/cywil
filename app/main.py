@@ -6,6 +6,7 @@ import asyncio
 import os
 from contextlib import asynccontextmanager
 from typing import Dict, Any, Optional
+import uuid
 
 from fastapi import FastAPI, HTTPException, Request, WebSocket, WebSocketDisconnect, Depends
 from fastapi.responses import StreamingResponse
@@ -15,20 +16,18 @@ import uvicorn
 from .paralegal_agents.refactored_agent_sdk import ParalegalAgentSDK
 from .core.config_service import ConfigService
 from .core.logger_manager import get_logger, correlation_context, set_user_id, trace, log_api_middleware
-from .auth import get_current_user, get_current_active_user
+from .auth import get_current_active_user
 from .core.auth_middleware import auth_middleware
 from .models import ChatRequest, ChatResponse, ToolResult, User
 from .routes.auth_routes_refactored import router as auth_router
 from .routes.case_management_routes import router as case_management_router
-from .models import init_db
 from .core.service_interface import ServiceContainer, ServiceLifecycleManager
-from .services import StatuteSearchService, SupremeCourtService, DocumentGenerationService, CaseManagementService, EmbeddingService, StatuteIngestionService, SupremeCourtIngestService
+from .services import StatuteSearchService, SupremeCourtService, DocumentGenerationService, CaseManagementService
 from .core.database_manager import DatabaseManager
 from .core.llm_manager import LLMManager
 from .core.conversation_manager import ConversationManager
 from .core.tool_executor import ToolExecutor
 from .services.auth_service import AuthService
-from .core.logger_manager import get_logger
 import json
 
 
@@ -74,23 +73,13 @@ def initialize_services():
     statute_search = StatuteSearchService(config_service)
     supreme_court = SupremeCourtService(db_manager, config_service)
     document_generation = DocumentGenerationService(db_manager, statute_search, supreme_court)
-    case_management = CaseManagementService()
-    
-    # Ingestion services
-    embedding_service = EmbeddingService(db_manager)
-    statute_ingestion = StatuteIngestionService(db_manager)
-    supreme_court_ingest = SupremeCourtIngestService(db_manager)
+    case_management = CaseManagementService(db_manager)
     
     # Register domain services
     service_container.register_singleton(StatuteSearchService, statute_search)
     service_container.register_singleton(SupremeCourtService, supreme_court)
     service_container.register_singleton(DocumentGenerationService, document_generation)
     service_container.register_singleton(CaseManagementService, case_management)
-    
-    # Register ingestion services
-    service_container.register_singleton(EmbeddingService, embedding_service)
-    service_container.register_singleton(StatuteIngestionService, statute_ingestion)
-    service_container.register_singleton(SupremeCourtIngestService, supreme_court_ingest)
     
     logger.info("All services registered successfully")
     
@@ -102,7 +91,7 @@ def initialize_services():
 async def lifespan(app: FastAPI):
     """Application lifespan manager"""
     
-    with correlation_context() as correlation_id:
+    with correlation_context("startup-" + str(uuid.uuid4())) as correlation_id:
         with tracer.start_as_current_span("initialize_services", attributes={"correlation_id": correlation_id}):
             try:
                 logger.info("LIFESPAN: Starting AI Paralegal application")
@@ -148,7 +137,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 # Add logging middleware
 log_api_middleware(app)
@@ -209,6 +197,7 @@ async def chat(
                 # Process message
                 response_content = ""
                 tool_results = []
+                response_thread_id = request.thread_id
                 
                 async for chunk in agent.process_message_stream(
                     user_message=request.message,
@@ -218,6 +207,7 @@ async def chat(
                 ):
                     if chunk["type"] == "message_complete":
                         response_content = chunk["content"]
+                        response_thread_id = chunk.get("thread_id", response_thread_id)
                     elif chunk["type"] == "tool_calls":
                         for tool in chunk["tools"]:
                             tool_results.append(
@@ -243,7 +233,7 @@ async def chat(
                 # Return response
                 return ChatResponse(
                     content=response_content,
-                    thread_id=chunk.get("thread_id"),
+                    thread_id=response_thread_id,
                     correlation_id=correlation_id,
                     tool_results=tool_results
                 )

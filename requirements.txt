@@ -1,12 +1,15 @@
 # Core dependencies
 fastapi==0.115.12
 uvicorn[standard]==0.34.3
+watchfiles
+celery
+redis
 pydantic-settings==2.9.1
 python-multipart==0.0.20
 
 # OpenAI and AI dependencies
-langchain==0.3.25
-langchain-openai==0.3.23
+# langchain==0.3.25  # REMOVED: Migrated to OpenAI SDK - only used in ingestion scripts now
+# langchain-openai==0.3.23  # REMOVED: Migrated to OpenAI SDK - only used in ingestion scripts now
 sentence-transformers==4.1.0
 transformers==4.52.4
 
@@ -41,7 +44,9 @@ celery==5.5.3
 python-jose[cryptography]==3.5.0
 passlib[bcrypt]==1.7.4
 httpx==0.28.1
-aiofiles==25.1.0
+aiofiles==24.1.0
+deepdiff==8.0.1
+python-dotenv==1.0.1
 
 # Development and testing
 pytest==8.4.0

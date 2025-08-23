@@ -7,7 +7,7 @@ import hashlib
 import json
 from functools import lru_cache
 from tenacity import retry, stop_after_attempt, wait_exponential
-from langchain_openai import ChatOpenAI
+from openai import AsyncOpenAI
 from sentence_transformers import SentenceTransformer
 import numpy as np
 from fastapi import Request
@@ -72,36 +72,33 @@ class LLMManager(ServiceInterface):
     def __init__(self, config_service: ConfigService):
         super().__init__("LLMManager")
         self._config = config_service.config
-        self._llm_clients: Dict[str, ChatOpenAI] = {}
+        self._llm_clients: Dict[str, Dict[str, Any]] = {}  # Store model configs instead of clients
+        self._openai_client: Optional[AsyncOpenAI] = None
         self._embedders: Dict[str, SentenceTransformer] = {}
         self._embedding_cache = EmbeddingCache(max_size=5000)
     
     async def _initialize_impl(self) -> None:
         """Initialize LLM clients and embedding models"""
-        # Initialize default LLM clients
+        # Initialize OpenAI client
         api_key = self._config.openai.api_key.get_secret_value()
-        
-        self._llm_clients["orchestrator"] = ChatOpenAI(
-            model=self._config.openai.orchestrator_model,
+        self._openai_client = AsyncOpenAI(
             api_key=api_key,
             max_retries=self._config.openai.max_retries,
             timeout=self._config.openai.timeout
         )
         
-        self._llm_clients["summary"] = ChatOpenAI(
-            model=self._config.openai.summary_model,
-            api_key=api_key,
-            max_retries=self._config.openai.max_retries,
-            timeout=self._config.openai.timeout
-        )
+        # Store model configurations
+        self._llm_clients["orchestrator"] = {
+            "model": self._config.openai.orchestrator_model
+        }
         
-        self._llm_clients["default"] = ChatOpenAI(
-            model=self._config.openai.llm_model,
-            api_key=api_key,
-            max_retries=self._config.openai.max_retries,
-            timeout=self._config.openai.timeout,
-            verbose=True
-        )
+        self._llm_clients["summary"] = {
+            "model": self._config.openai.summary_model
+        }
+        
+        self._llm_clients["default"] = {
+            "model": self._config.openai.llm_model
+        }
         
         # Initialize embedding models
         logger.info("Loading embedding models")
@@ -143,8 +140,8 @@ class LLMManager(ServiceInterface):
                 message=f"Health check failed: {str(e)}"
             )
     
-    def get_llm_client(self, model_type: str = "default") -> ChatOpenAI:
-        """Get LLM client by type"""
+    def get_model_config(self, model_type: str = "default") -> Dict[str, Any]:
+        """Get model configuration by type"""
         if model_type not in self._llm_clients:
             logger.warning(f"Unknown model type '{model_type}', using default")
             model_type = "default"
@@ -158,22 +155,26 @@ class LLMManager(ServiceInterface):
                                  max_tokens: Optional[int] = None,
                                  **kwargs) -> str:
         """Generate text completion with retry logic"""
-        client = self.get_llm_client(model_type)
+        model_config = self.get_model_config(model_type)
         
         logger.debug(f"Generating completion with {model_type} model")
         
-        # Create proper message format for ChatOpenAI
-        from langchain_core.messages import HumanMessage
-        messages = [HumanMessage(content=prompt)]
+        # Create proper message format for OpenAI
+        messages = [{"role": "user", "content": prompt}]
         
-        invoke_kwargs = {
-            "max_tokens": max_tokens,
+        # Prepare completion kwargs
+        completion_kwargs = {
+            "model": model_config["model"],
+            "messages": messages,
             **kwargs
         }
-            
-        response = await client.ainvoke(messages, **invoke_kwargs)
         
-        return response.content
+        if max_tokens is not None:
+            completion_kwargs["max_tokens"] = max_tokens
+            
+        response = await self._openai_client.chat.completions.create(**completion_kwargs)
+        
+        return response.choices[0].message.content
     
     @service_operation_logger("LLMManager")
     def get_embedding(self, 

@@ -1,7 +1,7 @@
 """
 Core infrastructure modules for the AI Paralegal system.
 """
-from .config_service import get_config, get_config_service, AppConfig, ConfigService
+from .config_service import get_config, AppConfig, ConfigService
 from .database_manager import DatabaseManager, UnitOfWork
 from .exceptions import (
     ParalegalException,
@@ -38,7 +38,6 @@ from .tool_registry import (
 __all__ = [
     # Configuration
     'get_config',
-    'get_config_service',
     'AppConfig',
     'ConfigService',
     

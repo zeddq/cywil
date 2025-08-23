@@ -3,7 +3,7 @@ Legacy configuration module - maintains backward compatibility.
 New code should use app.core.config_service instead.
 """
 import warnings
-from .core.config_service import get_config, get_config_service
+from .core.config_service import get_config
 
 # Issue deprecation warning
 warnings.warn(
@@ -65,6 +65,10 @@ class Settings:
     def qdrant_collection(self):
         return self._config.qdrant.collection_statutes
     
+    @property
+    def qdrant_api_key(self):
+        return self._config.qdrant.api_key.get_secret_value()
+    
     # PostgreSQL Configuration
     @property
     def postgres_host(self):
@@ -80,7 +84,7 @@ class Settings:
     
     @property
     def postgres_user(self):
-        return self._config.postgres.user
+        return self._config.postgres.user.get_secret_value()
     
     @property
     def postgres_password(self):

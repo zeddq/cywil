@@ -243,12 +243,6 @@ class ConfigService(ServiceInterface):
         logger.info("Configuration reloaded")
 
 
-@lru_cache()
-def get_config_service(request: Request) -> ConfigService:
-    """Get singleton instance of ConfigService"""
-    return request.app.state.manager.inject_service(ConfigService)
-
-
 # Convenience function for accessing config
 def get_config() -> AppConfig:
     """Get current configuration"""

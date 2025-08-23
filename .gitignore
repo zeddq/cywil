@@ -8,3 +8,5 @@ nginx/certificates/
 .env
 .env.local
 .env.production
+**/*.jsonl
+.venv/

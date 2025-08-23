@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-flower
+  namespace: ai-paralegal
+  labels:
+    app: celery-flower
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: celery-flower
+  template:
+    metadata:
+      labels:
+        app: celery-flower
+    spec:
+      containers:
+      - name: flower
+        image: mher/flower:latest
+        command: ["celery"]
+        args:
+          - "flower"
+          - "--broker=$(REDIS_URL)"
+          - "--port=5555"
+          - "--basic_auth=admin:$(FLOWER_PASSWORD)"
+        env:
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: ai-paralegal-config
+              key: REDIS_URL
+        - name: FLOWER_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: FLOWER_PASSWORD
+              optional: true
+        ports:
+        - containerPort: 5555
+          name: flower
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 5555
+          initialDelaySeconds: 30
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /healthcheck
+            port: 5555
+          initialDelaySeconds: 10
+          periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: celery-flower
+  namespace: ai-paralegal
+spec:
+  selector:
+    app: celery-flower
+  ports:
+  - port: 5555
+    targetPort: 5555
+    name: flower
+  type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: celery-flower-ingress
+  namespace: ai-paralegal
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: flower-basic-auth
+    nginx.ingress.kubernetes.io/auth-realm: "Celery Flower Monitoring"
+spec:
+  tls:
+  - hosts:
+    - flower.ai-paralegal.local
+    secretName: flower-tls
+  rules:
+  - host: flower.ai-paralegal.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: celery-flower
+            port:
+              number: 5555

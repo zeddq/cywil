@@ -31,7 +31,7 @@ OPENAI_MODEL = settings.openai_summary_model
 EMBEDDING_MODEL = "Stern5497/sbert-legal-xlm-roberta-base"
 QDRANT_COLLECTION_NAME = "sn_rulings"
 JSONL_DIR = Path(settings.jsonl_dir)
-
+QDRANT_API_KEY = settings.qdrant_api_key
 
 # --- DATABASE SETUP ---
 
@@ -42,8 +42,17 @@ engine = create_async_engine(DATABASE_URL)
 
 # --- CLIENTS ---
 aclient = openai.AsyncOpenAI(api_key=OPENAI_API_KEY)
-qdrant_client = AsyncQdrantClient(url=QDRANT_URL)
+qdrant_client = AsyncQdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY)
 embedding_model = SentenceTransformer(EMBEDDING_MODEL)
+
+print(f"QDRANT URL: {QDRANT_URL}")
+print(f"DATABASE URL: {DATABASE_URL}")
+print(f"OPENAI API KEY: {OPENAI_API_KEY}")
+print(f"OPENAI MODEL: {OPENAI_MODEL}")
+print(f"EMBEDDING MODEL: {EMBEDDING_MODEL}")
+print(f"QDRANT COLLECTION NAME: {QDRANT_COLLECTION_NAME}")
+print(f"JSONL DIR: {JSONL_DIR}")
+print(f"QDRANT API KEY: {QDRANT_API_KEY}")
 
 
 async def with_session(func: Callable[[AsyncSession], Awaitable[Any]]) -> Awaitable[Any]:
@@ -199,6 +208,7 @@ async def main():
 
     if not args.input_file.is_file():
         raise ValueError(f"Input file {args.input_file} is not a file.")
+    
 
     if args.force:
         await qdrant_client.delete_collection(collection_name=QDRANT_COLLECTION_NAME)

@@ -16,6 +16,9 @@ IMAGE_NAME="${IMAGE_NAME:-ai-paralegal}"
 IMAGE_TAG="${IMAGE_TAG:-latest}"
 NAMESPACE="ai-paralegal"
 
+# Component selection
+COMPONENT="${COMPONENT:-all}"  # all, backend, ui
+
 # Function to print colored output
 print_status() {
     echo -e "${GREEN}[INFO]${NC} $1"
@@ -55,6 +58,7 @@ usage() {
     echo "  -s, --skip-tests Skip running tests before build"
     echo "  -t, --tag       Docker image tag (default: latest)"
     echo "  -r, --registry  Docker registry (default: localhost:5000)"
+    echo "  -c, --component Component to build/deploy (all, backend, ui) (default: all)"
     echo ""
     exit 1
 }
@@ -88,6 +92,10 @@ while [[ $# -gt 0 ]]; do
             DOCKER_REGISTRY="$2"
             shift 2
             ;;
+        -c|--component)
+            COMPONENT="$2"
+            shift 2
+            ;;
         build|deploy|full|redeploy|update-image)
             OPERATION="$1"
             shift
@@ -104,9 +112,9 @@ if [ -z "$OPERATION" ]; then
     usage
 fi
 
-# Build Docker image
-build_image() {
-    print_step "Building Docker image..."
+# Build backend Docker image
+build_backend_image() {
+    print_step "Building backend Docker image..."
     
     cd "$PROJECT_ROOT"
     
@@ -138,12 +146,56 @@ build_image() {
         docker tag "$DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG" "$DOCKER_REGISTRY/$IMAGE_NAME:latest"
     fi
     
-    print_status "Image built successfully"
+    print_status "Backend image built successfully"
 }
 
-# Push image to registry
-push_image() {
-    print_step "Pushing image to registry..."
+# Build UI Docker image
+build_ui_image() {
+    print_step "Building UI Docker image..."
+    
+    cd "$PROJECT_ROOT/ui"
+    
+    # Check if Dockerfile exists
+    if [ ! -f "Dockerfile" ]; then
+        print_error "UI Dockerfile not found at ui/Dockerfile"
+        exit 1
+    fi
+    
+    # Build image
+    print_status "Building image: $DOCKER_REGISTRY/ai-paralegal-ui:$IMAGE_TAG"
+    docker build -t "$DOCKER_REGISTRY/ai-paralegal-ui:$IMAGE_TAG" .
+    
+    # Tag as latest if not already
+    if [ "$IMAGE_TAG" != "latest" ]; then
+        docker tag "$DOCKER_REGISTRY/ai-paralegal-ui:$IMAGE_TAG" "$DOCKER_REGISTRY/ai-paralegal-ui:latest"
+    fi
+    
+    print_status "UI image built successfully"
+}
+
+# Build Docker images based on component selection
+build_image() {
+    case "$COMPONENT" in
+        backend)
+            build_backend_image
+            ;;
+        ui)
+            build_ui_image
+            ;;
+        all)
+            build_backend_image
+            build_ui_image
+            ;;
+        *)
+            print_error "Unknown component: $COMPONENT"
+            exit 1
+            ;;
+    esac
+}
+
+# Push backend image to registry
+push_backend_image() {
+    print_step "Pushing backend image to registry..."
     
     # Check if registry is remote
     if [[ "$DOCKER_REGISTRY" != "localhost"* ]]; then
@@ -158,7 +210,47 @@ push_image() {
         docker push "$DOCKER_REGISTRY/$IMAGE_NAME:latest"
     fi
     
-    print_status "Image pushed successfully"
+    print_status "Backend image pushed successfully"
+}
+
+# Push UI image to registry
+push_ui_image() {
+    print_step "Pushing UI image to registry..."
+    
+    # Check if registry is remote
+    if [[ "$DOCKER_REGISTRY" != "localhost"* ]]; then
+        print_status "Logging in to registry..."
+        docker login "$DOCKER_REGISTRY"
+    fi
+    
+    # Push image
+    docker push "$DOCKER_REGISTRY/ai-paralegal-ui:$IMAGE_TAG"
+    
+    if [ "$IMAGE_TAG" != "latest" ]; then
+        docker push "$DOCKER_REGISTRY/ai-paralegal-ui:latest"
+    fi
+    
+    print_status "UI image pushed successfully"
+}
+
+# Push images based on component selection
+push_image() {
+    case "$COMPONENT" in
+        backend)
+            push_backend_image
+            ;;
+        ui)
+            push_ui_image
+            ;;
+        all)
+            push_backend_image
+            push_ui_image
+            ;;
+        *)
+            print_error "Unknown component: $COMPONENT"
+            exit 1
+            ;;
+    esac
 }
 
 # Deploy to Kubernetes
@@ -186,27 +278,46 @@ deploy_to_k8s() {
     # ConfigMap
     kubectl apply -f "$PROJECT_ROOT/deployment/k8s/configmap.yaml"
     
-    # Database deployments
-    kubectl apply -f "$PROJECT_ROOT/deployment/k8s/postgres-deployment.yaml"
-    kubectl apply -f "$PROJECT_ROOT/deployment/k8s/redis-deployment.yaml"
-    kubectl apply -f "$PROJECT_ROOT/deployment/k8s/qdrant-deployment.yaml"
+    # Database deployments (only for backend or all)
+    if [ "$COMPONENT" = "backend" ] || [ "$COMPONENT" = "all" ]; then
+        kubectl apply -f "$PROJECT_ROOT/deployment/k8s/postgres-deployment.yaml"
+        kubectl apply -f "$PROJECT_ROOT/deployment/k8s/redis-deployment.yaml"
+        kubectl apply -f "$PROJECT_ROOT/deployment/k8s/qdrant-deployment.yaml"
+        
+        # Wait for databases to be ready
+        print_status "Waiting for databases to be ready..."
+        kubectl wait --for=condition=available --timeout=300s deployment/postgres -n "$NAMESPACE"
+        kubectl wait --for=condition=available --timeout=300s deployment/redis -n "$NAMESPACE"
+        kubectl wait --for=condition=available --timeout=300s deployment/qdrant -n "$NAMESPACE"
+    fi
     
-    # Wait for databases to be ready
-    print_status "Waiting for databases to be ready..."
-    kubectl wait --for=condition=available --timeout=300s deployment/postgres -n "$NAMESPACE"
-    kubectl wait --for=condition=available --timeout=300s deployment/redis -n "$NAMESPACE"
-    kubectl wait --for=condition=available --timeout=300s deployment/qdrant -n "$NAMESPACE"
+    # Deploy backend
+    if [ "$COMPONENT" = "backend" ] || [ "$COMPONENT" = "all" ]; then
+        # Update app deployment with correct image
+        sed "s|image: localhost:5000/ai-paralegal:latest|image: $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG|g" \
+            "$PROJECT_ROOT/deployment/k8s/app-deployment.yaml" | kubectl apply -f -
+    fi
     
-    # Update app deployment with correct image
-    sed "s|image: ai-paralegal:latest|image: $DOCKER_REGISTRY/$IMAGE_NAME:$IMAGE_TAG|g" \
-        "$PROJECT_ROOT/deployment/k8s/app-deployment.yaml" | kubectl apply -f -
+    # Deploy UI
+    if [ "$COMPONENT" = "ui" ] || [ "$COMPONENT" = "all" ]; then
+        # Update UI deployment with correct image
+        sed "s|image: localhost:5000/ai-paralegal-ui:latest|image: $DOCKER_REGISTRY/ai-paralegal-ui:$IMAGE_TAG|g" \
+            "$PROJECT_ROOT/deployment/k8s/ui-deployment.yaml" | kubectl apply -f -
+    fi
     
-    # Apply ingress
+    # Apply ingress (always apply for proper routing)
     kubectl apply -f "$PROJECT_ROOT/deployment/k8s/ingress.yaml"
     
-    # Wait for app deployment
-    print_status "Waiting for application to be ready..."
-    kubectl wait --for=condition=available --timeout=300s deployment/ai-paralegal-app -n "$NAMESPACE"
+    # Wait for deployments to be ready
+    if [ "$COMPONENT" = "backend" ] || [ "$COMPONENT" = "all" ]; then
+        print_status "Waiting for backend application to be ready..."
+        kubectl wait --for=condition=available --timeout=300s deployment/ai-paralegal-app -n "$NAMESPACE"
+    fi
+    
+    if [ "$COMPONENT" = "ui" ] || [ "$COMPONENT" = "all" ]; then
+        print_status "Waiting for UI application to be ready..."
+        kubectl wait --for=condition=available --timeout=300s deployment/ai-paralegal-ui -n "$NAMESPACE"
+    fi
     
     print_status "Deployment completed successfully!"
     kubectl get all -n "$NAMESPACE"
@@ -279,8 +390,26 @@ EOF
 redeploy_pods() {
     print_step "Redeploying pods..."
     
-    kubectl rollout restart deployment/ai-paralegal-app -n "$NAMESPACE"
-    kubectl rollout status deployment/ai-paralegal-app -n "$NAMESPACE"
+    case "$COMPONENT" in
+        backend)
+            kubectl rollout restart deployment/ai-paralegal-app -n "$NAMESPACE"
+            kubectl rollout status deployment/ai-paralegal-app -n "$NAMESPACE"
+            ;;
+        ui)
+            kubectl rollout restart deployment/ai-paralegal-ui -n "$NAMESPACE"
+            kubectl rollout status deployment/ai-paralegal-ui -n "$NAMESPACE"
+            ;;
+        all)
+            kubectl rollout restart deployment/ai-paralegal-app -n "$NAMESPACE"
+            kubectl rollout restart deployment/ai-paralegal-ui -n "$NAMESPACE"
+            kubectl rollout status deployment/ai-paralegal-app -n "$NAMESPACE"
+            kubectl rollout status deployment/ai-paralegal-ui -n "$NAMESPACE"
+            ;;
+        *)
+            print_error "Unknown component: $COMPONENT"
+            exit 1
+            ;;
+    esac
     
     print_status "Pods redeployed successfully!"
 }

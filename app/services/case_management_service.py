@@ -10,14 +10,14 @@ from ..core.config_service import get_config
 from ..core.service_interface import ServiceInterface, ServiceStatus, HealthCheckResult
 from ..repositories.case_repository import CaseRepositoryDep
 from ..core.tool_registry import tool_registry, ToolCategory, ToolParameter
-
+from ..core.database_manager import DatabaseManagerDep
 logger = logging.getLogger(__name__)
 
-settings = get_config()
-
 class CaseManagementService(ServiceInterface):
-    def __init__(self):
+    def __init__(self, db_manager: DatabaseManagerDep):
         super().__init__("CaseManagementService")
+        self._config = get_config()
+        self._db_manager = db_manager
 
     def with_case_repository(self, case_repository: CaseRepositoryDep) -> "CaseManagementService":
         self.case_repository = case_repository
@@ -55,12 +55,10 @@ class CaseManagementService(ServiceInterface):
         # For tool usage, we need to handle this differently since tools don't have user context
         # In a real application, this would need proper authentication/authorization
         from sqlalchemy import select
-        from ..database import DatabaseManager
         
-        db_manager = DatabaseManager()
-        async with db_manager.get_session() as session:
+        async with self._db_manager.get_session() as session:
             result = await session.execute(
-                select(Case).where(Case.id == case_id)
+                select(Case).where(Case.id == str(case_id))
             )
             case = result.scalar_one_or_none()
             
@@ -171,9 +169,9 @@ class CaseManagementService(ServiceInterface):
         if not case:
             return None
             
-        os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
+        os.makedirs(self._config.upload_dir, exist_ok=True)
         
-        file_path = os.path.join(settings.UPLOAD_DIR, file.filename)
+        file_path = os.path.join(self._config.upload_dir, file.filename)
         content = await file.read()
         with open(file_path, "wb+") as file_object:
             file_object.write(content)
@@ -202,12 +200,10 @@ class CaseManagementService(ServiceInterface):
         """Schedule a reminder for a case - tool version without user context"""
         # Validate case exists
         from sqlalchemy import select
-        from ..database import DatabaseManager
         
-        db_manager = DatabaseManager()
-        async with db_manager.get_session() as session:
+        async with self._db_manager.get_session() as session:
             result = await session.execute(
-                select(Case).where(Case.id == case_id)
+                select(Case).where(Case.id == str(case_id))
             )
             case = result.scalar_one_or_none()
             

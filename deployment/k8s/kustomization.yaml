@@ -5,6 +5,7 @@ namespace: ai-paralegal
 resources:
 - namespace.yaml
 - app-deployment.yaml
+- ui-deployment.yaml
 - configmap.yaml
 - secrets.yaml
 - postgres-deployment.yaml

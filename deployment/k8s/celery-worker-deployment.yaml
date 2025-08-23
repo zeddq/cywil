@@ -1,0 +1,432 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-worker-default
+  namespace: ai-paralegal
+  labels:
+    app: celery-worker
+    queue: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: celery-worker
+      queue: default
+  template:
+    metadata:
+      labels:
+        app: celery-worker
+        queue: default
+    spec:
+      containers:
+      - name: worker
+        image: ai-paralegal-poc:latest
+        command: ["celery", "-A", "app.worker.celery_app", "worker"]
+        args:
+          - "--loglevel=info"
+          - "--concurrency=2"
+          - "--queues=default,high_priority"
+          - "--hostname=default-worker@%h"
+        env:
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: ai-paralegal-config
+              key: REDIS_URL
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: DATABASE_URL
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: OPENAI_API_KEY
+        - name: QDRANT_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: ai-paralegal-config
+              key: QDRANT_HOST
+        - name: QDRANT_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: ai-paralegal-config
+              key: QDRANT_PORT
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - celery
+            - -A
+            - app.worker.celery_app
+            - inspect
+            - ping
+          initialDelaySeconds: 30
+          periodSeconds: 60
+          timeoutSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+            - celery
+            - -A
+            - app.worker.celery_app
+            - inspect
+            - ping
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-worker-ingestion
+  namespace: ai-paralegal
+  labels:
+    app: celery-worker
+    queue: ingestion
+spec:
+  replicas: 1  # Heavy processing, keep it at 1
+  selector:
+    matchLabels:
+      app: celery-worker
+      queue: ingestion
+  template:
+    metadata:
+      labels:
+        app: celery-worker
+        queue: ingestion
+    spec:
+      containers:
+      - name: worker
+        image: ai-paralegal-poc:latest
+        command: ["celery", "-A", "app.worker.celery_app", "worker"]
+        args:
+          - "--loglevel=info"
+          - "--concurrency=1"
+          - "--queues=ingestion"
+          - "--hostname=ingestion-worker@%h"
+          - "--max-tasks-per-child=1"  # Restart worker after each task to free memory
+        env:
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: ai-paralegal-config
+              key: REDIS_URL
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: DATABASE_URL
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: OPENAI_API_KEY
+        - name: QDRANT_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: ai-paralegal-config
+              key: QDRANT_HOST
+        - name: QDRANT_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: ai-paralegal-config
+              key: QDRANT_PORT
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "500m"
+          limits:
+            memory: "4Gi"
+            cpu: "1000m"
+        volumeMounts:
+        - name: data-volume
+          mountPath: /app/data
+        livenessProbe:
+          exec:
+            command:
+            - celery
+            - -A
+            - app.worker.celery_app
+            - inspect
+            - ping
+          initialDelaySeconds: 30
+          periodSeconds: 60
+          timeoutSeconds: 10
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: ai-paralegal-data-pvc
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-worker-embeddings
+  namespace: ai-paralegal
+  labels:
+    app: celery-worker
+    queue: embeddings
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: celery-worker
+      queue: embeddings
+  template:
+    metadata:
+      labels:
+        app: celery-worker
+        queue: embeddings
+    spec:
+      containers:
+      - name: worker
+        image: ai-paralegal-poc:latest
+        command: ["celery", "-A", "app.worker.celery_app", "worker"]
+        args:
+          - "--loglevel=info"
+          - "--concurrency=1"
+          - "--queues=embeddings"
+          - "--hostname=embeddings-worker@%h"
+        env:
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: ai-paralegal-config
+              key: REDIS_URL
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: DATABASE_URL
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: OPENAI_API_KEY
+        - name: QDRANT_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: ai-paralegal-config
+              key: QDRANT_HOST
+        - name: QDRANT_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: ai-paralegal-config
+              key: QDRANT_PORT
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          exec:
+            command:
+            - celery
+            - -A
+            - app.worker.celery_app
+            - inspect
+            - ping
+          initialDelaySeconds: 30
+          periodSeconds: 60
+          timeoutSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-worker-search
+  namespace: ai-paralegal
+  labels:
+    app: celery-worker
+    queue: search
+spec:
+  replicas: 3  # More replicas for search performance
+  selector:
+    matchLabels:
+      app: celery-worker
+      queue: search
+  template:
+    metadata:
+      labels:
+        app: celery-worker
+        queue: search
+    spec:
+      containers:
+      - name: worker
+        image: ai-paralegal-poc:latest
+        command: ["celery", "-A", "app.worker.celery_app", "worker"]
+        args:
+          - "--loglevel=info"
+          - "--concurrency=2"
+          - "--queues=search"
+          - "--hostname=search-worker@%h"
+        env:
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: ai-paralegal-config
+              key: REDIS_URL
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: DATABASE_URL
+        - name: QDRANT_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: ai-paralegal-config
+              key: QDRANT_HOST
+        - name: QDRANT_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: ai-paralegal-config
+              key: QDRANT_PORT
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - celery
+            - -A
+            - app.worker.celery_app
+            - inspect
+            - ping
+          initialDelaySeconds: 30
+          periodSeconds: 60
+          timeoutSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-worker-documents
+  namespace: ai-paralegal
+  labels:
+    app: celery-worker
+    queue: documents
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: celery-worker
+      queue: documents
+  template:
+    metadata:
+      labels:
+        app: celery-worker
+        queue: documents
+    spec:
+      containers:
+      - name: worker
+        image: ai-paralegal-poc:latest
+        command: ["celery", "-A", "app.worker.celery_app", "worker"]
+        args:
+          - "--loglevel=info"
+          - "--concurrency=1"
+          - "--queues=documents"
+          - "--hostname=documents-worker@%h"
+        env:
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: ai-paralegal-config
+              key: REDIS_URL
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: DATABASE_URL
+        - name: OPENAI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: OPENAI_API_KEY
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - celery
+            - -A
+            - app.worker.celery_app
+            - inspect
+            - ping
+          initialDelaySeconds: 30
+          periodSeconds: 60
+          timeoutSeconds: 10
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-worker-case
+  namespace: ai-paralegal
+  labels:
+    app: celery-worker
+    queue: case_management
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: celery-worker
+      queue: case_management
+  template:
+    metadata:
+      labels:
+        app: celery-worker
+        queue: case_management
+    spec:
+      containers:
+      - name: worker
+        image: ai-paralegal-poc:latest
+        command: ["celery", "-A", "app.worker.celery_app", "worker"]
+        args:
+          - "--loglevel=info"
+          - "--concurrency=2"
+          - "--queues=case_management"
+          - "--hostname=case-worker@%h"
+        env:
+        - name: REDIS_URL
+          valueFrom:
+            configMapKeyRef:
+              name: ai-paralegal-config
+              key: REDIS_URL
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: ai-paralegal-secrets
+              key: DATABASE_URL
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "125m"
+          limits:
+            memory: "512Mi"
+            cpu: "250m"
+        livenessProbe:
+          exec:
+            command:
+            - celery
+            - -A
+            - app.worker.celery_app
+            - inspect
+            - ping
+          initialDelaySeconds: 30
+          periodSeconds: 60
+          timeoutSeconds: 10

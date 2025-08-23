@@ -7,8 +7,7 @@ import logging
 from qdrant_client import AsyncQdrantClient
 from qdrant_client.models import Filter, FieldCondition, MatchValue
 from sentence_transformers import SentenceTransformer
-from langchain_openai import ChatOpenAI
-from langchain.prompts import PromptTemplate
+from openai import AsyncOpenAI
 from fastapi import Request, Depends
 from typing import Annotated
 
@@ -29,7 +28,7 @@ class StatuteSearchService(ServiceInterface):
         self._config = config_service.config
         self._qdrant_client: Optional[AsyncQdrantClient] = None
         self._embedder: Optional[SentenceTransformer] = None
-        self._llm: Optional[ChatOpenAI] = None
+        self._openai_client: Optional[AsyncOpenAI] = None
     
     async def _initialize_impl(self) -> None:
         """Initialize Qdrant client and embedding model"""
@@ -46,9 +45,8 @@ class StatuteSearchService(ServiceInterface):
         logger.info("Loading SentenceTransformer model")
         self._embedder = SentenceTransformer('paraphrase-multilingual-mpnet-base-v2')
         
-        # Initialize LLM for summarization
-        self._llm = ChatOpenAI(
-            model=self._config.openai.summary_model,
+        # Initialize OpenAI client for summarization
+        self._openai_client = AsyncOpenAI(
             api_key=self._config.openai.api_key.get_secret_value()
         )
         
@@ -224,10 +222,9 @@ class StatuteSearchService(ServiceInterface):
             f"{p['citation']}: {p['text']}" for p in passages
         ])
         
-        prompt = PromptTemplate(
-            template="""Jako ekspert prawa cywilnego, podsumuj następujące przepisy w sposób jasny i zwięzły:
+        prompt = f"""Jako ekspert prawa cywilnego, podsumuj następujące przepisy w sposób jasny i zwięzły:
 
-{passages}
+{passages_text}
 
 Podsumowanie powinno:
 1. Wyjaśnić kluczowe zasady prawne
@@ -235,13 +232,15 @@ Podsumowanie powinno:
 3. Wskazać praktyczne zastosowanie
 4. Cytować konkretne artykuły
 
-Podsumowanie:""",
-            input_variables=["passages"]
-        )
+Podsumowanie:"""
         
         logger.info("Generating legal summary")
-        response = await self._llm.ainvoke(prompt.format(passages=passages_text))
-        return response.content
+        response = await self._openai_client.chat.completions.create(
+            model=self._config.openai.summary_model,
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=1000
+        )
+        return response.choices[0].message.content
     
     async def get_article_by_number(self, article_num: str, code: str) -> Optional[Dict[str, Any]]:
         """Get a specific article by its number and code"""

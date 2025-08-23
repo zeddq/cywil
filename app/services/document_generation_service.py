@@ -4,7 +4,7 @@ Document generation service for creating legal documents from templates.
 from typing import List, Dict, Any, Optional, Annotated
 from datetime import datetime
 import logging
-from langchain_openai import ChatOpenAI
+from openai import AsyncOpenAI
 from fastapi import Request, Depends
 
 from ..core.service_interface import ServiceInterface, HealthCheckResult, ServiceStatus
@@ -31,12 +31,11 @@ class DocumentGenerationService(ServiceInterface):
         self._db_manager = db_manager
         self._statute_search = statute_search_service
         self._sn_rulings = sn_rulings_service
-        self._llm: Optional[ChatOpenAI] = None
+        self._openai_client: Optional[AsyncOpenAI] = None
     
     async def _initialize_impl(self) -> None:
-        """Initialize LLM client"""
-        self._llm = ChatOpenAI(
-            model=self._config.openai.llm_model,
+        """Initialize OpenAI client"""
+        self._openai_client = AsyncOpenAI(
             api_key=self._config.openai.api_key.get_secret_value()
         )
     
@@ -218,8 +217,12 @@ Dokument:
 """
         
         logger.info(f"Enhancing {doc_type} document with AI")
-        response = await self._llm.ainvoke(prompt)
-        return response.content
+        response = await self._openai_client.chat.completions.create(
+            model=self._config.openai.llm_model,
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=2000
+        )
+        return response.choices[0].message.content
     
     def _format_rulings_for_prompt(self, rulings: Dict[str, Any]) -> str:
         """Format Supreme Court rulings for prompt"""
@@ -279,11 +282,15 @@ Dokument:
         prompt = prompt_template.format(contract_content=contract_content, analysis_type=analysis_type)
         
         try:
-            response = await self._llm.ainvoke(prompt)
+            response = await self._openai_client.chat.completions.create(
+                model=self._config.openai.llm_model,
+                messages=[{"role": "user", "content": prompt}],
+                max_tokens=2000
+            )
             return {
                 "status": "success",
                 "analysis_type": analysis_type,
-                "contract_analysis": response.content,
+                "contract_analysis": response.choices[0].message.content,
                 "analyzed_at": datetime.now().isoformat()
             }
         except Exception as e:
@@ -354,8 +361,12 @@ Cytowany przepis - {citation_info['citation']}: {article_text}
 Czy cytat jest prawidłowy? Odpowiedz TAK lub NIE i podaj krótkie uzasadnienie."""
         
         logger.info("Validating citation context")
-        response = await self._llm.ainvoke(validation_prompt)
-        return "TAK" in response.content
+        response = await self._openai_client.chat.completions.create(
+            model=self._config.openai.llm_model,
+            messages=[{"role": "user", "content": validation_prompt}],
+            max_tokens=1000
+        )
+        return "TAK" in response.choices[0].message.content
 
 def get_document_generation_service(request: Request, db_manager: DatabaseManagerDep, statute_search_service: StatuteSearchServiceDep, sn_rulings_service: SupremeCourtServiceDep) -> DocumentGenerationService:
     return request.app.state.manager.inject_service(DocumentGenerationService)

@@ -13,9 +13,6 @@ from .statute_search_service import StatuteSearchService
 from .document_generation_service import DocumentGenerationService
 from .case_management_service import CaseManagementService
 from .supreme_court_service import SupremeCourtService
-from .statute_ingestion_service import StatuteIngestionService
-from .supreme_court_ingest_service import SupremeCourtIngestService
-from .embedding_service import EmbeddingService
 from .auth_service import AuthService
 
 logger = logging.getLogger(__name__)
@@ -49,16 +46,12 @@ async def execute_tool(name: str, arguments: Dict[str, Any]) -> Any:
 
 # Export commonly used services
 __all__ = [
-    'initialize_services',
     'get_tool_schemas',
     'execute_tool',
     'StatuteSearchService',
     'DocumentGenerationService',
     'CaseManagementService',
     'SupremeCourtService',
-    'StatuteIngestionService',
-    'SupremeCourtIngestService',
-    'EmbeddingService',
     'AuthService',
     'DatabaseManager',
     'LLMManager',

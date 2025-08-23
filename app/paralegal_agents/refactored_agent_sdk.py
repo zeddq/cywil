@@ -1,28 +1,21 @@
-"""Refactored Paralegal Agent implemented with OpenAI Agent SDK.
+"""Paralegal Agent implemented with OpenAI Agent SDK.
 
-NOTE: This is an initial scaffold that mirrors the public surface of the old
-`RefactoredParalegalAgent` (from `orchestrator_refactored.py`) but relies on
-`openai-agents-sdk` primitives.  Additional wiring for streaming and full tool
-wrappers will be added in follow-up commits.
+This is the primary agent implementation using the OpenAI Agent SDK.
+It has replaced the previous Langchain-based orchestrator implementation.
 """
 from __future__ import annotations
 
-from typing import AsyncGenerator, Dict, Any, Optional, List, Callable
+from typing import AsyncGenerator, Dict, Any, Optional
 import asyncio
 import logging
-import json
 import uuid
 from datetime import timedelta
 
 from agents import Agent, Runner, function_tool, RunContextWrapper, RunHooks, Usage, Tool  # type: ignore
 from openai import AsyncOpenAI
-from openai.types.responses import ResponseStreamEvent, ResponseFunctionToolCall
 
 from ..core import (
     ConfigService,
-    ServiceLifecycleManager,    
-    ToolExecutionError,
-    ServiceError,
 )
 from ..core.streaming_handler import StreamingHandler, StreamEventType, MetricsCollector
 from ..core.conversation_manager import ConversationManager, get_conversation_manager

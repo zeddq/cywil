@@ -25,7 +25,8 @@ class PolishLegalEmbedder:
         self,
         model_name: str = "paraphrase-multilingual-mpnet-base-v2",
         qdrant_host: str = "localhost",
-        qdrant_port: int = 6333
+        qdrant_port: int = 6333,
+        qdrant_api_key: str = "paralegal"
     ):
         """
         Initialize embedder with multilingual model
@@ -37,7 +38,7 @@ class PolishLegalEmbedder:
         """
         self.model = SentenceTransformer(model_name)
         self.embedding_dim = self.model.get_sentence_embedding_dimension()
-        self.client = QdrantClient(host=qdrant_host, port=qdrant_port)
+        self.client = QdrantClient(host=qdrant_host, port=qdrant_port, api_key=qdrant_api_key)
         
         logger.info(f"Initialized embedder with model: {model_name}")
         logger.info(f"Embedding dimension: {self.embedding_dim}")
@@ -100,28 +101,15 @@ class PolishLegalEmbedder:
         Returns:
             Numpy array of embeddings
         """
-        # embeddings = []
+        embeddings = self.model.encode(
+            texts,
+            convert_to_numpy=True,
+            normalize_embeddings=True,  # Cosine similarity
+            show_progress_bar=True,
+            batch_size=batch_size,
+        )
         
-        # for i in tqdm(range(0, len(texts), batch_size), desc="Generating embeddings"):
-        #     batch = texts[i:i + batch_size]
-        #     batch_embeddings = self.model.encode(
-        #         batch,
-        #         convert_to_numpy=True,
-        #         normalize_embeddings=True,  # Cosine similarity
-        #         show_progress_bar=True
-        #     )
-        #     embeddings.append(batch_embeddings)
-        
-        batch_embeddings = self.model.encode(
-                texts,
-                convert_to_numpy=True,
-                normalize_embeddings=True,  # Cosine similarity
-                show_progress_bar=True,
-                batch_size=batch_size,
-            )
-        # embeddings.append(batch_embeddings)
-
-        return batch_embeddings
+        return embeddings
     
     def prepare_statute_texts(self, chunks: List[Dict]) -> List[str]:
         """
@@ -228,7 +216,8 @@ def process_and_embed_statutes(
     chunks_file: str,
     collection_name: str = "statutes",
     qdrant_host: str = "qdrant",
-    qdrant_port: int = 6333
+    qdrant_port: int = 6333,
+    qdrant_api_key: str = "paralegal"
 ) -> Dict:
     """
     Complete pipeline to embed statute chunks
@@ -256,7 +245,8 @@ def process_and_embed_statutes(
     logger.info(f"Initializing embedder with host: {qdrant_host} and port: {qdrant_port}")
     embedder = PolishLegalEmbedder(
         qdrant_host=qdrant_host,
-        qdrant_port=qdrant_port
+        qdrant_port=qdrant_port,
+        qdrant_api_key=qdrant_api_key
     )
     
     # Create collection
@@ -294,6 +284,7 @@ def process_and_embed_statutes(
 def create_hybrid_search_index(
     collection_name: str = "statutes",
     qdrant_host: str = "localhost",
+    qdrant_api_key: str = "paralegal",
     qdrant_port: int = 6333
 ):
     """
@@ -304,7 +295,7 @@ def create_hybrid_search_index(
         qdrant_host: Qdrant server host
         qdrant_port: Qdrant server port
     """
-    client = QdrantClient(host=qdrant_host, port=qdrant_port)
+    client = QdrantClient(host=qdrant_host, port=qdrant_port, api_key=qdrant_api_key)
     
     # Create text search index
     try:
@@ -335,6 +326,7 @@ def search_statutes(
     collection_name: str = "statutes",
     qdrant_host: str = "localhost",
     qdrant_port: int = 6333,
+    qdrant_api_key: str = "paralegal",
     top_k: int = 5
 ) -> List[Dict]:
     """
@@ -354,7 +346,8 @@ def search_statutes(
     # Initialize embedder
     embedder = PolishLegalEmbedder(
         qdrant_host=qdrant_host,
-        qdrant_port=qdrant_port
+        qdrant_port=qdrant_port,
+        qdrant_api_key=qdrant_api_key
     )
     
     # Generate query embedding

@@ -21,6 +21,7 @@ class ToolCategory(Enum):
     CASE_MANAGEMENT = "case_management"
     ANALYSIS = "analysis"
     UTILITY = "utility"
+    VECTOR_DB = "vector_db"
 
 
 @dataclass

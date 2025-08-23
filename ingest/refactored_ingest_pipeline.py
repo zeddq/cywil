@@ -18,9 +18,6 @@ sys.path.append(str(Path(__file__).parent.parent))
 from app.core.config_service import get_config
 from app.core.database_manager import DatabaseManager
 from app.core.logger_manager import get_logger
-from app.services.statute_ingestion_service import StatuteIngestionService
-from app.services.supreme_court_ingest_service import SupremeCourtIngestService
-from app.services.embedding_service import EmbeddingService
 
 
 logger = get_logger(__name__)
@@ -35,9 +32,6 @@ class RefactoredIngestOrchestrator:
     def __init__(self):
         self.config = get_config()
         self.db_manager = DatabaseManager()
-        self.statute_service: Optional[StatuteIngestionService] = None
-        self.court_service: Optional[SupremeCourtIngestService] = None
-        self.embedding_service: Optional[EmbeddingService] = None
         self.initialized = False
     
     async def initialize(self) -> None:
@@ -48,14 +42,9 @@ class RefactoredIngestOrchestrator:
         await self.db_manager.initialize()
         
         # Initialize services
-        self.statute_service = StatuteIngestionService(self.db_manager)
-        self.court_service = SupremeCourtIngestService(self.db_manager)
-        self.embedding_service = EmbeddingService(self.db_manager)
         
         # Initialize all services
-        await self.statute_service.initialize()
-        await self.court_service.initialize()
-        await self.embedding_service.initialize()
+        
         
         self.initialized = True
         logger.info("All services initialized successfully")
@@ -64,12 +53,6 @@ class RefactoredIngestOrchestrator:
         """Shutdown all services gracefully"""
         logger.info("Shutting down ingestion orchestrator")
         
-        if self.statute_service:
-            await self.statute_service.shutdown()
-        if self.court_service:
-            await self.court_service.shutdown()
-        if self.embedding_service:
-            await self.embedding_service.shutdown()
         if self.db_manager:
             await self.db_manager.shutdown()
         
@@ -85,9 +68,6 @@ class RefactoredIngestOrchestrator:
         # Check each service
         services = [
             ("database", self.db_manager),
-            ("statute_service", self.statute_service),
-            ("court_service", self.court_service),
-            ("embedding_service", self.embedding_service)
         ]
         
         for service_name, service in services:
