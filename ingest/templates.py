@@ -19,17 +19,18 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 load_dotenv()
 
-from app.config import settings
+from app.core.config_service import get_config
 from app.models import FormTemplate
 
 # --- CONFIGURATION ---
-QDRANT_URL = f"http://{settings.qdrant_host}:{settings.qdrant_port}"
-DATABASE_URL = settings.database_url
-OPENAI_API_KEY = settings.openai_api_key
-OPENAI_MODEL = settings.openai_summary_model
+config = get_config()
+QDRANT_URL = config.qdrant.url
+DATABASE_URL = config.postgres.async_url
+OPENAI_API_KEY = config.openai.api_key.get_secret_value()
+OPENAI_MODEL = config.openai.summary_model
 EMBEDDING_MODEL = "all-MiniLM-L6-v2"
 QDRANT_COLLECTION_NAME = "form_templates"
-TEMPLATES_DIR = Path(settings.pdfs_dir) / "templates"
+TEMPLATES_DIR = config.storage.get_path(config.storage.pdfs_dir) / "templates"
 
 
 # --- DATABASE SETUP ---

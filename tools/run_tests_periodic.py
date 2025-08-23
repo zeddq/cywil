@@ -44,6 +44,8 @@ def run_pytest_for_file(
         sys.executable,
         "-m",
         "pytest",
+        "-c",
+        str(repo_root / "tests" / "pytest.ini"),
         str(test_file),
         "-q",
         f"--junitxml={junit_path}",

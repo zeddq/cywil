@@ -16,9 +16,12 @@ from .auth import (
     get_current_active_user,
     require_admin
 )
-from .config import settings
+from .core.config_service import get_config
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
+
+# Get configuration
+config = get_config()
 
 # Request/Response models
 class UserRegister(BaseModel):
@@ -52,14 +55,14 @@ async def register(
 ):
     """Register a new user."""
     # Check if registration is enabled
-    if not settings.registration_enabled:
+    if not config.security.registration_enabled:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Registration is currently disabled"
         )
     
     # Validate secret key
-    valid_keys = [key.strip() for key in settings.registration_secret_keys.split(',')]
+    valid_keys = config.security.registration_keys
     if user_data.secret_key not in valid_keys:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -128,7 +131,7 @@ async def login(
     session.add(user)
     
     # Create access token
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(minutes=config.security.access_token_expire_minutes)
     access_token = create_access_token(
         data={"sub": str(user.id), "email": user.email, "role": user.role.value},
         expires_delta=access_token_expires
@@ -147,7 +150,7 @@ async def login(
     return Token(
         access_token=access_token,
         token_type="bearer",
-        expires_in=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
+        expires_in=config.security.access_token_expire_minutes * 60
     )
 
 @router.post("/logout")
@@ -188,7 +191,7 @@ async def refresh_token(
 ):
     """Refresh the access token."""
     # Create new access token
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token_expires = timedelta(minutes=config.security.access_token_expire_minutes)
     access_token = create_access_token(
         data={"sub": str(current_user.id), "email": current_user.email, "role": current_user.role.value},
         expires_delta=access_token_expires
@@ -197,7 +200,7 @@ async def refresh_token(
     return Token(
         access_token=access_token,
         token_type="bearer",
-        expires_in=settings.ACCESS_TOKEN_EXPIRE_MINUTES * 60
+        expires_in=config.security.access_token_expire_minutes * 60
     )
 
 # Admin endpoints
@@ -341,11 +344,11 @@ async def get_registration_status(
 ):
     """Get current registration configuration status (admin only)."""
     # Get current keys but mask them for security
-    valid_keys = [key.strip() for key in settings.registration_secret_keys.split(',')]
+    valid_keys = config.security.registration_keys
     masked_keys = [f"{key[:8]}...{key[-4:]}" if len(key) > 12 else "***" for key in valid_keys]
     
     return {
-        "registration_enabled": settings.registration_enabled,
+        "registration_enabled": config.security.registration_enabled,
         "number_of_active_keys": len(valid_keys),
         "masked_keys": masked_keys,
         "note": "To add new keys, update the REGISTRATION_SECRET_KEYS environment variable"

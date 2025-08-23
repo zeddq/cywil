@@ -9,4 +9,5 @@ nginx/certificates/
 .env.local
 .env.production
 **/*.jsonl
-.venv/
+.venv*/
+htmlcov/

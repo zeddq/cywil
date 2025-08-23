@@ -30,10 +30,17 @@ from .core.tool_executor import ToolExecutor
 from .services.auth_service import AuthService
 import json
 
-
 # Get log level and format from environment variables
 LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG").upper()
 JSON_LOGS = os.getenv("LOG_FORMAT", "json") == "json"
+USE_CELERY = os.getenv("USE_CELERY", "false").lower() == "true"
+
+# Import Celery components if enabled
+if USE_CELERY:
+    from .core.celery_service_wrapper import (
+        ExecutionMode,
+        celery_service_manager,
+    )
 
 tracer = trace.get_tracer(__name__)
 
@@ -46,9 +53,9 @@ logger = get_logger(__name__)
 def initialize_services():
     """
     Initialize all services and register them with the container.
-    This should be called during application startup.
+    Supports both direct and Celery-based execution modes.
     """
-    logger.info("Initializing services...")
+    logger.info(f"Initializing services (Celery mode: {USE_CELERY})")
     service_container = ServiceContainer()
 
     # Core services
@@ -75,11 +82,46 @@ def initialize_services():
     document_generation = DocumentGenerationService(db_manager, statute_search, supreme_court)
     case_management = CaseManagementService(db_manager)
     
-    # Register domain services
-    service_container.register_singleton(StatuteSearchService, statute_search)
-    service_container.register_singleton(SupremeCourtService, supreme_court)
-    service_container.register_singleton(DocumentGenerationService, document_generation)
-    service_container.register_singleton(CaseManagementService, case_management)
+    if USE_CELERY:
+        # Register services with Celery manager for async execution
+        logger.info("Registering services with Celery manager")
+        
+        # Register case management service
+        case_proxy = celery_service_manager.register_service(
+            "case_management",
+            case_management,
+            default_mode=ExecutionMode.CELERY_ASYNC
+        )
+        service_container.register_singleton(CaseManagementService, case_proxy)
+        
+        # Register document generation service
+        doc_proxy = celery_service_manager.register_service(
+            "document_generation",
+            document_generation,
+            default_mode=ExecutionMode.CELERY_ASYNC
+        )
+        service_container.register_singleton(DocumentGenerationService, doc_proxy)
+        
+        # Register search services
+        statute_proxy = celery_service_manager.register_service(
+            "statute_search",
+            statute_search,
+            default_mode=ExecutionMode.CELERY_SYNC  # Sync for immediate results
+        )
+        service_container.register_singleton(StatuteSearchService, statute_proxy)
+        
+        supreme_proxy = celery_service_manager.register_service(
+            "supreme_court",
+            supreme_court,
+            default_mode=ExecutionMode.CELERY_SYNC  # Sync for immediate results
+        )
+        service_container.register_singleton(SupremeCourtService, supreme_proxy)
+    else:
+        # Register services directly without Celery
+        service_container.register_singleton(StatuteSearchService, statute_search)
+        service_container.register_singleton(SupremeCourtService, supreme_court)
+        service_container.register_singleton(DocumentGenerationService, document_generation)
+        service_container.register_singleton(CaseManagementService, case_management)
     
     logger.info("All services registered successfully")
     
@@ -108,6 +150,20 @@ async def lifespan(app: FastAPI):
                                                     app.state.manager.inject_service(ToolExecutor))
                 await app.state.agent.initialize()
                 logger.info("LIFESPAN: Agent initialization complete.")
+                
+                if USE_CELERY:
+                    # Verify Celery workers are available
+                    try:
+                        from app.worker.celery_app import celery_app
+                        inspect = celery_app.control.inspect()
+                        active_workers = inspect.active_queues()
+                        
+                        if active_workers:
+                            logger.info(f"LIFESPAN: Found {len(active_workers)} active Celery workers")
+                        else:
+                            logger.warning("LIFESPAN: No active Celery workers found - tasks will queue")
+                    except Exception as e:
+                        logger.error(f"LIFESPAN: Failed to check Celery workers: {e}")
                 
                 logger.info("LIFESPAN: Application started successfully")
                 
@@ -159,10 +215,22 @@ async def health_check(req: Request):
             # Get tool metrics
             tool_metrics = await agent.get_tool_metrics()
             
+            # Add Celery status if enabled
+            celery_status = "disabled"
+            if USE_CELERY:
+                try:
+                    from app.worker.celery_app import celery_app
+                    inspect = celery_app.control.inspect()
+                    active_workers = inspect.active_queues()
+                    celery_status = f"active ({len(active_workers)} workers)" if active_workers else "no workers"
+                except:
+                    celery_status = "error"
+            
             return {
                 "user": "anonymous",
                 "status": "healthy",
                 "tool_metrics": tool_metrics,
+                "celery": celery_status,
                 "version": "2.0.0"
             }
 
@@ -387,3 +455,185 @@ async def reset_circuit_breaker(tool_name: str, req: Request):
             await agent.reset_circuit(tool_name)
             
             return {"status": "success", "tool": tool_name}
+
+
+# ==================== Celery-specific endpoints ====================
+
+@app.get("/celery/health")
+async def celery_health():
+    """Check Celery workers health"""
+    if not USE_CELERY:
+        return {"status": "disabled", "message": "Celery is disabled"}
+    
+    try:
+        from app.worker.tasks.maintenance import health_check_all_services
+        result = health_check_all_services.apply_async()
+        health_status = result.get(timeout=10)
+        return health_status
+    except Exception as e:
+        logger.error(f"Celery health check failed: {e}")
+        return {
+            "status": "error",
+            "error": str(e)
+        }
+
+
+@app.get("/celery/stats")
+async def celery_stats():
+    """Get Celery worker statistics"""
+    if not USE_CELERY:
+        return {"status": "disabled", "message": "Celery is disabled"}
+    
+    try:
+        from app.worker.tasks.maintenance import get_worker_statistics
+        result = get_worker_statistics.apply_async()
+        stats = result.get(timeout=10)
+        return stats
+    except Exception as e:
+        logger.error(f"Failed to get Celery stats: {e}")
+        return {
+            "status": "error",
+            "error": str(e)
+        }
+
+
+@app.get("/celery/task/{task_id}")
+async def get_task_status(task_id: str):
+    """Get status of a specific Celery task"""
+    if not USE_CELERY:
+        return {"status": "disabled", "message": "Celery is disabled"}
+    
+    try:
+        status = celery_service_manager.get_task_status(task_id)
+        return status
+    except Exception as e:
+        logger.error(f"Failed to get task status: {e}")
+        return {
+            "status": "error",
+            "error": str(e)
+        }
+
+
+@app.delete("/celery/task/{task_id}")
+async def cancel_task(task_id: str):
+    """Cancel a Celery task"""
+    if not USE_CELERY:
+        return {"status": "disabled", "message": "Celery is disabled"}
+    
+    try:
+        cancelled = celery_service_manager.cancel_task(task_id)
+        return {
+            "status": "success",
+            "task_id": task_id,
+            "cancelled": cancelled
+        }
+    except Exception as e:
+        logger.error(f"Failed to cancel task: {e}")
+        return {
+            "status": "error",
+            "error": str(e)
+        }
+
+
+@app.post("/celery/search/async")
+async def async_search(
+    query: str,
+    search_type: str = "hybrid",
+    current_user: Optional[User] = Depends(get_current_active_user)
+):
+    """
+    Perform asynchronous search using Celery.
+    Returns task ID for tracking.
+    """
+    if not USE_CELERY:
+        return {"status": "disabled", "message": "Celery is disabled"}
+    
+    try:
+        from app.worker.tasks.search_tasks import hybrid_search, search_statutes, search_rulings
+        
+        if search_type == "hybrid":
+            result = hybrid_search.apply_async(args=[query])
+        elif search_type == "statutes":
+            result = search_statutes.apply_async(args=[query])
+        elif search_type == "rulings":
+            result = search_rulings.apply_async(args=[query])
+        else:
+            raise ValueError(f"Unknown search type: {search_type}")
+        
+        return {
+            "status": "queued",
+            "task_id": result.id,
+            "search_type": search_type,
+            "query": query,
+            "check_status_url": f"/celery/task/{result.id}"
+        }
+    except Exception as e:
+        logger.error(f"Failed to queue search: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/celery/document/generate/async")
+async def async_generate_document(
+    document_type: str,
+    context: Dict[str, Any],
+    current_user: User = Depends(get_current_active_user)
+):
+    """
+    Generate document asynchronously using Celery.
+    Returns task ID for tracking.
+    """
+    if not USE_CELERY:
+        return {"status": "disabled", "message": "Celery is disabled"}
+    
+    try:
+        from app.worker.tasks.document_tasks import generate_legal_document
+        
+        result = generate_legal_document.apply_async(
+            args=[document_type, context, str(current_user.id)]
+        )
+        
+        return {
+            "status": "queued",
+            "task_id": result.id,
+            "document_type": document_type,
+            "check_status_url": f"/celery/task/{result.id}"
+        }
+    except Exception as e:
+        logger.error(f"Failed to queue document generation: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.post("/celery/ingest/trigger")
+async def trigger_ingestion(
+    ingestion_type: str = "all",
+    force_update: bool = False,
+    current_user: User = Depends(get_current_active_user)
+):
+    """
+    Trigger data ingestion pipeline via Celery.
+    """
+    if not USE_CELERY:
+        return {"status": "disabled", "message": "Celery is disabled"}
+    
+    if not current_user.is_admin:
+        raise HTTPException(status_code=403, detail="Admin access required")
+    
+    try:
+        from app.worker.tasks.ingestion_pipeline import run_full_pipeline
+        
+        result = run_full_pipeline.apply_async(
+            kwargs={
+                "statute_force_update": force_update,
+                "ruling_pdf_directory": "/app/data/pdfs/sn-rulings"
+            }
+        )
+        
+        return {
+            "status": "queued",
+            "task_id": result.id,
+            "ingestion_type": ingestion_type,
+            "check_status_url": f"/celery/task/{result.id}"
+        }
+    except Exception as e:
+        logger.error(f"Failed to trigger ingestion: {e}")
+        raise HTTPException(status_code=500, detail=str(e))

@@ -2,9 +2,10 @@ from typing import Any, Dict, List
 from openai import AsyncOpenAI
 from pydantic import BaseModel
 from typing import Literal
-from .config import settings
+from .core.config_service import get_config
 
-client = AsyncOpenAI(api_key=settings.openai_api_key)
+config = get_config()
+client = AsyncOpenAI(api_key=config.openai.api_key.get_secret_value())
 
 VALIDATOR_SYSTEM_PROMPT = """
 # Role and Goal:

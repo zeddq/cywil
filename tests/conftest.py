@@ -171,3 +171,27 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers", "unit: marks tests as unit tests"
     )
+    config.addinivalue_line(
+        "markers", "http: tests that require running HTTP API at localhost:8000"
+    )
+
+
+def pytest_collection_modifyitems(config, items):
+    """Skip HTTP-marked tests if API is not running locally."""
+    import socket
+    def is_port_open(host: str, port: int) -> bool:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.settimeout(0.2)
+            try:
+                return s.connect_ex((host, port)) == 0
+            except OSError:
+                return False
+
+    api_up = is_port_open("localhost", 8000)
+    if api_up:
+        return
+
+    skip_http = pytest.mark.skip(reason="HTTP API not running on localhost:8000")
+    for item in items:
+        if any(mark.name == "http" for mark in item.iter_markers()):
+            item.add_marker(skip_http)

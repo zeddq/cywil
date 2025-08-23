@@ -2,15 +2,25 @@
 Celery configuration for microservices architecture.
 """
 import os
+import sys
+from pathlib import Path
 from kombu import Queue, Exchange
 from datetime import timedelta
+
+# Add parent directory to path to import app modules
+sys.path.append(str(Path(__file__).parent.parent.parent))
+
+from app.core.config_service import ConfigService
 
 class CeleryConfig:
     """Centralized Celery configuration for all workers."""
     
-    # Broker settings
-    broker_url = os.getenv("REDIS_URL", "redis://localhost:6379/0")
-    result_backend = os.getenv("REDIS_URL", "redis://localhost:6379/0")
+    # Initialize ConfigService to get Redis URL
+    _config_service = ConfigService()
+    
+    # Broker settings - use ConfigService for Redis URL
+    broker_url = _config_service.config.redis.url
+    result_backend = _config_service.config.redis.url
     
     # Serialization
     task_serializer = "json"

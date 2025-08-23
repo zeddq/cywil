@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="5.706" timestamp="2025-08-23T23:34:22.810162+02:00" hostname="Cezarys-MacBook-Pro.local"><testcase classname="" name="" time="0.000"><error message="collection failure">ImportError while importing test module '/Volumes/code/cywil/ai-paralegal-poc/test_celery_tasks.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.11/3.11.13/Frameworks/Python.framework/Versions/3.11/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_celery_tasks.py:13: in &lt;module&gt;
+    from app.worker.tasks.ruling_tasks import get_ruling_processing_status
+app/worker/tasks/ruling_tasks.py:16: in &lt;module&gt;
+    from .preprocess_sn_o3 import preprocess_sn_rulings, process_batch
+app/worker/tasks/preprocess_sn_o3.py:18: in &lt;module&gt;
+    from langchain_openai import ChatOpenAI
+E   ModuleNotFoundError: No module named 'langchain_openai'</error></testcase></testsuite></testsuites>

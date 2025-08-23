@@ -164,14 +164,23 @@ class ConfigService(ServiceInterface):
     Configuration service providing centralized access to all settings.
     Implements singleton pattern for consistent configuration across the app.
     """
+    _instance: Optional['ConfigService'] = None
     _config: Optional[AppConfig] = None
     
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+        return cls._instance
+    
     def __init__(self):
-        super().__init__("ConfigService")
-        if self._config is None:
-            self._config = self._load_config()
-            self._validate_config()
-            self._setup_logging()
+        # Only initialize once
+        if not hasattr(self, '_initialized'):
+            super().__init__("ConfigService")
+            if ConfigService._config is None:
+                ConfigService._config = self._load_config()
+                self._validate_config()
+                self._setup_logging()
+            self._initialized = True
 
     async def _initialize_impl(self) -> None:
         """Initialize configuration service"""
@@ -181,8 +190,8 @@ class ConfigService(ServiceInterface):
         """Shutdown configuration service"""
         pass
     
-    @staticmethod
-    def _load_config() -> AppConfig:
+    @classmethod
+    def _load_config(cls) -> AppConfig:
         """Load configuration from environment"""
         try:
             config = AppConfig()
@@ -195,11 +204,11 @@ class ConfigService(ServiceInterface):
     def _validate_config(self):
         """Validate configuration values"""
         # Check required secrets in production
-        if self._config.environment == 'production':
-            if self._config.security.secret_key.get_secret_value() == 'dev-secret-key-change-in-production':
+        if ConfigService._config.environment == 'production':
+            if ConfigService._config.security.secret_key.get_secret_value() == 'dev-secret-key-change-in-production':
                 raise ValueError("SECRET_KEY must be changed in production")
             
-            if not self._config.openai.api_key.get_secret_value():
+            if not ConfigService._config.openai.api_key.get_secret_value():
                 raise ValueError("OPENAI_API_KEY is required")
     
     def _setup_logging(self):
@@ -218,32 +227,39 @@ class ConfigService(ServiceInterface):
     @property
     def config(self) -> AppConfig:
         """Get the configuration object"""
-        return self._config
+        return ConfigService._config
     
     def get_database_url(self, async_mode: bool = True) -> str:
         """Get database URL based on mode"""
-        return self._config.postgres.async_url if async_mode else self._config.postgres.sync_url
+        return ConfigService._config.postgres.async_url if async_mode else ConfigService._config.postgres.sync_url
     
     def get_storage_path(self, subdir: str) -> Path:
         """Get storage path for a specific subdirectory"""
-        return self._config.storage.get_path(subdir)
+        return ConfigService._config.storage.get_path(subdir)
     
     def is_production(self) -> bool:
         """Check if running in production"""
-        return self._config.environment == 'production'
+        return ConfigService._config.environment == 'production'
     
     def is_development(self) -> bool:
         """Check if running in development"""
-        return self._config.environment == 'development'
+        return ConfigService._config.environment == 'development'
     
     def reload(self):
         """Reload configuration (useful for testing)"""
-        self._config = self._load_config()
+        ConfigService._config = self._load_config()
         self._validate_config()
         logger.info("Configuration reloaded")
 
 
+# Singleton instance
+_config_service_instance: Optional[ConfigService] = None
+
 # Convenience function for accessing config
+@lru_cache(maxsize=1)
 def get_config() -> AppConfig:
-    """Get current configuration"""
-    return ConfigService().config
+    """Get current configuration (cached singleton)"""
+    global _config_service_instance
+    if _config_service_instance is None:
+        _config_service_instance = ConfigService()
+    return _config_service_instance.config

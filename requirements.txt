@@ -1,19 +1,15 @@
-# Core dependencies
+# Core web/api
 fastapi==0.115.12
 uvicorn[standard]==0.34.3
 watchfiles
-celery
-redis
 pydantic-settings==2.9.1
 python-multipart==0.0.20
 
-# OpenAI and AI dependencies
-# langchain==0.3.25  # REMOVED: Migrated to OpenAI SDK - only used in ingestion scripts now
-# langchain-openai==0.3.23  # REMOVED: Migrated to OpenAI SDK - only used in ingestion scripts now
+# OpenAI and embeddings (runtime + workers)
+openai==1.97.0
 sentence-transformers==4.1.0
-transformers==4.52.4
 
-# Vector database
+# Vector / database
 qdrant-client==1.14.3
 pgvector==0.4.1
 psycopg2-binary==2.9.10
@@ -24,21 +20,21 @@ sqlalchemy==2.0.41
 alembic==1.16.2
 asyncpg==0.30.0
 
-# Document processing
+# Document processing (runtime + workers)
 PyPDF2==3.0.1
 pdfplumber==0.11.7
 python-docx==1.2.0
 unstructured==0.17.2
 PyMuPDF==1.23.8
+tenacity==8.5.0
 
-# NLP and text processing
+# NLP (used in ingestion workers)
 spacy==3.7.4
 pl-core-news-sm @ https://github.com/explosion/spacy-models/releases/download/pl_core_news_sm-3.7.0/pl_core_news_sm-3.7.0-py3-none-any.whl
-nltk==3.8.1
 
 # Utilities
 python-dateutil==2.9.0
-pytz==2024.1
+dateparser
 redis==6.2.0
 celery==5.5.3
 python-jose[cryptography]==3.5.0
@@ -48,26 +44,13 @@ aiofiles==24.1.0
 deepdiff==8.0.1
 python-dotenv==1.0.1
 
-# Development and testing
-pytest==8.4.0
-pytest-asyncio==1.0.0
-black==25.1.0
-ruff==0.11.13
-mypy==1.16.1
-
 # Monitoring and logging
-structlog==25.4.0
-sentry-sdk==2.30.0
 
 # Progress bars and utilities
 tqdm==4.67.1
 SQLModel==0.0.24
-debugpy==1.8.14
 
-# Added dependency
-email-validator>=2.0
-alembic>=1.16.2
-dateparser
+# Observability
 opentelemetry-api==1.35.0
 opentelemetry-exporter-otlp==1.35.0
 opentelemetry-exporter-otlp-proto-common==1.35.0
@@ -78,6 +61,4 @@ opentelemetry-instrumentation-logging==0.56b0
 opentelemetry-proto==1.35.0
 opentelemetry-sdk==1.35.0
 opentelemetry-semantic-conventions==0.56b0
-
-openai==1.97.0
-openai-agents==0.2.2
+email-validator>=2.0

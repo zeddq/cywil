@@ -20,18 +20,19 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 load_dotenv()
 
-from app.config import settings
+from app.core.config_service import get_config
 from app.models import SNRulingBase, SNRuling
 
 # --- CONFIGURATION ---
-QDRANT_URL = f"http://{settings.qdrant_host}:{settings.qdrant_port}"
-DATABASE_URL = settings.database_url
-OPENAI_API_KEY = settings.openai_api_key
-OPENAI_MODEL = settings.openai_summary_model
+config = get_config()
+QDRANT_URL = config.qdrant.url
+DATABASE_URL = config.postgres.async_url
+OPENAI_API_KEY = config.openai.api_key.get_secret_value()
+OPENAI_MODEL = config.openai.summary_model
 EMBEDDING_MODEL = "Stern5497/sbert-legal-xlm-roberta-base"
-QDRANT_COLLECTION_NAME = "sn_rulings"
-JSONL_DIR = Path(settings.jsonl_dir)
-QDRANT_API_KEY = settings.qdrant_api_key
+QDRANT_COLLECTION_NAME = config.qdrant.collection_rulings
+JSONL_DIR = config.storage.get_path(config.storage.jsonl_dir)
+QDRANT_API_KEY = config.qdrant.api_key.get_secret_value() if config.qdrant.api_key else None
 
 # --- DATABASE SETUP ---
 

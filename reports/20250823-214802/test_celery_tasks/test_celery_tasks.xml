@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="0.422" timestamp="2025-08-23T21:48:06.429936+02:00" hostname="Cezarys-MacBook-Pro.local"><testcase classname="" name="test_celery_tasks" time="0.000"><error message="collection failure">ImportError while importing test module '/Volumes/code/cywil/ai-paralegal-poc/test_celery_tasks.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/opt/homebrew/Cellar/python@3.11/3.11.13/Frameworks/Python.framework/Versions/3.11/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_celery_tasks.py:12: in &lt;module&gt;
+    from app.worker.tasks.statute_tasks import get_statute_ingestion_status
+app/worker/tasks/statute_tasks.py:11: in &lt;module&gt;
+    from app.worker.celery_app import celery_app
+app/worker/celery_app.py:10: in &lt;module&gt;
+    from app.worker.config import CeleryConfig
+app/worker/config.py:13: in &lt;module&gt;
+    from app.core.config_service import ConfigService
+app/core/__init__.py:22: in &lt;module&gt;
+    from .llm_manager import LLMManager
+app/core/llm_manager.py:9: in &lt;module&gt;
+    from tenacity import retry, stop_after_attempt, wait_exponential
+E   ModuleNotFoundError: No module named 'tenacity'</error></testcase></testsuite></testsuites>

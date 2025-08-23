@@ -250,3 +250,26 @@ class MetricsCollector(StreamProcessor):
             "errors": 0,
             "total_content_length": 0
         }
+
+
+class TextAccumulator(StreamProcessor):
+    """Processor that accumulates text and tracks completed messages."""
+    def __init__(self):
+        self.accumulated_text: str = ""
+        self.complete_texts: List[str] = []
+        self.final_text: Optional[str] = None
+
+    def process_event(self, event: StreamEvent) -> Optional[StreamEvent]:
+        if event.type == StreamEventType.TEXT_DELTA and event.content:
+            self.accumulated_text += event.content
+        elif event.type == StreamEventType.TEXT_COMPLETE and event.content:
+            self.complete_texts.append(event.content)
+        elif event.type == StreamEventType.MESSAGE_COMPLETE and event.content:
+            self.complete_texts.append(event.content)
+            self.final_text = event.content
+        return event
+
+    def reset(self):
+        self.accumulated_text = ""
+        self.complete_texts = []
+        self.final_text = None

@@ -20,8 +20,10 @@ from qdrant_client.models import (
 )
 from sentence_transformers import SentenceTransformer
 import uuid
-from .config import settings
+from .core.config_service import get_config
 import fitz
+
+config = get_config()
 logger = logging.getLogger(__name__)
 
 
@@ -55,10 +57,10 @@ class DocumentProcessor:
         try:
             # Initialize Qdrant client
             self.qdrant_client = QdrantClient(
-                host=settings.qdrant_host,
-                port=settings.qdrant_port
+                host=config.qdrant.host,
+                port=config.qdrant.port
             )
-            logger.info(f"Connected to Qdrant at {settings.qdrant_host}:{settings.qdrant_port}")
+            logger.info(f"Connected to Qdrant at {config.qdrant.host}:{config.qdrant.port}")
             
             # Initialize sentence transformer
             logger.info("Loading sentence transformer model...")

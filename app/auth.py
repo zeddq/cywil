@@ -8,11 +8,14 @@ from fastapi.security import OAuth2PasswordBearer
 from sqlmodel import Session, select
 from .dependencies import get_db
 from .models import User, UserSession   
-from .config import settings
+from .core.config_service import get_config
 import secrets
 from .core.logger_manager import get_logger, set_user_id
 
 logger = get_logger(__name__)
+
+# Get configuration
+config = get_config()
 
 # Password hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -34,10 +37,10 @@ def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta]
     if expires_delta:
         expire = datetime.now(UTC) + expires_delta
     else:
-        expire = datetime.now(UTC) + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+        expire = datetime.now(UTC) + timedelta(minutes=config.security.access_token_expire_minutes)
     
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, config.security.secret_key.get_secret_value(), algorithm=config.security.algorithm)
     return encoded_jwt
 
 def create_session_token() -> str:
@@ -57,7 +60,7 @@ async def get_current_user(
     )
     
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        payload = jwt.decode(token, config.security.secret_key.get_secret_value(), algorithms=[config.security.algorithm])
         logger.debug(f"Decoded token: {payload}")
         user_id: Optional[str] = payload.get("user_id")
         if user_id is None:

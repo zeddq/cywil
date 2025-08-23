@@ -17,12 +17,15 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from ingest.pdf2chunks import process_statute_pdf
 from ingest.embed import process_and_embed_statutes, create_hybrid_search_index
-from app.config import settings
+from app.core.config_service import get_config
 from app.models import StatuteChunk
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 logger = logging.getLogger(__name__)
+
+# Get configuration
+config = get_config()
 
 class StatuteIngestionPipeline:
     """Orchestrates the complete statute ingestion process"""
@@ -35,12 +38,12 @@ class StatuteIngestionPipeline:
             config: Optional configuration override
         """
         self.config = config or {
-            "qdrant_host": settings.qdrant_host,
-            "qdrant_port": settings.qdrant_port,
-            "qdrant_api_key": settings.qdrant_api_key,
-            "collection_name": "statutes",
-            "chunks_dir": "data/chunks",
-            "pdfs_dir": "data/pdfs"
+            "qdrant_host": config.qdrant.host,
+            "qdrant_port": config.qdrant.port,
+            "qdrant_api_key": config.qdrant.api_key.get_secret_value() if config.qdrant.api_key else None,
+            "collection_name": config.qdrant.collection_statutes,
+            "chunks_dir": str(config.storage.get_path(config.storage.chunks_dir)),
+            "pdfs_dir": str(config.storage.get_path(config.storage.pdfs_dir))
         }
         
         # Create directories
@@ -48,7 +51,7 @@ class StatuteIngestionPipeline:
         Path(self.config["pdfs_dir"]).mkdir(parents=True, exist_ok=True)
         
         # Database setup
-        self.engine = create_engine(settings.sync_database_url)
+        self.engine = create_engine(config.postgres.sync_url)
         self.Session = sessionmaker(bind=self.engine)
     
     def download_statutes(self) -> Dict[str, str]:
@@ -347,16 +350,16 @@ def main():
     args = parser.parse_args()
     
     # Configure pipeline
-    config = {
-        "qdrant_host": settings.qdrant_host,
-        "qdrant_port": settings.qdrant_port,
-        "qdrant_api_key": settings.qdrant_api_key,
-        "collection_name": "statutes",
-        "chunks_dir": "data/chunks",
+    config_dict = {
+        "qdrant_host": config.qdrant.host,
+        "qdrant_port": config.qdrant.port,
+        "qdrant_api_key": config.qdrant.api_key.get_secret_value() if config.qdrant.api_key else None,
+        "collection_name": config.qdrant.collection_statutes,
+        "chunks_dir": str(config.storage.get_path(config.storage.chunks_dir)),
         "pdfs_dir": "data/pdfs"
     }
     
-    pipeline = StatuteIngestionPipeline(config)
+    pipeline = StatuteIngestionPipeline(config_dict)
     
     if args.validate_only:
         # Run validation only

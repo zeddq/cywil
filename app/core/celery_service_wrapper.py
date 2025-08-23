@@ -8,6 +8,8 @@ from functools import wraps
 import asyncio
 from celery.result import AsyncResult
 from enum import Enum
+from datetime import datetime, timedelta
+import threading
 
 from app.core.logger_manager import get_logger
 
@@ -23,6 +25,98 @@ class ExecutionMode(Enum):
     CELERY_ASYNC = "celery_async"  # Celery fire-and-forget
 
 
+class CircuitBreakerState(Enum):
+    """Circuit breaker states."""
+    CLOSED = "closed"  # Normal operation
+    OPEN = "open"  # Failures exceeded threshold
+    HALF_OPEN = "half_open"  # Testing if service recovered
+
+
+class CircuitBreaker:
+    """Simple circuit breaker for Celery tasks."""
+    
+    def __init__(
+        self,
+        failure_threshold: int = 5,
+        recovery_timeout: int = 60,
+        success_threshold: int = 2
+    ):
+        """
+        Initialize circuit breaker.
+        
+        Args:
+            failure_threshold: Number of failures before opening circuit
+            recovery_timeout: Seconds to wait before trying half-open
+            success_threshold: Successes needed to close circuit
+        """
+        self.failure_threshold = failure_threshold
+        self.recovery_timeout = recovery_timeout
+        self.success_threshold = success_threshold
+        
+        self.state = CircuitBreakerState.CLOSED
+        self.failure_count = 0
+        self.success_count = 0
+        self.last_failure_time = None
+        self._lock = threading.Lock()
+    
+    def call(self, func: Callable, *args, **kwargs) -> Any:
+        """Execute function through circuit breaker."""
+        with self._lock:
+            if self.state == CircuitBreakerState.OPEN:
+                if self._should_attempt_reset():
+                    self.state = CircuitBreakerState.HALF_OPEN
+                    logger.info("Circuit breaker entering HALF_OPEN state")
+                else:
+                    raise Exception("Circuit breaker is OPEN - service unavailable")
+        
+        try:
+            result = func(*args, **kwargs)
+            self._on_success()
+            return result
+        except Exception as e:
+            self._on_failure()
+            raise
+    
+    def _should_attempt_reset(self) -> bool:
+        """Check if enough time has passed to try reset."""
+        return (
+            self.last_failure_time and
+            datetime.now() - self.last_failure_time > timedelta(seconds=self.recovery_timeout)
+        )
+    
+    def _on_success(self):
+        """Handle successful call."""
+        with self._lock:
+            self.failure_count = 0
+            
+            if self.state == CircuitBreakerState.HALF_OPEN:
+                self.success_count += 1
+                if self.success_count >= self.success_threshold:
+                    self.state = CircuitBreakerState.CLOSED
+                    self.success_count = 0
+                    logger.info("Circuit breaker CLOSED - service recovered")
+    
+    def _on_failure(self):
+        """Handle failed call."""
+        with self._lock:
+            self.failure_count += 1
+            self.last_failure_time = datetime.now()
+            self.success_count = 0
+            
+            if self.failure_count >= self.failure_threshold:
+                self.state = CircuitBreakerState.OPEN
+                logger.warning(f"Circuit breaker OPEN after {self.failure_count} failures")
+    
+    def reset(self):
+        """Manually reset the circuit breaker."""
+        with self._lock:
+            self.state = CircuitBreakerState.CLOSED
+            self.failure_count = 0
+            self.success_count = 0
+            self.last_failure_time = None
+            logger.info("Circuit breaker manually reset")
+
+
 class CeleryServiceWrapper:
     """
     Wrapper to make services work with Celery tasks.
@@ -34,7 +128,8 @@ class CeleryServiceWrapper:
         service_name: str,
         default_mode: ExecutionMode = ExecutionMode.CELERY_ASYNC,
         task_timeout: int = 300,
-        result_ttl: int = 86400
+        result_ttl: int = 86400,
+        use_circuit_breaker: bool = True
     ):
         """
         Initialize the service wrapper.
@@ -44,12 +139,17 @@ class CeleryServiceWrapper:
             default_mode: Default execution mode
             task_timeout: Timeout for synchronous Celery tasks (seconds)
             result_ttl: Time to live for task results (seconds)
+            use_circuit_breaker: Whether to use circuit breaker pattern
         """
         self.service_name = service_name
         self.default_mode = default_mode
         self.task_timeout = task_timeout
         self.result_ttl = result_ttl
         self._task_registry = {}
+        self.use_circuit_breaker = use_circuit_breaker
+        
+        # Initialize circuit breakers per task
+        self._circuit_breakers = {} if use_circuit_breaker else None
         
     def register_task(
         self,
@@ -73,6 +173,16 @@ class CeleryServiceWrapper:
             "priority": priority
         }
         logger.info(f"Registered task {task_name} for {self.service_name}.{method_name}")
+    
+    def _get_circuit_breaker(self, method_name: str) -> Optional[CircuitBreaker]:
+        """Get or create circuit breaker for a method."""
+        if not self.use_circuit_breaker:
+            return None
+        
+        if method_name not in self._circuit_breakers:
+            self._circuit_breakers[method_name] = CircuitBreaker()
+        
+        return self._circuit_breakers[method_name]
     
     def execute(
         self,
@@ -99,15 +209,48 @@ class CeleryServiceWrapper:
             raise ValueError(f"Method {method_name} not registered for Celery execution")
         
         task_config = self._task_registry[method_name]
+        circuit_breaker = self._get_circuit_breaker(method_name)
         
+        # For async mode, circuit breaker only checks if we can queue
         if execution_mode == ExecutionMode.CELERY_ASYNC:
-            # Fire and forget - return AsyncResult immediately
+            if circuit_breaker:
+                try:
+                    circuit_breaker.call(self._check_worker_availability)
+                except Exception as e:
+                    logger.error(f"Circuit breaker prevented task execution: {e}")
+                    raise
             return self._execute_celery_async(task_config, *args, **kwargs)
+        
+        # For sync mode, circuit breaker wraps the entire execution
         elif execution_mode == ExecutionMode.CELERY_SYNC:
-            # Execute via Celery but wait for result
-            return self._execute_celery_sync(task_config, *args, **kwargs)
+            if circuit_breaker:
+                return circuit_breaker.call(
+                    self._execute_celery_sync,
+                    task_config,
+                    *args,
+                    **kwargs
+                )
+            else:
+                return self._execute_celery_sync(task_config, *args, **kwargs)
         else:
             raise ValueError(f"Unsupported execution mode: {execution_mode}")
+    
+    def _check_worker_availability(self) -> bool:
+        """Check if Celery workers are available."""
+        try:
+            from app.worker.celery_app import celery_app
+            inspect = celery_app.control.inspect()
+            active_workers = inspect.active_queues()
+            
+            if not active_workers:
+                logger.warning("No active Celery workers found!")
+                return False
+            
+            logger.debug(f"Found {len(active_workers)} active workers")
+            return True
+        except Exception as e:
+            logger.error(f"Failed to check worker availability: {e}")
+            return False
     
     def _execute_celery_async(
         self,
@@ -117,6 +260,10 @@ class CeleryServiceWrapper:
     ) -> AsyncResult:
         """Execute task asynchronously via Celery."""
         from app.worker.celery_app import celery_app
+        
+        # Check worker availability before queuing
+        if not self._check_worker_availability():
+            logger.warning(f"Queuing task {task_config['task_name']} but no workers available")
         
         result = celery_app.send_task(
             task_config["task_name"],
@@ -137,13 +284,25 @@ class CeleryServiceWrapper:
         **kwargs
     ) -> Any:
         """Execute task via Celery and wait for result."""
+        from celery.exceptions import TimeoutError, TaskRevokedError
+        
         result = self._execute_celery_async(task_config, *args, **kwargs)
         
         try:
             # Wait for result with timeout
             return result.get(timeout=self.task_timeout)
+        except TimeoutError:
+            logger.error(f"Task {task_config['task_name']} timed out after {self.task_timeout}s")
+            # Attempt to revoke the task
+            result.revoke(terminate=True)
+            raise TimeoutError(f"Task {result.id} exceeded timeout of {self.task_timeout} seconds")
+        except TaskRevokedError:
+            logger.error(f"Task {task_config['task_name']} was revoked")
+            raise
         except Exception as e:
-            logger.error(f"Task {task_config['task_name']} failed: {e}")
+            logger.error(f"Task {task_config['task_name']} failed: {e}", exc_info=True)
+            # Check if workers are available
+            self._check_worker_availability()
             raise
 
 
