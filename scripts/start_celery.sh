@@ -3,7 +3,11 @@
 # Script to start Celery workers with proper configuration
 # Usage: ./scripts/start_celery.sh [worker|beat|flower|all]
 
-set -e
+set -euo pipefail  # Exit on error, undefined vars, pipe failures
+IFS=$'\n\t'
+
+# Handle signals properly
+trap 'kill $(jobs -p) 2>/dev/null' EXIT SIGINT SIGTERM
 
 # Load environment variables
 if [ -f .env ]; then

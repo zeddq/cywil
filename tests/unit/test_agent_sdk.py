@@ -2,9 +2,14 @@
 import pytest
 import asyncio
 from unittest.mock import AsyncMock, MagicMock, patch
+# Add the app directory to the path
+import sys
+import os
 
-from app.agents import ParalegalAgentSDK
-from app.agents.tool_wrappers import (
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from app.paralegal_agents import ParalegalAgentSDK
+from app.paralegal_agents.tool_wrappers import (
     search_sn_rulings_tool,
     search_statute_tool,
     SearchSNRulingsParams,

@@ -7,7 +7,6 @@ from pydantic_settings import SettingsConfigDict, BaseSettings
 from pathlib import Path
 import logging
 from functools import lru_cache
-from fastapi import Request
 from .service_interface import ServiceInterface, HealthCheckResult, ServiceStatus
 
 logger = logging.getLogger(__name__)
