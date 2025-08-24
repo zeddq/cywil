@@ -1,5 +1,5 @@
 import re
-from typing import List, Dict, Tuple, Optional, Match
+from typing import List, Dict, Tuple, Optional, Match, Any
 import pdfplumber
 from pathlib import Path
 import json
@@ -145,7 +145,7 @@ class PolishStatuteParser:
         elif len(match_list) == 2:
             element.current_name = f"{element.keyword} {match_list[1]}"
             if element.level < self.HIERARCHY_MAP['article'].level and not self._match_hierarchy_element(next_line):
-                element.current_title = next_line
+                element.current_title = next_line.group() if next_line else None
             else:
                 element.current_title = None
         elif len(match_list) == 3:
@@ -202,7 +202,7 @@ class PolishStatuteParser:
             article = article_splits[i]
             article_content = article_splits[i + 1]
 
-            self._process_hierarchy_element(["Art.", article], "", self.HIERARCHY_MAP['article'])
+            self._process_hierarchy_element(["Art.", article], None, self.HIERARCHY_MAP['article'])
             
             # Find the end of this article (start of next article or end of text)
             next_article_match = self.HIERARCHY_MAP['article'].pattern.search(article_content)
@@ -231,7 +231,7 @@ class PolishStatuteParser:
             if paragraphs:
                 # Create separate chunks for each paragraph
                 for para_num, para_content in paragraphs.items():
-                    self._process_hierarchy_element(["§", para_num], "", self.HIERARCHY_MAP['paragraph'])
+                    self._process_hierarchy_element(["§", para_num], None, self.HIERARCHY_MAP['paragraph'])
                     chunk_id = f"{article}§{para_num}" if para_num != "main" else article
                     chunks.append(ArticleChunk(
                         code=self.code_type,
@@ -317,8 +317,14 @@ class PolishStatuteParser:
             # Check for book (first level)
             match_element = self._match_hierarchy_element(line)
             if match_element and match_element[1].level < self.HIERARCHY_MAP['article'].level:
+                next_line_match = None
+                if i + 1 < len(lines):
+                    next_line_result = self._match_hierarchy_element(lines[i + 1].strip())
+                    if next_line_result:
+                        next_line_match = next_line_result[0]
+                        
                 self._process_hierarchy_element([match_element[0].group(0)] + list(match_element[0].groups()),
-                                                lines[i + 1].strip() if i + 1 < len(lines) else "", match_element[1])
+                                                next_line_match, match_element[1])
                 hierarchy_found = True
             elif not hierarchy_found:
                 non_hierarchy_text += line + "\n"
@@ -339,9 +345,9 @@ class PolishStatuteParser:
             if part:
                 path_parts.append(part)
         
-        return " > ".join(path_parts) if path_parts else None
+        return " > ".join(path_parts) if path_parts else ""
     
-    def _get_hierarchy_metadata(self) -> Dict:
+    def _get_hierarchy_metadata(self) -> Dict[str, Any]:
         """Get current hierarchy as metadata dictionary"""
         return {
             "book": self.HIERARCHY_MAP['book'].current_name,
@@ -385,6 +391,10 @@ class StatuteChunker:
         chunks = []
         
         for article in articles:
+            # Skip articles with no content
+            if not article.content:
+                continue
+                
             # Create chunk ID with hierarchy information
             chunk_base_id = f"{article.code}_art_{article.article}"
             
@@ -547,4 +557,4 @@ if __name__ == "__main__":
         print(f"\nArticle {article.article}:")
         print(f"  Section: {article.path}")
         print(f"  Hierarchy: {article.metadata.get('hierarchy', {})}")
-        print(f"  Content preview: {article.content[:100]}...")
+        print(f"  Content preview: {(article.content or '')[:100]}...")

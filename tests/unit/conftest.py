@@ -1,12 +1,15 @@
-import pytest
+try:
+    import pytest
+except ImportError:
+    # pytest not available - likely running static analysis
+    pytest = None
 from unittest.mock import Mock, AsyncMock
+from types import SimpleNamespace
+
 import sys
-import os
 from pathlib import Path
 # Add the app directory to the path
 sys.path.append(str(Path(__file__).parent.parent))
-
-from app.core.config_service import ConfigService
 
 
 @pytest.fixture
@@ -21,17 +24,17 @@ def mock_db_connection():
 
 @pytest.fixture
 def mock_config_service():
-    """Mock configuration service for unit tests"""
-    mock_config = Mock(spec=ConfigService)
-    mock_config.postgres_host = "test_host"
-    mock_config.postgres_port = 5432
-    mock_config.postgres_user = "test_user"
-    mock_config.postgres_password = "test_pass"
-    mock_config.postgres_db = "test_db"
-    mock_config.redis_url = "redis://localhost:6379/1"
-    mock_config.qdrant_host = "localhost"
-    mock_config.qdrant_port = 6333
-    return mock_config
+    """Lightweight configuration object for unit tests"""
+    return SimpleNamespace(
+        postgres_host="test_host",
+        postgres_port=5432,
+        postgres_user="test_user",
+        postgres_password="test_pass",
+        postgres_db="test_db",
+        redis_url="redis://localhost:6379/1",
+        qdrant_host="localhost",
+        qdrant_port=6333,
+    )
 
 
 @pytest.fixture

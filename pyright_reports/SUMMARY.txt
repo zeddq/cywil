@@ -1,0 +1,14 @@
+Pyright Diagnostics Summary
+================================================================================
+
+Total rules with violations: 6
+Total violations: 197
+
+Violations by Rule:
+--------------------------------------------------
+reportAttributeAccessIssue                     81 violations
+reportArgumentType                             35 violations
+reportCallIssue                                31 violations
+reportOptionalMemberAccess                     28 violations
+reportMissingImports                           20 violations
+unknown                                         2 violations

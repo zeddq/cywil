@@ -83,7 +83,7 @@ async def main():
                 print("\n--- Extracted Text ---\n")
                 print(text)
                 print("\n--- End of Extracted Text ---\n")
-                pages_call.append(functools.partial(send_to_openai, text))
+                pages_call.append(lambda t=text: send_to_openai(t))
 
         except Exception as e:
             print(f"Error opening PDF file: {e}")

@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+import pytest
+if __name__ != "__main__":
+    pytest.skip("Registration key tests require running API server", allow_module_level=True)
+
 """Test script for registration with secret key functionality."""
 
 import requests
@@ -165,13 +169,16 @@ def main():
         print("\n" + "=" * 50)
         print(f"🏁 Test Summary: {tests_passed}/{total_tests} tests passed")
         # remove test user created in the test_registration_with_valid_key function
-        print(f"🔍 Deleting test user: {test_user}")
-        response = requests.delete(f"{BASE_URL}/auth/admin/users/{test_user['id']}", headers={"Authorization": f"Bearer {admin_token}"})
-        print(f"🔍 Response status code: {response.status_code}")
-        if response.status_code == 204:
-            print(f"✅ Test user deleted successfully")
+        if test_user and isinstance(test_user, dict) and 'id' in test_user:
+            print(f"🔍 Deleting test user: {test_user}")
+            response = requests.delete(f"{BASE_URL}/auth/admin/users/{test_user['id']}", headers={"Authorization": f"Bearer {admin_token}"})
+            print(f"🔍 Response status code: {response.status_code}")
+            if response.status_code == 204:
+                print(f"✅ Test user deleted successfully")
+            else:
+                print(f"❌ Failed to delete test user: {response.json()}")
         else:
-            print(f"❌ Failed to delete test user: {response.json()}")  
+            print(f"🔍 No test user to delete (registration may have failed)")  
     
     if tests_passed == total_tests:
         print("✅ All tests passed!")

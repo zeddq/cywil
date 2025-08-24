@@ -1,7 +1,9 @@
-from typing import Any, Dict, List
+import json
+from typing import Any, Dict, List, Literal
+
 from openai import AsyncOpenAI
 from pydantic import BaseModel
-from typing import Literal
+
 from .core.config_service import get_config
 
 config = get_config()
@@ -114,14 +116,16 @@ If the error cannot be fixed with a simple retry or clarification.
 }
 """
 
+
 # 1️⃣  Define the desired response structure
 class ValidatorResponse(BaseModel):
     call_id: str
-    action: Literal['RETRY', 'ASK_USER', 'FAIL']
+    action: Literal["RETRY", "ASK_USER", "FAIL"]
     new_function_call: dict | None = None
     question: str | None = None
     explanation: str | None = None
     reason: str | None = None
+
 
 # 2️⃣  Get the JSON-Schema produced by Pydantic
 # raw_schema = ValidatorResponse.model_json_schema()
@@ -158,27 +162,34 @@ class ValidatorResponse(BaseModel):
 #     "schema": openai_schema     # ✔ validated by the server
 # }
 
-async def recover_from_tool_error(conversation_history: List[Dict[str, Any]], failed_function_call: Dict[str, Any], error_message: str) -> ValidatorResponse:
+
+async def recover_from_tool_error(
+    conversation_history: List[Dict[str, Any]],
+    failed_function_call: Dict[str, Any],
+    error_message: str,
+) -> ValidatorResponse:
     # TODO: Implement the logic to recover from the tool error
     # For now, we'll just return a dummy response
 
-    input_message = {
+    input_data = {
         "conversation_history": conversation_history,
         "failed_function_call": failed_function_call,
-        "error_message": error_message
+        "error_message": error_message,
     }
+    input_message = json.dumps(input_data, indent=2)
 
     response = await client.responses.parse(
         model="o3-mini",
-        input=[{
-            "role": "system",
-            "content": VALIDATOR_SYSTEM_PROMPT
-        },
-        {
-            "role": "user",
-            "content": input_message
-        }],
-        text_format=ValidatorResponse
+        input=[
+            {"role": "system", "content": VALIDATOR_SYSTEM_PROMPT},
+            {"role": "user", "content": input_message},
+        ],
+        text_format=ValidatorResponse,
     )
+    if response.output_parsed is None:
+        return ValidatorResponse(
+            call_id="error_recovery",
+            action="FAIL",
+            reason="Failed to parse validator response"
+        )
     return response.output_parsed
-

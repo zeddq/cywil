@@ -9,7 +9,7 @@ from typing import List, Any
 
 from app.core.performance_utils import (
     AsyncCache, CacheEntry, BatchProcessor, QueryOptimizer,
-    EmbeddingBatcher, query_cache, embedding_cache, cached_query
+    EmbeddingBatcher, query_cache, embedding_cache, optimize_query_with_cache as cached_query
 )
 
 

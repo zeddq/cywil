@@ -9,7 +9,6 @@ from fastapi import Depends
 
 from ..models import Case, Document
 
-from ..core.service_interface import ServiceInterface
 from ..dependencies import get_db
 
 class CaseRepository:
@@ -35,7 +34,7 @@ class CaseRepository:
         if status:
             stmt = stmt.where(Case.status == status)
         result = await self.db.execute(stmt)
-        return result.scalars().all()
+        return list(result.scalars().all())
 
     async def create_case(self, case_in: Case, user_id: UUID) -> Case:
         db_case = Case(**case_in.model_dump(), created_by_id=str(user_id))
@@ -54,7 +53,7 @@ class CaseRepository:
         return case
 
     async def delete_case(self, case: Case) -> None:
-        self.db.delete(case)
+        self.db.delete(case)  # type: ignore[misc]
         await self.db.commit()
 
     async def create_document(self, doc_in: Document) -> Document:
@@ -67,13 +66,13 @@ class CaseRepository:
     async def list_documents(self, user_id: UUID, case_id: Optional[UUID] = None) -> List[Document]:
         stmt = (
             select(Document)
-            .join(Case, Document.case_id == Case.id)
+            .join(Case)
             .where(Case.created_by_id == str(user_id))
         )
         if case_id:
             stmt = stmt.where(Document.case_id == str(case_id))
         result = await self.db.execute(stmt)
-        return result.scalars().all()
+        return list(result.scalars().all())
 
 
 def get_case_repository(db: AsyncSession = Depends(get_db)) -> "CaseRepository":

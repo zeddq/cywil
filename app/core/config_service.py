@@ -1,40 +1,47 @@
 """
 Enhanced configuration service with validation and hierarchical organization.
 """
-from typing import Optional, List, Dict, Any
-from pydantic import Field, field_validator, SecretStr
-from pydantic_settings import SettingsConfigDict, BaseSettings
-from pathlib import Path
+
 import logging
+import os
+from enum import StrEnum
 from functools import lru_cache
-from .service_interface import ServiceInterface, HealthCheckResult, ServiceStatus
+from pathlib import Path
+from typing import List, Optional
+
+from pydantic import Field, SecretStr, field_validator
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
+from .service_interface import HealthCheckResult, ServiceInterface, ServiceStatus
 
 logger = logging.getLogger(__name__)
 
 
 class OpenAIConfig(BaseSettings):
     """OpenAI-specific configuration"""
-    api_key: SecretStr = Field(default="", env='OPENAI_API_KEY')
-    orchestrator_model: str = Field(default="gpt-4.1", env='OPENAI_ORCHESTRATOR_MODEL')
-    summary_model: str = Field(default="gpt-4o", env='OPENAI_SUMMARY_MODEL')
-    llm_model: str = Field(default="o3-mini", env='OPENAI_LLM_MODEL')
-    max_retries: int = Field(default=3, env='OPENAI_MAX_RETRIES')
-    timeout: int = Field(default=120, env='OPENAI_TIMEOUT')
-    
-    model_config = SettingsConfigDict(env_prefix='OPENAI_')
+
+    api_key: SecretStr = Field(default=SecretStr(""), validation_alias="OPENAI_API_KEY")
+    orchestrator_model: str = Field(default="gpt-4o", validation_alias="OPENAI_ORCHESTRATOR_MODEL")
+    summary_model: str = Field(default="gpt-5-mini", validation_alias="OPENAI_SUMMARY_MODEL")
+    llm_model: str = Field(default="gpt-5", validation_alias="OPENAI_LLM_MODEL")
+    max_retries: int = Field(default=3, validation_alias="OPENAI_MAX_RETRIES")
+    timeout: int = Field(default=120, validation_alias="OPENAI_TIMEOUT")
+
+    model_config = SettingsConfigDict(env_prefix="OPENAI_")
 
 
 class QdrantConfig(BaseSettings):
     """Qdrant vector database configuration"""
-    host: str = Field(default="qdrant-service", env='QDRANT_HOST')
-    port: int = Field(default=6333, env='QDRANT_PORT')
-    api_key: Optional[SecretStr] = Field(default="qdrant-api-key", env='QDRANT_API_KEY')
-    collection_statutes: str = Field(default="statutes", env='QDRANT_COLLECTION_STATUTES')
-    collection_rulings: str = Field(default="sn_rulings", env='QDRANT_COLLECTION_RULINGS')
-    timeout: int = Field(default=60, env='QDRANT_TIMEOUT')
-    
-    model_config = SettingsConfigDict(env_prefix='QDRANT_')
-    
+
+    host: str = Field(default="qdrant-service", validation_alias="QDRANT_HOST")
+    port: int = Field(default=6333, validation_alias="QDRANT_PORT")
+    api_key: Optional[SecretStr] = Field(default=SecretStr("qdrant-api-key"), validation_alias="QDRANT_API_KEY")
+    collection_statutes: str = Field(default="statutes", validation_alias="QDRANT_COLLECTION_STATUTES")
+    collection_rulings: str = Field(default="sn_rulings", validation_alias="QDRANT_COLLECTION_RULINGS")
+    timeout: int = Field(default=60, validation_alias="QDRANT_TIMEOUT")
+
+    model_config = SettingsConfigDict(env_prefix="QDRANT_")
+
     @property
     def url(self) -> str:
         """Construct Qdrant URL"""
@@ -43,36 +50,42 @@ class QdrantConfig(BaseSettings):
 
 class PostgresConfig(BaseSettings):
     """PostgreSQL database configuration"""
-    host: str = Field(default="postgres-service", env='POSTGRES_HOST')
-    port: int = Field(default=5432, env='POSTGRES_PORT')
-    database: str = Field(default="paralegal", env='POSTGRES_DB')
-    user: SecretStr = Field(default="postgres", env='POSTGRES_USER')
-    password: SecretStr = Field(default="postgres", env='POSTGRES_PASSWORD')
-    pool_size: int = Field(default=10, env='POSTGRES_POOL_SIZE')
-    max_overflow: int = Field(default=20, env='POSTGRES_MAX_OVERFLOW')
-    
-    model_config = SettingsConfigDict(env_prefix='POSTGRES_')
-    
+
+    host: str = Field(default="postgres-service", validation_alias="POSTGRES_HOST")
+    port: int = Field(default=5432, validation_alias="POSTGRES_PORT")
+    database: str = Field(default="paralegal", validation_alias="POSTGRES_DB")
+    user: SecretStr = Field(default=SecretStr("postgres"), validation_alias="POSTGRES_USER")
+    password: SecretStr = Field(default=SecretStr("postgres"), validation_alias="POSTGRES_PASSWORD")
+    pool_size: int = Field(default=10, validation_alias="POSTGRES_POOL_SIZE")
+    max_overflow: int = Field(default=20, validation_alias="POSTGRES_MAX_OVERFLOW")
+
+    model_config = SettingsConfigDict(env_prefix="POSTGRES_")
+
     @property
     def async_url(self) -> str:
         """Construct async PostgreSQL URL"""
-        return f"postgresql+asyncpg://{self.user.get_secret_value()}:{self.password.get_secret_value()}@{self.host}:{self.port}/{self.database}"
-    
+        user = self.user.get_secret_value()
+        password = self.password.get_secret_value()
+        return f"postgresql+asyncpg://{user}:{password}@{self.host}:{self.port}/{self.database}"
+
     @property
     def sync_url(self) -> str:
         """Construct sync PostgreSQL URL"""
-        return f"postgresql://{self.user.get_secret_value()}:{self.password.get_secret_value()}@{self.host}:{self.port}/{self.database}"
+        user = self.user.get_secret_value()
+        password = self.password.get_secret_value()
+        return f"postgresql://{user}:{password}@{self.host}:{self.port}/{self.database}"
 
 
 class RedisConfig(BaseSettings):
     """Redis configuration for caching and session management"""
-    host: str = Field(default="redis-service", env='REDIS_HOST')
-    port: int = Field(default=6379, env='REDIS_PORT')
-    db: int = Field(default=0, env='REDIS_DB')
-    password: Optional[SecretStr] = Field(default="redis", env='REDIS_PASSWORD')
-    
-    model_config = SettingsConfigDict(env_prefix='REDIS_')
-    
+
+    host: str = Field(default="redis-service", validation_alias="REDIS_HOST")
+    port: int = Field(default=6379, validation_alias="REDIS_PORT")
+    db: int = Field(default=0, validation_alias="REDIS_DB")
+    password: Optional[SecretStr] = Field(default=SecretStr("redis"), validation_alias="REDIS_PASSWORD")
+
+    model_config = SettingsConfigDict(env_prefix="REDIS_")
+
     @property
     def url(self) -> str:
         """Construct Redis URL"""
@@ -83,34 +96,36 @@ class RedisConfig(BaseSettings):
 
 class SecurityConfig(BaseSettings):
     """Security-related configuration"""
-    secret_key: SecretStr = Field(default="secret", env='SECRET_KEY')
-    algorithm: str = Field(default="HS256", env='JWT_ALGORITHM')
-    access_token_expire_minutes: int = Field(default=30, env='ACCESS_TOKEN_EXPIRE_MINUTES')
-    refresh_token_expire_days: int = Field(default=7, env='REFRESH_TOKEN_EXPIRE_DAYS')
-    registration_enabled: bool = Field(default=True, env='REGISTRATION_ENABLED')
-    registration_keys: List[str] = Field(default_factory=list, env='REGISTRATION_SECRET_KEYS')
-    
-    model_config = SettingsConfigDict(env_prefix='')
-    
-    @field_validator('registration_keys', mode='before')
+
+    secret_key: SecretStr = Field(default=SecretStr("secret"), validation_alias="SECRET_KEY")
+    algorithm: str = Field(default="HS256", validation_alias="JWT_ALGORITHM")
+    access_token_expire_minutes: int = Field(default=30, validation_alias="ACCESS_TOKEN_EXPIRE_MINUTES")
+    refresh_token_expire_days: int = Field(default=7, validation_alias="REFRESH_TOKEN_EXPIRE_DAYS")
+    registration_enabled: bool = Field(default=True, validation_alias="REGISTRATION_ENABLED")
+    registration_keys: List[str] = Field(default_factory=list, validation_alias="REGISTRATION_SECRET_KEYS")
+
+    model_config = SettingsConfigDict(env_prefix="")
+
+    @field_validator("registration_keys", mode="before")
     def parse_registration_keys(cls, v):
         if isinstance(v, str):
-            return [key.strip() for key in v.split(',') if key.strip()]
+            return [key.strip() for key in v.split(",") if key.strip()]
         return v
 
 
 class StorageConfig(BaseSettings):
     """File storage configuration"""
-    base_dir: Path = Field(default=Path("data"), env='STORAGE_BASE_DIR')
-    upload_dir: str = Field(default="uploads", env='STORAGE_UPLOAD_DIR')
-    embeddings_dir: str = Field(default="embeddings", env='STORAGE_EMBEDDINGS_DIR')
-    chunks_dir: str = Field(default="chunks", env='STORAGE_CHUNKS_DIR')
-    pdfs_dir: str = Field(default="pdfs", env='STORAGE_PDFS_DIR')
-    jsonl_dir: str = Field(default="jsonl", env='STORAGE_JSONL_DIR')
-    max_upload_size: int = Field(default=10 * 1024 * 1024, env='MAX_UPLOAD_SIZE')  # 10MB
-    
-    model_config = SettingsConfigDict(env_prefix='STORAGE_')
-    
+
+    base_dir: Path = Field(default=Path("data"), validation_alias="STORAGE_BASE_DIR")
+    upload_dir: str = Field(default="uploads", validation_alias="STORAGE_UPLOAD_DIR")
+    embeddings_dir: str = Field(default="embeddings", validation_alias="STORAGE_EMBEDDINGS_DIR")
+    chunks_dir: str = Field(default="chunks", validation_alias="STORAGE_CHUNKS_DIR")
+    pdfs_dir: str = Field(default="pdfs", validation_alias="STORAGE_PDFS_DIR")
+    jsonl_dir: str = Field(default="jsonl", validation_alias="STORAGE_JSONL_DIR")
+    max_upload_size: int = Field(default=10 * 1024 * 1024, validation_alias="MAX_UPLOAD_SIZE")  # 10MB
+
+    model_config = SettingsConfigDict(env_prefix="STORAGE_")
+
     def get_path(self, subdir: str) -> Path:
         """Get full path for a subdirectory"""
         path = self.base_dir / subdir
@@ -118,16 +133,29 @@ class StorageConfig(BaseSettings):
         return path
 
 
+class EnvironmentEnum(StrEnum):
+    DEVELOPMENT = "development"
+    STAGING = "staging"
+    PRODUCTION = "production"
+    TEST = "test"
+
+
+global_environment: EnvironmentEnum = EnvironmentEnum(
+    os.getenv("ENVIRONMENT", EnvironmentEnum.DEVELOPMENT.value)
+)
+
+
 class AppConfig(BaseSettings):
     """Main application configuration"""
-    name: str = Field(default="AI Paralegal POC", env='APP_NAME')
-    environment: str = Field(default="development", env='ENVIRONMENT')
-    debug: bool = Field(default=True, env='DEBUG')
-    log_level: str = Field(default="DEBUG", env='LOG_LEVEL')
-    cors_origins: List[str] = Field(default_factory=lambda: ["*"], env='CORS_ORIGINS')
-    host: str = Field(default="0.0.0.0", env='HOST')
-    port: int = Field(default=8000, env='PORT')
-    reload: bool = Field(default=True, env='RELOAD')
+
+    name: str = Field(default="AI Paralegal POC", validation_alias="APP_NAME")
+    environment: EnvironmentEnum = Field(default=global_environment, validation_alias="ENVIRONMENT")
+    debug: bool = Field(default=True, validation_alias="DEBUG")
+    log_level: str = Field(default="DEBUG", validation_alias="LOG_LEVEL")
+    cors_origins: List[str] = Field(default_factory=lambda: ["*"], validation_alias="CORS_ORIGINS")
+    host: str = Field(default="0.0.0.0", validation_alias="HOST")
+    port: int = Field(default=8000, validation_alias="PORT")
+    reload: bool = Field(default=True, validation_alias="RELOAD")
 
     # Sub-configurations
     openai: OpenAIConfig = Field(default_factory=OpenAIConfig)
@@ -136,24 +164,24 @@ class AppConfig(BaseSettings):
     redis: RedisConfig = Field(default_factory=RedisConfig)
     security: SecurityConfig = Field(default_factory=SecurityConfig)
     storage: StorageConfig = Field(default_factory=StorageConfig)
-    
+
     model_config = SettingsConfigDict(
-        env_file='.env',
-        env_file_encoding='utf-8',
+        env_file=".env" if global_environment != EnvironmentEnum.TEST else ".env.test",
+        env_file_encoding="utf-8",
         case_sensitive=False,
-        extra='ignore'
+        extra="ignore",
     )
-    
-    @field_validator('cors_origins', mode='before')
+
+    @field_validator("cors_origins", mode="before")
     def parse_cors_origins(cls, v):
         if isinstance(v, str):
-            return [origin.strip() for origin in v.split(',') if origin.strip()]
+            return [origin.strip() for origin in v.split(",") if origin.strip()]
         return v
-    
-    @field_validator('environment')
+
+    @field_validator("environment")
     def validate_environment(cls, v):
-        allowed = ['development', 'staging', 'production']
-        if v not in allowed:
+        allowed = ["development", "staging", "production", "test"]
+        if str(v).lower() not in allowed:
             raise ValueError(f"Environment must be one of {allowed}")
         return v
 
@@ -163,32 +191,32 @@ class ConfigService(ServiceInterface):
     Configuration service providing centralized access to all settings.
     Implements singleton pattern for consistent configuration across the app.
     """
-    _instance: Optional['ConfigService'] = None
+
+    _instance: Optional["ConfigService"] = None
     _config: Optional[AppConfig] = None
-    
+
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
-    
+
     def __init__(self):
         # Only initialize once
-        if not hasattr(self, '_initialized'):
+        if not hasattr(self, "_initialized"):
             super().__init__("ConfigService")
             if ConfigService._config is None:
                 ConfigService._config = self._load_config()
                 self._validate_config()
-                self._setup_logging()
             self._initialized = True
 
     async def _initialize_impl(self) -> None:
         """Initialize configuration service"""
         pass
-    
+
     async def _shutdown_impl(self) -> None:
         """Shutdown configuration service"""
         pass
-    
+
     @classmethod
     def _load_config(cls) -> AppConfig:
         """Load configuration from environment"""
@@ -199,51 +227,49 @@ class ConfigService(ServiceInterface):
         except Exception as e:
             logger.error(f"Failed to load configuration: {e}")
             raise
-    
+
     def _validate_config(self):
         """Validate configuration values"""
         # Check required secrets in production
-        if ConfigService._config.environment == 'production':
-            if ConfigService._config.security.secret_key.get_secret_value() == 'dev-secret-key-change-in-production':
+        config = self.config
+        if config.environment == "production":
+            if (
+                config.security.secret_key.get_secret_value()
+                == "dev-secret-key-change-in-production"
+            ):
                 raise ValueError("SECRET_KEY must be changed in production")
-            
-            if not ConfigService._config.openai.api_key.get_secret_value():
+
+            if not config.openai.api_key.get_secret_value():
                 raise ValueError("OPENAI_API_KEY is required")
-    
-    def _setup_logging(self):
-        """Configure logging based on settings"""
-        logging.basicConfig(
-            level=logging.DEBUG,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
 
     async def _health_check_impl(self) -> HealthCheckResult:
         return HealthCheckResult(
-            status=ServiceStatus.HEALTHY,
-            message="Configuration service is healthy"
+            status=ServiceStatus.HEALTHY, message="Configuration service is healthy"
         )
-    
+
     @property
     def config(self) -> AppConfig:
         """Get the configuration object"""
+        assert ConfigService._config is not None
         return ConfigService._config
-    
+
     def get_database_url(self, async_mode: bool = True) -> str:
         """Get database URL based on mode"""
-        return ConfigService._config.postgres.async_url if async_mode else ConfigService._config.postgres.sync_url
-    
+        config = self.config
+        return config.postgres.async_url if async_mode else config.postgres.sync_url
+
     def get_storage_path(self, subdir: str) -> Path:
         """Get storage path for a specific subdirectory"""
-        return ConfigService._config.storage.get_path(subdir)
-    
+        return self.config.storage.get_path(subdir)
+
     def is_production(self) -> bool:
         """Check if running in production"""
-        return ConfigService._config.environment == 'production'
-    
+        return self.config.environment == "production"
+
     def is_development(self) -> bool:
         """Check if running in development"""
-        return ConfigService._config.environment == 'development'
-    
+        return self.config.environment == "development"
+
     def reload(self):
         """Reload configuration (useful for testing)"""
         ConfigService._config = self._load_config()
@@ -253,6 +279,7 @@ class ConfigService(ServiceInterface):
 
 # Singleton instance
 _config_service_instance: Optional[ConfigService] = None
+
 
 # Convenience function for accessing config
 @lru_cache(maxsize=1)

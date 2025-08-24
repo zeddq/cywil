@@ -15,10 +15,35 @@ from typing import Dict, List, Any, Optional, Tuple, Literal
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import re
 import fitz  # PyMuPDF
-from langchain_openai import ChatOpenAI
-from langchain.prompts import PromptTemplate
-from langchain.schema import BaseMessage, HumanMessage
-from langchain.output_parsers import PydanticOutputParser
+# Langchain removed during migration - these scripts need updating to use OpenAI SDK
+# from langchain_openai import ChatOpenAI
+# from langchain.prompts import PromptTemplate
+# from langchain.schema import BaseMessage, HumanMessage
+# from langchain.output_parsers import PydanticOutputParser
+
+# Temporary placeholders for removed langchain classes
+class PydanticOutputParser:
+    def __init__(self, pydantic_object):
+        self.pydantic_object = pydantic_object
+    def get_format_instructions(self):
+        return f"Return data as JSON matching this schema: {self.pydantic_object.model_json_schema()}"
+
+class ChatOpenAI:
+    def __init__(self, **kwargs):
+        pass
+    def invoke(self, messages):
+        raise NotImplementedError("This preprocessing script needs to be updated to use OpenAI SDK directly")
+
+class HumanMessage:
+    def __init__(self, content):
+        self.content = content
+
+class PromptTemplate:
+    def __init__(self, input_variables, template):
+        self.input_variables = input_variables
+        self.template = template
+    def format(self, **kwargs):
+        return self.template.format(**kwargs)
 from pydantic import BaseModel, Field
 from openai import BaseModel as OpenAIModel
 from datetime import datetime
@@ -145,8 +170,9 @@ async def extract_pdf_with_o3(pdf_path: Path, is_batch: bool = False) -> ParsedR
         return jsonl_bytes
     
     # Parse response
+    response: Optional[ParsedResponse[ParsedRuling]] = None
     try:
-        response: ParsedResponse[ParsedRuling] = client.responses.parse(
+        response = client.responses.parse(
             model="o3-mini",
             input=[
                 {"role": "user", "content": extract_prompt_template.format(pdf_path=full_text, format_instructions=parser.get_format_instructions())},
@@ -155,12 +181,18 @@ async def extract_pdf_with_o3(pdf_path: Path, is_batch: bool = False) -> ParsedR
             max_output_tokens=100000,
             timeout=600,
         )
+        if response.output_parsed is None:
+            logger.warning("o3 response parsing returned None, falling back to simple parsing")
+            ruling = await fallback_parse(full_text)
+            return ParsedRuling(paragraphs=[RulingParagraph(**p.model_dump()) for p in ruling.paragraphs])
         return response.output_parsed
     except Exception as e:
         logger.error(f"Failed to parse o3 response: {e}")
-        logger.debug(f"Response: {response}")
-        # Fallback parsing
-        return fallback_parse(full_text)
+        if response is not None:
+            logger.debug(f"Response: {response}")
+        # Fallback parsing - convert Ruling to ParsedRuling
+        ruling = await fallback_parse(full_text)
+        return ParsedRuling(paragraphs=[RulingParagraph(**p.model_dump()) for p in ruling.paragraphs])
 
 # ---------- 4  Fallback parsing for error cases ----------------------------- #
 
@@ -189,7 +221,6 @@ async def fallback_parse(text: str) -> Ruling:
     
     # Basic metadata extraction
     metadata = RulingMetadata(
-        court="Sąd Najwyższy" if "SĄD NAJWYŻSZY" in text.upper() else None,
         docket=None,
         date=None,
         panel=[]
@@ -299,13 +330,18 @@ Dla każdej encji zwróć:
                 max_output_tokens=20000,
                 timeout=600,
             )
-            batch[0].entities = response.output_parsed.entities
+            ruling.paragraphs[index].entities = response.output_parsed.entities
         except Exception as e:
-            logger.warning(f"Failed to parse entities for batch {i}: {e}")
-            for para in batch:
-                para.entities = extract_entities_regex(para.text)
+            logger.warning(f"Failed to parse entities for paragraph {index}: {e}")
+            ruling.paragraphs[index].entities = extract_entities_regex(ruling.paragraphs[index].text)
     
-    return ruling
+    # Convert ParsedRuling to Ruling with enhanced entities
+    enhanced_paragraphs = [RulingParagraphEnriched(**p.model_dump()) for p in ruling.paragraphs]
+    return Ruling(
+        name=f"ruling-{index}",
+        meta=RulingMetadata(),
+        paragraphs=enhanced_paragraphs
+    )
 
 def extract_entities_regex(text: str) -> List[LegalEntity]:
     """Fallback regex-based entity extraction"""
@@ -414,8 +450,13 @@ async def preprocess_sn_rulings(pdf_path: Path) -> List[Dict[str, Any]]:
         # Step 1: Parse PDF with o3
         logger.info("Step 1: Parsing PDF structure with o3")
         parsed_ruling = await extract_pdf_with_o3(pdf_path)
+        if isinstance(parsed_ruling, bytes):
+            raise ValueError("Failed to parse PDF, received bytes instead of ParsedRuling")
+        
+        # Type assertion to help type checker understand parsed_ruling is not bytes here
+        assert not isinstance(parsed_ruling, bytes), "parsed_ruling should not be bytes at this point"
         enriched_paragraphs = [RulingParagraphEnriched(**para.model_dump(), entities=[]) for para in parsed_ruling.paragraphs]
-        ruling = Ruling(metadata=RulingMetadata(), paragraphs=enriched_paragraphs)
+        ruling = Ruling(name="Supreme Court Ruling", meta=RulingMetadata(), paragraphs=enriched_paragraphs)
 
         # Step 2: Enhance entity extraction
         logger.info("Step 2: Enhancing entity recognition with o3")
@@ -472,7 +513,7 @@ async def process_batch(pdf_files: List[Path], extracted_jsonl: Optional[Path] =
                 logger.error(f"Failed to process {pdf_path}: {e}")
                 failed_files.append(pdf_path)
 
-        with open("data/jsonl/batch_input.jsonl", "wb+") as f:
+        with open("data/jsonl/batch_input.jsonl", "w+b") as f:
             f.write(b"\n".join(all_jsonl_bytes))
             f.seek(0)
             file_ret = cl.files.create(
@@ -501,7 +542,7 @@ async def process_batch(pdf_files: List[Path], extracted_jsonl: Optional[Path] =
         for i, record in enumerate(all_records):
             if record:
                 all_jsonl_bytes.extend(await enhance_entities_with_o3(record, i, is_batch=True))
-        with open("data/jsonl/batch_input_enriched.jsonl", "wb+") as f:
+        with open("data/jsonl/batch_input_enriched.jsonl", "w+b") as f:
             f.write(b"\n".join(all_jsonl_bytes))
             f.seek(0)
             file_ret = cl.files.create(
@@ -552,7 +593,9 @@ async def process_batch(pdf_files: List[Path], extracted_jsonl: Optional[Path] =
                         ruling = rulings[int(rule_num)]
                         if ruling:
                             p = next(filter(lambda p: p.para_no - 1 == int(para_num), ruling.paragraphs))
-                            p.entities = [LegalEntity(**e) for e in para["entities"]]
+                            if p is not None:
+
+                                p.entities = [LegalEntity(**e) for e in para["entities"]]
                         else:
                             logger.error(f"Ruling not found for rule {rule_num}")
                     except Exception as e:
@@ -577,7 +620,9 @@ async def process_batch(pdf_files: List[Path], extracted_jsonl: Optional[Path] =
                         end = min(len(para.text), p.end + 1)
                         if "sędzia" in para.text[start:end].lower() or "sedzia" in para.text[start:end].lower() or "ssn" in para.text[start:end].lower():
                             panel.append(p.text)
-            ruling.meta = RulingMetadata(docket=docket, date=date, panel=panel)
+            if ruling is not None:
+
+                ruling.meta = RulingMetadata(docket=docket, date=date, panel=panel)
 
         with open("data/jsonl/final_sn_rulings.jsonl", "w") as f:
             for ruling in rulings:

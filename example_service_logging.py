@@ -1,7 +1,7 @@
 """
 Example of how to use service_operation_logger decorator
 """
-from app.core.logging_middleware import service_operation_logger
+from app.core.logging_utils import service_operation_logger
 import asyncio
 
 

@@ -13,8 +13,7 @@ from dotenv import load_dotenv
 from qdrant_client import AsyncQdrantClient, models
 from sentence_transformers import SentenceTransformer
 from sqlalchemy import select, Result, Select, Tuple, delete
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 
 sys.path.append(str(Path(__file__).parent.parent))
 
@@ -57,7 +56,7 @@ print(f"QDRANT API KEY: {QDRANT_API_KEY}")
 
 
 async def with_session(func: Callable[[AsyncSession], Awaitable[Any]]) -> Awaitable[Any]:
-    async with sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)() as session:
+    async with async_sessionmaker(engine, expire_on_commit=False)() as session:
         try:
             return await func(session)
         except Exception as e:
@@ -113,7 +112,11 @@ async def process_sn_ruling_file(line: str, session: AsyncSession):
         date_int = 0
         try:
             if ruling and ruling.meta['date']:
-                date_int = int(dateparser.parse(ruling.meta['date'], languages=['pl']).strftime("%Y%m%d"))
+                parsed_date = dateparser.parse(ruling.meta['date'], languages=['pl'])
+                if parsed_date is not None:
+                    date_int = int(parsed_date.strftime("%Y%m%d"))
+                else:
+                    raise ValueError(f"Could not parse date: {ruling.meta['date']}")
             else:
                 raise ValueError(f"No date found for '{para_id}'")
         except Exception:

@@ -1,0 +1,106 @@
+digraph "AI_Paralegal_POC_Detailed_Architecture" {
+    rankdir=TB;
+    node [shape=record, style="rounded,filled", fontname="Arial", fontcolor="black"];
+    edge [fontname="Arial", fontcolor="black"];
+    compound=true;
+    
+    // app.core subgraph
+    subgraph cluster_core {
+        label="app.core - Core Infrastructure";
+        style="rounded,dashed";
+        bgcolor="#e8f4f8";
+        
+        core_config [fillcolor="#b3d9ff", label="{ConfigService|+get_config()\l+get_env_var()\l}"];
+        core_db [fillcolor="#b3d9ff", label="{DatabaseManager|+create_pool()\l+get_connection()\l+execute_query()\l}"];
+        core_logger [fillcolor="#b3d9ff", label="{LoggerManager|+get_logger()\l+correlation_context\l}"];
+        core_llm [fillcolor="#b3d9ff", label="{LLMManager|+generate_response()\l+stream_response()\l}"];
+        core_tools [fillcolor="#b3d9ff", label="{ToolRegistry|+register_tool()\l+get_tool()\l}"];
+        core_service [fillcolor="#b3d9ff", label="{ServiceInterface|+health_check()\l+start()\l+stop()\l}"];
+    }
+    
+    // app.services subgraph
+    subgraph cluster_services {
+        label="app.services - Business Logic";
+        style="rounded,dashed";
+        bgcolor="#f0f4ff";
+        
+        svc_case [fillcolor="#99ccff", label="{CaseManagementService|+create_case()\l+update_case()\l+get_case_history()\l}"];
+        svc_doc [fillcolor="#99ccff", label="{DocumentGenerationService|+generate_contract()\l+generate_motion()\l}"];
+        svc_statute [fillcolor="#99ccff", label="{StatuteSearchService|+search_statutes()\l+get_statute_details()\l}"];
+        svc_court [fillcolor="#99ccff", label="{SupremeCourtService|+search_rulings()\l+analyze_precedent()\l}"];
+    }
+    
+    // app.routes subgraph
+    subgraph cluster_routes {
+        label="app.routes - API Endpoints";
+        style="rounded,dashed";
+        bgcolor="#e6f2ff";
+        
+        route_auth [fillcolor="#80bfff", label="{auth|/login\l/register\l/refresh\l}"];
+        route_case [fillcolor="#80bfff", label="{case_management|/cases\l/cases/:id\l/documents\l}"];
+        route_monitor [fillcolor="#80bfff", label="{monitoring|/health\l/metrics\l/status\l}"];
+    }
+    
+    // app.worker subgraph
+    subgraph cluster_worker {
+        label="app.worker - Background Tasks";
+        style="rounded,dashed";
+        bgcolor="#e6e6ff";
+        
+        worker_celery [fillcolor="#66b3ff", label="{CeleryApp|+celery_app\l+task_routes\l}"];
+        worker_tasks [fillcolor="#66b3ff", label="{Tasks|case_tasks\ldocument_tasks\lstatute_tasks\lruling_tasks\l}"];
+    }
+    
+    // app.paralegal_agents subgraph
+    subgraph cluster_agents {
+        label="app.paralegal_agents";
+        style="rounded,dashed";
+        bgcolor="#f0e6ff";
+        
+        agent_sdk [fillcolor="#80bfff", label="{ParalegalAgentSDK|+process_query()\l+execute_tool()\l}"];
+        agent_tools [fillcolor="#80bfff", label="{ToolWrappers|+search_statute()\l+analyze_case()\l+generate_document()\l}"];
+    }
+    
+    // Main app
+    app_main [fillcolor="#80bfff", fontcolor="black", label="{app.main|FastAPI Application\l+startup()\l+shutdown()\l+chat_endpoint()\l}"];
+    
+    // Models
+    app_models [fillcolor="#cce6ff", label="{app.models|Case\lDocument\lUser\lStatuteChunk\lSNRuling\l}"];
+    
+    // Ingest module
+    ingest_module [fillcolor="#ffcc99", label="{ingest|pdf2chunks\lembed\lpreprocess_sn\lingest_pipeline\l}"];
+    
+    // External systems
+    postgres [shape=cylinder, fillcolor="#ffffe6", label="PostgreSQL\nDatabase"];
+    redis [shape=cylinder, fillcolor="#ffe6e6", label="Redis\nCache/Queue"];
+    openai [shape=ellipse, fillcolor="#f0e6ff", label="OpenAI API"];
+    
+    // UI
+    ui_app [fillcolor="#80ff80", label="{UI Frontend|React/TypeScript\l}"];
+    
+    // Dependencies - simplified for clarity
+    app_main -> core_config [lhead=cluster_core];
+    app_main -> route_auth [lhead=cluster_routes];
+    app_main -> agent_sdk [lhead=cluster_agents];
+    
+    svc_case -> core_db [ltail=cluster_services];
+    svc_case -> app_models;
+    
+    route_case -> svc_case [ltail=cluster_routes];
+    
+    agent_sdk -> svc_statute [ltail=cluster_agents, lhead=cluster_services];
+    
+    worker_tasks -> ingest_module;
+    worker_tasks -> core_db;
+    
+    core_db -> postgres;
+    worker_celery -> redis;
+    core_llm -> openai;
+    
+    ui_app -> app_main [label="HTTP/REST API"];
+    
+    // Test dependencies (dotted)
+    tests [fillcolor="#d9d9d9", label="{tests|unit/\lintegration/\lcelery/\l}"];
+    tests -> app_main [style=dotted];
+    tests -> core_service [style=dotted, lhead=cluster_core];
+}

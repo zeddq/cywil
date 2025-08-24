@@ -34,18 +34,18 @@ async def create_tables():
         
         # Initialize database manager
         db_manager = DatabaseManager(config_service)
-        await db_manager.startup()
+        await db_manager.initialize()
         
         logger.info("Creating database tables...")
         
         # Create all tables using SQLModel
-        async with db_manager.engine.begin() as conn:
+        async with db_manager.async_engine.begin() as conn:
             await conn.run_sync(SQLModel.metadata.create_all)
         
         logger.info("✅ All database tables created successfully!")
         
         # List created tables
-        async with db_manager.engine.connect() as conn:
+        async with db_manager.async_engine.connect() as conn:
             result = await conn.execute(
                 """
                 SELECT tablename FROM pg_tables 
@@ -71,9 +71,9 @@ async def check_existing_tables():
     try:
         config_service = ConfigService()
         db_manager = DatabaseManager(config_service)
-        await db_manager.startup()
+        await db_manager.initialize()
         
-        async with db_manager.engine.connect() as conn:
+        async with db_manager.async_engine.connect() as conn:
             result = await conn.execute(
                 """
                 SELECT tablename FROM pg_tables 

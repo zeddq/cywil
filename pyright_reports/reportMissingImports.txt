@@ -1,0 +1,85 @@
+Pyright Diagnostic Report: reportMissingImports
+================================================================================
+
+Total violations: 20
+
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/celery/conftest.py (1 violations)
+-------------------------------------------------------------
+  Line 1:8 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/celery/test_celery_integration.py (1 violations)
+----------------------------------------------------------------------------
+  Line 2:8 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/celery/test_celery_tasks.py (1 violations)
+----------------------------------------------------------------------
+  Line 1:8 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py (1 violations)
+------------------------------------------------------
+  Line 5:12 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py (1 violations)
+------------------------------------------------------------------
+  Line 2:12 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py (1 violations)
+------------------------------------------------------------------
+  Line 2:8 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_conversation_manager.py (1 violations)
+-----------------------------------------------------------------------------------
+  Line 4:8 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_database_manager.py (1 violations)
+-------------------------------------------------------------------------------
+  Line 4:8 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py (1 violations)
+--------------------------------------------------------------------------
+  Line 5:8 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py (1 violations)
+-------------------------------------------------------------------------------------
+  Line 5:8 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_migration.py (1 violations)
+------------------------------------------------------------------------
+  Line 2:8 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py (1 violations)
+----------------------------------------------------------------------------------
+  Line 5:8 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming.py (1 violations)
+------------------------------------------------------------------------
+  Line 2:8 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py (1 violations)
+--------------------------------------------------------------------------------
+  Line 4:8 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/unit/conftest.py (1 violations)
+-----------------------------------------------------------
+  Line 2:12 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py (1 violations)
+-----------------------------------------------------------------
+  Line 2:8 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_performance_utils.py (1 violations)
+-------------------------------------------------------------------------
+  Line 4:8 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_registration_key.py (1 violations)
+------------------------------------------------------------------------
+  Line 2:8 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_executor.py (1 violations)
+---------------------------------------------------------------------
+  Line 4:8 [error]: Import "pytest" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_registry.py (1 violations)
+---------------------------------------------------------------------
+  Line 4:8 [error]: Import "pytest" could not be resolved

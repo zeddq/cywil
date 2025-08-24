@@ -12,8 +12,7 @@ from dotenv import load_dotenv
 from qdrant_client import QdrantClient, models
 from sentence_transformers import SentenceTransformer
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 
 sys.path.append(str(Path(__file__).parent.parent))
 
@@ -67,7 +66,7 @@ async def generate_summary(template_text: str, file_name: str) -> str:
             ],
             temperature=0.2,
         )
-        summary = completion.choices[0].message.content.strip()
+        content = completion.choices[0].message.content; summary = content.strip() if content else "No summary available"
         print(f"  -> Summary for {file_name}: {summary}")
         return summary
     except Exception as e:
@@ -75,7 +74,7 @@ async def generate_summary(template_text: str, file_name: str) -> str:
         return f"Nie udało się wygenerować podsumowania dla {file_name}."
 
 async def with_session(func: Callable[[AsyncSession], Awaitable[Any]]) -> Awaitable[Any]:
-    async with sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)() as session:
+    async with async_sessionmaker(engine, expire_on_commit=False)() as session:
         try:
             return await func(session)
         except Exception as e:

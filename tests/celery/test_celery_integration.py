@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+import pytest
+if __name__ != "__main__":
+    pytest.skip("Celery integration tests require running workers", allow_module_level=True)
+
 """
 Comprehensive test script for Celery integration.
 Tests all queues, task types, and monitoring capabilities.

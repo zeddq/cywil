@@ -1,7 +1,7 @@
 """
 Examples of using the centralized logger manager
 """
-from app.logging_config import LOGGING_CONFIG
+from app.worker.logging_config import LOGGING_CONFIG
 from app.core.logger_manager import (
     get_logger, 
     configure_logging, 

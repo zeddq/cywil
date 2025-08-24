@@ -234,6 +234,8 @@ def preprocess_sn_rulings(pdf_path: Path) -> List[Dict[str, Any]]:
         for rec in records:
             print(json.dumps(rec, ensure_ascii=False, indent=2))
             f.write(json.dumps(rec, ensure_ascii=False, indent=2) + "\n")
+    
+    return records
 
 if __name__ == "__main__":
     rulings_dir = Path("data/pdfs/sn-rulings")

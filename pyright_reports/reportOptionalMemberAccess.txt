@@ -1,0 +1,54 @@
+Pyright Diagnostic Report: reportOptionalMemberAccess
+================================================================================
+
+Total violations: 28
+
+
+/Volumes/code/cywil/ai-paralegal-poc/app/services/supreme_court_service.py (1 violations)
+--------------------------------------------------------------------------
+  Line 301:91 [error]: "astext" is not a known attribute of "None"
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/ingestion_pipeline.py (3 violations)
+---------------------------------------------------------------------------
+  Line 69:60 [error]: "id" is not a known attribute of "None"
+  Line 137:56 [error]: "id" is not a known attribute of "None"
+  Line 167:60 [error]: "id" is not a known attribute of "None"
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (2 violations)
+-------------------------------------------------------------------------
+  Line 370:72 [error]: "entities" is not a known attribute of "None"
+  Line 672:44 [error]: "paragraphs" is not a known attribute of "None"
+
+/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py (2 violations)
+---------------------------------------------------------------
+  Line 333:72 [error]: "entities" is not a known attribute of "None"
+  Line 609:44 [error]: "paragraphs" is not a known attribute of "None"
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py (10 violations)
+------------------------------------------------------
+  Line 18:9 [error]: "fixture" is not a known attribute of "None"
+  Line 26:9 [error]: "fixture" is not a known attribute of "None"
+  Line 46:9 [error]: "fixture" is not a known attribute of "None"
+  Line 57:9 [error]: "fixture" is not a known attribute of "None"
+  Line 76:9 [error]: "fixture" is not a known attribute of "None"
+  Line 89:9 [error]: "fixture" is not a known attribute of "None"
+  Line 106:9 [error]: "fixture" is not a known attribute of "None"
+  Line 127:9 [error]: "fixture" is not a known attribute of "None"
+  Line 157:9 [error]: "fixture" is not a known attribute of "None"
+  Line 198:24 [error]: "mark" is not a known attribute of "None"
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py (6 violations)
+------------------------------------------------------------------
+  Line 23:9 [error]: "fixture" is not a known attribute of "None"
+  Line 31:9 [error]: "fixture" is not a known attribute of "None"
+  Line 43:9 [error]: "fixture" is not a known attribute of "None"
+  Line 52:9 [error]: "fixture" is not a known attribute of "None"
+  Line 64:9 [error]: "fixture" is not a known attribute of "None"
+  Line 72:9 [error]: "fixture" is not a known attribute of "None"
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/unit/conftest.py (4 violations)
+-----------------------------------------------------------
+  Line 15:9 [error]: "fixture" is not a known attribute of "None"
+  Line 25:9 [error]: "fixture" is not a known attribute of "None"
+  Line 40:9 [error]: "fixture" is not a known attribute of "None"
+  Line 48:9 [error]: "fixture" is not a known attribute of "None"

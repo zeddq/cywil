@@ -1,7 +1,11 @@
 """
 Pytest configuration and shared fixtures for all tests.
 """
-import pytest
+try:
+    import pytest
+except ImportError:
+    # pytest not available - likely running in non-test environment
+    pytest = None
 import asyncio
 from unittest.mock import Mock, patch
 import sys

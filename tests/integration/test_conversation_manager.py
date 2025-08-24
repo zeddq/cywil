@@ -11,6 +11,7 @@ from sqlalchemy import select
 
 from app.core.conversation_manager import ConversationManager, ConversationState
 from app.core.database_manager import DatabaseManager
+from app.core.config_service import ConfigService
 from app.core.service_interface import ServiceStatus
 from app.models import ResponseHistory, Case
 
@@ -24,6 +25,15 @@ def mock_config():
 
 
 @pytest.fixture
+def mock_config_service():
+    """Mock config service"""
+    config_service = Mock(spec=ConfigService)
+    config_service.config = Mock()
+    config_service.config.redis.url = "redis://localhost:6379/0"
+    return config_service
+
+
+@pytest.fixture
 def mock_db_manager():
     """Mock database manager"""
     db_manager = Mock(spec=DatabaseManager)
@@ -33,11 +43,10 @@ def mock_db_manager():
 
 
 @pytest.fixture
-async def conversation_manager(mock_config, mock_db_manager):
+async def conversation_manager(mock_config_service, mock_db_manager):
     """Create ConversationManager instance"""
-    with patch('app.core.conversation_manager.get_config', return_value=mock_config):
-        manager = ConversationManager(mock_db_manager)
-        yield manager
+    manager = ConversationManager(mock_db_manager, mock_config_service)
+    yield manager
 
 
 class TestConversationStateManagement:

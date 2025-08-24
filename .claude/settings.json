@@ -30,6 +30,15 @@
           }
         ],
         "matcher": "Bash"
+      },
+      {
+        "hooks": [
+          {
+            "command": "source .venv/bin/activate",
+            "type": "command"
+          }
+        ],
+        "matcher": "*"
       }
     ],
     "Stop": [

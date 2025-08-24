@@ -1,4 +1,4 @@
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Optional
 import numpy as np
 from sentence_transformers import SentenceTransformer
 import json
@@ -8,7 +8,8 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance, VectorParams, PointStruct,
     Filter, FieldCondition, MatchValue,
-    CreateCollection, OptimizersConfigDiff
+    CreateCollection, OptimizersConfigDiff,
+    KeywordIndexParams, TextIndexParams
 )
 import logging
 from tqdm import tqdm
@@ -53,6 +54,8 @@ class PolishLegalEmbedder:
                 return
             
             # Create collection
+            if self.embedding_dim is None:
+                raise ValueError("Unable to determine embedding dimension")
             self.client.create_collection(
                 collection_name=collection_name,
                 vectors_config=VectorParams(
@@ -69,19 +72,19 @@ class PolishLegalEmbedder:
             self.client.create_payload_index(
                 collection_name=collection_name,
                 field_name="code",
-                field_schema="keyword"
+                field_schema=KeywordIndexParams()
             )
             
             self.client.create_payload_index(
                 collection_name=collection_name,
                 field_name="article",
-                field_schema="keyword"
+                field_schema=KeywordIndexParams()
             )
             
             self.client.create_payload_index(
                 collection_name=collection_name,
                 field_name="status",
-                field_schema="keyword"
+                field_schema=KeywordIndexParams()
             )
             
             logger.info(f"Created collection '{collection_name}' with indexes")
@@ -302,7 +305,7 @@ def create_hybrid_search_index(
         client.create_payload_index(
             collection_name=collection_name,
             field_name="text",
-            field_schema="text"
+            field_schema=TextIndexParams()
         )
         logger.info("Created text search index")
     except Exception as e:
@@ -314,7 +317,7 @@ def create_hybrid_search_index(
             client.create_payload_index(
                 collection_name=collection_name,
                 field_name=field,
-                field_schema="keyword"
+                field_schema=KeywordIndexParams()
             )
             logger.info(f"Created index for field: {field}")
         except Exception as e:
@@ -322,7 +325,7 @@ def create_hybrid_search_index(
 
 def search_statutes(
     query: str,
-    code_filter: str = None,
+    code_filter: Optional[str] = None,
     collection_name: str = "statutes",
     qdrant_host: str = "localhost",
     qdrant_port: int = 6333,
@@ -377,7 +380,8 @@ def search_statutes(
     # Format results
     formatted_results = []
     for result in results:
-        formatted_results.append({
+        if result.payload is None:
+            continue        formatted_results.append({
             "score": result.score,
             "article": result.payload.get("article"),
             "code": result.payload.get("code"),

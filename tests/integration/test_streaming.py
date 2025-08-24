@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+import pytest
+if __name__ != "__main__":
+    pytest.skip("Streaming test requires running full application", allow_module_level=True)
+
 """
 Test script for streaming functionality
 """

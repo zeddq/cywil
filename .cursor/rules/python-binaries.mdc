@@ -1,0 +1,5 @@
+---
+alwaysApply: true
+---
+
+Use .venv-test/bin/* python binaries when task encompases only the test files. In other cases use .venv/bin/* python binaries.

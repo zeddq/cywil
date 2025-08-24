@@ -1,15 +1,23 @@
+"""
+Celery application with comprehensive monitoring, error handling, and structured logging.
+"""
 
-"""
-Celery application with proper microservices configuration.
-"""
-from celery import Celery
-from celery.signals import worker_ready, worker_shutting_down, task_failure, task_success, task_retry
-import logging
 import os
 
+from celery import Celery
+
+from app.core.logger_manager import get_logger
 from app.worker.config import CeleryConfig
 
-logger = logging.getLogger(__name__)
+# Initialize structured logging first
+from app.worker.logging_config import configure_celery_logging
+
+configure_celery_logging(
+    log_level=os.getenv("CELERY_LOG_LEVEL", "INFO"),
+    json_logs=os.getenv("CELERY_JSON_LOGS", "true").lower() == "true",
+)
+
+logger = get_logger(__name__)
 
 # Create Celery app with configuration
 celery_app = Celery("ai_paralegal_worker")
@@ -28,31 +36,15 @@ celery_app.conf.imports = [
     "app.worker.tasks.maintenance",
 ]
 
-# Signal handlers for monitoring
-@worker_ready.connect
-def worker_ready_handler(sender, **kwargs):
-    """Log when worker is ready to accept tasks."""
-    logger.info(f"Worker {sender.hostname} is ready to accept tasks")
+# Import and initialize monitoring
+# The monitor will auto-register all signals when imported
 
-@worker_shutting_down.connect
-def worker_shutting_down_handler(sender, **kwargs):
-    """Log when worker is shutting down."""
-    logger.info(f"Worker {sender.hostname} is shutting down")
+# Import service registry to register worker lifecycle signals
+# This ensures services are initialized once per worker, not per task
 
-@task_failure.connect
-def task_failure_handler(sender=None, task_id=None, exception=None, args=None, kwargs=None, traceback=None, einfo=None, **kw):
-    """Log task failures for monitoring."""
-    logger.error(f"Task {sender.name}[{task_id}] failed: {exception}")
-
-@task_success.connect
-def task_success_handler(sender=None, result=None, **kwargs):
-    """Log task success for monitoring."""
-    logger.info(f"Task {sender.name} completed successfully")
-
-@task_retry.connect  
-def task_retry_handler(sender=None, reason=None, **kwargs):
-    """Log task retries for monitoring."""
-    logger.warning(f"Task {sender.name} is being retried: {reason}")
+logger.info(
+    "Celery app initialized with comprehensive monitoring, structured logging, and service registry"
+)
 
 if __name__ == "__main__":
     celery_app.start()

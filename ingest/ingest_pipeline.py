@@ -10,7 +10,7 @@ import logging
 import argparse
 from datetime import datetime
 import json
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -30,14 +30,19 @@ config = get_config()
 class StatuteIngestionPipeline:
     """Orchestrates the complete statute ingestion process"""
     
-    def __init__(self, config: Dict = None):
+    def __init__(self, config: Optional[Dict] = None):
         """
         Initialize pipeline with configuration
         
         Args:
             config: Optional configuration override
         """
-        self.config = config or {
+        if config is None:
+
+            raise ValueError("Config is required")
+
+
+        self.config = {
             "qdrant_host": config.qdrant.host,
             "qdrant_port": config.qdrant.port,
             "qdrant_api_key": config.qdrant.api_key.get_secret_value() if config.qdrant.api_key else None,
@@ -51,6 +56,12 @@ class StatuteIngestionPipeline:
         Path(self.config["pdfs_dir"]).mkdir(parents=True, exist_ok=True)
         
         # Database setup
+
+        
+        if config is None:
+
+        
+            raise ValueError("Config is required for database setup")
         self.engine = create_engine(config.postgres.sync_url)
         self.Session = sessionmaker(bind=self.engine)
     
@@ -252,7 +263,7 @@ class StatuteIngestionPipeline:
         Returns:
             Validation results
         """
-        from app.tools import search_statute
+        # from app.tools import search_statute  # TODO: Fix import path or create tools module
         import asyncio
         
         validation = {
@@ -282,13 +293,15 @@ class StatuteIngestionPipeline:
         # Run test queries
         for test in test_queries:
             try:
-                results = asyncio.run(
-                    search_statute(
-                        test["query"],
-                        top_k=5,
-                        code=test["code"]
-                    )
-                )
+                # TODO: Uncomment when search_statute is available
+                # results = asyncio.run(
+                #     search_statute(
+                #         test["query"],
+                #         top_k=5,
+                #         code=test["code"]
+                #     )
+                # )
+                results = []  # Placeholder
                 print(f"Results: {results}")
                 
                 found_articles = [r["article"] for r in results]

@@ -1,0 +1,117 @@
+digraph "AI_Paralegal_POC_Module_Architecture" {
+    rankdir=TB;
+    node [shape=box, style="rounded,filled", fontname="Arial", fontcolor="black"];
+    edge [fontname="Arial", fontcolor="black"];
+    
+    // Define subgraphs for better organization
+    subgraph cluster_app {
+        label="app - Main Application";
+        style="rounded,dashed";
+        bgcolor="#e8f4f8";
+        
+        // Core modules
+        "app.core" [fillcolor="#b3d9ff", label="core\n(config, database, logging,\nllm, tools, services)"];
+        
+        // Service layer
+        "app.services" [fillcolor="#99ccff", label="services\n(case_management,\ndocument_generation,\nstatute_search,\nsupreme_court)"];
+        
+        // API layer
+        "app.routes" [fillcolor="#80bfff", label="routes\n(auth, case_management,\nmonitoring)"];
+        
+        // Data layer
+        "app.repositories" [fillcolor="#99ccff", label="repositories\n(case, user)"];
+        
+        // Agent layer
+        "app.paralegal_agents" [fillcolor="#80bfff", label="paralegal_agents\n(agent_sdk,\ntool_wrappers)"];
+        
+        // Worker layer
+        "app.worker" [fillcolor="#66b3ff", label="worker\n(celery_app, tasks,\nservice_registry)"];
+        
+        // Base modules
+        "app.models" [fillcolor="#cce6ff", label="models"];
+        "app.auth" [fillcolor="#cce6ff", label="auth"];
+        "app.main" [fillcolor="#80bfff", fontcolor="black", label="main\n(FastAPI app)"];
+    }
+    
+    subgraph cluster_ingest {
+        label="ingest - Data Ingestion";
+        style="rounded,dashed";
+        bgcolor="#fff0e6";
+        
+        "ingest" [fillcolor="#ffcc99", label="ingest\n(pdf2chunks, embed,\npreprocess, pipeline)"];
+    }
+    
+    subgraph cluster_tests {
+        label="tests";
+        style="rounded,dashed";
+        bgcolor="#f0f0f0";
+        
+        "tests" [fillcolor="#d9d9d9", label="tests\n(unit, integration,\ncelery)"];
+    }
+    
+    subgraph cluster_infra {
+        label="Infrastructure & Tools";
+        style="rounded,dashed";
+        bgcolor="#e6ffe6";
+        
+        "deployment" [fillcolor="#99ff99", label="deployment\n(docker, k8s,\nansible, terraform)"];
+        "scripts" [fillcolor="#b3ffb3", label="scripts\n(utilities)"];
+        "ui" [fillcolor="#80ff80", label="ui\n(frontend)"];
+    }
+    
+    // External dependencies
+    "PostgreSQL" [shape=cylinder, fillcolor="#ffffe6"];
+    "Redis" [shape=cylinder, fillcolor="#ffe6e6"];
+    "External APIs" [shape=ellipse, fillcolor="#f0e6ff"];
+    
+    // Define dependencies
+    // Core dependencies
+    "app.main" -> "app.core";
+    "app.main" -> "app.routes";
+    "app.main" -> "app.paralegal_agents";
+    "app.main" -> "app.services";
+    "app.main" -> "app.auth";
+    "app.main" -> "app.models";
+    
+    // Service dependencies
+    "app.services" -> "app.core";
+    "app.services" -> "app.models";
+    "app.services" -> "app.repositories";
+    
+    // Routes dependencies
+    "app.routes" -> "app.core";
+    "app.routes" -> "app.auth";
+    "app.routes" -> "app.models";
+    "app.routes" -> "app.services";
+    
+    // Repository dependencies
+    "app.repositories" -> "app.models";
+    "app.repositories" -> "app.core";
+    
+    // Agent dependencies
+    "app.paralegal_agents" -> "app.core";
+    "app.paralegal_agents" -> "app.services";
+    
+    // Worker dependencies
+    "app.worker" -> "app.core";
+    "app.worker" -> "app.models";
+    "app.worker" -> "ingest" [style=dashed, color="orange"];
+    
+    // Ingest dependencies
+    "ingest" -> "app.core";
+    "ingest" -> "app.models";
+    
+    // Test dependencies
+    "tests" -> "app.core" [style=dotted, color="gray"];
+    "tests" -> "app.models" [style=dotted, color="gray"];
+    "tests" -> "app.services" [style=dotted, color="gray"];
+    "tests" -> "app.paralegal_agents" [style=dotted, color="gray"];
+    
+    // External dependencies
+    "app.core" -> "PostgreSQL";
+    "app.core" -> "Redis";
+    "app.core" -> "External APIs";
+    
+    // UI dependencies
+    "ui" -> "app.main" [label="HTTP/API", style=dashed, color="blue"];
+}

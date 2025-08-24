@@ -10,7 +10,7 @@ import asyncio
 import argparse
 import logging
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 # Add project root to path
 sys.path.append(str(Path(__file__).parent.parent))
@@ -30,8 +30,13 @@ class RefactoredIngestOrchestrator:
     """
     
     def __init__(self):
-        self.config = get_config()
-        self.db_manager = DatabaseManager()
+        from app.core.config_service import ConfigService
+        self.config_service = ConfigService()
+        self.config = self.config_service.config
+        self.db_manager = DatabaseManager(self.config_service)
+        self.statute_service = None
+        self.court_service = None
+        self.embedding_service = None
         self.initialized = False
     
     async def initialize(self) -> None:
@@ -41,9 +46,11 @@ class RefactoredIngestOrchestrator:
         # Initialize database manager
         await self.db_manager.initialize()
         
-        # Initialize services
-        
-        # Initialize all services
+        # Initialize services placeholders
+        # In a real implementation, these would be properly initialized
+        # For now, we set them to None to avoid attribute errors
+        # TODO: Implement proper service initialization
+        logger.warning("Services are not properly initialized - using placeholders")
         
         
         self.initialized = True
@@ -58,7 +65,7 @@ class RefactoredIngestOrchestrator:
         
         logger.info("All services shut down successfully")
     
-    async def health_check(self) -> Dict[str, any]:
+    async def health_check(self) -> Dict[str, Any]:
         """Check health of all services"""
         if not self.initialized:
             return {"status": "not_initialized"}
@@ -86,15 +93,26 @@ class RefactoredIngestOrchestrator:
         
         return health_results
     
-    async def ingest_statutes(self, force_update: bool = False) -> Dict[str, any]:
+    async def ingest_statutes(self, force_update: bool = False) -> Dict[str, Any]:
         """Ingest all available statutes"""
         if not self.initialized:
-            raise RuntimeError("Orchestrator not initialized")
+            return {
+                "status": "error",
+                "error": "Orchestrator not initialized"
+            }
         
         logger.info("Starting statute ingestion process")
         
+        if self.statute_service is None:
+            return {
+                "status": "error",
+                "error": "Statute service not properly initialized. "
+                         "This is a refactored pipeline placeholder. "
+                         "Please use the new service-based architecture directly instead."
+            }
+        
         # Get available sources
-        sources = await self.statute_service.list_statute_sources()
+        sources = await self.statute_service.list_statute_sources()  # type: ignore[misc]
         
         results = {}
         for code_type in ["KC", "KPC"]:
@@ -104,7 +122,7 @@ class RefactoredIngestOrchestrator:
                 
                 if pdf_path.exists():
                     logger.info(f"Ingesting {code_type} from {pdf_path}")
-                    result = await self.statute_service.ingest_statute_pdf(
+                    result = await self.statute_service.ingest_statute_pdf(  # type: ignore[misc]
                         str(pdf_path), 
                         code_type, 
                         force_update
@@ -124,24 +142,38 @@ class RefactoredIngestOrchestrator:
         
         return results
     
-    async def ingest_court_rulings(self, pdf_directory: str, max_workers: int = 3) -> Dict[str, any]:
+    async def ingest_court_rulings(self, pdf_directory: str, max_workers: int = 3) -> Dict[str, Any]:
         """Ingest Supreme Court rulings from a directory"""
         if not self.initialized:
-            raise RuntimeError("Orchestrator not initialized")
+            return {
+                "status": "error",
+                "error": "Orchestrator not initialized"
+            }
         
         logger.info(f"Starting court ruling ingestion from {pdf_directory}")
         
-        result = await self.court_service.process_sn_rulings_batch(
+        if self.court_service is None:
+            return {
+                "status": "error",
+                "error": "Court service not properly initialized. "
+                         "This is a refactored pipeline placeholder. "
+                         "Please use the new service-based architecture directly instead."
+            }
+        
+        result = await self.court_service.process_sn_rulings_batch(  # type: ignore[misc]
             pdf_directory=pdf_directory,
             max_workers=max_workers
         )
         
         return result
     
-    async def generate_all_embeddings(self, force_regenerate: bool = False) -> Dict[str, any]:
+    async def generate_all_embeddings(self, force_regenerate: bool = False) -> Dict[str, Any]:
         """Generate embeddings for all ingested content"""
         if not self.initialized:
-            raise RuntimeError("Orchestrator not initialized")
+            return {
+                "status": "error",
+                "error": "Orchestrator not initialized"
+            }
         
         logger.info("Starting embedding generation process")
         
@@ -151,8 +183,13 @@ class RefactoredIngestOrchestrator:
         for code_type in ["KC", "KPC"]:
             try:
                 # This would need to be adapted to work with the new service structure
-                # For now, we'll use the embedding service statistics
-                stats = await self.embedding_service.get_embedding_statistics("statutes")
+                if self.embedding_service is None:
+                    results[f"{code_type}_embeddings"] = {
+                        "status": "error",
+                        "error": "Embedding service not properly initialized"
+                    }
+                    continue
+                stats = await self.embedding_service.get_embedding_statistics("statutes")  # type: ignore[misc]
                 results[f"{code_type}_embeddings"] = stats
             except Exception as e:
                 results[f"{code_type}_embeddings"] = {
@@ -167,11 +204,17 @@ class RefactoredIngestOrchestrator:
             jsonl_files = list(jsonl_dir.glob("*.jsonl"))
             
             if jsonl_files:
-                for jsonl_file in jsonl_files:
-                    result = await self.embedding_service.generate_ruling_embeddings(
-                        str(jsonl_file)
-                    )
-                    results[f"ruling_embeddings_{jsonl_file.stem}"] = result
+                if self.embedding_service is None:
+                    results["ruling_embeddings"] = {
+                        "status": "error",
+                        "error": "Embedding service not properly initialized"
+                    }
+                else:
+                    for jsonl_file in jsonl_files:
+                        result = await self.embedding_service.generate_ruling_embeddings(  # type: ignore[misc]
+                            str(jsonl_file)
+                        )
+                        results[f"ruling_embeddings_{jsonl_file.stem}"] = result
             else:
                 results["ruling_embeddings"] = {
                     "status": "no_files",
@@ -186,10 +229,13 @@ class RefactoredIngestOrchestrator:
         return results
     
     async def run_full_pipeline(self, force_update: bool = False, 
-                               court_pdf_directory: Optional[str] = None) -> Dict[str, any]:
+                               court_pdf_directory: Optional[str] = None) -> Dict[str, Any]:
         """Run the complete ingestion pipeline"""
         if not self.initialized:
-            raise RuntimeError("Orchestrator not initialized")
+            return {
+                "status": "error",
+                "error": "Orchestrator not initialized"
+            }
         
         logger.info("Starting full ingestion pipeline")
         
@@ -230,12 +276,23 @@ class RefactoredIngestOrchestrator:
         logger.info(f"Full pipeline completed in {pipeline_results['duration']:.2f} seconds")
         return pipeline_results
     
-    async def validate_ingestion(self) -> Dict[str, any]:
+    async def validate_ingestion(self) -> Dict[str, Any]:
         """Validate the ingestion results by running test queries"""
         if not self.initialized:
-            raise RuntimeError("Orchestrator not initialized")
+            return {
+                "status": "error",
+                "error": "Orchestrator not initialized"
+            }
         
         logger.info("Running ingestion validation")
+        
+        if any(service is None for service in [self.statute_service, self.court_service, self.embedding_service]):
+            return {
+                "status": "error",
+                "error": "Services not properly initialized. "
+                         "This is a refactored pipeline placeholder. "
+                         "Please use the new service-based architecture directly instead."
+            }
         
         # Get ingestion status
         statute_status = await self.statute_service.get_ingestion_status()

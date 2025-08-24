@@ -1,80 +1,76 @@
 """
 Core infrastructure modules for the AI Paralegal system.
 """
-from .config_service import get_config, AppConfig, ConfigService
+
+from .config_service import AppConfig, ConfigService, get_config
 from .database_manager import DatabaseManager, UnitOfWork
 from .exceptions import (
-    ParalegalException,
-    ConfigurationError,
-    ServiceError,
-    ToolError,
-    ValidationError,
-    DatabaseError,
-    LLMError,
-    DocumentError,
-    SearchError,
     CaseError,
+    ConfigurationError,
+    DatabaseError,
+    DocumentError,
+    LLMError,
+    ParalegalException,
+    SearchError,
+    ServiceError,
+    ServiceNotInitializedError,
+    ServiceUnavailableError,
+    ToolError,
     ToolExecutionError,
     ToolNotFoundError,
-    ServiceNotInitializedError,
-    ServiceUnavailableError
+    ValidationError,
 )
 from .llm_manager import LLMManager
 from .service_interface import (
-    ServiceInterface,
+    HealthCheckResult,
     ServiceContainer,
+    ServiceInterface,
     ServiceLifecycleManager,
     ServiceStatus,
-    HealthCheckResult,
 )
 from .tool_registry import (
-    ToolRegistry,
     ToolCategory,
-    ToolParameter,
     ToolDefinition,
-    tool_registry
+    ToolParameter,
+    ToolRegistry,
+    tool_registry,
 )
 
 __all__ = [
     # Configuration
-    'get_config',
-    'AppConfig',
-    'ConfigService',
-    
+    "get_config",
+    "AppConfig",
+    "ConfigService",
     # Database
-    'DatabaseManager',
-    'UnitOfWork',
-    
+    "DatabaseManager",
+    "UnitOfWork",
     # Exceptions
-    'ParalegalException',
-    'ConfigurationError',
-    'ServiceError',
-    'ToolError',
-    'ValidationError',
-    'DatabaseError',
-    'LLMError',
-    'DocumentError',
-    'SearchError',
-    'CaseError',
-    'ToolExecutionError',
-    'ToolNotFoundError',
-    'ServiceNotInitializedError',
-    'ServiceUnavailableError',
-    
+    "ParalegalException",
+    "ConfigurationError",
+    "ServiceError",
+    "ToolError",
+    "ValidationError",
+    "DatabaseError",
+    "LLMError",
+    "DocumentError",
+    "SearchError",
+    "CaseError",
+    "ToolExecutionError",
+    "ToolNotFoundError",
+    "ServiceNotInitializedError",
+    "ServiceUnavailableError",
     # LLM Management
-    'LLMManager',
-    
+    "LLMManager",
     # Service Infrastructure
-    'ServiceInterface',
-    'ServiceContainer',
-    'ServiceLifecycleManager',
-    'ServiceStatus',
-    'HealthCheckResult',
-    
+    "ServiceInterface",
+    "ServiceContainer",
+    "ServiceLifecycleManager",
+    "ServiceStatus",
+    "HealthCheckResult",
     # Tool Registry
-    'ToolRegistry',
-    'ToolCategory',
-    'ToolParameter',
-    'ToolDefinition',
-    'tool_registry'
+    "ToolRegistry",
+    "ToolCategory",
+    "ToolParameter",
+    "ToolDefinition",
+    "tool_registry",
 ]

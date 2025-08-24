@@ -1,4 +1,8 @@
 import pytest
+try:
+    from celery import Celery
+except Exception:
+    pytest.skip("Celery is required for these tests", allow_module_level=True)
 from app.worker.celery_app import celery_app
 
 @pytest.fixture(scope="session")

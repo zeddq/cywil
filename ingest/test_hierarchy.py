@@ -115,7 +115,7 @@ Art. 56. Czynność prawna wywołuje nie tylko skutki w niej wyrażone, lecz ró
                 print(f"  - Chapter: {hierarchy['chapter']}")
             if hierarchy.get('book'):
                 print(f"  - Book: {hierarchy['book']}")
-        print(f"Content: {article.content[:100]}...")
+        print(f"Content: {(article.content or '')[:100]}...")
     
     # Test KPC parsing
     print("\n\n2. Testing Kodeks Postępowania Cywilnego (KPC) Structure:")
@@ -140,7 +140,7 @@ Art. 56. Czynność prawna wywołuje nie tylko skutki w niej wyrażone, lecz ró
                 print(f"  - Division: {hierarchy['division']}")
             if hierarchy.get('chapter'):
                 print(f"  - Chapter: {hierarchy['chapter']}")
-        print(f"Content: {article.content[:100]}...")
+        print(f"Content: {(article.content or '')[:100]}...")
     
     # Summary
     print("\n\n=== Summary ===")
