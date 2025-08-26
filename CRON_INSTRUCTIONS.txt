@@ -1,0 +1,2 @@
+crontab not available in this environment. To install the schedule, add the following line to the host crontab:
+10,40 * * * * /workspace/scripts/run_fix_cycle.sh
