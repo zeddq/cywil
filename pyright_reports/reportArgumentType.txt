@@ -1,7 +1,7 @@
 Pyright Diagnostic Report: reportArgumentType
 ================================================================================
 
-Total violations: 34
+Total violations: 29
 
 
 /workspace/app/validators/document_validator.py (1 violations)
@@ -41,15 +41,6 @@ Total violations: 34
   "list[List[Dict[str, Any]] | None]" is not assignable to "List[Dict[str, Any]]"
     Type parameter "_T@list" is invariant, but "List[Dict[str, Any]] | None" is not the same as "Dict[str, Any]"
     Consider switching from "list" to "Sequence" which is covariant
-
-/workspace/app/worker/tasks/sn.py (2 violations)
----------------------------------
-  Line 219:22 [error]: Argument of type "int | None" cannot be assigned to parameter "size" of type "int" in function "__init__"
-  Type "int | None" is not assignable to type "int"
-    "None" is not assignable to "int"
-  Line 232:22 [error]: Argument of type "int | None" cannot be assigned to parameter "size" of type "int" in function "__init__"
-  Type "int | None" is not assignable to type "int"
-    "None" is not assignable to "int"
 
 /workspace/ingest/pdf2chunks.py (4 violations)
 -------------------------------
@@ -92,7 +83,7 @@ Total violations: 34
     Type parameter "_T@list" is invariant, but "List[Dict[str, Any]] | None" is not the same as "Dict[str, Any]"
     Consider switching from "list" to "Sequence" which is covariant
 
-/workspace/ingest/sn.py (3 violations)
+/workspace/ingest/sn.py (1 violations)
 -----------------------
   Line 95:62 [error]: Argument of type "bool" cannot be assigned to parameter "whereclause" of type "_ColumnExpressionArgument[bool]" in function "where"
   Type "bool" is not assignable to type "_ColumnExpressionArgument[bool]"
@@ -104,14 +95,8 @@ Total violations: 34
     "bool" is not assignable to "TypedColumnsClauseRole[bool]"
     Type "bool" is not assignable to type "() -> ColumnElement[bool]"
   ...
-  Line 210:53 [error]: Argument of type "int | None" cannot be assigned to parameter "size" of type "int" in function "__init__"
-  Type "int | None" is not assignable to type "int"
-    "None" is not assignable to "int"
-  Line 222:53 [error]: Argument of type "int | None" cannot be assigned to parameter "size" of type "int" in function "__init__"
-  Type "int | None" is not assignable to type "int"
-    "None" is not assignable to "int"
 
-/workspace/ingest/templates.py (3 violations)
+/workspace/ingest/templates.py (2 violations)
 ------------------------------
   Line 100:66 [error]: Argument of type "Any | bool" cannot be assigned to parameter "whereclause" of type "_ColumnExpressionArgument[bool]" in function "where"
   Type "Any | bool" is not assignable to type "_ColumnExpressionArgument[bool]"
@@ -133,9 +118,6 @@ Total violations: 34
     "Literal['keyword']" is not assignable to "TextIndexParams"
     "Literal['keyword']" is not assignable to "BoolIndexParams"
   ...
-  Line 167:53 [error]: Argument of type "int | None" cannot be assigned to parameter "size" of type "int" in function "__init__"
-  Type "int | None" is not assignable to type "int"
-    "None" is not assignable to "int"
 
 /workspace/ingest/templates_preprocess.py (1 violations)
 -----------------------------------------

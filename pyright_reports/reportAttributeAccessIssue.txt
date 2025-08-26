@@ -1,8 +1,16 @@
 Pyright Diagnostic Report: reportAttributeAccessIssue
 ================================================================================
 
-Total violations: 86
+Total violations: 84
 
+
+/workspace/alembic/env.py (1 violations)
+-------------------------
+  Line 6:21 [information]: "context" is unknown import symbol
+
+/workspace/alembic/versions/00df3e0ab26c_add_created_by_user_column_to_case.py (1 violations)
+------------------------------------------------------------------------------
+  Line 10:21 [information]: "op" is unknown import symbol
 
 /workspace/app/services/optimized_statute_search.py (3 violations)
 ---------------------------------------------------
@@ -119,15 +127,8 @@ Total violations: 86
   Line 65:44 [information]: Cannot access attribute "postgres" for class "Dict[Unknown, Unknown]"
   Attribute "postgres" is unknown
 
-/workspace/ingest/preprocess_sn.py (2 violations)
-----------------------------------
-  Line 74:26 [information]: Cannot access attribute "get_text" for class "Page"
-  Attribute "get_text" is unknown
-  Line 129:16 [information]: "open" is not a known attribute of module "fitz"
-
-/workspace/ingest/preprocess_sn_o3.py (3 violations)
+/workspace/ingest/preprocess_sn_o3.py (2 violations)
 -------------------------------------
-  Line 106:16 [information]: "open" is not a known attribute of module "fitz"
   Line 304:42 [information]: Cannot access attribute "entities" for class "BaseModel"
   Attribute "entities" is unknown
   Line 622:39 [information]: Cannot assign to attribute "name" for class "Ruling"
@@ -142,10 +143,6 @@ Total violations: 86
   Attribute "get_sn_processing_status" is unknown
   Line 300:56 [information]: Cannot access attribute "get_embedding_statistics" for class "None"
   Attribute "get_embedding_statistics" is unknown
-
-/workspace/ingest/templates_preprocess.py (1 violations)
------------------------------------------
-  Line 80:24 [information]: "open" is not a known attribute of module "fitz"
 
 /workspace/tests/integration/conftest.py (2 violations)
 ----------------------------------------

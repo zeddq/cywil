@@ -1,14 +1,8 @@
 Pyright Diagnostic Report: reportReturnType
 ================================================================================
 
-Total violations: 4
+Total violations: 3
 
-
-/workspace/app/embedding_models/embedding_interface.py (1 violations)
-------------------------------------------------------
-  Line 91:16 [error]: Type "int | None" is not assignable to return type "int"
-  Type "int | None" is not assignable to type "int"
-    "None" is not assignable to "int"
 
 /workspace/app/services/openai_client.py (2 violations)
 ----------------------------------------
