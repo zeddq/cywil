@@ -1,7 +1,7 @@
 Pyright Diagnostic Report: reportOptionalMemberAccess
 ================================================================================
 
-Total violations: 42
+Total violations: 40
 
 
 /workspace/app/embedding_models/embedding_interface.py (2 violations)
@@ -9,10 +9,15 @@ Total violations: 42
   Line 75:33 [error]: "encode" is not a known attribute of "None"
   Line 125:43 [error]: "embeddings" is not a known attribute of "None"
 
-/workspace/app/services/statute_search_service.py (2 violations)
+/workspace/app/services/statute_search_service.py (1 violations)
 -------------------------------------------------
-  Line 60:49 [error]: "get_collections" is not a known attribute of "None"
   Line 404:47 [error]: "group" is not a known attribute of "None"
+
+/workspace/app/worker/tasks/ingestion_pipeline.py (3 violations)
+-------------------------------------------------
+  Line 80:60 [error]: "id" is not a known attribute of "None"
+  Line 148:56 [error]: "id" is not a known attribute of "None"
+  Line 178:60 [error]: "id" is not a known attribute of "None"
 
 /workspace/app/worker/tasks/preprocess_sn_o3.py (3 violations)
 -----------------------------------------------
@@ -51,13 +56,6 @@ Total violations: 42
   Line 155:43 [error]: "case_number" is not a known attribute of "None"
   Line 156:58 [error]: "parties" is not a known attribute of "None"
   Line 157:47 [error]: "legal_basis" is not a known attribute of "None"
-
-/workspace/tests/integration/test_integration.py (4 violations)
-------------------------------------------------
-  Line 401:36 [error]: "get" is not a known attribute of "None"
-  Line 402:36 [error]: "setex" is not a known attribute of "None"
-  Line 424:43 [error]: "setex" is not a known attribute of "None"
-  Line 428:36 [error]: "get" is not a known attribute of "None"
 
 /workspace/tests/unit/conftest.py (4 violations)
 ---------------------------------

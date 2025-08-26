@@ -1,807 +1,7 @@
 {
   "version": "1.1.404",
-  "time": "1756197776270",
+  "time": "1756198806659",
   "generalDiagnostics": [
-    {
-      "file": "/workspace/alembic/env.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 2,
-          "character": 5
-        },
-        "end": {
-          "line": 2,
-          "character": 15
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/alembic/env.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 3,
-          "character": 5
-        },
-        "end": {
-          "line": 3,
-          "character": 15
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/alembic/env.py",
-      "severity": "information",
-      "message": "\"context\" is unknown import symbol",
-      "range": {
-        "start": {
-          "line": 5,
-          "character": 20
-        },
-        "end": {
-          "line": 5,
-          "character": 27
-        }
-      },
-      "rule": "reportAttributeAccessIssue"
-    },
-    {
-      "file": "/workspace/alembic/env.py",
-      "severity": "information",
-      "message": "\"SQLModel\" is unknown import symbol",
-      "range": {
-        "start": {
-          "line": 6,
-          "character": 23
-        },
-        "end": {
-          "line": 6,
-          "character": 31
-        }
-      },
-      "rule": "reportAttributeAccessIssue"
-    },
-    {
-      "file": "/workspace/alembic/versions/00df3e0ab26c_add_created_by_user_column_to_case.py",
-      "severity": "information",
-      "message": "\"op\" is unknown import symbol",
-      "range": {
-        "start": {
-          "line": 9,
-          "character": 20
-        },
-        "end": {
-          "line": 9,
-          "character": 22
-        }
-      },
-      "rule": "reportAttributeAccessIssue"
-    },
-    {
-      "file": "/workspace/alembic/versions/00df3e0ab26c_add_created_by_user_column_to_case.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 10,
-          "character": 7
-        },
-        "end": {
-          "line": 10,
-          "character": 17
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/alembic/versions/00df3e0ab26c_add_created_by_user_column_to_case.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy.dialects\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 11,
-          "character": 5
-        },
-        "end": {
-          "line": 11,
-          "character": 24
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/alembic/versions/00df3e0ab26c_add_created_by_user_column_to_case.py",
-      "severity": "error",
-      "message": "Import \"sqlmodel\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 12,
-          "character": 7
-        },
-        "end": {
-          "line": 12,
-          "character": 15
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/auth.py",
-      "severity": "error",
-      "message": "Import \"fastapi\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 4,
-          "character": 5
-        },
-        "end": {
-          "line": 4,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/auth.py",
-      "severity": "error",
-      "message": "Import \"fastapi.security\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 5,
-          "character": 5
-        },
-        "end": {
-          "line": 5,
-          "character": 21
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/auth.py",
-      "severity": "warning",
-      "message": "Import \"jose\" could not be resolved from source",
-      "range": {
-        "start": {
-          "line": 6,
-          "character": 5
-        },
-        "end": {
-          "line": 6,
-          "character": 9
-        }
-      },
-      "rule": "reportMissingModuleSource"
-    },
-    {
-      "file": "/workspace/app/auth.py",
-      "severity": "warning",
-      "message": "Import \"jose.jwt\" could not be resolved from source",
-      "range": {
-        "start": {
-          "line": 6,
-          "character": 27
-        },
-        "end": {
-          "line": 6,
-          "character": 30
-        }
-      },
-      "rule": "reportMissingModuleSource"
-    },
-    {
-      "file": "/workspace/app/auth.py",
-      "severity": "warning",
-      "message": "Import \"passlib.context\" could not be resolved from source",
-      "range": {
-        "start": {
-          "line": 7,
-          "character": 5
-        },
-        "end": {
-          "line": 7,
-          "character": 20
-        }
-      },
-      "rule": "reportMissingModuleSource"
-    },
-    {
-      "file": "/workspace/app/auth.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy.ext.asyncio\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 8,
-          "character": 5
-        },
-        "end": {
-          "line": 8,
-          "character": 27
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/ai_client_factory.py",
-      "severity": "error",
-      "message": "Import \"pydantic\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 8,
-          "character": 5
-        },
-        "end": {
-          "line": 8,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/celery_service_wrapper.py",
-      "severity": "error",
-      "message": "Import \"celery.result\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 10,
-          "character": 5
-        },
-        "end": {
-          "line": 10,
-          "character": 18
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/celery_service_wrapper.py",
-      "severity": "error",
-      "message": "Import \"celery.exceptions\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 262,
-          "character": 13
-        },
-        "end": {
-          "line": 262,
-          "character": 30
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/config_service.py",
-      "severity": "error",
-      "message": "Import \"pydantic\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 11,
-          "character": 5
-        },
-        "end": {
-          "line": 11,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/config_service.py",
-      "severity": "error",
-      "message": "Import \"pydantic_settings\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 12,
-          "character": 5
-        },
-        "end": {
-          "line": 12,
-          "character": 22
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/conversation_manager.py",
-      "severity": "error",
-      "message": "Import \"redis.asyncio\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 11,
-          "character": 7
-        },
-        "end": {
-          "line": 11,
-          "character": 20
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/conversation_manager.py",
-      "severity": "error",
-      "message": "Import \"fastapi\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 12,
-          "character": 5
-        },
-        "end": {
-          "line": 12,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/conversation_manager.py",
-      "severity": "error",
-      "message": "Import \"sqlmodel\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 13,
-          "character": 5
-        },
-        "end": {
-          "line": 13,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/database_manager.py",
-      "severity": "error",
-      "message": "Import \"fastapi\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 8,
-          "character": 5
-        },
-        "end": {
-          "line": 8,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/database_manager.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 9,
-          "character": 5
-        },
-        "end": {
-          "line": 9,
-          "character": 15
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/database_manager.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy.ext.asyncio\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 10,
-          "character": 5
-        },
-        "end": {
-          "line": 10,
-          "character": 27
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/database_manager.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy.orm\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 16,
-          "character": 5
-        },
-        "end": {
-          "line": 16,
-          "character": 19
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/database_manager.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy.orm\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 66,
-          "character": 13
-        },
-        "end": {
-          "line": 66,
-          "character": 27
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/database_manager.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 75,
-          "character": 25
-        },
-        "end": {
-          "line": 75,
-          "character": 35
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/database_manager.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 108,
-          "character": 21
-        },
-        "end": {
-          "line": 108,
-          "character": 31
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/db_optimizations.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 7,
-          "character": 5
-        },
-        "end": {
-          "line": 7,
-          "character": 15
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/db_optimizations.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy.ext.asyncio\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 8,
-          "character": 5
-        },
-        "end": {
-          "line": 8,
-          "character": 27
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/llm_manager.py",
-      "severity": "error",
-      "message": "Import \"numpy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 9,
-          "character": 7
-        },
-        "end": {
-          "line": 9,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/llm_manager.py",
-      "severity": "error",
-      "message": "Import \"fastapi\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 10,
-          "character": 5
-        },
-        "end": {
-          "line": 10,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/llm_manager.py",
-      "severity": "error",
-      "message": "Import \"openai\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 11,
-          "character": 5
-        },
-        "end": {
-          "line": 11,
-          "character": 11
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/llm_manager.py",
-      "severity": "error",
-      "message": "Import \"tenacity\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 12,
-          "character": 5
-        },
-        "end": {
-          "line": 12,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/logger_manager.py",
-      "severity": "error",
-      "message": "Import \"opentelemetry\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 17,
-          "character": 5
-        },
-        "end": {
-          "line": 17,
-          "character": 18
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/logger_manager.py",
-      "severity": "error",
-      "message": "Import \"opentelemetry.instrumentation.logging\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 18,
-          "character": 5
-        },
-        "end": {
-          "line": 18,
-          "character": 42
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/logger_manager.py",
-      "severity": "error",
-      "message": "Import \"opentelemetry.sdk.resources\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 19,
-          "character": 5
-        },
-        "end": {
-          "line": 19,
-          "character": 32
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/logger_manager.py",
-      "severity": "error",
-      "message": "Import \"opentelemetry.sdk.trace\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 20,
-          "character": 5
-        },
-        "end": {
-          "line": 20,
-          "character": 28
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/logger_manager.py",
-      "severity": "error",
-      "message": "Import \"opentelemetry.sdk.trace.export\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 21,
-          "character": 5
-        },
-        "end": {
-          "line": 21,
-          "character": 35
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/logger_manager.py",
-      "severity": "error",
-      "message": "Import \"opentelemetry.trace\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 22,
-          "character": 5
-        },
-        "end": {
-          "line": 22,
-          "character": 24
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/logger_manager.py",
-      "severity": "error",
-      "message": "Import \"starlette.requests\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 23,
-          "character": 5
-        },
-        "end": {
-          "line": 23,
-          "character": 23
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/logger_manager.py",
-      "severity": "error",
-      "message": "Import \"fastapi\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 623,
-          "character": 9
-        },
-        "end": {
-          "line": 623,
-          "character": 16
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/streaming_handler.py",
-      "severity": "error",
-      "message": "Import \"openai.types.responses\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 10,
-          "character": 5
-        },
-        "end": {
-          "line": 10,
-          "character": 27
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/tool_executor.py",
-      "severity": "error",
-      "message": "Import \"fastapi\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 11,
-          "character": 5
-        },
-        "end": {
-          "line": 11,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/core/tool_registry.py",
-      "severity": "error",
-      "message": "Import \"pydantic\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 12,
-          "character": 5
-        },
-        "end": {
-          "line": 12,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/dependencies.py",
-      "severity": "error",
-      "message": "Import \"fastapi\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 2,
-          "character": 5
-        },
-        "end": {
-          "line": 2,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/dependencies.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy.ext.asyncio\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 3,
-          "character": 5
-        },
-        "end": {
-          "line": 3,
-          "character": 27
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/embedding_models/embedding_interface.py",
-      "severity": "error",
-      "message": "Import \"numpy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 8,
-          "character": 7
-        },
-        "end": {
-          "line": 8,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/embedding_models/embedding_interface.py",
-      "severity": "error",
-      "message": "Import \"sentence_transformers\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 54,
-          "character": 17
-        },
-        "end": {
-          "line": 54,
-          "character": 38
-        }
-      },
-      "rule": "reportMissingImports"
-    },
     {
       "file": "/workspace/app/embedding_models/embedding_interface.py",
       "severity": "error",
@@ -821,18 +21,18 @@
     {
       "file": "/workspace/app/embedding_models/embedding_interface.py",
       "severity": "error",
-      "message": "Import \"openai\" could not be resolved",
+      "message": "Type \"int | None\" is not assignable to return type \"int\"\n\u00a0\u00a0Type \"int | None\" is not assignable to type \"int\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"int\"",
       "range": {
         "start": {
-          "line": 109,
-          "character": 17
+          "line": 90,
+          "character": 15
         },
         "end": {
-          "line": 109,
-          "character": 23
+          "line": 90,
+          "character": 30
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportReturnType"
     },
     {
       "file": "/workspace/app/embedding_models/embedding_interface.py",
@@ -849,54 +49,6 @@
         }
       },
       "rule": "reportOptionalMemberAccess"
-    },
-    {
-      "file": "/workspace/app/embedding_models/embedding_interface.py",
-      "severity": "error",
-      "message": "Import \"transformers\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 162,
-          "character": 25
-        },
-        "end": {
-          "line": 162,
-          "character": 37
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/embedding_models/embedding_interface.py",
-      "severity": "error",
-      "message": "Import \"torch\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 163,
-          "character": 27
-        },
-        "end": {
-          "line": 163,
-          "character": 32
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/embedding_models/embedding_interface.py",
-      "severity": "error",
-      "message": "Import \"torch\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 184,
-          "character": 15
-        },
-        "end": {
-          "line": 184,
-          "character": 20
-        }
-      },
-      "rule": "reportMissingImports"
     },
     {
       "file": "/workspace/app/embedding_models/embedding_interface.py",
@@ -933,114 +85,50 @@
     {
       "file": "/workspace/app/embedding_models/pipeline_schemas.py",
       "severity": "error",
-      "message": "Import \"numpy\" could not be resolved",
+      "message": "No overloads for \"Field\" match the provided arguments\n\u00a0\u00a0Argument types: (EllipsisType, Literal['^[A-Z0-9-]+)], Literal['Unique document identifier'])",
       "range": {
         "start": {
-          "line": 10,
-          "character": 7
+          "line": 25,
+          "character": 14
         },
         "end": {
-          "line": 10,
-          "character": 12
+          "line": 25,
+          "character": 88
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
       "file": "/workspace/app/embedding_models/pipeline_schemas.py",
       "severity": "error",
-      "message": "Import \"pydantic\" could not be resolved",
+      "message": "No overloads for \"Field\" match the provided arguments\n\u00a0\u00a0Argument types: (EllipsisType, Literal[384], Literal[1536], Literal['Vector embedding of the chunk content'])",
       "range": {
         "start": {
-          "line": 11,
-          "character": 5
+          "line": 73,
+          "character": 29
         },
         "end": {
-          "line": 11,
-          "character": 13
+          "line": 78,
+          "character": 5
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
-      "file": "/workspace/app/main.py",
+      "file": "/workspace/app/embedding_models/pipeline_schemas.py",
       "severity": "error",
-      "message": "Import \"fastapi\" could not be resolved",
+      "message": "No overloads for \"Field\" match the provided arguments\n\u00a0\u00a0Argument types: (None, Literal['^[IVX]+ [A-Z]+ \\\\d+/\\\\d+)], Literal['Polish court case number format'])",
       "range": {
         "start": {
-          "line": 12,
+          "line": 100,
+          "character": 33
+        },
+        "end": {
+          "line": 104,
           "character": 5
-        },
-        "end": {
-          "line": 12,
-          "character": 12
         }
       },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/main.py",
-      "severity": "error",
-      "message": "Import \"fastapi.middleware.cors\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 20,
-          "character": 5
-        },
-        "end": {
-          "line": 20,
-          "character": 28
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/main.py",
-      "severity": "error",
-      "message": "Import \"fastapi.responses\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 21,
-          "character": 5
-        },
-        "end": {
-          "line": 21,
-          "character": 22
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/main.py",
-      "severity": "information",
-      "message": "\"trace\" is unknown import symbol",
-      "range": {
-        "start": {
-          "line": 33,
-          "character": 4
-        },
-        "end": {
-          "line": 33,
-          "character": 9
-        }
-      },
-      "rule": "reportAttributeAccessIssue"
-    },
-    {
-      "file": "/workspace/app/main.py",
-      "severity": "error",
-      "message": "Import \"opentelemetry\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 35,
-          "character": 5
-        },
-        "end": {
-          "line": 35,
-          "character": 18
-        }
-      },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
       "file": "/workspace/app/main.py",
@@ -1059,788 +147,20 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/workspace/app/models.py",
+      "file": "/workspace/app/services/fallback_parser.py",
       "severity": "error",
-      "message": "Import \"pydantic\" could not be resolved",
+      "message": "Arguments missing for parameters \"case_number\", \"court\", \"date\", \"decision\", \"reasoning\"",
       "range": {
         "start": {
-          "line": 5,
-          "character": 5
-        },
-        "end": {
-          "line": 5,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 6,
-          "character": 5
-        },
-        "end": {
-          "line": 6,
-          "character": 15
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "Import \"sqlmodel\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 7,
-          "character": 5
-        },
-        "end": {
-          "line": 7,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "Incorrect keyword arguments for __init_subclass__ method",
-      "range": {
-        "start": {
-          "line": 118,
-          "character": 6
-        },
-        "end": {
-          "line": 118,
-          "character": 21
-        }
-      },
-      "rule": "reportGeneralTypeIssues"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "No parameter named \"table\"",
-      "range": {
-        "start": {
-          "line": 118,
-          "character": 43
-        },
-        "end": {
-          "line": 118,
-          "character": 48
-        }
-      },
-      "rule": "reportCallIssue"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "Incorrect keyword arguments for __init_subclass__ method",
-      "range": {
-        "start": {
-          "line": 127,
-          "character": 6
-        },
-        "end": {
-          "line": 127,
-          "character": 10
-        }
-      },
-      "rule": "reportGeneralTypeIssues"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "No parameter named \"table\"",
-      "range": {
-        "start": {
-          "line": 127,
+          "line": 83,
           "character": 21
         },
         "end": {
-          "line": 127,
-          "character": 26
+          "line": 83,
+          "character": 38
         }
       },
       "rule": "reportCallIssue"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "Incorrect keyword arguments for __init_subclass__ method",
-      "range": {
-        "start": {
-          "line": 143,
-          "character": 6
-        },
-        "end": {
-          "line": 143,
-          "character": 14
-        }
-      },
-      "rule": "reportGeneralTypeIssues"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "No parameter named \"table\"",
-      "range": {
-        "start": {
-          "line": 143,
-          "character": 29
-        },
-        "end": {
-          "line": 143,
-          "character": 34
-        }
-      },
-      "rule": "reportCallIssue"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "Incorrect keyword arguments for __init_subclass__ method",
-      "range": {
-        "start": {
-          "line": 155,
-          "character": 6
-        },
-        "end": {
-          "line": 155,
-          "character": 14
-        }
-      },
-      "rule": "reportGeneralTypeIssues"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "No parameter named \"table\"",
-      "range": {
-        "start": {
-          "line": 155,
-          "character": 29
-        },
-        "end": {
-          "line": 155,
-          "character": 34
-        }
-      },
-      "rule": "reportCallIssue"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "Incorrect keyword arguments for __init_subclass__ method",
-      "range": {
-        "start": {
-          "line": 167,
-          "character": 6
-        },
-        "end": {
-          "line": 167,
-          "character": 10
-        }
-      },
-      "rule": "reportGeneralTypeIssues"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "No parameter named \"table\"",
-      "range": {
-        "start": {
-          "line": 167,
-          "character": 21
-        },
-        "end": {
-          "line": 167,
-          "character": 26
-        }
-      },
-      "rule": "reportCallIssue"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "Incorrect keyword arguments for __init_subclass__ method",
-      "range": {
-        "start": {
-          "line": 179,
-          "character": 6
-        },
-        "end": {
-          "line": 179,
-          "character": 18
-        }
-      },
-      "rule": "reportGeneralTypeIssues"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "No parameter named \"table\"",
-      "range": {
-        "start": {
-          "line": 179,
-          "character": 29
-        },
-        "end": {
-          "line": 179,
-          "character": 34
-        }
-      },
-      "rule": "reportCallIssue"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "Incorrect keyword arguments for __init_subclass__ method",
-      "range": {
-        "start": {
-          "line": 196,
-          "character": 6
-        },
-        "end": {
-          "line": 196,
-          "character": 18
-        }
-      },
-      "rule": "reportGeneralTypeIssues"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "No parameter named \"table\"",
-      "range": {
-        "start": {
-          "line": 196,
-          "character": 37
-        },
-        "end": {
-          "line": 196,
-          "character": 42
-        }
-      },
-      "rule": "reportCallIssue"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "Incorrect keyword arguments for __init_subclass__ method",
-      "range": {
-        "start": {
-          "line": 205,
-          "character": 6
-        },
-        "end": {
-          "line": 205,
-          "character": 14
-        }
-      },
-      "rule": "reportGeneralTypeIssues"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "No parameter named \"table\"",
-      "range": {
-        "start": {
-          "line": 205,
-          "character": 29
-        },
-        "end": {
-          "line": 205,
-          "character": 34
-        }
-      },
-      "rule": "reportCallIssue"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "Incorrect keyword arguments for __init_subclass__ method",
-      "range": {
-        "start": {
-          "line": 231,
-          "character": 6
-        },
-        "end": {
-          "line": 231,
-          "character": 10
-        }
-      },
-      "rule": "reportGeneralTypeIssues"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "No parameter named \"table\"",
-      "range": {
-        "start": {
-          "line": 231,
-          "character": 21
-        },
-        "end": {
-          "line": 231,
-          "character": 26
-        }
-      },
-      "rule": "reportCallIssue"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "Incorrect keyword arguments for __init_subclass__ method",
-      "range": {
-        "start": {
-          "line": 251,
-          "character": 6
-        },
-        "end": {
-          "line": 251,
-          "character": 17
-        }
-      },
-      "rule": "reportGeneralTypeIssues"
-    },
-    {
-      "file": "/workspace/app/models.py",
-      "severity": "error",
-      "message": "No parameter named \"table\"",
-      "range": {
-        "start": {
-          "line": 251,
-          "character": 28
-        },
-        "end": {
-          "line": 251,
-          "character": 33
-        }
-      },
-      "rule": "reportCallIssue"
-    },
-    {
-      "file": "/workspace/app/paralegal_agents/refactored_agent_sdk.py",
-      "severity": "error",
-      "message": "Import \"openai\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 23,
-          "character": 5
-        },
-        "end": {
-          "line": 23,
-          "character": 11
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/repositories/case_repository.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy.ext.asyncio\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 2,
-          "character": 5
-        },
-        "end": {
-          "line": 2,
-          "character": 27
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/repositories/case_repository.py",
-      "severity": "error",
-      "message": "Import \"sqlmodel\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 3,
-          "character": 5
-        },
-        "end": {
-          "line": 3,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/repositories/case_repository.py",
-      "severity": "error",
-      "message": "Import \"fastapi\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 7,
-          "character": 5
-        },
-        "end": {
-          "line": 7,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/repositories/user_repository.py",
-      "severity": "error",
-      "message": "Import \"fastapi\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 3,
-          "character": 5
-        },
-        "end": {
-          "line": 3,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/repositories/user_repository.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy.ext.asyncio\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 4,
-          "character": 5
-        },
-        "end": {
-          "line": 4,
-          "character": 27
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/repositories/user_repository.py",
-      "severity": "error",
-      "message": "Import \"sqlmodel\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 5,
-          "character": 5
-        },
-        "end": {
-          "line": 5,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/routes/auth.py",
-      "severity": "error",
-      "message": "Import \"fastapi\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 9,
-          "character": 5
-        },
-        "end": {
-          "line": 9,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/routes/auth.py",
-      "severity": "error",
-      "message": "Import \"fastapi.security\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 10,
-          "character": 5
-        },
-        "end": {
-          "line": 10,
-          "character": 21
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/routes/auth.py",
-      "severity": "warning",
-      "message": "Import \"jose\" could not be resolved from source",
-      "range": {
-        "start": {
-          "line": 11,
-          "character": 5
-        },
-        "end": {
-          "line": 11,
-          "character": 9
-        }
-      },
-      "rule": "reportMissingModuleSource"
-    },
-    {
-      "file": "/workspace/app/routes/auth.py",
-      "severity": "warning",
-      "message": "Import \"jose.jwt\" could not be resolved from source",
-      "range": {
-        "start": {
-          "line": 11,
-          "character": 27
-        },
-        "end": {
-          "line": 11,
-          "character": 30
-        }
-      },
-      "rule": "reportMissingModuleSource"
-    },
-    {
-      "file": "/workspace/app/routes/auth.py",
-      "severity": "error",
-      "message": "Import \"pydantic\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 12,
-          "character": 5
-        },
-        "end": {
-          "line": 12,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/routes/auth.py",
-      "severity": "error",
-      "message": "Import \"sqlmodel\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 13,
-          "character": 5
-        },
-        "end": {
-          "line": 13,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/routes/auth.py",
-      "severity": "error",
-      "message": "Import \"sqlmodel\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 14,
-          "character": 5
-        },
-        "end": {
-          "line": 14,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/routes/case_management_routes.py",
-      "severity": "error",
-      "message": "Import \"fastapi\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 8,
-          "character": 5
-        },
-        "end": {
-          "line": 8,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/routes/monitoring_routes.py",
-      "severity": "error",
-      "message": "Import \"fastapi\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 7,
-          "character": 5
-        },
-        "end": {
-          "line": 7,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/routes/monitoring_routes.py",
-      "severity": "error",
-      "message": "Import \"pydantic\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 8,
-          "character": 5
-        },
-        "end": {
-          "line": 8,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/routes/monitoring_routes.py",
-      "severity": "error",
-      "message": "Import \"celery.result\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 144,
-          "character": 13
-        },
-        "end": {
-          "line": 144,
-          "character": 26
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/services/case_management_service.py",
-      "severity": "error",
-      "message": "Import \"fastapi\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 6,
-          "character": 5
-        },
-        "end": {
-          "line": 6,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/services/document_generation_service.py",
-      "severity": "error",
-      "message": "Import \"fastapi\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 8,
-          "character": 5
-        },
-        "end": {
-          "line": 8,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/services/document_generation_service.py",
-      "severity": "error",
-      "message": "Import \"openai\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 9,
-          "character": 5
-        },
-        "end": {
-          "line": 9,
-          "character": 11
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/services/document_generation_service.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 10,
-          "character": 5
-        },
-        "end": {
-          "line": 10,
-          "character": 15
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/services/openai_client.py",
-      "severity": "error",
-      "message": "Import \"openai\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 9,
-          "character": 5
-        },
-        "end": {
-          "line": 9,
-          "character": 11
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/services/openai_client.py",
-      "severity": "error",
-      "message": "Import \"openai.types.chat\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 10,
-          "character": 5
-        },
-        "end": {
-          "line": 10,
-          "character": 22
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/services/openai_client.py",
-      "severity": "error",
-      "message": "Import \"pydantic\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 11,
-          "character": 5
-        },
-        "end": {
-          "line": 11,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/services/openai_client.py",
-      "severity": "error",
-      "message": "Import \"tenacity\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 12,
-          "character": 5
-        },
-        "end": {
-          "line": 12,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
     },
     {
       "file": "/workspace/app/services/openai_client.py",
@@ -1907,20 +227,36 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/workspace/app/services/optimized_statute_search.py",
+      "file": "/workspace/app/services/openai_client.py",
       "severity": "error",
-      "message": "Import \"qdrant_client.models\" could not be resolved",
+      "message": "Type \"str | None\" is not assignable to return type \"BaseModel | str\"\n\u00a0\u00a0Type \"str | None\" is not assignable to type \"BaseModel | str\"\n\u00a0\u00a0\u00a0\u00a0Type \"None\" is not assignable to type \"BaseModel | str\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"BaseModel\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"str\"",
       "range": {
         "start": {
-          "line": 9,
-          "character": 5
+          "line": 295,
+          "character": 19
         },
         "end": {
-          "line": 9,
-          "character": 25
+          "line": 295,
+          "character": 54
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportReturnType"
+    },
+    {
+      "file": "/workspace/app/services/openai_client.py",
+      "severity": "error",
+      "message": "Type \"str | None\" is not assignable to return type \"BaseModel | str\"\n\u00a0\u00a0Type \"str | None\" is not assignable to type \"BaseModel | str\"\n\u00a0\u00a0\u00a0\u00a0Type \"None\" is not assignable to type \"BaseModel | str\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"BaseModel\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"str\"",
+      "range": {
+        "start": {
+          "line": 327,
+          "character": 19
+        },
+        "end": {
+          "line": 327,
+          "character": 54
+        }
+      },
+      "rule": "reportReturnType"
     },
     {
       "file": "/workspace/app/services/optimized_statute_search.py",
@@ -1989,102 +325,6 @@
     {
       "file": "/workspace/app/services/statute_search_service.py",
       "severity": "error",
-      "message": "Import \"fastapi\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 9,
-          "character": 5
-        },
-        "end": {
-          "line": 9,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/services/statute_search_service.py",
-      "severity": "error",
-      "message": "Import \"openai\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 10,
-          "character": 5
-        },
-        "end": {
-          "line": 10,
-          "character": 11
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/services/statute_search_service.py",
-      "severity": "error",
-      "message": "Import \"qdrant_client\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 11,
-          "character": 5
-        },
-        "end": {
-          "line": 11,
-          "character": 18
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/services/statute_search_service.py",
-      "severity": "error",
-      "message": "Import \"qdrant_client.models\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 12,
-          "character": 5
-        },
-        "end": {
-          "line": 12,
-          "character": 25
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/services/statute_search_service.py",
-      "severity": "error",
-      "message": "Import \"..models.pipeline_schemas\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 19,
-          "character": 5
-        },
-        "end": {
-          "line": 19,
-          "character": 30
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/services/statute_search_service.py",
-      "severity": "error",
-      "message": "\"get_collections\" is not a known attribute of \"None\"",
-      "range": {
-        "start": {
-          "line": 59,
-          "character": 48
-        },
-        "end": {
-          "line": 59,
-          "character": 63
-        }
-      },
-      "rule": "reportOptionalMemberAccess"
-    },
-    {
-      "file": "/workspace/app/services/statute_search_service.py",
-      "severity": "error",
       "message": "\"group\" is not a known attribute of \"None\"",
       "range": {
         "start": {
@@ -2100,99 +340,19 @@
     },
     {
       "file": "/workspace/app/services/supreme_court_service.py",
-      "severity": "error",
-      "message": "Import \"fastapi\" could not be resolved",
+      "severity": "information",
+      "message": "Cannot access attribute \"__table__\" for class \"type[SNRuling]\"\n\u00a0\u00a0Attribute \"__table__\" is unknown",
       "range": {
         "start": {
-          "line": 10,
-          "character": 5
+          "line": 302,
+          "character": 33
         },
         "end": {
-          "line": 10,
-          "character": 12
+          "line": 302,
+          "character": 42
         }
       },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/services/supreme_court_service.py",
-      "severity": "error",
-      "message": "Import \"openai\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 11,
-          "character": 5
-        },
-        "end": {
-          "line": 11,
-          "character": 11
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/services/supreme_court_service.py",
-      "severity": "error",
-      "message": "Import \"qdrant_client\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 12,
-          "character": 5
-        },
-        "end": {
-          "line": 12,
-          "character": 18
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/services/supreme_court_service.py",
-      "severity": "error",
-      "message": "Import \"qdrant_client.models\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 13,
-          "character": 5
-        },
-        "end": {
-          "line": 13,
-          "character": 25
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/services/supreme_court_service.py",
-      "severity": "error",
-      "message": "Import \"sentence_transformers\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 14,
-          "character": 5
-        },
-        "end": {
-          "line": 14,
-          "character": 26
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/services/supreme_court_service.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 15,
-          "character": 5
-        },
-        "end": {
-          "line": 15,
-          "character": 15
-        }
-      },
-      "rule": "reportMissingImports"
+      "rule": "reportAttributeAccessIssue"
     },
     {
       "file": "/workspace/app/services/supreme_court_service.py",
@@ -2260,131 +420,35 @@
     },
     {
       "file": "/workspace/app/task_processors.py",
-      "severity": "warning",
-      "message": "Import \"aiofiles\" could not be resolved from source",
+      "severity": "information",
+      "message": "Cannot assign to attribute \"metadata\" for class \"Document\"\n\u00a0\u00a0Expression of type \"dict[Any, Any]\" cannot be assigned to attribute \"metadata\" of class \"Document\"\n\u00a0\u00a0\u00a0\u00a0\"dict[Any, Any]\" is not assignable to \"MetaData\"",
       "range": {
         "start": {
-          "line": 7,
-          "character": 7
+          "line": 300,
+          "character": 29
         },
         "end": {
-          "line": 7,
-          "character": 15
+          "line": 300,
+          "character": 37
         }
       },
-      "rule": "reportMissingModuleSource"
+      "rule": "reportAttributeAccessIssue"
     },
     {
       "file": "/workspace/app/task_processors.py",
-      "severity": "error",
-      "message": "Import \"fitz\" could not be resolved",
+      "severity": "information",
+      "message": "Cannot access attribute \"update\" for class \"MetaData\"\n\u00a0\u00a0Attribute \"update\" is unknown",
       "range": {
         "start": {
-          "line": 8,
-          "character": 7
+          "line": 302,
+          "character": 34
         },
         "end": {
-          "line": 8,
-          "character": 11
+          "line": 302,
+          "character": 40
         }
       },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/task_processors.py",
-      "severity": "error",
-      "message": "Import \"qdrant_client\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 9,
-          "character": 5
-        },
-        "end": {
-          "line": 9,
-          "character": 18
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/task_processors.py",
-      "severity": "error",
-      "message": "Import \"qdrant_client.models\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 10,
-          "character": 5
-        },
-        "end": {
-          "line": 10,
-          "character": 25
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/task_processors.py",
-      "severity": "error",
-      "message": "Import \"sentence_transformers\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 15,
-          "character": 5
-        },
-        "end": {
-          "line": 15,
-          "character": 26
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/validator.py",
-      "severity": "error",
-      "message": "Import \"openai\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 3,
-          "character": 5
-        },
-        "end": {
-          "line": 3,
-          "character": 11
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/validator.py",
-      "severity": "error",
-      "message": "Import \"pydantic\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 4,
-          "character": 5
-        },
-        "end": {
-          "line": 4,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/validators/document_validator.py",
-      "severity": "error",
-      "message": "Import \"pydantic\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 7,
-          "character": 5
-        },
-        "end": {
-          "line": 7,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
+      "rule": "reportAttributeAccessIssue"
     },
     {
       "file": "/workspace/app/validators/document_validator.py",
@@ -2401,262 +465,6 @@
         }
       },
       "rule": "reportArgumentType"
-    },
-    {
-      "file": "/workspace/app/worker/base_task.py",
-      "severity": "error",
-      "message": "Import \"celery\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 9,
-          "character": 5
-        },
-        "end": {
-          "line": 9,
-          "character": 11
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/base_task.py",
-      "severity": "error",
-      "message": "Import \"celery.exceptions\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 10,
-          "character": 5
-        },
-        "end": {
-          "line": 10,
-          "character": 22
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/base_task.py",
-      "severity": "error",
-      "message": "Import \"kombu.exceptions\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 11,
-          "character": 5
-        },
-        "end": {
-          "line": 11,
-          "character": 21
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/celery_app.py",
-      "severity": "error",
-      "message": "Import \"celery\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 6,
-          "character": 5
-        },
-        "end": {
-          "line": 6,
-          "character": 11
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/config.py",
-      "severity": "error",
-      "message": "Import \"kombu\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 8,
-          "character": 5
-        },
-        "end": {
-          "line": 8,
-          "character": 10
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/ingestion_api.py",
-      "severity": "error",
-      "message": "Import \"celery.result\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 6,
-          "character": 5
-        },
-        "end": {
-          "line": 6,
-          "character": 18
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/ingestion_api.py",
-      "severity": "error",
-      "message": "Import \"fastapi\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 7,
-          "character": 5
-        },
-        "end": {
-          "line": 7,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/ingestion_api.py",
-      "severity": "error",
-      "message": "Import \"fastapi.responses\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 8,
-          "character": 5
-        },
-        "end": {
-          "line": 8,
-          "character": 22
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/ingestion_api.py",
-      "severity": "error",
-      "message": "Import \"pydantic\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 9,
-          "character": 5
-        },
-        "end": {
-          "line": 9,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/ingestion_api.py",
-      "severity": "error",
-      "message": "Import \"uvicorn\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 326,
-          "character": 11
-        },
-        "end": {
-          "line": 326,
-          "character": 18
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/logging_config.py",
-      "severity": "error",
-      "message": "Import \"pythonjsonlogger\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 11,
-          "character": 5
-        },
-        "end": {
-          "line": 11,
-          "character": 21
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/logging_config.py",
-      "severity": "error",
-      "message": "Import \"celery\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 23,
-          "character": 13
-        },
-        "end": {
-          "line": 23,
-          "character": 19
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/monitoring.py",
-      "severity": "error",
-      "message": "Import \"redis\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 11,
-          "character": 7
-        },
-        "end": {
-          "line": 11,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/monitoring.py",
-      "severity": "error",
-      "message": "Import \"celery.signals\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 12,
-          "character": 5
-        },
-        "end": {
-          "line": 12,
-          "character": 19
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/service_registry.py",
-      "severity": "error",
-      "message": "Import \"redis\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 9,
-          "character": 7
-        },
-        "end": {
-          "line": 9,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/service_registry.py",
-      "severity": "error",
-      "message": "Import \"celery.signals\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 13,
-          "character": 5
-        },
-        "end": {
-          "line": 13,
-          "character": 19
-        }
-      },
-      "rule": "reportMissingImports"
     },
     {
       "file": "/workspace/app/worker/service_registry.py",
@@ -2723,116 +531,84 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/workspace/app/worker/tasks/case_tasks.py",
+      "file": "/workspace/app/worker/tasks/embed.py",
       "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
+      "message": "Argument missing for parameter \"type\"",
       "range": {
         "start": {
-          "line": 384,
-          "character": 21
+          "line": 74,
+          "character": 29
         },
         "end": {
-          "line": 384,
-          "character": 31
+          "line": 74,
+          "character": 49
         }
       },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/tasks/case_tasks.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy.orm\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 385,
-          "character": 21
-        },
-        "end": {
-          "line": 385,
-          "character": 35
-        }
-      },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
       "file": "/workspace/app/worker/tasks/embed.py",
       "severity": "error",
-      "message": "Import \"numpy\" could not be resolved",
+      "message": "Argument missing for parameter \"type\"",
       "range": {
         "start": {
-          "line": 7,
-          "character": 7
+          "line": 80,
+          "character": 29
         },
         "end": {
-          "line": 7,
-          "character": 12
+          "line": 80,
+          "character": 49
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
       "file": "/workspace/app/worker/tasks/embed.py",
       "severity": "error",
-      "message": "Import \"qdrant_client\" could not be resolved",
+      "message": "Argument missing for parameter \"type\"",
       "range": {
         "start": {
-          "line": 8,
-          "character": 5
+          "line": 86,
+          "character": 29
         },
         "end": {
-          "line": 8,
-          "character": 18
+          "line": 86,
+          "character": 49
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
       "file": "/workspace/app/worker/tasks/embed.py",
       "severity": "error",
-      "message": "Import \"qdrant_client.models\" could not be resolved",
+      "message": "Argument missing for parameter \"type\"",
       "range": {
         "start": {
-          "line": 9,
-          "character": 5
+          "line": 307,
+          "character": 77
         },
         "end": {
-          "line": 9,
-          "character": 25
+          "line": 307,
+          "character": 94
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
       "file": "/workspace/app/worker/tasks/embed.py",
       "severity": "error",
-      "message": "Import \"sentence_transformers\" could not be resolved",
+      "message": "Argument missing for parameter \"type\"",
       "range": {
         "start": {
-          "line": 20,
-          "character": 5
+          "line": 319,
+          "character": 29
         },
         "end": {
-          "line": 20,
-          "character": 26
+          "line": 319,
+          "character": 49
         }
       },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/tasks/embedding_tasks.py",
-      "severity": "error",
-      "message": "Import \"qdrant_client\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 186,
-          "character": 17
-        },
-        "end": {
-          "line": 186,
-          "character": 30
-        }
-      },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
       "file": "/workspace/app/worker/tasks/embedding_tasks.py",
@@ -2852,22 +628,6 @@
     },
     {
       "file": "/workspace/app/worker/tasks/ingestion_pipeline.py",
-      "severity": "error",
-      "message": "Import \"celery\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 6,
-          "character": 5
-        },
-        "end": {
-          "line": 6,
-          "character": 11
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/tasks/ingestion_pipeline.py",
       "severity": "information",
       "message": "\"generate_statute_embeddings\" is unknown import symbol",
       "range": {
@@ -2883,84 +643,52 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/workspace/app/worker/tasks/maintenance.py",
+      "file": "/workspace/app/worker/tasks/ingestion_pipeline.py",
       "severity": "error",
-      "message": "Import \"redis\" could not be resolved",
+      "message": "\"id\" is not a known attribute of \"None\"",
       "range": {
         "start": {
-          "line": 9,
-          "character": 7
+          "line": 79,
+          "character": 59
         },
         "end": {
-          "line": 9,
-          "character": 12
+          "line": 79,
+          "character": 61
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/workspace/app/worker/tasks/maintenance.py",
+      "file": "/workspace/app/worker/tasks/ingestion_pipeline.py",
       "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
+      "message": "\"id\" is not a known attribute of \"None\"",
       "range": {
         "start": {
-          "line": 72,
-          "character": 21
+          "line": 147,
+          "character": 55
         },
         "end": {
-          "line": 72,
-          "character": 31
+          "line": 147,
+          "character": 57
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/workspace/app/worker/tasks/maintenance.py",
+      "file": "/workspace/app/worker/tasks/ingestion_pipeline.py",
       "severity": "error",
-      "message": "Import \"qdrant_client\" could not be resolved",
+      "message": "\"id\" is not a known attribute of \"None\"",
       "range": {
         "start": {
-          "line": 99,
-          "character": 21
+          "line": 177,
+          "character": 59
         },
         "end": {
-          "line": 99,
-          "character": 34
+          "line": 177,
+          "character": 61
         }
       },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/tasks/maintenance.py",
-      "severity": "error",
-      "message": "Import \"qdrant_client\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 467,
-          "character": 13
-        },
-        "end": {
-          "line": 467,
-          "character": 26
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/tasks/pdf2chunks.py",
-      "severity": "error",
-      "message": "Import \"pdfplumber\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 8,
-          "character": 7
-        },
-        "end": {
-          "line": 8,
-          "character": 17
-        }
-      },
-      "rule": "reportMissingImports"
+      "rule": "reportOptionalMemberAccess"
     },
     {
       "file": "/workspace/app/worker/tasks/pdf2chunks.py",
@@ -3025,70 +753,6 @@
         }
       },
       "rule": "reportArgumentType"
-    },
-    {
-      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
-      "severity": "warning",
-      "message": "Import \"dateparser\" could not be resolved from source",
-      "range": {
-        "start": {
-          "line": 21,
-          "character": 7
-        },
-        "end": {
-          "line": 21,
-          "character": 17
-        }
-      },
-      "rule": "reportMissingModuleSource"
-    },
-    {
-      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
-      "severity": "error",
-      "message": "Import \"fitz\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 22,
-          "character": 7
-        },
-        "end": {
-          "line": 22,
-          "character": 11
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
-      "severity": "error",
-      "message": "Import \"pydantic\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 23,
-          "character": 5
-        },
-        "end": {
-          "line": 23,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
-      "severity": "warning",
-      "message": "Import \"tqdm\" could not be resolved from source",
-      "range": {
-        "start": {
-          "line": 24,
-          "character": 5
-        },
-        "end": {
-          "line": 24,
-          "character": 9
-        }
-      },
-      "rule": "reportMissingModuleSource"
     },
     {
       "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
@@ -3252,6 +916,38 @@
     },
     {
       "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "information",
+      "message": "Cannot assign to attribute \"entities\" for class \"RulingParagraph\"\n\u00a0\u00a0Attribute \"entities\" is unknown",
+      "range": {
+        "start": {
+          "line": 341,
+          "character": 37
+        },
+        "end": {
+          "line": 341,
+          "character": 45
+        }
+      },
+      "rule": "reportAttributeAccessIssue"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "information",
+      "message": "Cannot assign to attribute \"entities\" for class \"RulingParagraph\"\n\u00a0\u00a0Attribute \"entities\" is unknown",
+      "range": {
+        "start": {
+          "line": 344,
+          "character": 37
+        },
+        "end": {
+          "line": 344,
+          "character": 45
+        }
+      },
+      "rule": "reportAttributeAccessIssue"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
       "severity": "error",
       "message": "\"PromptTemplate\" is not defined",
       "range": {
@@ -3281,6 +977,22 @@
         }
       },
       "rule": "reportUndefinedVariable"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "Argument of type \"Ruling\" cannot be assigned to parameter \"ruling\" of type \"ParsedRuling\" in function \"enhance_entities_with_o3\"\n\u00a0\u00a0\"Ruling\" is not assignable to \"ParsedRuling\"",
+      "range": {
+        "start": {
+          "line": 481,
+          "character": 48
+        },
+        "end": {
+          "line": 481,
+          "character": 54
+        }
+      },
+      "rule": "reportArgumentType"
     },
     {
       "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
@@ -3361,6 +1073,22 @@
         }
       },
       "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "information",
+      "message": "Cannot assign to attribute \"name\" for class \"Ruling\"\n\u00a0\u00a0Type \"str | None\" is not assignable to type \"str\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"str\"",
+      "range": {
+        "start": {
+          "line": 673,
+          "character": 38
+        },
+        "end": {
+          "line": 673,
+          "character": 56
+        }
+      },
+      "rule": "reportAttributeAccessIssue"
     },
     {
       "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
@@ -3476,131 +1204,35 @@
     },
     {
       "file": "/workspace/app/worker/tasks/sn.py",
-      "severity": "warning",
-      "message": "Import \"dateparser\" could not be resolved from source",
+      "severity": "error",
+      "message": "Argument of type \"int | None\" cannot be assigned to parameter \"size\" of type \"int\" in function \"__init__\"\n\u00a0\u00a0Type \"int | None\" is not assignable to type \"int\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"int\"",
       "range": {
         "start": {
-          "line": 8,
-          "character": 7
+          "line": 218,
+          "character": 21
         },
         "end": {
-          "line": 8,
-          "character": 17
+          "line": 218,
+          "character": 35
         }
       },
-      "rule": "reportMissingModuleSource"
+      "rule": "reportArgumentType"
     },
     {
       "file": "/workspace/app/worker/tasks/sn.py",
       "severity": "error",
-      "message": "Import \"openai\" could not be resolved",
+      "message": "Argument of type \"int | None\" cannot be assigned to parameter \"size\" of type \"int\" in function \"__init__\"\n\u00a0\u00a0Type \"int | None\" is not assignable to type \"int\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"int\"",
       "range": {
         "start": {
-          "line": 9,
-          "character": 7
+          "line": 231,
+          "character": 21
         },
         "end": {
-          "line": 9,
-          "character": 13
+          "line": 231,
+          "character": 35
         }
       },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/tasks/sn.py",
-      "severity": "error",
-      "message": "Import \"deepdiff\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 10,
-          "character": 5
-        },
-        "end": {
-          "line": 10,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/tasks/sn.py",
-      "severity": "error",
-      "message": "Import \"dotenv\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 11,
-          "character": 5
-        },
-        "end": {
-          "line": 11,
-          "character": 11
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/tasks/sn.py",
-      "severity": "error",
-      "message": "Import \"qdrant_client\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 12,
-          "character": 5
-        },
-        "end": {
-          "line": 12,
-          "character": 18
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/tasks/sn.py",
-      "severity": "error",
-      "message": "Import \"sentence_transformers\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 13,
-          "character": 5
-        },
-        "end": {
-          "line": 13,
-          "character": 26
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/tasks/sn.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 14,
-          "character": 5
-        },
-        "end": {
-          "line": 14,
-          "character": 15
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/tasks/sn.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy.ext.asyncio\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 15,
-          "character": 5
-        },
-        "end": {
-          "line": 15,
-          "character": 27
-        }
-      },
-      "rule": "reportMissingImports"
+      "rule": "reportArgumentType"
     },
     {
       "file": "/workspace/app/worker/tasks/statute_tasks.py",
@@ -3717,82 +1349,82 @@
     {
       "file": "/workspace/ingest/embed.py",
       "severity": "error",
-      "message": "Import \"numpy\" could not be resolved",
+      "message": "Argument missing for parameter \"type\"",
       "range": {
         "start": {
-          "line": 1,
-          "character": 7
+          "line": 74,
+          "character": 29
         },
         "end": {
-          "line": 1,
-          "character": 12
+          "line": 74,
+          "character": 49
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
       "file": "/workspace/ingest/embed.py",
       "severity": "error",
-      "message": "Import \"sentence_transformers\" could not be resolved",
+      "message": "Argument missing for parameter \"type\"",
       "range": {
         "start": {
-          "line": 2,
-          "character": 5
+          "line": 80,
+          "character": 29
         },
         "end": {
-          "line": 2,
-          "character": 26
+          "line": 80,
+          "character": 49
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
       "file": "/workspace/ingest/embed.py",
       "severity": "error",
-      "message": "Import \"qdrant_client\" could not be resolved",
+      "message": "Argument missing for parameter \"type\"",
       "range": {
         "start": {
-          "line": 6,
-          "character": 5
+          "line": 86,
+          "character": 29
         },
         "end": {
-          "line": 6,
-          "character": 18
+          "line": 86,
+          "character": 49
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
       "file": "/workspace/ingest/embed.py",
       "severity": "error",
-      "message": "Import \"qdrant_client.models\" could not be resolved",
+      "message": "Argument missing for parameter \"type\"",
       "range": {
         "start": {
-          "line": 7,
-          "character": 5
-        },
-        "end": {
-          "line": 7,
+          "line": 307,
           "character": 25
+        },
+        "end": {
+          "line": 307,
+          "character": 42
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
       "file": "/workspace/ingest/embed.py",
-      "severity": "warning",
-      "message": "Import \"tqdm\" could not be resolved from source",
+      "severity": "error",
+      "message": "Argument missing for parameter \"type\"",
       "range": {
         "start": {
-          "line": 14,
-          "character": 5
+          "line": 319,
+          "character": 29
         },
         "end": {
-          "line": 14,
-          "character": 9
+          "line": 319,
+          "character": 49
         }
       },
-      "rule": "reportMissingModuleSource"
+      "rule": "reportCallIssue"
     },
     {
       "file": "/workspace/ingest/embed.py",
@@ -3808,38 +1440,6 @@
           "character": 45
         }
       }
-    },
-    {
-      "file": "/workspace/ingest/ingest_pipeline.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 21,
-          "character": 5
-        },
-        "end": {
-          "line": 21,
-          "character": 15
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/ingest/ingest_pipeline.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy.orm\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 22,
-          "character": 5
-        },
-        "end": {
-          "line": 22,
-          "character": 19
-        }
-      },
-      "rule": "reportMissingImports"
     },
     {
       "file": "/workspace/ingest/ingest_pipeline.py",
@@ -4002,20 +1602,20 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/workspace/ingest/pdf2chunks.py",
+      "file": "/workspace/ingest/ingest_pipeline.py",
       "severity": "error",
-      "message": "Import \"pdfplumber\" could not be resolved",
+      "message": "No parameter named \"metadata\"",
       "range": {
         "start": {
-          "line": 2,
-          "character": 7
+          "line": 144,
+          "character": 20
         },
         "end": {
-          "line": 2,
-          "character": 17
+          "line": 144,
+          "character": 28
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
       "file": "/workspace/ingest/pdf2chunks.py",
@@ -4099,131 +1699,115 @@
     },
     {
       "file": "/workspace/ingest/preprocess_sn.py",
-      "severity": "error",
-      "message": "Import \"fitz\" could not be resolved",
+      "severity": "information",
+      "message": "Cannot access attribute \"get_text\" for class \"Page\"\n\u00a0\u00a0Attribute \"get_text\" is unknown",
       "range": {
         "start": {
-          "line": 23,
-          "character": 7
+          "line": 73,
+          "character": 25
         },
         "end": {
-          "line": 23,
-          "character": 11
+          "line": 73,
+          "character": 33
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportAttributeAccessIssue"
     },
     {
       "file": "/workspace/ingest/preprocess_sn.py",
-      "severity": "error",
-      "message": "Import \"spacy\" could not be resolved",
+      "severity": "information",
+      "message": "\"open\" is not a known attribute of module \"fitz\"",
       "range": {
         "start": {
-          "line": 24,
-          "character": 7
+          "line": 128,
+          "character": 15
         },
         "end": {
-          "line": 24,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/ingest/preprocess_sn.py",
-      "severity": "error",
-      "message": "Import \"spacy.pipeline\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 25,
-          "character": 5
-        },
-        "end": {
-          "line": 25,
+          "line": 128,
           "character": 19
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/workspace/ingest/preprocess_sn.py",
-      "severity": "warning",
-      "message": "Import \"dateparser\" could not be resolved from source",
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
+      "severity": "information",
+      "message": "\"open\" is not a known attribute of module \"fitz\"",
       "range": {
         "start": {
-          "line": 26,
-          "character": 7
+          "line": 105,
+          "character": 15
         },
         "end": {
-          "line": 26,
-          "character": 17
+          "line": 105,
+          "character": 19
         }
       },
-      "rule": "reportMissingModuleSource"
+      "rule": "reportAttributeAccessIssue"
     },
     {
       "file": "/workspace/ingest/preprocess_sn_o3.py",
       "severity": "error",
-      "message": "Import \"fitz\" could not be resolved",
+      "message": "Type \"BaseModel\" is not assignable to return type \"ParsedRuling | bytes\"\n\u00a0\u00a0Type \"BaseModel\" is not assignable to type \"ParsedRuling | bytes\"\n\u00a0\u00a0\u00a0\u00a0\"BaseModel\" is not assignable to \"ParsedRuling\"\n\u00a0\u00a0\u00a0\u00a0\"BaseModel\" is not assignable to \"bytes\"",
       "range": {
         "start": {
-          "line": 16,
-          "character": 7
+          "line": 153,
+          "character": 15
         },
         "end": {
-          "line": 16,
+          "line": 153,
+          "character": 28
+        }
+      },
+      "rule": "reportReturnType"
+    },
+    {
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "Argument missing for parameter \"name\"",
+      "range": {
+        "start": {
+          "line": 239,
           "character": 11
+        },
+        "end": {
+          "line": 239,
+          "character": 66
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
       "file": "/workspace/ingest/preprocess_sn_o3.py",
       "severity": "error",
-      "message": "Import \"pydantic\" could not be resolved",
+      "message": "No parameter named \"metadata\"",
       "range": {
         "start": {
-          "line": 21,
-          "character": 5
+          "line": 239,
+          "character": 18
         },
         "end": {
-          "line": 21,
-          "character": 13
+          "line": 239,
+          "character": 26
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
       "file": "/workspace/ingest/preprocess_sn_o3.py",
-      "severity": "warning",
-      "message": "Import \"dateparser\" could not be resolved from source",
+      "severity": "information",
+      "message": "Cannot access attribute \"entities\" for class \"BaseModel\"\n\u00a0\u00a0Attribute \"entities\" is unknown",
       "range": {
         "start": {
-          "line": 23,
-          "character": 7
+          "line": 303,
+          "character": 41
         },
         "end": {
-          "line": 23,
-          "character": 17
+          "line": 303,
+          "character": 49
         }
       },
-      "rule": "reportMissingModuleSource"
-    },
-    {
-      "file": "/workspace/ingest/preprocess_sn_o3.py",
-      "severity": "warning",
-      "message": "Import \"tqdm\" could not be resolved from source",
-      "range": {
-        "start": {
-          "line": 24,
-          "character": 5
-        },
-        "end": {
-          "line": 24,
-          "character": 9
-        }
-      },
-      "rule": "reportMissingModuleSource"
+      "rule": "reportAttributeAccessIssue"
     },
     {
       "file": "/workspace/ingest/preprocess_sn_o3.py",
@@ -4387,6 +1971,22 @@
     },
     {
       "file": "/workspace/ingest/preprocess_sn_o3.py",
+      "severity": "information",
+      "message": "Cannot assign to attribute \"name\" for class \"Ruling\"\n\u00a0\u00a0Type \"str | None\" is not assignable to type \"str\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"str\"",
+      "range": {
+        "start": {
+          "line": 621,
+          "character": 38
+        },
+        "end": {
+          "line": 621,
+          "character": 56
+        }
+      },
+      "rule": "reportAttributeAccessIssue"
+    },
+    {
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
       "severity": "error",
       "message": "Argument of type \"list[List[Dict[str, Any]] | None]\" cannot be assigned to parameter \"records\" of type \"List[Dict[str, Any]]\" in function \"validate_output\"\n\u00a0\u00a0\"list[List[Dict[str, Any]] | None]\" is not assignable to \"List[Dict[str, Any]]\"\n\u00a0\u00a0\u00a0\u00a0Type parameter \"_T@list\" is invariant, but \"List[Dict[str, Any]] | None\" is not the same as \"Dict[str, Any]\"\n\u00a0\u00a0\u00a0\u00a0Consider switching from \"list\" to \"Sequence\" which is covariant",
       "range": {
@@ -4452,279 +2052,119 @@
     {
       "file": "/workspace/ingest/sn.py",
       "severity": "error",
-      "message": "Import \"deepdiff\" could not be resolved",
+      "message": "Argument of type \"bool\" cannot be assigned to parameter \"whereclause\" of type \"_ColumnExpressionArgument[bool]\" in function \"where\"\n\u00a0\u00a0Type \"bool\" is not assignable to type \"_ColumnExpressionArgument[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ColumnElement[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is incompatible with protocol \"_HasClauseElement[bool]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"__clause_element__\" is not present\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"SQLCoreOperations[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ExpressionElementRole[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"TypedColumnsClauseRole[bool]\"\n\u00a0\u00a0\u00a0\u00a0Type \"bool\" is not assignable to type \"() -> ColumnElement[bool]\"\n  ...",
       "range": {
         "start": {
-          "line": 7,
-          "character": 5
+          "line": 94,
+          "character": 61
         },
         "end": {
-          "line": 7,
-          "character": 13
+          "line": 94,
+          "character": 92
         }
       },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/ingest/sn.py",
-      "severity": "warning",
-      "message": "Import \"dateparser\" could not be resolved from source",
-      "range": {
-        "start": {
-          "line": 9,
-          "character": 7
-        },
-        "end": {
-          "line": 9,
-          "character": 17
-        }
-      },
-      "rule": "reportMissingModuleSource"
+      "rule": "reportArgumentType"
     },
     {
       "file": "/workspace/ingest/sn.py",
       "severity": "error",
-      "message": "Import \"openai\" could not be resolved",
+      "message": "Argument of type \"int | None\" cannot be assigned to parameter \"size\" of type \"int\" in function \"__init__\"\n\u00a0\u00a0Type \"int | None\" is not assignable to type \"int\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"int\"",
       "range": {
         "start": {
-          "line": 10,
-          "character": 7
+          "line": 209,
+          "character": 52
         },
         "end": {
-          "line": 10,
-          "character": 13
+          "line": 209,
+          "character": 66
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportArgumentType"
     },
     {
       "file": "/workspace/ingest/sn.py",
       "severity": "error",
-      "message": "Import \"dotenv\" could not be resolved",
+      "message": "Argument of type \"int | None\" cannot be assigned to parameter \"size\" of type \"int\" in function \"__init__\"\n\u00a0\u00a0Type \"int | None\" is not assignable to type \"int\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"int\"",
       "range": {
         "start": {
-          "line": 11,
-          "character": 5
+          "line": 221,
+          "character": 52
         },
         "end": {
-          "line": 11,
-          "character": 11
+          "line": 221,
+          "character": 66
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportArgumentType"
     },
     {
-      "file": "/workspace/ingest/sn.py",
+      "file": "/workspace/ingest/templates.py",
       "severity": "error",
-      "message": "Import \"qdrant_client\" could not be resolved",
+      "message": "Argument of type \"Any | bool\" cannot be assigned to parameter \"whereclause\" of type \"_ColumnExpressionArgument[bool]\" in function \"where\"\n\u00a0\u00a0Type \"Any | bool\" is not assignable to type \"_ColumnExpressionArgument[bool]\"\n\u00a0\u00a0\u00a0\u00a0Type \"bool\" is not assignable to type \"_ColumnExpressionArgument[bool]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ColumnElement[bool]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"bool\" is incompatible with protocol \"_HasClauseElement[bool]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"__clause_element__\" is not present\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"SQLCoreOperations[bool]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ExpressionElementRole[bool]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"TypedColumnsClauseRole[bool]\"\n  ...",
       "range": {
         "start": {
-          "line": 12,
-          "character": 5
+          "line": 99,
+          "character": 65
         },
         "end": {
-          "line": 12,
-          "character": 18
+          "line": 99,
+          "character": 99
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportArgumentType"
     },
     {
-      "file": "/workspace/ingest/sn.py",
+      "file": "/workspace/ingest/templates.py",
       "severity": "error",
-      "message": "Import \"sentence_transformers\" could not be resolved",
+      "message": "Argument of type \"Literal['keyword']\" cannot be assigned to parameter \"field_schema\" of type \"qdrant_client.conversions.common_types.PayloadSchemaType | None\" in function \"create_payload_index\"\n\u00a0\u00a0Type \"Literal['keyword']\" is not assignable to type \"qdrant_client.conversions.common_types.PayloadSchemaType | None\"\n\u00a0\u00a0\u00a0\u00a0\"Literal['keyword']\" is not assignable to \"PayloadSchemaType\"\n\u00a0\u00a0\u00a0\u00a0\"Literal['keyword']\" is not assignable to \"KeywordIndexParams\"\n\u00a0\u00a0\u00a0\u00a0\"Literal['keyword']\" is not assignable to \"IntegerIndexParams\"\n\u00a0\u00a0\u00a0\u00a0\"Literal['keyword']\" is not assignable to \"FloatIndexParams\"\n\u00a0\u00a0\u00a0\u00a0\"Literal['keyword']\" is not assignable to \"GeoIndexParams\"\n\u00a0\u00a0\u00a0\u00a0\"Literal['keyword']\" is not assignable to \"TextIndexParams\"\n\u00a0\u00a0\u00a0\u00a0\"Literal['keyword']\" is not assignable to \"BoolIndexParams\"\n  ...",
       "range": {
         "start": {
-          "line": 13,
-          "character": 5
+          "line": 135,
+          "character": 29
         },
         "end": {
-          "line": 13,
-          "character": 26
+          "line": 135,
+          "character": 38
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportArgumentType"
     },
     {
-      "file": "/workspace/ingest/sn.py",
+      "file": "/workspace/ingest/templates.py",
       "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
+      "message": "Argument of type \"int | None\" cannot be assigned to parameter \"size\" of type \"int\" in function \"__init__\"\n\u00a0\u00a0Type \"int | None\" is not assignable to type \"int\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"int\"",
       "range": {
         "start": {
-          "line": 14,
-          "character": 5
+          "line": 166,
+          "character": 52
         },
         "end": {
-          "line": 14,
-          "character": 15
+          "line": 166,
+          "character": 66
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportArgumentType"
     },
     {
-      "file": "/workspace/ingest/sn.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy.ext.asyncio\" could not be resolved",
+      "file": "/workspace/ingest/templates_preprocess.py",
+      "severity": "information",
+      "message": "\"open\" is not a known attribute of module \"fitz\"",
       "range": {
         "start": {
-          "line": 15,
-          "character": 5
+          "line": 79,
+          "character": 23
         },
         "end": {
-          "line": 15,
+          "line": 79,
           "character": 27
         }
       },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/ingest/templates.py",
-      "severity": "error",
-      "message": "Import \"openai\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 9,
-          "character": 7
-        },
-        "end": {
-          "line": 9,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/ingest/templates.py",
-      "severity": "error",
-      "message": "Import \"dotenv\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 10,
-          "character": 5
-        },
-        "end": {
-          "line": 10,
-          "character": 11
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/ingest/templates.py",
-      "severity": "error",
-      "message": "Import \"qdrant_client\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 11,
-          "character": 5
-        },
-        "end": {
-          "line": 11,
-          "character": 18
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/ingest/templates.py",
-      "severity": "error",
-      "message": "Import \"sentence_transformers\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 12,
-          "character": 5
-        },
-        "end": {
-          "line": 12,
-          "character": 26
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/ingest/templates.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 13,
-          "character": 5
-        },
-        "end": {
-          "line": 13,
-          "character": 15
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/ingest/templates.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy.ext.asyncio\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 14,
-          "character": 5
-        },
-        "end": {
-          "line": 14,
-          "character": 27
-        }
-      },
-      "rule": "reportMissingImports"
+      "rule": "reportAttributeAccessIssue"
     },
     {
       "file": "/workspace/ingest/templates_preprocess.py",
       "severity": "error",
-      "message": "Import \"fitz\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 0,
-          "character": 7
-        },
-        "end": {
-          "line": 0,
-          "character": 11
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/ingest/templates_preprocess.py",
-      "severity": "error",
-      "message": "Import \"openai\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 2,
-          "character": 7
-        },
-        "end": {
-          "line": 2,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/ingest/templates_preprocess.py",
-      "severity": "error",
-      "message": "Import \"pydantic\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 10,
-          "character": 5
-        },
-        "end": {
-          "line": 10,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/ingest/templates_preprocess.py",
-      "severity": "error",
-      "message": "Argument of type \"(t: Unknown = text) -> CoroutineType[Any, Any, Unknown | None]\" cannot be assigned to parameter \"object\" of type \"() -> Coroutine[Any, Any, Template]\" in function \"append\"\n\u00a0\u00a0Type \"(t: Unknown = text) -> CoroutineType[Any, Any, Unknown | None]\" is not assignable to type \"() -> Coroutine[Any, Any, Template]\"\n\u00a0\u00a0\u00a0\u00a0Function return type \"CoroutineType[Any, Any, Unknown | None]\" is incompatible with type \"Coroutine[Any, Any, Template]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"CoroutineType[Any, Any, Unknown | None]\" is not assignable to \"Coroutine[Any, Any, Template]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Type parameter \"_ReturnT_nd_co@Coroutine\" is covariant, but \"Unknown | None\" is not a subtype of \"Template\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Type \"Unknown | None\" is not assignable to type \"Template\"",
+      "message": "Argument of type \"(t: Unknown = text) -> CoroutineType[Any, Any, Template | None]\" cannot be assigned to parameter \"object\" of type \"() -> Coroutine[Any, Any, Template]\" in function \"append\"\n\u00a0\u00a0Type \"(t: Unknown = text) -> CoroutineType[Any, Any, Template | None]\" is not assignable to type \"() -> Coroutine[Any, Any, Template]\"\n\u00a0\u00a0\u00a0\u00a0Function return type \"CoroutineType[Any, Any, Template | None]\" is incompatible with type \"Coroutine[Any, Any, Template]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"CoroutineType[Any, Any, Template | None]\" is not assignable to \"Coroutine[Any, Any, Template]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Type parameter \"_ReturnT_nd_co@Coroutine\" is covariant, but \"Template | None\" is not a subtype of \"Template\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Type \"Template | None\" is not assignable to type \"Template\"",
       "range": {
         "start": {
           "line": 85,
@@ -4756,162 +2196,66 @@
     {
       "file": "/workspace/init_database.py",
       "severity": "error",
-      "message": "Import \"sqlmodel\" could not be resolved",
+      "message": "No overloads for \"execute\" match the provided arguments",
       "range": {
         "start": {
-          "line": 14,
-          "character": 5
+          "line": 48,
+          "character": 27
         },
         "end": {
-          "line": 14,
+          "line": 54,
           "character": 13
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
-      "file": "/workspace/schema_cmp.py",
-      "severity": "warning",
-      "message": "Import \"psycopg2\" could not be resolved from source",
+      "file": "/workspace/init_database.py",
+      "severity": "error",
+      "message": "Argument of type \"Literal['\\n                SELECT tablename FROM pg_tables \\n\u2026']\" cannot be assigned to parameter \"statement\" of type \"Executable\" in function \"execute\"\n\u00a0\u00a0\"Literal['\\n                SELECT tablename FROM pg_tables \\n\u2026']\" is not assignable to \"Executable\"",
       "range": {
         "start": {
-          "line": 22,
-          "character": 7
+          "line": 49,
+          "character": 16
         },
         "end": {
-          "line": 22,
-          "character": 15
+          "line": 53,
+          "character": 19
         }
       },
-      "rule": "reportMissingModuleSource"
+      "rule": "reportArgumentType"
     },
     {
-      "file": "/workspace/test_celery_refactor.py",
+      "file": "/workspace/init_database.py",
       "severity": "error",
-      "message": "Import \"celery\" could not be resolved",
+      "message": "No overloads for \"execute\" match the provided arguments",
       "range": {
         "start": {
-          "line": 94,
-          "character": 9
+          "line": 76,
+          "character": 27
         },
         "end": {
-          "line": 94,
-          "character": 15
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/test_openai_implementation.py",
-      "severity": "error",
-      "message": "Import \"pydantic\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 7,
-          "character": 5
-        },
-        "end": {
-          "line": 7,
+          "line": 82,
           "character": 13
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
-      "file": "/workspace/tests/celery/conftest.py",
+      "file": "/workspace/init_database.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
+      "message": "Argument of type \"Literal['\\n                SELECT tablename FROM pg_tables \\n\u2026']\" cannot be assigned to parameter \"statement\" of type \"Executable\" in function \"execute\"\n\u00a0\u00a0\"Literal['\\n                SELECT tablename FROM pg_tables \\n\u2026']\" is not assignable to \"Executable\"",
       "range": {
         "start": {
-          "line": 0,
-          "character": 7
+          "line": 77,
+          "character": 16
         },
         "end": {
-          "line": 0,
-          "character": 13
+          "line": 81,
+          "character": 19
         }
       },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/celery/conftest.py",
-      "severity": "information",
-      "message": "\"Celery\" is unknown import symbol",
-      "range": {
-        "start": {
-          "line": 2,
-          "character": 23
-        },
-        "end": {
-          "line": 2,
-          "character": 29
-        }
-      },
-      "rule": "reportAttributeAccessIssue"
-    },
-    {
-      "file": "/workspace/tests/celery/test_celery_integration.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 1,
-          "character": 7
-        },
-        "end": {
-          "line": 1,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/celery/test_celery_integration.py",
-      "severity": "error",
-      "message": "Import \"celery.result\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 23,
-          "character": 5
-        },
-        "end": {
-          "line": 23,
-          "character": 18
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/celery/test_celery_tasks.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 0,
-          "character": 7
-        },
-        "end": {
-          "line": 0,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/conftest.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 4,
-          "character": 11
-        },
-        "end": {
-          "line": 4,
-          "character": 17
-        }
-      },
-      "rule": "reportMissingImports"
+      "rule": "reportArgumentType"
     },
     {
       "file": "/workspace/tests/conftest.py",
@@ -4992,22 +2336,6 @@
         }
       },
       "rule": "reportOptionalMemberAccess"
-    },
-    {
-      "file": "/workspace/tests/conftest.py",
-      "severity": "error",
-      "message": "Import \"qdrant_client\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 78,
-          "character": 9
-        },
-        "end": {
-          "line": 78,
-          "character": 22
-        }
-      },
-      "rule": "reportMissingImports"
     },
     {
       "file": "/workspace/tests/conftest.py",
@@ -5092,86 +2420,6 @@
     {
       "file": "/workspace/tests/integration/conftest.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 1,
-          "character": 11
-        },
-        "end": {
-          "line": 1,
-          "character": 17
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/conftest.py",
-      "severity": "error",
-      "message": "Import \"asyncpg\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 10,
-          "character": 11
-        },
-        "end": {
-          "line": 10,
-          "character": 18
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/conftest.py",
-      "severity": "error",
-      "message": "Import \"qdrant_client\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 11,
-          "character": 9
-        },
-        "end": {
-          "line": 11,
-          "character": 22
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/conftest.py",
-      "severity": "error",
-      "message": "Import \"qdrant_client.models\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 12,
-          "character": 9
-        },
-        "end": {
-          "line": 12,
-          "character": 29
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/conftest.py",
-      "severity": "error",
-      "message": "Import \"redis.asyncio\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 13,
-          "character": 11
-        },
-        "end": {
-          "line": 13,
-          "character": 24
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/conftest.py",
-      "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
         "start": {
@@ -5200,22 +2448,6 @@
         }
       },
       "rule": "reportOptionalMemberAccess"
-    },
-    {
-      "file": "/workspace/tests/integration/conftest.py",
-      "severity": "error",
-      "message": "Import \"dotenv\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 35,
-          "character": 13
-        },
-        "end": {
-          "line": 35,
-          "character": 19
-        }
-      },
-      "rule": "reportMissingImports"
     },
     {
       "file": "/workspace/tests/integration/conftest.py",
@@ -5283,6 +2515,22 @@
     },
     {
       "file": "/workspace/tests/integration/conftest.py",
+      "severity": "information",
+      "message": "Cannot access attribute \"aclose\" for class \"Redis[Any]\"\n\u00a0\u00a0Attribute \"aclose\" is unknown",
+      "range": {
+        "start": {
+          "line": 68,
+          "character": 17
+        },
+        "end": {
+          "line": 68,
+          "character": 23
+        }
+      },
+      "rule": "reportAttributeAccessIssue"
+    },
+    {
+      "file": "/workspace/tests/integration/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -5300,34 +2548,18 @@
     {
       "file": "/workspace/tests/integration/test_ai_functionality.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
+      "message": "Argument of type \"Any | None\" cannot be assigned to parameter \"embedded_at\" of type \"datetime\" in function \"__init__\"\n\u00a0\u00a0Type \"Any | None\" is not assignable to type \"datetime\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"datetime\"",
       "range": {
         "start": {
-          "line": 6,
-          "character": 7
+          "line": 110,
+          "character": 28
         },
         "end": {
-          "line": 6,
-          "character": 13
+          "line": 110,
+          "character": 61
         }
       },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/test_ai_functionality.py",
-      "severity": "error",
-      "message": "Import \"numpy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 61,
-          "character": 15
-        },
-        "end": {
-          "line": 61,
-          "character": 20
-        }
-      },
-      "rule": "reportMissingImports"
+      "rule": "reportArgumentType"
     },
     {
       "file": "/workspace/tests/integration/test_ai_functionality.py",
@@ -5378,52 +2610,36 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/workspace/tests/integration/test_api.py",
+      "file": "/workspace/tests/integration/test_ai_functionality.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
+      "message": "Arguments missing for parameters \"date\", \"reasoning\"",
       "range": {
         "start": {
-          "line": 1,
-          "character": 7
+          "line": 342,
+          "character": 19
         },
         "end": {
-          "line": 1,
+          "line": 348,
           "character": 13
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
-      "file": "/workspace/tests/integration/test_api.py",
-      "severity": "warning",
-      "message": "Import \"requests\" could not be resolved from source",
-      "range": {
-        "start": {
-          "line": 9,
-          "character": 7
-        },
-        "end": {
-          "line": 9,
-          "character": 15
-        }
-      },
-      "rule": "reportMissingModuleSource"
-    },
-    {
-      "file": "/workspace/tests/integration/test_api.py",
+      "file": "/workspace/tests/integration/test_ai_functionality.py",
       "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
+      "message": "Arguments missing for parameters \"case_number\", \"court\", \"date\", \"decision\", \"reasoning\"",
       "range": {
         "start": {
-          "line": 19,
-          "character": 5
+          "line": 388,
+          "character": 25
         },
         "end": {
-          "line": 19,
-          "character": 15
+          "line": 388,
+          "character": 63
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
       "file": "/workspace/tests/integration/test_api.py",
@@ -5458,116 +2674,52 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/workspace/tests/integration/test_conversation_manager.py",
+      "file": "/workspace/tests/integration/test_api.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
+      "message": "Argument of type \"bool\" cannot be assigned to parameter \"onclause\" of type \"_OnClauseArgument | None\" in function \"join\"\n\u00a0\u00a0Type \"bool\" is not assignable to type \"_OnClauseArgument | None\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ColumnElement[Any]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is incompatible with protocol \"_HasClauseElement[Any]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"__clause_element__\" is not present\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"SQLCoreOperations[Any]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ExpressionElementRole[Any]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"TypedColumnsClauseRole[Any]\"\n\u00a0\u00a0\u00a0\u00a0Type \"bool\" is not assignable to type \"() -> ColumnElement[Any]\"\n  ...",
       "range": {
         "start": {
-          "line": 3,
-          "character": 7
+          "line": 137,
+          "character": 28
         },
         "end": {
-          "line": 3,
-          "character": 13
+          "line": 137,
+          "character": 51
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportArgumentType"
     },
     {
-      "file": "/workspace/tests/integration/test_conversation_manager.py",
+      "file": "/workspace/tests/integration/test_api.py",
       "severity": "error",
-      "message": "Import \"redis.asyncio\" could not be resolved",
+      "message": "Argument of type \"bool\" cannot be assigned to parameter \"whereclause\" of type \"_ColumnExpressionArgument[bool]\" in function \"where\"\n\u00a0\u00a0Type \"bool\" is not assignable to type \"_ColumnExpressionArgument[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ColumnElement[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is incompatible with protocol \"_HasClauseElement[bool]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"__clause_element__\" is not present\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"SQLCoreOperations[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ExpressionElementRole[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"TypedColumnsClauseRole[bool]\"\n\u00a0\u00a0\u00a0\u00a0Type \"bool\" is not assignable to type \"() -> ColumnElement[bool]\"\n  ...",
       "range": {
         "start": {
-          "line": 8,
-          "character": 7
+          "line": 138,
+          "character": 23
         },
         "end": {
-          "line": 8,
-          "character": 20
+          "line": 138,
+          "character": 57
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportArgumentType"
     },
     {
-      "file": "/workspace/tests/integration/test_conversation_manager.py",
+      "file": "/workspace/tests/integration/test_api.py",
       "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
+      "message": "Argument of type \"datetime | None\" cannot be assigned to parameter \"column\" of type \"_ColumnExpressionOrStrLabelArgument[_T@desc]\" in function \"desc\"\n\u00a0\u00a0Type \"datetime | None\" is not assignable to type \"_ColumnExpressionOrStrLabelArgument[_T@desc]\"\n\u00a0\u00a0\u00a0\u00a0Type \"datetime\" is not assignable to type \"_ColumnExpressionOrStrLabelArgument[_T@desc]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"datetime\" is not assignable to \"LambdaElement\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"datetime\" is not assignable to \"str\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"datetime\" is not assignable to \"ColumnElement[_T@desc]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"datetime\" is not assignable to \"ExpressionElementRole[_T@desc]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"datetime\" is not assignable to \"SQLCoreOperations[_T@desc]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"datetime\" is not assignable to \"TypedColumnsClauseRole[_T@desc]\"\n  ...",
       "range": {
         "start": {
-          "line": 9,
-          "character": 5
+          "line": 139,
+          "character": 31
         },
         "end": {
-          "line": 9,
-          "character": 15
+          "line": 139,
+          "character": 46
         }
       },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/test_database_manager.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 3,
-          "character": 7
-        },
-        "end": {
-          "line": 3,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/test_database_manager.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy.ext.asyncio\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 7,
-          "character": 5
-        },
-        "end": {
-          "line": 7,
-          "character": 27
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/test_database_manager.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy.exc\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 8,
-          "character": 5
-        },
-        "end": {
-          "line": 8,
-          "character": 19
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/test_database_manager.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy.pool\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 9,
-          "character": 5
-        },
-        "end": {
-          "line": 9,
-          "character": 20
-        }
-      },
-      "rule": "reportMissingImports"
+      "rule": "reportArgumentType"
     },
     {
       "file": "/workspace/tests/integration/test_database_manager.py",
@@ -5588,22 +2740,6 @@
     {
       "file": "/workspace/tests/integration/test_database_manager.py",
       "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 63,
-          "character": 17
-        },
-        "end": {
-          "line": 63,
-          "character": 27
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/test_database_manager.py",
-      "severity": "error",
       "message": "Argument missing for parameter \"config_service\"",
       "range": {
         "start": {
@@ -5620,98 +2756,34 @@
     {
       "file": "/workspace/tests/integration/test_database_manager.py",
       "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
+      "message": "Argument of type \"None\" cannot be assigned to parameter \"orig\" of type \"BaseException\" in function \"__init__\"\n\u00a0\u00a0\"None\" is not assignable to \"BaseException\"",
       "range": {
         "start": {
-          "line": 163,
-          "character": 17
+          "line": 137,
+          "character": 94
         },
         "end": {
-          "line": 163,
-          "character": 27
+          "line": 137,
+          "character": 98
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportArgumentType"
     },
     {
       "file": "/workspace/tests/integration/test_database_manager.py",
       "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
+      "message": "Argument of type \"None\" cannot be assigned to parameter \"orig\" of type \"BaseException\" in function \"__init__\"\n\u00a0\u00a0\"None\" is not assignable to \"BaseException\"",
       "range": {
         "start": {
-          "line": 233,
-          "character": 17
+          "line": 336,
+          "character": 95
         },
         "end": {
-          "line": 233,
-          "character": 27
+          "line": 336,
+          "character": 99
         }
       },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/test_database_manager.py",
-      "severity": "error",
-      "message": "Import \"sqlalchemy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 368,
-          "character": 21
-        },
-        "end": {
-          "line": 368,
-          "character": 31
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/test_embedding_pipeline.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 5,
-          "character": 7
-        },
-        "end": {
-          "line": 5,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/test_embedding_pipeline.py",
-      "severity": "error",
-      "message": "Import \"numpy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 6,
-          "character": 7
-        },
-        "end": {
-          "line": 6,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/test_integration.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 4,
-          "character": 7
-        },
-        "end": {
-          "line": 4,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
+      "rule": "reportArgumentType"
     },
     {
       "file": "/workspace/tests/integration/test_integration.py",
@@ -5728,22 +2800,6 @@
         }
       },
       "rule": "reportAttributeAccessIssue"
-    },
-    {
-      "file": "/workspace/tests/integration/test_integration.py",
-      "severity": "error",
-      "message": "Import \"openai.types.responses\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 23,
-          "character": 5
-        },
-        "end": {
-          "line": 23,
-          "character": 27
-        }
-      },
-      "rule": "reportMissingImports"
     },
     {
       "file": "/workspace/tests/integration/test_integration.py",
@@ -5779,70 +2835,6 @@
     },
     {
       "file": "/workspace/tests/integration/test_integration.py",
-      "severity": "error",
-      "message": "\"get\" is not a known attribute of \"None\"",
-      "range": {
-        "start": {
-          "line": 400,
-          "character": 35
-        },
-        "end": {
-          "line": 400,
-          "character": 38
-        }
-      },
-      "rule": "reportOptionalMemberAccess"
-    },
-    {
-      "file": "/workspace/tests/integration/test_integration.py",
-      "severity": "error",
-      "message": "\"setex\" is not a known attribute of \"None\"",
-      "range": {
-        "start": {
-          "line": 401,
-          "character": 35
-        },
-        "end": {
-          "line": 401,
-          "character": 40
-        }
-      },
-      "rule": "reportOptionalMemberAccess"
-    },
-    {
-      "file": "/workspace/tests/integration/test_integration.py",
-      "severity": "error",
-      "message": "\"setex\" is not a known attribute of \"None\"",
-      "range": {
-        "start": {
-          "line": 423,
-          "character": 42
-        },
-        "end": {
-          "line": 423,
-          "character": 47
-        }
-      },
-      "rule": "reportOptionalMemberAccess"
-    },
-    {
-      "file": "/workspace/tests/integration/test_integration.py",
-      "severity": "error",
-      "message": "\"get\" is not a known attribute of \"None\"",
-      "range": {
-        "start": {
-          "line": 427,
-          "character": 35
-        },
-        "end": {
-          "line": 427,
-          "character": 38
-        }
-      },
-      "rule": "reportOptionalMemberAccess"
-    },
-    {
-      "file": "/workspace/tests/integration/test_integration.py",
       "severity": "information",
       "message": "\"cached_query\" is unknown import symbol",
       "range": {
@@ -5856,22 +2848,6 @@
         }
       },
       "rule": "reportAttributeAccessIssue"
-    },
-    {
-      "file": "/workspace/tests/integration/test_integration_refactored.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 4,
-          "character": 7
-        },
-        "end": {
-          "line": 4,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
     },
     {
       "file": "/workspace/tests/integration/test_integration_refactored.py",
@@ -5938,52 +2914,36 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/workspace/tests/integration/test_migration.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
+      "file": "/workspace/tests/integration/test_openai_integration.py",
+      "severity": "information",
+      "message": "\"config\" is not a known attribute of module \"pytest\"",
       "range": {
         "start": {
-          "line": 1,
-          "character": 7
+          "line": 82,
+          "character": 19
         },
         "end": {
-          "line": 1,
-          "character": 13
+          "line": 82,
+          "character": 25
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportAttributeAccessIssue"
     },
     {
       "file": "/workspace/tests/integration/test_openai_integration.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
+      "severity": "information",
+      "message": "\"config\" is not a known attribute of module \"pytest\"",
       "range": {
         "start": {
-          "line": 6,
-          "character": 7
+          "line": 110,
+          "character": 19
         },
         "end": {
-          "line": 6,
-          "character": 13
+          "line": 110,
+          "character": 25
         }
       },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/test_openai_integration.py",
-      "severity": "error",
-      "message": "Import \"pydantic\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 8,
-          "character": 5
-        },
-        "end": {
-          "line": 8,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
+      "rule": "reportAttributeAccessIssue"
     },
     {
       "file": "/workspace/tests/integration/test_openai_integration.py",
@@ -6003,35 +2963,19 @@
     },
     {
       "file": "/workspace/tests/integration/test_openai_integration.py",
-      "severity": "warning",
-      "message": "Import \"psutil\" could not be resolved from source",
+      "severity": "information",
+      "message": "\"config\" is not a known attribute of module \"pytest\"",
       "range": {
         "start": {
-          "line": 238,
-          "character": 15
+          "line": 232,
+          "character": 19
         },
         "end": {
-          "line": 238,
-          "character": 21
+          "line": 232,
+          "character": 25
         }
       },
-      "rule": "reportMissingModuleSource"
-    },
-    {
-      "file": "/workspace/tests/integration/test_refactored_services.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 4,
-          "character": 7
-        },
-        "end": {
-          "line": 4,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
+      "rule": "reportAttributeAccessIssue"
     },
     {
       "file": "/workspace/tests/integration/test_refactored_services.py",
@@ -6131,22 +3075,6 @@
     },
     {
       "file": "/workspace/tests/integration/test_streaming.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 1,
-          "character": 7
-        },
-        "end": {
-          "line": 1,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/test_streaming.py",
       "severity": "information",
       "message": "\"ParalegalAgent\" is unknown import symbol",
       "range": {
@@ -6160,38 +3088,6 @@
         }
       },
       "rule": "reportAttributeAccessIssue"
-    },
-    {
-      "file": "/workspace/tests/integration/test_streaming_handler.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 3,
-          "character": 7
-        },
-        "end": {
-          "line": 3,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/test_streaming_handler.py",
-      "severity": "error",
-      "message": "Import \"openai.types.responses\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 12,
-          "character": 5
-        },
-        "end": {
-          "line": 12,
-          "character": 27
-        }
-      },
-      "rule": "reportMissingImports"
     },
     {
       "file": "/workspace/tests/integration/test_streaming_handler.py",
@@ -6436,22 +3332,6 @@
     {
       "file": "/workspace/tests/unit/conftest.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 1,
-          "character": 11
-        },
-        "end": {
-          "line": 1,
-          "character": 17
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/unit/conftest.py",
-      "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
         "start": {
@@ -6516,22 +3396,6 @@
     {
       "file": "/workspace/tests/unit/test_agent_sdk.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 1,
-          "character": 7
-        },
-        "end": {
-          "line": 1,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/unit/test_agent_sdk.py",
-      "severity": "error",
       "message": "Arguments missing for parameters \"config_service\", \"conversation_manager\", \"tool_executor\"",
       "range": {
         "start": {
@@ -6560,70 +3424,6 @@
         }
       },
       "rule": "reportCallIssue"
-    },
-    {
-      "file": "/workspace/tests/unit/test_llm_manager.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 5,
-          "character": 7
-        },
-        "end": {
-          "line": 5,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/unit/test_llm_manager.py",
-      "severity": "error",
-      "message": "Import \"numpy\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 6,
-          "character": 7
-        },
-        "end": {
-          "line": 6,
-          "character": 12
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/unit/test_openai_integration.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 4,
-          "character": 7
-        },
-        "end": {
-          "line": 4,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/unit/test_openai_integration.py",
-      "severity": "error",
-      "message": "Import \"openai\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 7,
-          "character": 5
-        },
-        "end": {
-          "line": 7,
-          "character": 11
-        }
-      },
-      "rule": "reportMissingImports"
     },
     {
       "file": "/workspace/tests/unit/test_openai_integration.py",
@@ -6724,6 +3524,86 @@
     {
       "file": "/workspace/tests/unit/test_openai_integration.py",
       "severity": "error",
+      "message": "Arguments missing for parameters \"request\", \"body\"",
+      "range": {
+        "start": {
+          "line": 89,
+          "character": 65
+        },
+        "end": {
+          "line": 89,
+          "character": 86
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "Argument of type \"Literal['Request timeout']\" cannot be assigned to parameter \"request\" of type \"Request\" in function \"__init__\"\n\u00a0\u00a0\"Literal['Request timeout']\" is not assignable to \"Request\"",
+      "range": {
+        "start": {
+          "line": 122,
+          "character": 81
+        },
+        "end": {
+          "line": 122,
+          "character": 98
+        }
+      },
+      "rule": "reportArgumentType"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "Arguments missing for parameters \"date\", \"decision\", \"reasoning\"",
+      "range": {
+        "start": {
+          "line": 202,
+          "character": 27
+        },
+        "end": {
+          "line": 207,
+          "character": 9
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "Arguments missing for parameters \"court\", \"date\", \"decision\", \"reasoning\"",
+      "range": {
+        "start": {
+          "line": 214,
+          "character": 29
+        },
+        "end": {
+          "line": 217,
+          "character": 9
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "Argument of type \"Literal['Timeout']\" cannot be assigned to parameter \"request\" of type \"Request\" in function \"__init__\"\n\u00a0\u00a0\"Literal['Timeout']\" is not assignable to \"Request\"",
+      "range": {
+        "start": {
+          "line": 235,
+          "character": 28
+        },
+        "end": {
+          "line": 235,
+          "character": 37
+        }
+      },
+      "rule": "reportArgumentType"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
       "message": "\"case_number\" is not a known attribute of \"None\"",
       "range": {
         "start": {
@@ -6738,100 +3618,20 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/workspace/tests/unit/test_openai_service.py",
+      "file": "/workspace/tests/unit/test_openai_integration.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
+      "message": "Arguments missing for parameters \"case_number\", \"court\", \"date\", \"decision\", \"reasoning\"",
       "range": {
         "start": {
-          "line": 5,
-          "character": 7
+          "line": 390,
+          "character": 19
         },
         "end": {
-          "line": 5,
-          "character": 13
+          "line": 390,
+          "character": 36
         }
       },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/unit/test_openai_service.py",
-      "severity": "error",
-      "message": "Import \"pydantic\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 7,
-          "character": 5
-        },
-        "end": {
-          "line": 7,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/unit/test_performance_utils.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 3,
-          "character": 7
-        },
-        "end": {
-          "line": 3,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/unit/test_registration_key.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 1,
-          "character": 7
-        },
-        "end": {
-          "line": 1,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/unit/test_registration_key.py",
-      "severity": "warning",
-      "message": "Import \"requests\" could not be resolved from source",
-      "range": {
-        "start": {
-          "line": 7,
-          "character": 7
-        },
-        "end": {
-          "line": 7,
-          "character": 15
-        }
-      },
-      "rule": "reportMissingModuleSource"
-    },
-    {
-      "file": "/workspace/tests/unit/test_tool_executor.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 3,
-          "character": 7
-        },
-        "end": {
-          "line": 3,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
       "file": "/workspace/tests/unit/test_tool_executor.py",
@@ -6851,26 +3651,58 @@
     },
     {
       "file": "/workspace/tests/unit/test_tool_registry.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
+      "severity": "information",
+      "message": "Cannot access attribute \"name\" for class \"BaseModel\"\n\u00a0\u00a0Attribute \"name\" is unknown",
       "range": {
         "start": {
-          "line": 3,
-          "character": 7
+          "line": 165,
+          "character": 24
         },
         "end": {
-          "line": 3,
-          "character": 13
+          "line": 165,
+          "character": 28
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportAttributeAccessIssue"
+    },
+    {
+      "file": "/workspace/tests/unit/test_tool_registry.py",
+      "severity": "information",
+      "message": "Cannot access attribute \"age\" for class \"BaseModel\"\n\u00a0\u00a0Attribute \"age\" is unknown",
+      "range": {
+        "start": {
+          "line": 166,
+          "character": 24
+        },
+        "end": {
+          "line": 166,
+          "character": 27
+        }
+      },
+      "rule": "reportAttributeAccessIssue"
+    },
+    {
+      "file": "/workspace/tests/unit/test_tool_registry.py",
+      "severity": "information",
+      "message": "Cannot access attribute \"active\" for class \"BaseModel\"\n\u00a0\u00a0Attribute \"active\" is unknown",
+      "range": {
+        "start": {
+          "line": 167,
+          "character": 24
+        },
+        "end": {
+          "line": 167,
+          "character": 30
+        }
+      },
+      "rule": "reportAttributeAccessIssue"
     }
   ],
   "summary": {
     "filesAnalyzed": 128,
-    "errorCount": 339,
-    "warningCount": 18,
-    "informationCount": 72,
-    "timeInSec": 3.623
+    "errorCount": 145,
+    "warningCount": 0,
+    "informationCount": 86,
+    "timeInSec": 14.242
   }
 }

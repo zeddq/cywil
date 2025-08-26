@@ -1,21 +1,8 @@
 Pyright Diagnostic Report: reportAttributeAccessIssue
 ================================================================================
 
-Total violations: 72
+Total violations: 86
 
-
-/workspace/alembic/env.py (2 violations)
--------------------------
-  Line 6:21 [information]: "context" is unknown import symbol
-  Line 7:24 [information]: "SQLModel" is unknown import symbol
-
-/workspace/alembic/versions/00df3e0ab26c_add_created_by_user_column_to_case.py (1 violations)
-------------------------------------------------------------------------------
-  Line 10:21 [information]: "op" is unknown import symbol
-
-/workspace/app/main.py (1 violations)
-----------------------
-  Line 34:5 [information]: "trace" is unknown import symbol
 
 /workspace/app/services/optimized_statute_search.py (3 violations)
 ---------------------------------------------------
@@ -26,8 +13,10 @@ Total violations: 72
   Line 57:27 [information]: Cannot access attribute "_embedder" for class "OptimizedStatuteSearchService*"
   Attribute "_embedder" is unknown
 
-/workspace/app/services/supreme_court_service.py (4 violations)
+/workspace/app/services/supreme_court_service.py (5 violations)
 ------------------------------------------------
+  Line 303:34 [information]: Cannot access attribute "__table__" for class "type[SNRuling]"
+  Attribute "__table__" is unknown
   Line 323:29 [information]: Cannot access attribute "meta" for class "RulingPayload"
   Attribute "meta" is unknown
   Line 323:65 [information]: Cannot access attribute "meta" for class "RulingPayload"
@@ -36,6 +25,14 @@ Total violations: 72
   Attribute "meta" is unknown
   Line 324:58 [information]: Cannot access attribute "meta" for class "RulingPayload"
   Attribute "meta" is unknown
+
+/workspace/app/task_processors.py (2 violations)
+---------------------------------
+  Line 301:30 [information]: Cannot assign to attribute "metadata" for class "Document"
+  Expression of type "dict[Any, Any]" cannot be assigned to attribute "metadata" of class "Document"
+    "dict[Any, Any]" is not assignable to "MetaData"
+  Line 303:35 [information]: Cannot access attribute "update" for class "MetaData"
+  Attribute "update" is unknown
 
 /workspace/app/worker/tasks/case_tasks.py (3 violations)
 -----------------------------------------
@@ -55,10 +52,17 @@ Total violations: 72
 -------------------------------------------------
   Line 24:28 [information]: "generate_statute_embeddings" is unknown import symbol
 
-/workspace/app/worker/tasks/preprocess_sn_o3.py (1 violations)
+/workspace/app/worker/tasks/preprocess_sn_o3.py (4 violations)
 -----------------------------------------------
+  Line 342:38 [information]: Cannot assign to attribute "entities" for class "RulingParagraph"
+  Attribute "entities" is unknown
+  Line 345:38 [information]: Cannot assign to attribute "entities" for class "RulingParagraph"
+  Attribute "entities" is unknown
   Line 491:28 [information]: Cannot access attribute "paragraphs" for class "List[bytes]"
   Attribute "paragraphs" is unknown
+  Line 674:39 [information]: Cannot assign to attribute "name" for class "Ruling"
+  Type "str | None" is not assignable to type "str"
+    "None" is not assignable to "str"
 
 /workspace/app/worker/tasks/search_tasks.py (6 violations)
 -------------------------------------------
@@ -115,6 +119,21 @@ Total violations: 72
   Line 65:44 [information]: Cannot access attribute "postgres" for class "Dict[Unknown, Unknown]"
   Attribute "postgres" is unknown
 
+/workspace/ingest/preprocess_sn.py (2 violations)
+----------------------------------
+  Line 74:26 [information]: Cannot access attribute "get_text" for class "Page"
+  Attribute "get_text" is unknown
+  Line 129:16 [information]: "open" is not a known attribute of module "fitz"
+
+/workspace/ingest/preprocess_sn_o3.py (3 violations)
+-------------------------------------
+  Line 106:16 [information]: "open" is not a known attribute of module "fitz"
+  Line 304:42 [information]: Cannot access attribute "entities" for class "BaseModel"
+  Attribute "entities" is unknown
+  Line 622:39 [information]: Cannot assign to attribute "name" for class "Ruling"
+  Type "str | None" is not assignable to type "str"
+    "None" is not assignable to "str"
+
 /workspace/ingest/refactored_ingest_pipeline.py (3 violations)
 -----------------------------------------------
   Line 298:53 [information]: Cannot access attribute "get_ingestion_status" for class "None"
@@ -124,14 +143,16 @@ Total violations: 72
   Line 300:56 [information]: Cannot access attribute "get_embedding_statistics" for class "None"
   Attribute "get_embedding_statistics" is unknown
 
-/workspace/tests/celery/conftest.py (1 violations)
------------------------------------
-  Line 3:24 [information]: "Celery" is unknown import symbol
+/workspace/ingest/templates_preprocess.py (1 violations)
+-----------------------------------------
+  Line 80:24 [information]: "open" is not a known attribute of module "fitz"
 
-/workspace/tests/integration/conftest.py (1 violations)
+/workspace/tests/integration/conftest.py (2 violations)
 ----------------------------------------
   Line 49:22 [information]: Cannot access attribute "close" for class "DatabaseManager"
   Attribute "close" is unknown
+  Line 69:18 [information]: Cannot access attribute "aclose" for class "Redis[Any]"
+  Attribute "aclose" is unknown
 
 /workspace/tests/integration/test_api.py (2 violations)
 ----------------------------------------
@@ -149,6 +170,12 @@ Total violations: 72
   Line 17:26 [information]: "initialize_services" is unknown import symbol
   Line 190:42 [information]: "get" is not a known attribute of module "app.core.service_container"
   Line 247:47 [information]: "get" is not a known attribute of module "app.core.service_container"
+
+/workspace/tests/integration/test_openai_integration.py (3 violations)
+-------------------------------------------------------
+  Line 83:20 [information]: "config" is not a known attribute of module "pytest"
+  Line 111:20 [information]: "config" is not a known attribute of module "pytest"
+  Line 233:20 [information]: "config" is not a known attribute of module "pytest"
 
 /workspace/tests/integration/test_refactored_services.py (3 violations)
 --------------------------------------------------------
@@ -196,3 +223,12 @@ Total violations: 72
   Attribute "errors" is unknown
   Line 428:26 [information]: Cannot access attribute "events_by_type" for class "MetricsCollector"
   Attribute "events_by_type" is unknown
+
+/workspace/tests/unit/test_tool_registry.py (3 violations)
+-------------------------------------------
+  Line 166:25 [information]: Cannot access attribute "name" for class "BaseModel"
+  Attribute "name" is unknown
+  Line 167:25 [information]: Cannot access attribute "age" for class "BaseModel"
+  Attribute "age" is unknown
+  Line 168:25 [information]: Cannot access attribute "active" for class "BaseModel"
+  Attribute "active" is unknown

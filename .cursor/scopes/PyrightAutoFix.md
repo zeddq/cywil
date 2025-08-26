@@ -1,73 +1,55 @@
-## Pyright Auto-Fix Workflow Spec (Agent-Driven)
+## Pyright Auto-Fix Workflow Spec (Agent-Driven, Aggressive Mode)
 
 ### Purpose & Problem
-- Reduce Pyright violations continuously by performing safe, deterministic edits directly (no auto-fix scripts).
-- Act immediately after each discovery run triggered by the monitor when HEAD advances (at most every 30 minutes).
+- Reduce Pyright violations aggressively with safe-but-broader edits applied directly (no auto-fix scripts).
+- Act immediately after each discovery run when HEAD advances (≤ every 30 minutes).
 
 ### Success Criteria
-- Violations trend downward; each successful cycle yields a net reduction in `pyright_reports/all_violations.csv` rows.
+- Clear downward trend in total violations on each cycle when feasible.
 - Tests are executed after fixes and results are logged (non-blocking).
-- Only commit when:
-  - The post-fix Pyright report shows fewer violations than the previous baseline.
-- Each cycle appends a clear entry to `reports/pyright_monitor_latest.md` with before/after counts, files changed, rules affected, and test summary.
+- Commits occur when the post-fix report shows fewer violations than the previous baseline.
 
-### Scope (Initial Phases)
-- Phase A (Low-risk, deterministic; default ON):
-  1) Import path normalization (internal modules)
-     - Update import lines to correct internal paths (e.g., `app.models.pipeline_schemas` → `app.embedding_models.pipeline_schemas`).
-     - Limit to single-line `import` or `from ... import ...` statements.
-     - Skip ambiguous multi-line or side-effect imports unless unambiguous.
-  2) Pyright configuration hardening
-     - Ensure `pyrightconfig.json` is correct (e.g., `extraPaths`, `venvPath`/`venv`).
-     - Do not loosen error rules; only improve resolution.
-- Phase B (Optional, guarded; enabled when explicitly requested)
-  - Add minimal `None` checks for `reportOptionalMemberAccess`/`reportOptionalCall` where an isolated assignment or expression is implicated.
-  - Only small, surgical edits; avoid behavior changes.
+### Expanded Scope (Aggressive Mode)
+- Dependencies
+  - Install/upgrade dependencies into `.venv` from `requirements.txt` and `requirements-test.txt` to resolve import issues.
+  - May pin minor versions as needed (only if strictly required for import resolution).
+- Import corrections
+  - Replace incorrect internal imports (e.g., `app.models.pipeline_schemas` → `app.embedding_models.pipeline_schemas`).
+  - Normalize relative imports to absolute `app.*` where appropriate (e.g., `..models.pipeline_schemas` → `app.embedding_models.pipeline_schemas`).
+  - Fix mixed package/module import paths in tests to reference production modules consistently.
+- Pyright configuration
+  - Adjust `pyrightconfig.json` `extraPaths`, `venvPath`/`venv`, and test roots if needed to reflect the workspace layout.
+  - Do not loosen error severities beyond project standards, but may mark specific noisy rules as information where appropriate.
+- Optional value guards (Phase B)
+  - Apply minimal `None` checks for `reportOptionalMemberAccess`/`reportOptionalCall` in simple assignments/expressions when it clearly removes false-positive risk.
+  - Keep changes localized and behavior-neutral.
+- Limited stubs
+  - Add minimal type-only stubs for third-party packages not strictly required at runtime to quiet type checker noise (as a last resort).
 
 ### Constraints & Safeguards
-- Make the smallest change necessary; do not modify business logic beyond what the rule requires.
-- Avoid broad refactors or multi-line structural edits in Phase A.
-- If changes do not reduce violations, revert edits. Test failures are logged and non-blocking.
-- Rate-limit to once per new commit (aligned with monitor cadence).
-- Maintain idempotency; repeated runs should not thrash files.
-
-### Technical Considerations
-- Inputs
-  - `pyright_reports/*.txt` and `pyright_reports/all_violations.csv` from `scripts/pyright_report_by_rule.py`.
-- Approach (no auto-fix scripts)
-  - The engineer (agent) reviews the latest reports, identifies safe targets, and performs edits directly in the codebase.
-  - Use search/grep and the editor for precise, line-scoped changes.
+- Prefer correctness-preserving edits; avoid behavior changes.
+- Keep edits small and reviewable; batch related import fixes together.
+- If no reduction is achieved, revert edits for that cycle. Test failures are logged and non-blocking.
+- Maintain idempotency and avoid thrashing.
 
 ### Process Per Cycle
-1) Monitor detects a new commit and runs the discovery script.
-2) Agent reviews `pyright_reports/SUMMARY.txt` and per-rule `*.txt` files.
-3) Agent performs Phase A edits (and Phase B if explicitly enabled).
-4) Re-run the discovery script.
+1) Monitor detects a new commit and runs discovery.
+2) Agent reviews `pyright_reports` outputs.
+3) Perform aggressive edits:
+   - Install deps, correct imports, adjust `pyrightconfig.json`, and apply Phase B guards where safe.
+4) Re-run discovery.
 5) If violations reduced:
-   - Run tests; record results in logs (non-blocking).
-   - Commit with message like `chore(pyright): agent fixes (-N)`.
-   - Optionally push if configured.
-   - Log details (before/after, rules impacted, files changed) and test summary to `reports/pyright_monitor_latest.md`.
-6) If not reduced:
-   - Revert changes and log outcome.
-
-### Monitor Integration
-- The monitor continues to run the discovery script on new commits and writes logs.
-- The agent acts immediately after each discovery run to apply fixes; no auto-fix scripts are invoked by the monitor.
-- All actions and outcomes are recorded in `reports/pyright_monitor_latest.md`.
+   - Run tests; record results (non-blocking).
+   - Commit with `chore(pyright): agent aggressive fixes (-N)` and optionally push.
+   - Log details and test summary to `reports/pyright_monitor_latest.md`.
+6) If not reduced: revert and log.
 
 ### Testing & Validation
-- Run local unit tests via `pytest -q` if available; failures are logged and non-blocking.
-- No interactive prompts; deterministic edits only.
+- Run `pytest -q` if available; log failures (non-blocking).
 
 ### Rollback Strategy
-- Revert the working copy if reductions are not achieved.
-- Do not accumulate partial edits across cycles.
-
-### Implementation Notes
-- Remove reliance on any auto-fix script; fixes are human-in-the-loop edits.
-- Keep a short, curated list of known safe import path corrections (tracked in commit messages or in a developer note) to speed up future cycles.
+- Revert working copy if no reduction is achieved.
 
 ---
 
-Does this capture your intent? If so, I will proceed with agent-driven fixes after each discovery run and follow the commit/push/logging gates above.
+This aggressive mode will be used for upcoming manual fix cycles to accelerate reduction of violations.

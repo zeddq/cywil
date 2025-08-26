@@ -1,7 +1,7 @@
 Pyright Diagnostic Report: reportArgumentType
 ================================================================================
 
-Total violations: 15
+Total violations: 34
 
 
 /workspace/app/validators/document_validator.py (1 violations)
@@ -23,8 +23,10 @@ Total violations: 15
   Type "str | None" is not assignable to type "str"
     "None" is not assignable to "str"
 
-/workspace/app/worker/tasks/preprocess_sn_o3.py (2 violations)
+/workspace/app/worker/tasks/preprocess_sn_o3.py (3 violations)
 -----------------------------------------------
+  Line 482:49 [error]: Argument of type "Ruling" cannot be assigned to parameter "ruling" of type "ParsedRuling" in function "enhance_entities_with_o3"
+  "Ruling" is not assignable to "ParsedRuling"
   Line 589:19 [error]: Argument of type "Path | None" cannot be assigned to parameter "file" of type "FileDescriptorOrPath" in function "open"
   Type "Path | None" is not assignable to type "FileDescriptorOrPath"
     Type "None" is not assignable to type "FileDescriptorOrPath"
@@ -39,6 +41,15 @@ Total violations: 15
   "list[List[Dict[str, Any]] | None]" is not assignable to "List[Dict[str, Any]]"
     Type parameter "_T@list" is invariant, but "List[Dict[str, Any]] | None" is not the same as "Dict[str, Any]"
     Consider switching from "list" to "Sequence" which is covariant
+
+/workspace/app/worker/tasks/sn.py (2 violations)
+---------------------------------
+  Line 219:22 [error]: Argument of type "int | None" cannot be assigned to parameter "size" of type "int" in function "__init__"
+  Type "int | None" is not assignable to type "int"
+    "None" is not assignable to "int"
+  Line 232:22 [error]: Argument of type "int | None" cannot be assigned to parameter "size" of type "int" in function "__init__"
+  Type "int | None" is not assignable to type "int"
+    "None" is not assignable to "int"
 
 /workspace/ingest/pdf2chunks.py (4 violations)
 -------------------------------
@@ -81,11 +92,116 @@ Total violations: 15
     Type parameter "_T@list" is invariant, but "List[Dict[str, Any]] | None" is not the same as "Dict[str, Any]"
     Consider switching from "list" to "Sequence" which is covariant
 
+/workspace/ingest/sn.py (3 violations)
+-----------------------
+  Line 95:62 [error]: Argument of type "bool" cannot be assigned to parameter "whereclause" of type "_ColumnExpressionArgument[bool]" in function "where"
+  Type "bool" is not assignable to type "_ColumnExpressionArgument[bool]"
+    "bool" is not assignable to "ColumnElement[bool]"
+    "bool" is incompatible with protocol "_HasClauseElement[bool]"
+      "__clause_element__" is not present
+    "bool" is not assignable to "SQLCoreOperations[bool]"
+    "bool" is not assignable to "ExpressionElementRole[bool]"
+    "bool" is not assignable to "TypedColumnsClauseRole[bool]"
+    Type "bool" is not assignable to type "() -> ColumnElement[bool]"
+  ...
+  Line 210:53 [error]: Argument of type "int | None" cannot be assigned to parameter "size" of type "int" in function "__init__"
+  Type "int | None" is not assignable to type "int"
+    "None" is not assignable to "int"
+  Line 222:53 [error]: Argument of type "int | None" cannot be assigned to parameter "size" of type "int" in function "__init__"
+  Type "int | None" is not assignable to type "int"
+    "None" is not assignable to "int"
+
+/workspace/ingest/templates.py (3 violations)
+------------------------------
+  Line 100:66 [error]: Argument of type "Any | bool" cannot be assigned to parameter "whereclause" of type "_ColumnExpressionArgument[bool]" in function "where"
+  Type "Any | bool" is not assignable to type "_ColumnExpressionArgument[bool]"
+    Type "bool" is not assignable to type "_ColumnExpressionArgument[bool]"
+      "bool" is not assignable to "ColumnElement[bool]"
+      "bool" is incompatible with protocol "_HasClauseElement[bool]"
+        "__clause_element__" is not present
+      "bool" is not assignable to "SQLCoreOperations[bool]"
+      "bool" is not assignable to "ExpressionElementRole[bool]"
+      "bool" is not assignable to "TypedColumnsClauseRole[bool]"
+  ...
+  Line 136:30 [error]: Argument of type "Literal['keyword']" cannot be assigned to parameter "field_schema" of type "qdrant_client.conversions.common_types.PayloadSchemaType | None" in function "create_payload_index"
+  Type "Literal['keyword']" is not assignable to type "qdrant_client.conversions.common_types.PayloadSchemaType | None"
+    "Literal['keyword']" is not assignable to "PayloadSchemaType"
+    "Literal['keyword']" is not assignable to "KeywordIndexParams"
+    "Literal['keyword']" is not assignable to "IntegerIndexParams"
+    "Literal['keyword']" is not assignable to "FloatIndexParams"
+    "Literal['keyword']" is not assignable to "GeoIndexParams"
+    "Literal['keyword']" is not assignable to "TextIndexParams"
+    "Literal['keyword']" is not assignable to "BoolIndexParams"
+  ...
+  Line 167:53 [error]: Argument of type "int | None" cannot be assigned to parameter "size" of type "int" in function "__init__"
+  Type "int | None" is not assignable to type "int"
+    "None" is not assignable to "int"
+
 /workspace/ingest/templates_preprocess.py (1 violations)
 -----------------------------------------
-  Line 86:35 [error]: Argument of type "(t: Unknown = text) -> CoroutineType[Any, Any, Unknown | None]" cannot be assigned to parameter "object" of type "() -> Coroutine[Any, Any, Template]" in function "append"
-  Type "(t: Unknown = text) -> CoroutineType[Any, Any, Unknown | None]" is not assignable to type "() -> Coroutine[Any, Any, Template]"
-    Function return type "CoroutineType[Any, Any, Unknown | None]" is incompatible with type "Coroutine[Any, Any, Template]"
-      "CoroutineType[Any, Any, Unknown | None]" is not assignable to "Coroutine[Any, Any, Template]"
-        Type parameter "_ReturnT_nd_co@Coroutine" is covariant, but "Unknown | None" is not a subtype of "Template"
-          Type "Unknown | None" is not assignable to type "Template"
+  Line 86:35 [error]: Argument of type "(t: Unknown = text) -> CoroutineType[Any, Any, Template | None]" cannot be assigned to parameter "object" of type "() -> Coroutine[Any, Any, Template]" in function "append"
+  Type "(t: Unknown = text) -> CoroutineType[Any, Any, Template | None]" is not assignable to type "() -> Coroutine[Any, Any, Template]"
+    Function return type "CoroutineType[Any, Any, Template | None]" is incompatible with type "Coroutine[Any, Any, Template]"
+      "CoroutineType[Any, Any, Template | None]" is not assignable to "Coroutine[Any, Any, Template]"
+        Type parameter "_ReturnT_nd_co@Coroutine" is covariant, but "Template | None" is not a subtype of "Template"
+          Type "Template | None" is not assignable to type "Template"
+
+/workspace/init_database.py (2 violations)
+---------------------------
+  Line 50:17 [error]: Argument of type "Literal['\n                SELECT tablename FROM pg_tables \n…']" cannot be assigned to parameter "statement" of type "Executable" in function "execute"
+  "Literal['\n                SELECT tablename FROM pg_tables \n…']" is not assignable to "Executable"
+  Line 78:17 [error]: Argument of type "Literal['\n                SELECT tablename FROM pg_tables \n…']" cannot be assigned to parameter "statement" of type "Executable" in function "execute"
+  "Literal['\n                SELECT tablename FROM pg_tables \n…']" is not assignable to "Executable"
+
+/workspace/tests/integration/test_ai_functionality.py (1 violations)
+-----------------------------------------------------
+  Line 111:29 [error]: Argument of type "Any | None" cannot be assigned to parameter "embedded_at" of type "datetime" in function "__init__"
+  Type "Any | None" is not assignable to type "datetime"
+    "None" is not assignable to "datetime"
+
+/workspace/tests/integration/test_api.py (3 violations)
+----------------------------------------
+  Line 138:29 [error]: Argument of type "bool" cannot be assigned to parameter "onclause" of type "_OnClauseArgument | None" in function "join"
+  Type "bool" is not assignable to type "_OnClauseArgument | None"
+    "bool" is not assignable to "ColumnElement[Any]"
+    "bool" is incompatible with protocol "_HasClauseElement[Any]"
+      "__clause_element__" is not present
+    "bool" is not assignable to "SQLCoreOperations[Any]"
+    "bool" is not assignable to "ExpressionElementRole[Any]"
+    "bool" is not assignable to "TypedColumnsClauseRole[Any]"
+    Type "bool" is not assignable to type "() -> ColumnElement[Any]"
+  ...
+  Line 139:24 [error]: Argument of type "bool" cannot be assigned to parameter "whereclause" of type "_ColumnExpressionArgument[bool]" in function "where"
+  Type "bool" is not assignable to type "_ColumnExpressionArgument[bool]"
+    "bool" is not assignable to "ColumnElement[bool]"
+    "bool" is incompatible with protocol "_HasClauseElement[bool]"
+      "__clause_element__" is not present
+    "bool" is not assignable to "SQLCoreOperations[bool]"
+    "bool" is not assignable to "ExpressionElementRole[bool]"
+    "bool" is not assignable to "TypedColumnsClauseRole[bool]"
+    Type "bool" is not assignable to type "() -> ColumnElement[bool]"
+  ...
+  Line 140:32 [error]: Argument of type "datetime | None" cannot be assigned to parameter "column" of type "_ColumnExpressionOrStrLabelArgument[_T@desc]" in function "desc"
+  Type "datetime | None" is not assignable to type "_ColumnExpressionOrStrLabelArgument[_T@desc]"
+    Type "datetime" is not assignable to type "_ColumnExpressionOrStrLabelArgument[_T@desc]"
+      "datetime" is not assignable to "LambdaElement"
+      "datetime" is not assignable to "str"
+      "datetime" is not assignable to "ColumnElement[_T@desc]"
+      "datetime" is not assignable to "ExpressionElementRole[_T@desc]"
+      "datetime" is not assignable to "SQLCoreOperations[_T@desc]"
+      "datetime" is not assignable to "TypedColumnsClauseRole[_T@desc]"
+  ...
+
+/workspace/tests/integration/test_database_manager.py (2 violations)
+-----------------------------------------------------
+  Line 138:95 [error]: Argument of type "None" cannot be assigned to parameter "orig" of type "BaseException" in function "__init__"
+  "None" is not assignable to "BaseException"
+  Line 337:96 [error]: Argument of type "None" cannot be assigned to parameter "orig" of type "BaseException" in function "__init__"
+  "None" is not assignable to "BaseException"
+
+/workspace/tests/unit/test_openai_integration.py (2 violations)
+------------------------------------------------
+  Line 123:82 [error]: Argument of type "Literal['Request timeout']" cannot be assigned to parameter "request" of type "Request" in function "__init__"
+  "Literal['Request timeout']" is not assignable to "Request"
+  Line 236:29 [error]: Argument of type "Literal['Timeout']" cannot be assigned to parameter "request" of type "Request" in function "__init__"
+  "Literal['Timeout']" is not assignable to "Request"

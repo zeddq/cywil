@@ -1,25 +1,25 @@
 Pyright Diagnostic Report: reportCallIssue
 ================================================================================
 
-Total violations: 33
+Total violations: 48
 
+
+/workspace/app/embedding_models/pipeline_schemas.py (3 violations)
+---------------------------------------------------
+  Line 26:15 [error]: No overloads for "Field" match the provided arguments
+  Argument types: (EllipsisType, Literal['^[A-Z0-9-]+)], Literal['Unique document identifier'])
+  Line 74:30 [error]: No overloads for "Field" match the provided arguments
+  Argument types: (EllipsisType, Literal[384], Literal[1536], Literal['Vector embedding of the chunk content'])
+  Line 101:34 [error]: No overloads for "Field" match the provided arguments
+  Argument types: (None, Literal['^[IVX]+ [A-Z]+ \\d+/\\d+)], Literal['Polish court case number format'])
 
 /workspace/app/main.py (1 violations)
 ----------------------
   Line 94:22 [error]: Argument missing for parameter "llm_manager"
 
-/workspace/app/models.py (10 violations)
-------------------------
-  Line 119:44 [error]: No parameter named "table"
-  Line 128:22 [error]: No parameter named "table"
-  Line 144:30 [error]: No parameter named "table"
-  Line 156:30 [error]: No parameter named "table"
-  Line 168:22 [error]: No parameter named "table"
-  Line 180:30 [error]: No parameter named "table"
-  Line 197:38 [error]: No parameter named "table"
-  Line 206:30 [error]: No parameter named "table"
-  Line 232:22 [error]: No parameter named "table"
-  Line 252:29 [error]: No parameter named "table"
+/workspace/app/services/fallback_parser.py (1 violations)
+------------------------------------------
+  Line 84:22 [error]: Arguments missing for parameters "case_number", "court", "date", "decision", "reasoning"
 
 /workspace/app/services/openai_client.py (4 violations)
 ----------------------------------------
@@ -36,16 +36,38 @@ Total violations: 33
 -----------------------------------------
   Line 97:48 [error]: Argument missing for parameter "llm_manager"
 
+/workspace/app/worker/tasks/embed.py (5 violations)
+------------------------------------
+  Line 75:30 [error]: Argument missing for parameter "type"
+  Line 81:30 [error]: Argument missing for parameter "type"
+  Line 87:30 [error]: Argument missing for parameter "type"
+  Line 308:78 [error]: Argument missing for parameter "type"
+  Line 320:30 [error]: Argument missing for parameter "type"
+
 /workspace/app/worker/tasks/preprocess_sn_o3.py (1 violations)
 -----------------------------------------------
   Line 589:14 [error]: No overloads for "open" match the provided arguments
+
+/workspace/ingest/embed.py (5 violations)
+--------------------------
+  Line 75:30 [error]: Argument missing for parameter "type"
+  Line 81:30 [error]: Argument missing for parameter "type"
+  Line 87:30 [error]: Argument missing for parameter "type"
+  Line 308:26 [error]: Argument missing for parameter "type"
+  Line 320:30 [error]: Argument missing for parameter "type"
+
+/workspace/ingest/ingest_pipeline.py (1 violations)
+------------------------------------
+  Line 145:21 [error]: No parameter named "metadata"
 
 /workspace/ingest/pdf2chunks.py (1 violations)
 -------------------------------
   Line 226:13 [error]: No overloads for "update" match the provided arguments
 
-/workspace/ingest/preprocess_sn_o3.py (3 violations)
+/workspace/ingest/preprocess_sn_o3.py (5 violations)
 -------------------------------------
+  Line 240:12 [error]: Argument missing for parameter "name"
+  Line 240:19 [error]: No parameter named "metadata"
   Line 453:24 [error]: Argument missing for parameter "index"
   Line 526:14 [error]: No overloads for "open" match the provided arguments
   Line 552:14 [error]: No overloads for "open" match the provided arguments
@@ -53,6 +75,16 @@ Total violations: 33
 /workspace/ingest/test_preprocess_o3.py (1 violations)
 ---------------------------------------
   Line 68:50 [error]: No parameter named "max_workers"
+
+/workspace/init_database.py (2 violations)
+---------------------------
+  Line 49:28 [error]: No overloads for "execute" match the provided arguments
+  Line 77:28 [error]: No overloads for "execute" match the provided arguments
+
+/workspace/tests/integration/test_ai_functionality.py (2 violations)
+-----------------------------------------------------
+  Line 343:20 [error]: Arguments missing for parameters "date", "reasoning"
+  Line 389:26 [error]: Arguments missing for parameters "case_number", "court", "date", "decision", "reasoning"
 
 /workspace/tests/integration/test_database_manager.py (2 violations)
 -----------------------------------------------------
@@ -74,6 +106,13 @@ Total violations: 33
 ---------------------------------------
   Line 24:13 [error]: Arguments missing for parameters "config_service", "conversation_manager", "tool_executor"
   Line 56:13 [error]: Arguments missing for parameters "config_service", "conversation_manager", "tool_executor"
+
+/workspace/tests/unit/test_openai_integration.py (4 violations)
+------------------------------------------------
+  Line 90:66 [error]: Arguments missing for parameters "request", "body"
+  Line 203:28 [error]: Arguments missing for parameters "date", "decision", "reasoning"
+  Line 215:30 [error]: Arguments missing for parameters "court", "date", "decision", "reasoning"
+  Line 391:20 [error]: Arguments missing for parameters "case_number", "court", "date", "decision", "reasoning"
 
 /workspace/tests/unit/test_tool_executor.py (1 violations)
 -------------------------------------------
