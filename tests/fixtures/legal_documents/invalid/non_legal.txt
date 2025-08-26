@@ -1,0 +1,12 @@
+This is just a regular text document without any legal content.
+It contains no Polish legal terminology, no case numbers, 
+no court references, and no article citations.
+
+This document should fail legal validation tests because
+it lacks the required structure and content of Polish legal documents.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+
+This text is in English and has no Polish diacritical marks.
+It should trigger warnings in the validation system.

@@ -4,10 +4,17 @@ Centralized LLM and embedding management with caching and retry logic.
 
 import asyncio
 import hashlib
+import pickle
 from pathlib import Path
 from typing import Annotated, Any, Dict, List, Optional
 
 import numpy as np
+try:
+    from diskcache import Cache
+    HAS_DISKCACHE = True
+except ImportError:
+    HAS_DISKCACHE = False
+    Cache = None
 from fastapi import Depends, Request
 from openai import AsyncOpenAI
 from tenacity import retry, stop_after_attempt, wait_exponential
@@ -20,21 +27,24 @@ from .service_interface import HealthCheckResult, ServiceInterface, ServiceStatu
 
 logger = get_logger(__name__)
 
-# Simple two-tier cache without external dependencies
+
 class TwoTierCache:
-    """Two-tier caching system with memory (LRU) and basic disk persistence."""
+    """Two-tier caching system with memory (LRU) and disk persistence."""
     
     def __init__(self, memory_size: int = 1000, cache_dir: Optional[Path] = None):
         self._memory_cache: Dict[str, Any] = {}
         self._memory_access_order: List[str] = []
         self._memory_max_size = memory_size
         
-        # Basic disk cache directory (without external dependency)
-        self._cache_dir = cache_dir or Path(".embedding_cache")
-        self._cache_dir.mkdir(exist_ok=True)
-    
+        # Disk cache with TTL (if available)
+        if HAS_DISKCACHE:
+            cache_path = cache_dir or Path(".embedding_cache")
+            cache_path.mkdir(exist_ok=True)
+            self._disk_cache = Cache(str(cache_path), size_limit=10 * 1024 * 1024 * 1024)  # 10GB
+        else:
+            self._disk_cache = None    
     def get(self, key: str) -> Optional[np.ndarray]:
-        """Get from cache, checking memory first, then basic disk cache."""
+        """Get from cache, checking memory first, then disk."""
         # Check memory cache
         if key in self._memory_cache:
             # Move to end (most recently used)
@@ -42,11 +52,10 @@ class TwoTierCache:
             self._memory_access_order.append(key)
             return self._memory_cache[key]
         
-        # Check simple disk cache
+        # Check disk cache
         try:
-            cache_file = self._cache_dir / f"{key}.npy"
-            if cache_file.exists():
-                embedding = np.load(cache_file)
+            if key in self._disk_cache:
+                embedding = self._disk_cache[key]
                 # Promote to memory cache
                 self._put_memory(key, embedding)
                 return embedding
@@ -56,13 +65,12 @@ class TwoTierCache:
         return None
     
     def put(self, key: str, embedding: np.ndarray) -> None:
-        """Store in both memory and basic disk cache."""
+        """Store in both memory and disk cache."""
         self._put_memory(key, embedding)
         
-        # Store in basic disk cache
+        # Store in disk cache with TTL
         try:
-            cache_file = self._cache_dir / f"{key}.npy"
-            np.save(cache_file, embedding)
+            self._disk_cache.set(key, embedding, expire=86400)  # 24 hours TTL
         except Exception as e:
             logger.warning(f"Disk cache write error: {e}")
     
@@ -82,25 +90,17 @@ class TwoTierCache:
         """Clear both caches."""
         self._memory_cache.clear()
         self._memory_access_order.clear()
-        # Clear disk cache files
         try:
-            for cache_file in self._cache_dir.glob("*.npy"):
-                cache_file.unlink()
+            self._disk_cache.clear()
         except Exception as e:
             logger.warning(f"Error clearing disk cache: {e}")
     
     def get_stats(self) -> Dict[str, Any]:
         """Get cache statistics."""
-        disk_files = 0
-        try:
-            disk_files = len(list(self._cache_dir.glob("*.npy")))
-        except:
-            pass
-        
         return {
             "memory_size": len(self._memory_cache),
             "memory_max_size": self._memory_max_size,
-            "disk_size": disk_files,
+            "disk_size": len(self._disk_cache) if self._disk_cache else 0,
         }
 
 
@@ -113,7 +113,7 @@ class LLMManager(ServiceInterface):
     def __init__(self, config_service: ConfigService):
         super().__init__("LLMManager")
         self._config = config_service.config
-        self._llm_clients: Dict[str, Dict[str, Any]] = {}
+        self._llm_clients: Dict[str, Dict[str, Any]] = {}  # Store model configs instead of clients
         self._openai_client: Optional[AsyncOpenAI] = None
         
         # Centralized embedding management
@@ -121,7 +121,7 @@ class LLMManager(ServiceInterface):
         self._embedding_cache = TwoTierCache(memory_size=5000)
         
         # Concurrency control
-        self._embedding_semaphore = asyncio.Semaphore(10)
+        self._embedding_semaphore = asyncio.Semaphore(10)  # Limit concurrent requests
         self._model_locks: Dict[str, asyncio.Lock] = {}
 
     async def _initialize_impl(self) -> None:
@@ -251,7 +251,7 @@ class LLMManager(ServiceInterface):
     def _get_cache_key(self, texts: List[str], model_name: str) -> str:
         """Generate cache key for text batch."""
         text_hash = hashlib.sha256('||'.join(texts).encode()).hexdigest()
-        return f"{model_name}_{text_hash}"
+        return f"{model_name}:{text_hash}"
 
     @service_operation_logger("LLMManager")
     async def get_embeddings(
@@ -311,11 +311,23 @@ class LLMManager(ServiceInterface):
         """Get text embedding with caching (backward compatibility)"""
         import asyncio
         
+        # Run async method in current loop or create new one
         try:
-            embedding = asyncio.run(self.get_embedding_single(text, model_type, use_cache))
+            loop = asyncio.get_event_loop()
+            if loop.is_running():
+                # If we're in an async context, we can't use run_until_complete
+                # This is a sync wrapper that should be called from async contexts carefully
+                logger.warning("get_embedding called from async context, consider using get_embedding_single")
+                task = asyncio.create_task(self.get_embedding_single(text, model_type, use_cache))
+                # For now, we'll have to raise an error as we can't block in async context
+                raise RuntimeError("Use await get_embedding_single() from async context")
+            else:
+                embedding = loop.run_until_complete(
+                    self.get_embedding_single(text, model_type, use_cache)
+                )
         except RuntimeError:
-            # Already in event loop
-            raise RuntimeError("Use await get_embedding_single() from async context")
+            # No event loop, create one
+            embedding = asyncio.run(self.get_embedding_single(text, model_type, use_cache))
         
         return embedding.tolist()
 
@@ -325,10 +337,18 @@ class LLMManager(ServiceInterface):
         """Get embeddings for multiple texts efficiently (backward compatibility)"""
         import asyncio
         
+        # Run async method in current loop or create new one
         try:
-            embeddings = asyncio.run(self.get_embeddings(texts, model_type, use_cache))
+            loop = asyncio.get_event_loop()
+            if loop.is_running():
+                logger.warning("get_embeddings_batch called from async context, consider using get_embeddings")
+                raise RuntimeError("Use await get_embeddings() from async context")
+            else:
+                embeddings = loop.run_until_complete(
+                    self.get_embeddings(texts, model_type, use_cache)
+                )
         except RuntimeError:
-            raise RuntimeError("Use await get_embeddings() from async context")
+            embeddings = asyncio.run(self.get_embeddings(texts, model_type, use_cache))
         
         return embeddings.tolist()
 

@@ -1,0 +1,3 @@
+"""
+Valid legal document fixtures.
+"""

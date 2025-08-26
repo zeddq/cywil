@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-End-to-end processor for Polish Supreme-Court rulings (SN) using LangChain o3
+End-to-end processor for Polish Supreme-Court rulings (SN) using OpenAI SDK
 -----------------------------------------------------------------------------
-• Uses o3/o1 chat client for intelligent PDF parsing and structure extraction
-• Leverages LLM for metadata extraction and entity recognition
+• Uses o3-mini for intelligent PDF parsing and structure extraction
+• Leverages OpenAI SDK for metadata extraction and entity recognition
 • Produces structured JSON output with enhanced accuracy
 """
 
@@ -21,69 +21,41 @@ from typing import Any, Dict, List, Literal, Optional, Tuple
 
 import dateparser
 import fitz  # PyMuPDF
-# Langchain removed during migration - using OpenAI SDK directly
-# from langchain.output_parsers import PydanticOutputParser
-# from langchain.prompts import PromptTemplate  
-# from langchain.schema import HumanMessage
-# from langchain_openai import ChatOpenAI
-
-# Temporary placeholders for removed langchain classes - these need proper OpenAI SDK implementation
-class PydanticOutputParser:
-    def __init__(self, pydantic_object):
-        self.pydantic_object = pydantic_object
-    def get_format_instructions(self):
-        return f"Return data as JSON matching this schema: {self.pydantic_object.model_json_schema()}"
-
-class ChatOpenAI:
-    def __init__(self, **kwargs):
-        pass
-    def invoke(self, messages):
-        raise NotImplementedError("This preprocessing script needs to be updated to use OpenAI SDK directly")
-
-class HumanMessage:
-    def __init__(self, content):
-        self.content = content
-
-class PromptTemplate:
-    def __init__(self, input_variables, template):
-        self.input_variables = input_variables
-        self.template = template
-    def format(self, **kwargs):
-        return self.template.format(**kwargs)
-from openai import BaseModel as OpenAIModel
-from openai import OpenAI
-from openai.types.responses import (
-    ParsedResponse,
-)
-from pydantic import Field
+from pydantic import BaseModel, Field
 from tqdm import tqdm
+
+# Import OpenAI service from the app
+from app.core.ai_client_factory import get_ai_client, AIProvider
+from app.services.openai_client import get_openai_service
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+# Get OpenAI service instance
+openai_service = get_openai_service()
 
 
 # ---------- 1  Pydantic models for structured output ----------------------- #
 
 
-class LegalEntity(OpenAIModel):
+class LegalEntity(BaseModel):
     text: str = Field(description="The entity text")
     label: str = Field(description="Entity type: LAW_REF, DOCKET, PERSON, ORG, DATE")
     start: int = Field(description="Start character position")
     end: int = Field(description="End character position")
 
 
-class LegalEntities(OpenAIModel):
+class LegalEntities(BaseModel):
     entities: List[LegalEntity] = Field(description="List of legal entities")
 
 
-class RulingMetadata(OpenAIModel):
+class RulingMetadata(BaseModel):
     docket: Optional[str] = Field(description="Case docket number", default=None)
     date: Optional[str] = Field(description="Decision date in ISO format", default=None)
     panel: Optional[List[str]] = Field(description="List of judges", default=[])
 
 
-class RulingParagraph(OpenAIModel):
+class RulingParagraph(BaseModel):
     section: Literal["header", "legal_question", "reasoning", "disposition", "body"] = Field(
         description="Section type: header, legal_question, reasoning, disposition, body"
     )
@@ -91,7 +63,7 @@ class RulingParagraph(OpenAIModel):
     text: str = Field(description="Paragraph text", default="")
 
 
-class ParsedRuling(OpenAIModel):
+class ParsedRuling(BaseModel):
     paragraphs: List[RulingParagraph] = Field(description="List of paragraphs", default=[])
 
 
@@ -99,7 +71,7 @@ class RulingParagraphEnriched(RulingParagraph):
     entities: List[LegalEntity] = Field(description="Named entities in the paragraph")
 
 
-class Ruling(OpenAIModel):
+class Ruling(BaseModel):
     name: str = Field(description="Ruling name")
     meta: RulingMetadata = Field(default=RulingMetadata())
     paragraphs: List[RulingParagraphEnriched]

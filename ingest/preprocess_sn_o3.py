@@ -1,112 +1,77 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-End-to-end processor for Polish Supreme-Court rulings (SN) using LangChain o3
+End-to-end processor for Polish Supreme-Court rulings (SN) using OpenAI SDK
 -----------------------------------------------------------------------------
-• Uses o3/o1 chat client for intelligent PDF parsing and structure extraction
-• Leverages LLM for metadata extraction and entity recognition
+• Uses o3-mini for intelligent PDF parsing and structure extraction
+• Leverages OpenAI SDK for metadata extraction and entity recognition
 • Produces structured JSON output with enhanced accuracy
 """
 
 from __future__ import annotations
-import json, logging, os, base64, asyncio, uuid
+import json, logging, os, base64, asyncio, uuid, sys
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple, Literal
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import re
 import fitz  # PyMuPDF
-# Langchain removed during migration - these scripts need updating to use OpenAI SDK
-# from langchain_openai import ChatOpenAI
-# from langchain.prompts import PromptTemplate
-# from langchain.schema import BaseMessage, HumanMessage
-# from langchain.output_parsers import PydanticOutputParser
 
-# Temporary placeholders for removed langchain classes
-class PydanticOutputParser:
-    def __init__(self, pydantic_object):
-        self.pydantic_object = pydantic_object
-    def get_format_instructions(self):
-        return f"Return data as JSON matching this schema: {self.pydantic_object.model_json_schema()}"
+# Add parent directories to Python path to import app modules
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
-class ChatOpenAI:
-    def __init__(self, **kwargs):
-        pass
-    def invoke(self, messages):
-        raise NotImplementedError("This preprocessing script needs to be updated to use OpenAI SDK directly")
-
-class HumanMessage:
-    def __init__(self, content):
-        self.content = content
-
-class PromptTemplate:
-    def __init__(self, input_variables, template):
-        self.input_variables = input_variables
-        self.template = template
-    def format(self, **kwargs):
-        return self.template.format(**kwargs)
 from pydantic import BaseModel, Field
-from openai import BaseModel as OpenAIModel
 from datetime import datetime
 import dateparser
 from tqdm import tqdm
-from openai import OpenAI
 
-from openai.types.responses import ResponseStreamEvent, ResponseFunctionToolCall, Response, ParsedResponse
+# Import OpenAI service from the app
+from app.core.ai_client_factory import get_ai_client, AIProvider
+from app.services.openai_client import get_openai_service
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+# Get OpenAI service instance
+openai_service = get_openai_service()
 
 
 # ---------- 1  Pydantic models for structured output ----------------------- #
 
-class LegalEntity(OpenAIModel):
+class LegalEntity(BaseModel):
     text: str = Field(description="The entity text")
     label: str = Field(description="Entity type: LAW_REF, DOCKET, PERSON, ORG, DATE")
     start: int = Field(description="Start character position")
     end: int = Field(description="End character position")
 
 
-class LegalEntities(OpenAIModel):
+class LegalEntities(BaseModel):
     entities: List[LegalEntity] = Field(description="List of legal entities")
 
 
-class RulingMetadata(OpenAIModel):
+class RulingMetadata(BaseModel):
     docket: Optional[str] = Field(description="Case docket number", default=None)
     date: Optional[str] = Field(description="Decision date in ISO format", default=None)
     panel: Optional[List[str]] = Field(description="List of judges", default=[])
     
-class RulingParagraph(OpenAIModel):
+class RulingParagraph(BaseModel):
     section: Literal["header", "legal_question", "reasoning", "disposition", "body"] = Field(description="Section type: header, legal_question, reasoning, disposition, body")
     para_no: int = Field(description="Paragraph number", default=0)
     text: str = Field(description="Paragraph text", default="")
 
-class ParsedRuling(OpenAIModel):
+class ParsedRuling(BaseModel):
     paragraphs: List[RulingParagraph] = Field(description="List of paragraphs", default=[])
 
 class RulingParagraphEnriched(RulingParagraph):
     entities: List[LegalEntity] = Field(description="Named entities in the paragraph")
     
-class Ruling(OpenAIModel):
+class Ruling(BaseModel):
     name: str = Field(description="Ruling name")
     meta: RulingMetadata = Field(default=RulingMetadata())
     paragraphs: List[RulingParagraphEnriched]
 
 
-# ---------- 2  Initialize o3/o1 chat client --------------------------------- #
-
-def get_o3_client(stream: bool = True) -> ChatOpenAI:
-    """Initialize o3/o1 chat client with appropriate settings"""
-    # Note: Using o1-preview as o3 may not be available yet
-    # Adjust model name when o3 becomes available
-    return ChatOpenAI(
-        model="o3-mini",
-        max_tokens=20000,
-        timeout=120,
-        max_retries=0,
-        streaming=stream,
-        stream_usage=stream,
-    )
+# ---------- 2  OpenAI service configuration --------------------------------- #
+# OpenAI service is initialized globally and configured via the app's config system
 
 # ---------- 3  PDF parsing with o3 ------------------------------------------ #
 
@@ -137,9 +102,6 @@ async def extract_pdf_with_o3(pdf_path: Path, is_batch: bool = False) -> ParsedR
     """Use o3 to intelligently parse PDF structure and content"""
 
     
-    # llm = get_o3_client(False)
-    # logger.info(response)
-    
     # Extract raw text from PDF first
     doc = fitz.open(pdf_path)
     full_text = ""
@@ -151,45 +113,48 @@ async def extract_pdf_with_o3(pdf_path: Path, is_batch: bool = False) -> ParsedR
         full_text += f"\n--- PAGE {page_num + 1} ---\n{page_text}\n"
     
     doc.close()
-    parser = PydanticOutputParser(pydantic_object=ParsedRuling)
 
     if is_batch:
+        # For batch processing, return JSONL format for OpenAI batch API
         schema = ParsedRuling.model_json_schema()
         req = {
             "custom_id": "extract_pdf_with_o3-" + pdf_path.name,
             "method": "POST",
-            "url": "/v1/responses",
-            "body":{
+            "url": "/v1/chat/completions",
+            "body": {
                 "model": "o3-mini",
-                "input": [
-                    {"role": "user", "content": extract_prompt_template.format(pdf_path=full_text, format_instructions=parser.get_format_instructions())},
-                ]
+                "messages": [
+                    {"role": "user", "content": extract_prompt_template.format(
+                        pdf_path=full_text, 
+                        format_instructions=f"Return data as JSON matching this schema: {schema}"
+                    )},
+                ],
+                "response_format": {"type": "json_object"}
             }
         }
-        jsonl_bytes   = json.dumps(req, ensure_ascii=False).encode("utf-8")
+        jsonl_bytes = json.dumps(req, ensure_ascii=False).encode("utf-8")
         return jsonl_bytes
     
-    # Parse response
-    response: Optional[ParsedResponse[ParsedRuling]] = None
+    # Use structured output parsing via OpenAI service
     try:
-        response = client.responses.parse(
+        messages = [
+            {"role": "user", "content": extract_prompt_template.format(
+                pdf_path=full_text,
+                format_instructions="Please structure your response according to the ParsedRuling schema."
+            )}
+        ]
+        
+        parsed_ruling = await openai_service.async_parse_structured_output(
             model="o3-mini",
-            input=[
-                {"role": "user", "content": extract_prompt_template.format(pdf_path=full_text, format_instructions=parser.get_format_instructions())},
-            ],
-            text_format=ParsedRuling,
-            max_output_tokens=100000,
-            timeout=600,
+            messages=messages,
+            response_format=ParsedRuling,
+            max_tokens=100000,
         )
-        if response.output_parsed is None:
-            logger.warning("o3 response parsing returned None, falling back to simple parsing")
-            ruling = await fallback_parse(full_text)
-            return ParsedRuling(paragraphs=[RulingParagraph(**p.model_dump()) for p in ruling.paragraphs])
-        return response.output_parsed
+        
+        return parsed_ruling
+        
     except Exception as e:
         logger.error(f"Failed to parse o3 response: {e}")
-        if response is not None:
-            logger.debug(f"Response: {response}")
         # Fallback parsing - convert Ruling to ParsedRuling
         ruling = await fallback_parse(full_text)
         return ParsedRuling(paragraphs=[RulingParagraph(**p.model_dump()) for p in ruling.paragraphs])
@@ -277,8 +242,7 @@ async def fallback_parse(text: str) -> Ruling:
 # ---------- 5  Enhanced entity extraction with o3 --------------------------- #
 
 async def enhance_entities_with_o3(ruling: ParsedRuling, index: int, is_batch: bool = False) -> Ruling | List[bytes]:
-    """Use o3 to enhance entity recognition in paragraphs"""
-    llm = get_o3_client()
+    """Use o3-mini to enhance entity recognition in paragraphs"""
     
     entity_prompt = """Wyodrębnij encje prawne z poniższego polskiego tekstu prawnego.
 
@@ -297,46 +261,72 @@ Dla każdej encji zwróć:
 - start: pozycja początkowa znaku w tekście (licząc od 0)
 - end: pozycja końcowa znaku w tekście
 
-{response_format}
+Uwaga: Odpowiedz w formacie JSON zgodnym ze schematem LegalEntities.
 """
 
-
     if is_batch:
-        parser = PydanticOutputParser(pydantic_object=LegalEntities)
+        # For batch processing
+        schema = LegalEntities.model_json_schema()
         jsonl_bytes = []
         for i in range(len(ruling.paragraphs)):
             req = {
-                "custom_id": "extract_pdf_with_o3-" + str(index) + "-" + str(i),
+                "custom_id": "extract_entities-" + str(index) + "-" + str(i),
                 "method": "POST",
-                "url": "/v1/responses",
-                "body":{
+                "url": "/v1/chat/completions",
+                "body": {
                     "model": "o3-mini",
-                    "input": [
-                        {"role": "user", "content": entity_prompt.format(text=ruling.paragraphs[i].text, response_format=parser.get_format_instructions())},
-                    ]
+                    "messages": [
+                        {"role": "user", "content": entity_prompt.format(text=ruling.paragraphs[i].text)},
+                    ],
+                    "response_format": {"type": "json_object"}
                 }
             }
             j = json.dumps(req, ensure_ascii=False).encode("utf-8")
             jsonl_bytes.append(j)
         return jsonl_bytes
     else:
+        # Process a single paragraph
         try:
-            response: ParsedResponse[LegalEntities] = client.responses.parse(
+            messages = [
+                {"role": "user", "content": entity_prompt.format(text=ruling.paragraphs[index].text)}
+            ]
+            
+            parsed_entities = await openai_service.async_parse_structured_output(
                 model="o3-mini",
-                input=[
-                    {"role": "user", "content": entity_prompt.format(text=ruling.paragraphs[index].text)},
-                ],
-                text_format=LegalEntities,
-                max_output_tokens=20000,
-                timeout=600,
+                messages=messages,
+                response_format=LegalEntities,
+                max_tokens=20000,
             )
-            ruling.paragraphs[index].entities = response.output_parsed.entities
+            
+            # Create new ruling paragraph with entities
+            enhanced_paragraph = RulingParagraphEnriched(
+                **ruling.paragraphs[index].model_dump(),
+                entities=parsed_entities.entities
+            )
+            
+            # Update the ruling with enhanced paragraph
+            enhanced_paragraphs = []
+            for i, para in enumerate(ruling.paragraphs):
+                if i == index:
+                    enhanced_paragraphs.append(enhanced_paragraph)
+                else:
+                    enhanced_paragraphs.append(RulingParagraphEnriched(**para.model_dump(), entities=[]))
+            
         except Exception as e:
             logger.warning(f"Failed to parse entities for paragraph {index}: {e}")
-            ruling.paragraphs[index].entities = extract_entities_regex(ruling.paragraphs[index].text)
+            # Use regex fallback
+            entities = extract_entities_regex(ruling.paragraphs[index].text)
+            enhanced_paragraphs = []
+            for i, para in enumerate(ruling.paragraphs):
+                if i == index:
+                    enhanced_paragraphs.append(RulingParagraphEnriched(
+                        **para.model_dump(),
+                        entities=entities
+                    ))
+                else:
+                    enhanced_paragraphs.append(RulingParagraphEnriched(**para.model_dump(), entities=[]))
     
-    # Convert ParsedRuling to Ruling with enhanced entities
-    enhanced_paragraphs = [RulingParagraphEnriched(**p.model_dump()) for p in ruling.paragraphs]
+    # Return Ruling with enhanced entities
     return Ruling(
         name=f"ruling-{index}",
         meta=RulingMetadata(),
