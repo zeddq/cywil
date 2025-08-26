@@ -1,0 +1,26 @@
+Pyright Diagnostic Report: reportUndefinedVariable
+================================================================================
+
+Total violations: 15
+
+
+/workspace/app/worker/tasks/preprocess_sn_o3.py (11 violations)
+-----------------------------------------------
+  Line 83:43 [error]: "ChatOpenAI" is not defined
+  Line 87:12 [error]: "ChatOpenAI" is not defined
+  Line 140:14 [error]: "PydanticOutputParser" is not defined
+  Line 165:24 [error]: "ParsedResponse" is not defined
+  Line 167:20 [error]: "client" is not defined
+  Line 305:18 [error]: "PydanticOutputParser" is not defined
+  Line 330:23 [error]: "ParsedResponse" is not defined
+  Line 330:55 [error]: "client" is not defined
+  Line 395:29 [error]: "PromptTemplate" is not defined
+  Line 432:9 [error]: "HumanMessage" is not defined
+  Line 528:10 [error]: "OpenAI" is not defined
+
+/workspace/ingest/preprocess_sn_o3.py (4 violations)
+-------------------------------------
+  Line 369:11 [error]: "get_o3_client" is not defined
+  Line 371:29 [error]: "PromptTemplate" is not defined
+  Line 407:17 [error]: "HumanMessage" is not defined
+  Line 493:10 [error]: "OpenAI" is not defined

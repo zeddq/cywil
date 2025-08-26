@@ -1,13 +1,9 @@
 Pyright Diagnostic Report: unknown
 ================================================================================
 
-Total violations: 2
+Total violations: 1
 
 
-/Volumes/code/cywil/ai-paralegal-poc/app/task_processors.py (1 violations)
------------------------------------------------------------
-  Line 328:21 [error]: Expected indented block
-
-/Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py (1 violations)
-----------------------------------------------------
+/workspace/ingest/embed.py (1 violations)
+--------------------------
   Line 384:29 [error]: Statements must be separated by newlines or semicolons

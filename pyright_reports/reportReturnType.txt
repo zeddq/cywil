@@ -1,0 +1,25 @@
+Pyright Diagnostic Report: reportReturnType
+================================================================================
+
+Total violations: 3
+
+
+/workspace/app/services/openai_client.py (2 violations)
+----------------------------------------
+  Line 296:20 [error]: Type "str | None" is not assignable to return type "BaseModel | str"
+  Type "str | None" is not assignable to type "BaseModel | str"
+    Type "None" is not assignable to type "BaseModel | str"
+      "None" is not assignable to "BaseModel"
+      "None" is not assignable to "str"
+  Line 328:20 [error]: Type "str | None" is not assignable to return type "BaseModel | str"
+  Type "str | None" is not assignable to type "BaseModel | str"
+    Type "None" is not assignable to type "BaseModel | str"
+      "None" is not assignable to "BaseModel"
+      "None" is not assignable to "str"
+
+/workspace/ingest/preprocess_sn_o3.py (1 violations)
+-------------------------------------
+  Line 154:16 [error]: Type "BaseModel" is not assignable to return type "ParsedRuling | bytes"
+  Type "BaseModel" is not assignable to type "ParsedRuling | bytes"
+    "BaseModel" is not assignable to "ParsedRuling"
+    "BaseModel" is not assignable to "bytes"

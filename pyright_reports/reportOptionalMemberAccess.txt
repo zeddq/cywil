@@ -1,31 +1,36 @@
 Pyright Diagnostic Report: reportOptionalMemberAccess
 ================================================================================
 
-Total violations: 28
+Total violations: 30
 
 
-/Volumes/code/cywil/ai-paralegal-poc/app/services/supreme_court_service.py (1 violations)
---------------------------------------------------------------------------
-  Line 301:91 [error]: "astext" is not a known attribute of "None"
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/ingestion_pipeline.py (3 violations)
----------------------------------------------------------------------------
-  Line 69:60 [error]: "id" is not a known attribute of "None"
-  Line 137:56 [error]: "id" is not a known attribute of "None"
-  Line 167:60 [error]: "id" is not a known attribute of "None"
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (2 violations)
--------------------------------------------------------------------------
-  Line 370:72 [error]: "entities" is not a known attribute of "None"
-  Line 672:44 [error]: "paragraphs" is not a known attribute of "None"
-
-/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py (2 violations)
----------------------------------------------------------------
-  Line 333:72 [error]: "entities" is not a known attribute of "None"
-  Line 609:44 [error]: "paragraphs" is not a known attribute of "None"
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py (10 violations)
+/workspace/app/embedding_models/embedding_interface.py (2 violations)
 ------------------------------------------------------
+  Line 75:33 [error]: "encode" is not a known attribute of "None"
+  Line 125:43 [error]: "embeddings" is not a known attribute of "None"
+
+/workspace/app/services/statute_search_service.py (1 violations)
+-------------------------------------------------
+  Line 404:47 [error]: "group" is not a known attribute of "None"
+
+/workspace/app/worker/tasks/ingestion_pipeline.py (3 violations)
+-------------------------------------------------
+  Line 80:60 [error]: "id" is not a known attribute of "None"
+  Line 148:56 [error]: "id" is not a known attribute of "None"
+  Line 178:60 [error]: "id" is not a known attribute of "None"
+
+/workspace/app/worker/tasks/preprocess_sn_o3.py (3 violations)
+-----------------------------------------------
+  Line 182:21 [error]: "output_parsed" is not a known attribute of "None"
+  Line 186:25 [error]: "output_parsed" is not a known attribute of "None"
+  Line 644:44 [error]: "paragraphs" is not a known attribute of "None"
+
+/workspace/ingest/preprocess_sn_o3.py (1 violations)
+-------------------------------------
+  Line 599:44 [error]: "paragraphs" is not a known attribute of "None"
+
+/workspace/tests/conftest.py (10 violations)
+----------------------------
   Line 18:9 [error]: "fixture" is not a known attribute of "None"
   Line 26:9 [error]: "fixture" is not a known attribute of "None"
   Line 46:9 [error]: "fixture" is not a known attribute of "None"
@@ -37,8 +42,8 @@ Total violations: 28
   Line 157:9 [error]: "fixture" is not a known attribute of "None"
   Line 198:24 [error]: "mark" is not a known attribute of "None"
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py (6 violations)
-------------------------------------------------------------------
+/workspace/tests/integration/conftest.py (6 violations)
+----------------------------------------
   Line 23:9 [error]: "fixture" is not a known attribute of "None"
   Line 31:9 [error]: "fixture" is not a known attribute of "None"
   Line 43:9 [error]: "fixture" is not a known attribute of "None"
@@ -46,8 +51,8 @@ Total violations: 28
   Line 64:9 [error]: "fixture" is not a known attribute of "None"
   Line 72:9 [error]: "fixture" is not a known attribute of "None"
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/conftest.py (4 violations)
------------------------------------------------------------
+/workspace/tests/unit/conftest.py (4 violations)
+---------------------------------
   Line 15:9 [error]: "fixture" is not a known attribute of "None"
   Line 25:9 [error]: "fixture" is not a known attribute of "None"
   Line 40:9 [error]: "fixture" is not a known attribute of "None"

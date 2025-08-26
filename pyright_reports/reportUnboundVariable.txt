@@ -1,0 +1,9 @@
+Pyright Diagnostic Report: reportUnboundVariable
+================================================================================
+
+Total violations: 1
+
+
+/workspace/tests/integration/test_openai_integration.py (1 violations)
+-------------------------------------------------------
+  Line 176:87 [error]: "i" is unbound

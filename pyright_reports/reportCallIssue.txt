@@ -1,75 +1,107 @@
 Pyright Diagnostic Report: reportCallIssue
 ================================================================================
 
-Total violations: 31
+Total violations: 42
 
 
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/embed.py (5 violations)
---------------------------------------------------------------
+/workspace/app/embedding_models/pipeline_schemas.py (3 violations)
+---------------------------------------------------
+  Line 26:15 [error]: No overloads for "Field" match the provided arguments
+  Argument types: (EllipsisType, Literal['^[A-Z0-9-]+)], Literal['Unique document identifier'])
+  Line 74:30 [error]: No overloads for "Field" match the provided arguments
+  Argument types: (EllipsisType, Literal[384], Literal[1536], Literal['Vector embedding of the chunk content'])
+  Line 101:34 [error]: No overloads for "Field" match the provided arguments
+  Argument types: (None, Literal['^[IVX]+ [A-Z]+ \\d+/\\d+)], Literal['Polish court case number format'])
+
+/workspace/app/main.py (1 violations)
+----------------------
+  Line 94:22 [error]: Argument missing for parameter "llm_manager"
+
+/workspace/app/services/openai_client.py (4 violations)
+----------------------------------------
+  Line 42:19 [error]: Argument missing for parameter "message"
+  Line 142:23 [error]: Argument missing for parameter "message"
+  Line 184:23 [error]: Argument missing for parameter "message"
+  Line 214:19 [error]: Argument missing for parameter "message"
+
+/workspace/app/services/optimized_statute_search.py (1 violations)
+---------------------------------------------------
+  Line 31:9 [error]: Argument missing for parameter "llm_manager"
+
+/workspace/app/worker/service_registry.py (1 violations)
+-----------------------------------------
+  Line 97:48 [error]: Argument missing for parameter "llm_manager"
+
+/workspace/app/worker/tasks/embed.py (5 violations)
+------------------------------------
   Line 75:30 [error]: Argument missing for parameter "type"
   Line 81:30 [error]: Argument missing for parameter "type"
   Line 87:30 [error]: Argument missing for parameter "type"
   Line 308:78 [error]: Argument missing for parameter "type"
   Line 320:30 [error]: Argument missing for parameter "type"
 
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (1 violations)
--------------------------------------------------------------------------
-  Line 617:14 [error]: No overloads for "open" match the provided arguments
+/workspace/app/worker/tasks/preprocess_sn_o3.py (1 violations)
+-----------------------------------------------
+  Line 589:14 [error]: No overloads for "open" match the provided arguments
 
-/Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py (5 violations)
-----------------------------------------------------
+/workspace/ingest/embed.py (5 violations)
+--------------------------
   Line 75:30 [error]: Argument missing for parameter "type"
   Line 81:30 [error]: Argument missing for parameter "type"
   Line 87:30 [error]: Argument missing for parameter "type"
   Line 308:26 [error]: Argument missing for parameter "type"
   Line 320:30 [error]: Argument missing for parameter "type"
 
-/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py (1 violations)
---------------------------------------------------------------
+/workspace/ingest/ingest_pipeline.py (1 violations)
+------------------------------------
   Line 145:21 [error]: No parameter named "metadata"
 
-/Volumes/code/cywil/ai-paralegal-poc/ingest/pdf2chunks.py (1 violations)
----------------------------------------------------------
+/workspace/ingest/pdf2chunks.py (1 violations)
+-------------------------------
   Line 226:13 [error]: No overloads for "update" match the provided arguments
 
-/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py (5 violations)
----------------------------------------------------------------
-  Line 275:12 [error]: Argument missing for parameter "name"
-  Line 275:19 [error]: No parameter named "metadata"
-  Line 463:24 [error]: Argument missing for parameter "index"
-  Line 536:14 [error]: No overloads for "open" match the provided arguments
-  Line 562:14 [error]: No overloads for "open" match the provided arguments
+/workspace/ingest/preprocess_sn_o3.py (5 violations)
+-------------------------------------
+  Line 240:12 [error]: Argument missing for parameter "name"
+  Line 240:19 [error]: No parameter named "metadata"
+  Line 453:24 [error]: Argument missing for parameter "index"
+  Line 526:14 [error]: No overloads for "open" match the provided arguments
+  Line 552:14 [error]: No overloads for "open" match the provided arguments
 
-/Volumes/code/cywil/ai-paralegal-poc/ingest/test_preprocess_o3.py (1 violations)
------------------------------------------------------------------
+/workspace/ingest/test_preprocess_o3.py (1 violations)
+---------------------------------------
   Line 68:50 [error]: No parameter named "max_workers"
 
-/Volumes/code/cywil/ai-paralegal-poc/init_database.py (2 violations)
------------------------------------------------------
+/workspace/init_database.py (2 violations)
+---------------------------
   Line 49:28 [error]: No overloads for "execute" match the provided arguments
   Line 77:28 [error]: No overloads for "execute" match the provided arguments
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_database_manager.py (2 violations)
--------------------------------------------------------------------------------
+/workspace/tests/integration/test_database_manager.py (2 violations)
+-----------------------------------------------------
   Line 32:19 [error]: Argument missing for parameter "config_service"
   Line 106:27 [error]: Argument missing for parameter "config_service"
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py (2 violations)
---------------------------------------------------------------------------
+/workspace/tests/integration/test_integration.py (2 violations)
+------------------------------------------------
   Line 296:20 [error]: Argument missing for parameter "config_service"
   Line 397:24 [error]: Argument missing for parameter "config_service"
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py (3 violations)
-----------------------------------------------------------------------------------
-  Line 71:23 [error]: Argument missing for parameter "config_service"
-  Line 314:13 [error]: Argument missing for parameter "config_service"
-  Line 352:23 [error]: Argument missing for parameter "config_service"
+/workspace/tests/integration/test_refactored_services.py (3 violations)
+--------------------------------------------------------
+  Line 71:23 [error]: Arguments missing for parameters "config_service", "llm_manager"
+  Line 314:13 [error]: Arguments missing for parameters "config_service", "llm_manager"
+  Line 352:23 [error]: Arguments missing for parameters "config_service", "llm_manager"
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py (2 violations)
------------------------------------------------------------------
+/workspace/tests/unit/test_agent_sdk.py (2 violations)
+---------------------------------------
   Line 24:13 [error]: Arguments missing for parameters "config_service", "conversation_manager", "tool_executor"
   Line 56:13 [error]: Arguments missing for parameters "config_service", "conversation_manager", "tool_executor"
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_executor.py (1 violations)
----------------------------------------------------------------------
+/workspace/tests/unit/test_openai_integration.py (1 violations)
+------------------------------------------------
+  Line 90:66 [error]: Arguments missing for parameters "request", "body"
+
+/workspace/tests/unit/test_tool_executor.py (1 violations)
+-------------------------------------------
   Line 31:20 [error]: Argument missing for parameter "config_service"
