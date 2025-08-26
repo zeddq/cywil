@@ -5,7 +5,7 @@ Test data loader for legal document fixtures.
 from pathlib import Path
 from typing import Dict, List
 
-from app.models.pipeline_schemas import RawDocument, DocumentType
+from app.embedding_models.pipeline_schemas import RawDocument, DocumentType
 
 
 class LegalDocumentLoader:

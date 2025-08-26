@@ -58,12 +58,16 @@ async def send_to_openai(full_text):
 
     except openai.APIConnectionError as e:
         print(f"Failed to connect to OpenAI API: {e}", file=sys.stderr)
+        return None
     except openai.RateLimitError as e:
         print(f"OpenAI API request exceeded rate limit: {e}", file=sys.stderr)
+        return None
     except openai.APIError as e:
         print(f"OpenAI API returned an API Error: {e}", file=sys.stderr)
+        return None
     except Exception as e:
         print(f"An unexpected error occurred: {e}", file=sys.stderr)
+        return None
     finally:
         print("\n--- End of OpenAI Response ---\n")
 

@@ -142,7 +142,7 @@ class StatuteIngestionPipeline:
                     paragraph=metadata.get("paragraph"),
                     text=chunk["text"],
                     embedding_id=chunk["chunk_id"],
-                    metadata=metadata
+                    statute_metadata=metadata
                 )
                 
                 session.add(db_chunk)

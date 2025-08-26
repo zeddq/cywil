@@ -296,11 +296,11 @@ class DocumentProcessor:
                         f"Uploaded batch {i//batch_size + 1} of {len(points)//batch_size + 1}"
                     )
 
-                # Update document metadata to indicate processing
-                if not document.metadata:
-                    document.metadata = {}
+                # Update document metadata to indicate processing - FIXED: use document_metadata
+                if not document.document_metadata:
+                    document.document_metadata = {}
 
-                document.metadata.update(
+                document.document_metadata.update(
                     {
                         "processed": True,
                         "processed_at": datetime.now().isoformat(),

@@ -173,7 +173,6 @@ class TestOpenAIIntegration:
     @pytest.mark.asyncio
     async def test_concurrent_api_calls(self, openai_service):
         """Test multiple concurrent API calls"""
-        messages = [{"role": "user", "content": f"Generate a short response for test {i}"}]
         
         # Create multiple concurrent tasks (with mocks this should work fine)
         tasks = []

@@ -17,7 +17,7 @@ from ..core.llm_manager import LLMManager
 from ..core.service_interface import HealthCheckResult, ServiceInterface, ServiceStatus
 from ..core.tool_registry import ToolCategory, ToolParameter, tool_registry
 from ..validators.document_validator import DocumentValidator
-from app.embedding_models.pipeline_schemas import ValidationResult
+from ..embedding_models.pipeline_schemas import ValidationResult
 
 logger = logging.getLogger(__name__)
 
@@ -400,7 +400,7 @@ Podsumowanie:"""
         
         # Check relevance for specific article queries
         article_match = re.search(r'art\.?\s*(\d+)', query, re.IGNORECASE)
-        if article_match is not None:
+        if article_match:
             requested_article = article_match.group(1)
             
             found_articles = [r.get('article') for r in results]
