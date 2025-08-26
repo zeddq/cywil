@@ -7,7 +7,7 @@ import re
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 
-from app.models.pipeline_schemas import (
+from app.embedding_models.pipeline_schemas import (
     LegalExtraction,
     FallbackResult,
     DocumentType,

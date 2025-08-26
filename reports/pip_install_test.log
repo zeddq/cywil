@@ -1,0 +1,352 @@
+Requirement already satisfied: aiohappyeyeballs==2.6.1 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 7)) (2.6.1)
+Requirement already satisfied: aiohttp==3.12.15 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 9)) (3.12.15)
+Collecting aioresponses==0.7.6 (from -r /workspace/requirements-test.txt (line 13))
+  Downloading aioresponses-0.7.6-py2.py3-none-any.whl.metadata (9.8 kB)
+Requirement already satisfied: aiosignal==1.4.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 15)) (1.4.0)
+Requirement already satisfied: amqp==5.3.1 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 17)) (5.3.1)
+Requirement already satisfied: annotated-types==0.7.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 19)) (0.7.0)
+Requirement already satisfied: anyio==4.10.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 21)) (4.10.0)
+Requirement already satisfied: astroid==3.0.3 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 28)) (3.0.3)
+Requirement already satisfied: asyncpg==0.30.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 30)) (0.30.0)
+Requirement already satisfied: attrs==25.3.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 32)) (25.3.0)
+Requirement already satisfied: billiard==4.2.1 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 38)) (4.2.1)
+Requirement already satisfied: black==23.12.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 40)) (23.12.0)
+Collecting blinker==1.9.0 (from -r /workspace/requirements-test.txt (line 42))
+  Downloading blinker-1.9.0-py3-none-any.whl.metadata (1.6 kB)
+Collecting brotli==1.1.0 (from -r /workspace/requirements-test.txt (line 44))
+  Downloading Brotli-1.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.5 kB)
+Requirement already satisfied: celery==5.5.3 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 46)) (5.5.3)
+Requirement already satisfied: certifi==2025.8.3 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 48)) (2025.8.3)
+Collecting cffi==2.0.0b1 (from -r /workspace/requirements-test.txt (line 54))
+  Downloading cffi-2.0.0b1-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (2.5 kB)
+Requirement already satisfied: charset-normalizer==3.4.3 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 56)) (3.4.3)
+Requirement already satisfied: click==8.2.1 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 58)) (8.2.1)
+Requirement already satisfied: click-didyoumean==0.3.1 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 67)) (0.3.1)
+Requirement already satisfied: click-plugins==1.1.1.2 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 69)) (1.1.1.2)
+Requirement already satisfied: click-repl==0.3.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 71)) (0.3.0)
+Collecting colorama==0.4.6 (from -r /workspace/requirements-test.txt (line 73))
+  Downloading colorama-0.4.6-py2.py3-none-any.whl.metadata (17 kB)
+Collecting configargparse==1.7.1 (from -r /workspace/requirements-test.txt (line 75))
+  Downloading configargparse-1.7.1-py3-none-any.whl.metadata (24 kB)
+Collecting coverage==7.10.5 (from coverage[toml]==7.10.5->-r /workspace/requirements-test.txt (line 77))
+  Downloading coverage-7.10.5-cp311-cp311-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (8.9 kB)
+Requirement already satisfied: cryptography==45.0.6 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 79)) (45.0.6)
+Requirement already satisfied: dill==0.4.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 83)) (0.4.0)
+Requirement already satisfied: distro==1.9.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 85)) (1.9.0)
+Collecting factory-boy==3.3.0 (from -r /workspace/requirements-test.txt (line 87))
+  Downloading factory_boy-3.3.0-py2.py3-none-any.whl.metadata (15 kB)
+Collecting faker==20.1.0 (from -r /workspace/requirements-test.txt (line 89))
+  Downloading Faker-20.1.0-py3-none-any.whl.metadata (15 kB)
+Requirement already satisfied: fastapi==0.116.1 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 93)) (0.116.1)
+Requirement already satisfied: flake8==6.1.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 95)) (6.1.0)
+Collecting flask==3.1.2 (from -r /workspace/requirements-test.txt (line 97))
+  Downloading flask-3.1.2-py3-none-any.whl.metadata (3.2 kB)
+Collecting flask-basicauth==0.2.0 (from -r /workspace/requirements-test.txt (line 102))
+  Downloading Flask-BasicAuth-0.2.0.tar.gz (16 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Collecting flask-cors==6.0.1 (from -r /workspace/requirements-test.txt (line 104))
+  Downloading flask_cors-6.0.1-py3-none-any.whl.metadata (5.3 kB)
+Requirement already satisfied: frozenlist==1.7.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 106)) (1.7.0)
+Collecting gevent==25.5.1 (from -r /workspace/requirements-test.txt (line 110))
+  Downloading gevent-25.5.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (13 kB)
+Collecting geventhttpclient==2.3.4 (from -r /workspace/requirements-test.txt (line 114))
+  Downloading geventhttpclient-2.3.4-cp311-cp311-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (8.4 kB)
+Requirement already satisfied: googleapis-common-protos==1.70.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 116)) (1.70.0)
+Requirement already satisfied: greenlet==3.2.4 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 120)) (3.2.4)
+Collecting griffe==1.12.1 (from -r /workspace/requirements-test.txt (line 124))
+  Downloading griffe-1.12.1-py3-none-any.whl.metadata (5.0 kB)
+Requirement already satisfied: grpcio==1.74.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 126)) (1.74.0)
+Requirement already satisfied: h11==0.16.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 130)) (0.16.0)
+Requirement already satisfied: h2==4.3.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 134)) (4.3.0)
+Requirement already satisfied: hpack==4.1.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 136)) (4.1.0)
+Requirement already satisfied: httpcore==1.0.9 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 138)) (1.0.9)
+Requirement already satisfied: httpx==0.28.1 in ./.venv/lib/python3.11/site-packages (from httpx[http2]==0.28.1->-r /workspace/requirements-test.txt (line 140)) (0.28.1)
+Collecting httpx-sse==0.4.1 (from -r /workspace/requirements-test.txt (line 145))
+  Downloading httpx_sse-0.4.1-py3-none-any.whl.metadata (9.4 kB)
+Requirement already satisfied: hyperframe==6.1.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 147)) (6.1.0)
+Collecting hypothesis==6.92.1 (from -r /workspace/requirements-test.txt (line 149))
+  Downloading hypothesis-6.92.1-py3-none-any.whl.metadata (6.0 kB)
+Requirement already satisfied: idna==3.10 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 151)) (3.10)
+Requirement already satisfied: importlib-metadata==8.7.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 157)) (8.7.0)
+Requirement already satisfied: iniconfig==2.1.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 159)) (2.1.0)
+Requirement already satisfied: isort==5.13.2 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 161)) (5.13.2)
+Collecting itsdangerous==2.2.0 (from -r /workspace/requirements-test.txt (line 165))
+  Downloading itsdangerous-2.2.0-py3-none-any.whl.metadata (1.9 kB)
+Requirement already satisfied: jinja2==3.1.6 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 167)) (3.1.6)
+Requirement already satisfied: jiter==0.10.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 171)) (0.10.0)
+Collecting jose==1.0.0 (from -r /workspace/requirements-test.txt (line 173))
+  Downloading jose-1.0.0.tar.gz (9.2 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: jsonschema==4.25.1 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 175)) (4.25.1)
+Requirement already satisfied: jsonschema-specifications==2025.4.1 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 177)) (2025.4.1)
+Requirement already satisfied: kombu==5.5.4 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 179)) (5.5.4)
+Collecting locust==2.17.0 (from -r /workspace/requirements-test.txt (line 181))
+  Downloading locust-2.17.0-py3-none-any.whl.metadata (7.5 kB)
+Requirement already satisfied: markupsafe==3.0.2 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 183)) (3.0.2)
+Requirement already satisfied: mccabe==0.7.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 188)) (0.7.0)
+Collecting mcp==1.13.1 (from -r /workspace/requirements-test.txt (line 192))
+  Downloading mcp-1.13.1-py3-none-any.whl.metadata (74 kB)
+Requirement already satisfied: msgpack==1.1.1 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 194)) (1.1.1)
+Requirement already satisfied: multidict==6.6.4 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 196)) (6.6.4)
+Requirement already satisfied: mypy==1.7.1 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 200)) (1.7.1)
+Requirement already satisfied: mypy-extensions==1.1.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 202)) (1.1.0)
+Collecting numpy==2.3.2 (from -r /workspace/requirements-test.txt (line 206))
+  Downloading numpy-2.3.2-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (62 kB)
+Requirement already satisfied: openai==1.97.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 208)) (1.97.0)
+Collecting openai-agents==0.2.2 (from -r /workspace/requirements-test.txt (line 212))
+  Downloading openai_agents-0.2.2-py3-none-any.whl.metadata (11 kB)
+Requirement already satisfied: opentelemetry-api==1.35.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 214)) (1.35.0)
+Requirement already satisfied: opentelemetry-exporter-otlp==1.35.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 223)) (1.35.0)
+Requirement already satisfied: opentelemetry-exporter-otlp-proto-common==1.35.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 225)) (1.35.0)
+Requirement already satisfied: opentelemetry-exporter-otlp-proto-grpc==1.35.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 230)) (1.35.0)
+Requirement already satisfied: opentelemetry-exporter-otlp-proto-http==1.35.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 234)) (1.35.0)
+Requirement already satisfied: opentelemetry-instrumentation==0.56b0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 238)) (0.56b0)
+Requirement already satisfied: opentelemetry-instrumentation-logging==0.56b0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 242)) (0.56b0)
+Requirement already satisfied: opentelemetry-proto==1.35.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 244)) (1.35.0)
+Requirement already satisfied: opentelemetry-sdk==1.35.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 250)) (1.35.0)
+Requirement already satisfied: opentelemetry-semantic-conventions==0.56b0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 255)) (0.56b0)
+Requirement already satisfied: packaging==25.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 260)) (25.0)
+Requirement already satisfied: pathspec==0.12.1 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 266)) (0.12.1)
+Collecting platformdirs==4.3.8 (from -r /workspace/requirements-test.txt (line 268))
+  Downloading platformdirs-4.3.8-py3-none-any.whl.metadata (12 kB)
+Requirement already satisfied: pluggy==1.6.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 272)) (1.6.0)
+Requirement already satisfied: portalocker==3.2.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 274)) (3.2.0)
+Requirement already satisfied: prompt-toolkit==3.0.51 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 276)) (3.0.51)
+Requirement already satisfied: propcache==0.3.2 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 278)) (0.3.2)
+Requirement already satisfied: protobuf==6.32.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 282)) (6.32.0)
+Requirement already satisfied: psutil==7.0.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 287)) (7.0.0)
+Requirement already satisfied: pycodestyle==2.11.1 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 289)) (2.11.1)
+Requirement already satisfied: pycparser==2.22 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 291)) (2.22)
+Requirement already satisfied: pydantic==2.11.7 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 293)) (2.11.7)
+Requirement already satisfied: pydantic-core==2.33.2 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 303)) (2.33.2)
+Collecting pydantic-settings==2.10.1 (from -r /workspace/requirements-test.txt (line 305))
+  Downloading pydantic_settings-2.10.1-py3-none-any.whl.metadata (3.4 kB)
+Requirement already satisfied: pyflakes==3.1.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 307)) (3.1.0)
+Requirement already satisfied: pygments==2.19.2 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 309)) (2.19.2)
+Requirement already satisfied: pylint==3.0.3 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 311)) (3.0.3)
+Collecting pytest==8.4.0 (from -r /workspace/requirements-test.txt (line 313))
+  Downloading pytest-8.4.0-py3-none-any.whl.metadata (7.7 kB)
+Collecting pytest-asyncio==1.0.0 (from -r /workspace/requirements-test.txt (line 323))
+  Downloading pytest_asyncio-1.0.0-py3-none-any.whl.metadata (4.0 kB)
+Collecting pytest-cov==5.0.0 (from -r /workspace/requirements-test.txt (line 325))
+  Downloading pytest_cov-5.0.0-py3-none-any.whl.metadata (27 kB)
+Collecting pytest-html==4.1.1 (from -r /workspace/requirements-test.txt (line 327))
+  Downloading pytest_html-4.1.1-py3-none-any.whl.metadata (3.9 kB)
+Collecting pytest-json-report==1.5.0 (from -r /workspace/requirements-test.txt (line 329))
+  Downloading pytest_json_report-1.5.0-py3-none-any.whl.metadata (15 kB)
+Collecting pytest-metadata==3.1.1 (from -r /workspace/requirements-test.txt (line 331))
+  Downloading pytest_metadata-3.1.1-py3-none-any.whl.metadata (8.6 kB)
+Collecting pytest-mock==3.12.0 (from -r /workspace/requirements-test.txt (line 335))
+  Downloading pytest_mock-3.12.0-py3-none-any.whl.metadata (3.8 kB)
+Collecting pytest-timeout==2.2.0 (from -r /workspace/requirements-test.txt (line 337))
+  Downloading pytest_timeout-2.2.0-py3-none-any.whl.metadata (17 kB)
+Collecting python-dateutil==2.9.0.post0 (from -r /workspace/requirements-test.txt (line 339))
+  Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+Collecting python-dotenv==1.0.0 (from -r /workspace/requirements-test.txt (line 343))
+  Downloading python_dotenv-1.0.0-py3-none-any.whl.metadata (21 kB)
+Requirement already satisfied: python-json-logger==2.0.7 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 347)) (2.0.7)
+Requirement already satisfied: python-multipart==0.0.20 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 349)) (0.0.20)
+Requirement already satisfied: pyyaml==6.0.2 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 351)) (6.0.2)
+Collecting pyzmq==27.0.2 (from -r /workspace/requirements-test.txt (line 353))
+  Downloading pyzmq-27.0.2-cp311-cp311-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl.metadata (6.0 kB)
+Requirement already satisfied: qdrant-client==1.15.1 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 355)) (1.15.1)
+Collecting redis==6.4.0 (from -r /workspace/requirements-test.txt (line 357))
+  Downloading redis-6.4.0-py3-none-any.whl.metadata (10 kB)
+Requirement already satisfied: referencing==0.36.2 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 359)) (0.36.2)
+Requirement already satisfied: requests==2.32.5 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 363)) (2.32.5)
+Collecting responses==0.24.1 (from -r /workspace/requirements-test.txt (line 369))
+  Downloading responses-0.24.1-py3-none-any.whl.metadata (46 kB)
+Collecting roundrobin==0.0.4 (from -r /workspace/requirements-test.txt (line 371))
+  Downloading roundrobin-0.0.4.tar.gz (3.4 kB)
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Getting requirements to build wheel: started
+  Getting requirements to build wheel: finished with status 'done'
+  Preparing metadata (pyproject.toml): started
+  Preparing metadata (pyproject.toml): finished with status 'done'
+Requirement already satisfied: rpds-py==0.27.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 373)) (0.27.0)
+Requirement already satisfied: six==1.17.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 377)) (1.17.0)
+Requirement already satisfied: sniffio==1.3.1 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 379)) (1.3.1)
+Collecting sortedcontainers==2.4.0 (from -r /workspace/requirements-test.txt (line 383))
+  Downloading sortedcontainers-2.4.0-py2.py3-none-any.whl.metadata (10 kB)
+Requirement already satisfied: sqlalchemy==2.0.41 in ./.venv/lib/python3.11/site-packages (from sqlalchemy[asyncio]==2.0.41->-r /workspace/requirements-test.txt (line 385)) (2.0.41)
+Requirement already satisfied: sqlmodel==0.0.24 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 389)) (0.0.24)
+Collecting sse-starlette==3.0.2 (from -r /workspace/requirements-test.txt (line 391))
+  Downloading sse_starlette-3.0.2-py3-none-any.whl.metadata (11 kB)
+Requirement already satisfied: starlette==0.47.3 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 393)) (0.47.3)
+Requirement already satisfied: tenacity==8.5.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 397)) (8.5.0)
+Requirement already satisfied: tomlkit==0.13.3 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 399)) (0.13.3)
+Requirement already satisfied: tqdm==4.67.1 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 401)) (4.67.1)
+Collecting types-cffi==1.17.0.20250822 (from -r /workspace/requirements-test.txt (line 403))
+  Downloading types_cffi-1.17.0.20250822-py3-none-any.whl.metadata (1.7 kB)
+Collecting types-pyopenssl==24.1.0.20240722 (from -r /workspace/requirements-test.txt (line 405))
+  Downloading types_pyOpenSSL-24.1.0.20240722-py3-none-any.whl.metadata (2.1 kB)
+Collecting types-redis==4.6.0.11 (from -r /workspace/requirements-test.txt (line 407))
+  Downloading types_redis-4.6.0.11-py3-none-any.whl.metadata (2.0 kB)
+Collecting types-requests==2.31.0.10 (from -r /workspace/requirements-test.txt (line 409))
+  Downloading types_requests-2.31.0.10-py3-none-any.whl.metadata (1.8 kB)
+Collecting types-setuptools==80.9.0.20250822 (from -r /workspace/requirements-test.txt (line 413))
+  Downloading types_setuptools-80.9.0.20250822-py3-none-any.whl.metadata (1.9 kB)
+Collecting typing-extensions==4.15.0rc1 (from -r /workspace/requirements-test.txt (line 415))
+  Downloading typing_extensions-4.15.0rc1-py3-none-any.whl.metadata (3.3 kB)
+Requirement already satisfied: typing-inspection==0.4.1 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 435)) (0.4.1)
+Requirement already satisfied: tzdata==2025.2 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 439)) (2025.2)
+Collecting urllib3==2.5.0 (from -r /workspace/requirements-test.txt (line 441))
+  Downloading urllib3-2.5.0-py3-none-any.whl.metadata (6.5 kB)
+Collecting uvicorn==0.35.0 (from -r /workspace/requirements-test.txt (line 448))
+  Downloading uvicorn-0.35.0-py3-none-any.whl.metadata (6.5 kB)
+Requirement already satisfied: vine==5.1.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 450)) (5.1.0)
+Requirement already satisfied: wcwidth==0.2.13 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 455)) (0.2.13)
+Collecting werkzeug==3.1.3 (from -r /workspace/requirements-test.txt (line 457))
+  Downloading werkzeug-3.1.3-py3-none-any.whl.metadata (3.7 kB)
+Requirement already satisfied: wrapt==1.17.3 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 462)) (1.17.3)
+Requirement already satisfied: yarl==1.20.1 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 464)) (1.20.1)
+Requirement already satisfied: zipp==3.23.0 in ./.venv/lib/python3.11/site-packages (from -r /workspace/requirements-test.txt (line 466)) (3.23.0)
+Collecting zope-event==5.1.1 (from -r /workspace/requirements-test.txt (line 468))
+  Downloading zope_event-5.1.1-py3-none-any.whl.metadata (5.0 kB)
+Collecting zope-interface==7.2 (from -r /workspace/requirements-test.txt (line 470))
+  Downloading zope.interface-7.2-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (44 kB)
+Requirement already satisfied: python-jose==3.5.0 in ./.venv/lib/python3.11/site-packages (from python-jose[cryptography]==3.5.0->-r /workspace/requirements-test.txt (line 472)) (3.5.0)
+Requirement already satisfied: passlib==1.7.4 in ./.venv/lib/python3.11/site-packages (from passlib[bcrypt]==1.7.4->-r /workspace/requirements-test.txt (line 473)) (1.7.4)
+Collecting setuptools>=75.8.2 (from zope-event==5.1.1->-r /workspace/requirements-test.txt (line 468))
+  Using cached setuptools-80.9.0-py3-none-any.whl.metadata (6.6 kB)
+Requirement already satisfied: ecdsa!=0.15 in ./.venv/lib/python3.11/site-packages (from python-jose==3.5.0->python-jose[cryptography]==3.5.0->-r /workspace/requirements-test.txt (line 472)) (0.19.1)
+Requirement already satisfied: rsa!=4.1.1,!=4.4,<5.0,>=4.0 in ./.venv/lib/python3.11/site-packages (from python-jose==3.5.0->python-jose[cryptography]==3.5.0->-r /workspace/requirements-test.txt (line 472)) (4.9.1)
+Requirement already satisfied: pyasn1>=0.5.0 in ./.venv/lib/python3.11/site-packages (from python-jose==3.5.0->python-jose[cryptography]==3.5.0->-r /workspace/requirements-test.txt (line 472)) (0.6.1)
+Requirement already satisfied: bcrypt>=3.1.0 in ./.venv/lib/python3.11/site-packages (from passlib[bcrypt]==1.7.4->-r /workspace/requirements-test.txt (line 473)) (4.3.0)
+Downloading aioresponses-0.7.6-py2.py3-none-any.whl (11 kB)
+Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+Downloading Brotli-1.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.9/2.9 MB 97.1 MB/s  0:00:00
+Downloading cffi-2.0.0b1-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (215 kB)
+Downloading colorama-0.4.6-py2.py3-none-any.whl (25 kB)
+Downloading configargparse-1.7.1-py3-none-any.whl (25 kB)
+Downloading coverage-7.10.5-cp311-cp311-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (249 kB)
+Downloading factory_boy-3.3.0-py2.py3-none-any.whl (36 kB)
+Downloading Faker-20.1.0-py3-none-any.whl (1.7 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.7/1.7 MB 155.8 MB/s  0:00:00
+Downloading flask-3.1.2-py3-none-any.whl (103 kB)
+Downloading flask_cors-6.0.1-py3-none-any.whl (13 kB)
+Downloading gevent-25.5.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.1 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.1/2.1 MB 155.9 MB/s  0:00:00
+Downloading geventhttpclient-2.3.4-cp311-cp311-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (114 kB)
+Downloading griffe-1.12.1-py3-none-any.whl (138 kB)
+Downloading httpx_sse-0.4.1-py3-none-any.whl (8.1 kB)
+Downloading hypothesis-6.92.1-py3-none-any.whl (429 kB)
+Downloading sortedcontainers-2.4.0-py2.py3-none-any.whl (29 kB)
+Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+Downloading locust-2.17.0-py3-none-any.whl (829 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 829.5/829.5 kB 89.7 MB/s  0:00:00
+Downloading mcp-1.13.1-py3-none-any.whl (161 kB)
+Downloading numpy-2.3.2-cp311-cp311-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (16.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.9/16.9 MB 226.2 MB/s  0:00:00
+Downloading typing_extensions-4.15.0rc1-py3-none-any.whl (44 kB)
+Downloading openai_agents-0.2.2-py3-none-any.whl (161 kB)
+Downloading types_requests-2.31.0.10-py3-none-any.whl (14 kB)
+Downloading urllib3-2.5.0-py3-none-any.whl (129 kB)
+Downloading platformdirs-4.3.8-py3-none-any.whl (18 kB)
+Downloading pydantic_settings-2.10.1-py3-none-any.whl (45 kB)
+Downloading pytest-8.4.0-py3-none-any.whl (363 kB)
+Downloading pytest_asyncio-1.0.0-py3-none-any.whl (15 kB)
+Downloading pytest_cov-5.0.0-py3-none-any.whl (21 kB)
+Downloading pytest_html-4.1.1-py3-none-any.whl (23 kB)
+Downloading pytest_json_report-1.5.0-py3-none-any.whl (13 kB)
+Downloading pytest_metadata-3.1.1-py3-none-any.whl (11 kB)
+Downloading pytest_mock-3.12.0-py3-none-any.whl (9.8 kB)
+Downloading pytest_timeout-2.2.0-py3-none-any.whl (13 kB)
+Downloading python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+Downloading python_dotenv-1.0.0-py3-none-any.whl (19 kB)
+Downloading pyzmq-27.0.2-cp311-cp311-manylinux_2_26_x86_64.manylinux_2_28_x86_64.whl (856 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 857.0/857.0 kB 95.6 MB/s  0:00:00
+Downloading redis-6.4.0-py3-none-any.whl (279 kB)
+Downloading responses-0.24.1-py3-none-any.whl (55 kB)
+Downloading sse_starlette-3.0.2-py3-none-any.whl (11 kB)
+Downloading types_cffi-1.17.0.20250822-py3-none-any.whl (20 kB)
+Downloading types_pyOpenSSL-24.1.0.20240722-py3-none-any.whl (7.5 kB)
+Downloading types_redis-4.6.0.11-py3-none-any.whl (57 kB)
+Downloading types_setuptools-80.9.0.20250822-py3-none-any.whl (63 kB)
+Downloading uvicorn-0.35.0-py3-none-any.whl (66 kB)
+Downloading werkzeug-3.1.3-py3-none-any.whl (224 kB)
+Downloading zope_event-5.1.1-py3-none-any.whl (7.0 kB)
+Downloading zope.interface-7.2-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (259 kB)
+Using cached setuptools-80.9.0-py3-none-any.whl (1.2 MB)
+Building wheels for collected packages: flask-basicauth, jose, roundrobin
+  Building wheel for flask-basicauth (pyproject.toml): started
+  Building wheel for flask-basicauth (pyproject.toml): finished with status 'done'
+  Created wheel for flask-basicauth: filename=flask_basicauth-0.2.0-py3-none-any.whl size=4320 sha256=a30be36353697ab78192ff2c528943889ec16521752dd135f7036b58d13e2b11
+  Stored in directory: /root/.cache/pip/wheels/3f/54/3d/8dcca37cc410b1be1ea1812d17f8c1dc892ddf7356353ecee9
+  Building wheel for jose (pyproject.toml): started
+  Building wheel for jose (pyproject.toml): finished with status 'done'
+  Created wheel for jose: filename=jose-1.0.0-py3-none-any.whl size=8900 sha256=bfe2752bdafca4c2f102eb98854e6a304295c1d18eef7eed30a569a4c21744f1
+  Stored in directory: /root/.cache/pip/wheels/a8/86/77/b87d27d8f599625e90ba62408a919b4fe9d2d8ba4011908cc5
+  Building wheel for roundrobin (pyproject.toml): started
+  Building wheel for roundrobin (pyproject.toml): finished with status 'done'
+  Created wheel for roundrobin: filename=roundrobin-0.0.4-py3-none-any.whl size=4097 sha256=6a9f3c10dff1c5bb419c66f7486322000a38f95cb96f7a9b730a8aa1521f501f
+  Stored in directory: /root/.cache/pip/wheels/a0/bc/5d/8714573bb8dd7e86b272448c8837bc0ea19e6b4ab3a46fca2b
+Successfully built flask-basicauth jose roundrobin
+Installing collected packages: sortedcontainers, roundrobin, jose, brotli, werkzeug, uvicorn, urllib3, typing-extensions, types-setuptools, setuptools, redis, pyzmq, python-dotenv, python-dateutil, pytest, platformdirs, numpy, itsdangerous, hypothesis, httpx-sse, coverage, configargparse, colorama, cffi, blinker, zope-interface, zope-event, types-requests, types-cffi, pytest-timeout, pytest-mock, pytest-metadata, pytest-asyncio, griffe, flask, faker, types-pyopenssl, sse-starlette, responses, pytest-json-report, pytest-html, pytest-cov, gevent, flask-cors, flask-basicauth, factory-boy, types-redis, pydantic-settings, geventhttpclient, aioresponses, mcp, locust, openai-agents
+  Attempting uninstall: uvicorn
+    Found existing installation: uvicorn 0.34.3
+    Uninstalling uvicorn-0.34.3:
+      Successfully uninstalled uvicorn-0.34.3
+  Attempting uninstall: urllib3
+    Found existing installation: urllib3 1.26.20
+    Uninstalling urllib3-1.26.20:
+      Successfully uninstalled urllib3-1.26.20
+  Attempting uninstall: typing-extensions
+    Found existing installation: typing_extensions 4.14.1
+    Uninstalling typing_extensions-4.14.1:
+      Successfully uninstalled typing_extensions-4.14.1
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 65.5.0
+    Uninstalling setuptools-65.5.0:
+      Successfully uninstalled setuptools-65.5.0
+  Attempting uninstall: redis
+    Found existing installation: redis 6.2.0
+    Uninstalling redis-6.2.0:
+      Successfully uninstalled redis-6.2.0
+  Attempting uninstall: python-dotenv
+    Found existing installation: python-dotenv 1.0.1
+    Uninstalling python-dotenv-1.0.1:
+      Successfully uninstalled python-dotenv-1.0.1
+  Attempting uninstall: python-dateutil
+    Found existing installation: python-dateutil 2.9.0
+    Uninstalling python-dateutil-2.9.0:
+      Successfully uninstalled python-dateutil-2.9.0
+  Attempting uninstall: pytest
+    Found existing installation: pytest 8.4.1
+    Uninstalling pytest-8.4.1:
+      Successfully uninstalled pytest-8.4.1
+  Attempting uninstall: platformdirs
+    Found existing installation: platformdirs 2.6.2
+    Uninstalling platformdirs-2.6.2:
+      Successfully uninstalled platformdirs-2.6.2
+  Attempting uninstall: numpy
+    Found existing installation: numpy 1.26.4
+    Uninstalling numpy-1.26.4:
+      Successfully uninstalled numpy-1.26.4
+  Attempting uninstall: cffi
+    Found existing installation: cffi 1.17.1
+    Uninstalling cffi-1.17.1:
+      Successfully uninstalled cffi-1.17.1
+  Attempting uninstall: pydantic-settings
+    Found existing installation: pydantic-settings 2.9.1
+    Uninstalling pydantic-settings-2.9.1:
+      Successfully uninstalled pydantic-settings-2.9.1
+
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+poetry 1.3.1 requires platformdirs<3.0.0,>=2.5.2, but you have platformdirs 4.3.8 which is incompatible.
+poetry 1.3.1 requires urllib3<2.0.0,>=1.26.0, but you have urllib3 2.5.0 which is incompatible.
+thinc 8.2.5 requires numpy<2.0.0,>=1.19.0; python_version >= "3.9", but you have numpy 2.3.2 which is incompatible.
+virtualenv 20.21.1 requires platformdirs<4,>=2.4, but you have platformdirs 4.3.8 which is incompatible.
+Successfully installed aioresponses-0.7.6 blinker-1.9.0 brotli-1.1.0 cffi-2.0.0b1 colorama-0.4.6 configargparse-1.7.1 coverage-7.10.5 factory-boy-3.3.0 faker-20.1.0 flask-3.1.2 flask-basicauth-0.2.0 flask-cors-6.0.1 gevent-25.5.1 geventhttpclient-2.3.4 griffe-1.12.1 httpx-sse-0.4.1 hypothesis-6.92.1 itsdangerous-2.2.0 jose-1.0.0 locust-2.17.0 mcp-1.13.1 numpy-2.3.2 openai-agents-0.2.2 platformdirs-4.3.8 pydantic-settings-2.10.1 pytest-8.4.0 pytest-asyncio-1.0.0 pytest-cov-5.0.0 pytest-html-4.1.1 pytest-json-report-1.5.0 pytest-metadata-3.1.1 pytest-mock-3.12.0 pytest-timeout-2.2.0 python-dateutil-2.9.0.post0 python-dotenv-1.0.0 pyzmq-27.0.2 redis-6.4.0 responses-0.24.1 roundrobin-0.0.4 setuptools-80.9.0 sortedcontainers-2.4.0 sse-starlette-3.0.2 types-cffi-1.17.0.20250822 types-pyopenssl-24.1.0.20240722 types-redis-4.6.0.11 types-requests-2.31.0.10 types-setuptools-80.9.0.20250822 typing-extensions-4.15.0rc1 urllib3-2.5.0 uvicorn-0.35.0 werkzeug-3.1.3 zope-event-5.1.1 zope-interface-7.2

@@ -1,85 +1,69 @@
 Pyright Diagnostic Report: reportMissingImports
 ================================================================================
 
-Total violations: 20
+Total violations: 22
 
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/celery/conftest.py (1 violations)
--------------------------------------------------------------
-  Line 1:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/celery/test_celery_integration.py (1 violations)
-----------------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/celery/test_celery_tasks.py (1 violations)
-----------------------------------------------------------------------
-  Line 1:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py (1 violations)
+/workspace/app/embedding_models/embedding_interface.py (4 violations)
 ------------------------------------------------------
-  Line 5:12 [error]: Import "pytest" could not be resolved
+  Line 55:18 [error]: Import "sentence_transformers" could not be resolved
+  Line 163:26 [error]: Import "transformers" could not be resolved
+  Line 164:28 [error]: Import "torch" could not be resolved
+  Line 185:16 [error]: Import "torch" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py (1 violations)
-------------------------------------------------------------------
-  Line 2:12 [error]: Import "pytest" could not be resolved
+/workspace/app/services/supreme_court_service.py (1 violations)
+------------------------------------------------
+  Line 15:6 [error]: Import "sentence_transformers" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py (1 violations)
-------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
+/workspace/app/task_processors.py (2 violations)
+---------------------------------
+  Line 9:8 [error]: Import "fitz" could not be resolved
+  Line 16:6 [error]: Import "sentence_transformers" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_conversation_manager.py (1 violations)
------------------------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
+/workspace/app/worker/tasks/embed.py (1 violations)
+------------------------------------
+  Line 21:6 [error]: Import "sentence_transformers" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_database_manager.py (1 violations)
--------------------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
+/workspace/app/worker/tasks/pdf2chunks.py (1 violations)
+-----------------------------------------
+  Line 9:8 [error]: Import "pdfplumber" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py (1 violations)
---------------------------------------------------------------------------
-  Line 5:8 [error]: Import "pytest" could not be resolved
+/workspace/app/worker/tasks/preprocess_sn_o3.py (1 violations)
+-----------------------------------------------
+  Line 23:8 [error]: Import "fitz" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py (1 violations)
--------------------------------------------------------------------------------------
-  Line 5:8 [error]: Import "pytest" could not be resolved
+/workspace/app/worker/tasks/sn.py (2 violations)
+---------------------------------
+  Line 11:6 [error]: Import "deepdiff" could not be resolved
+  Line 14:6 [error]: Import "sentence_transformers" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_migration.py (1 violations)
-------------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
+/workspace/ingest/embed.py (1 violations)
+--------------------------
+  Line 3:6 [error]: Import "sentence_transformers" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py (1 violations)
-----------------------------------------------------------------------------------
-  Line 5:8 [error]: Import "pytest" could not be resolved
+/workspace/ingest/pdf2chunks.py (1 violations)
+-------------------------------
+  Line 3:8 [error]: Import "pdfplumber" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming.py (1 violations)
-------------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
+/workspace/ingest/preprocess_sn.py (3 violations)
+----------------------------------
+  Line 24:8 [error]: Import "fitz" could not be resolved
+  Line 25:8 [error]: Import "spacy" could not be resolved
+  Line 26:6 [error]: Import "spacy.pipeline" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py (1 violations)
---------------------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
+/workspace/ingest/preprocess_sn_o3.py (1 violations)
+-------------------------------------
+  Line 17:8 [error]: Import "fitz" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/conftest.py (1 violations)
------------------------------------------------------------
-  Line 2:12 [error]: Import "pytest" could not be resolved
+/workspace/ingest/sn.py (2 violations)
+-----------------------
+  Line 8:6 [error]: Import "deepdiff" could not be resolved
+  Line 14:6 [error]: Import "sentence_transformers" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py (1 violations)
------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
+/workspace/ingest/templates.py (1 violations)
+------------------------------
+  Line 13:6 [error]: Import "sentence_transformers" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_performance_utils.py (1 violations)
--------------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_registration_key.py (1 violations)
-------------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_executor.py (1 violations)
----------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_registry.py (1 violations)
----------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
+/workspace/ingest/templates_preprocess.py (1 violations)
+-----------------------------------------
+  Line 1:8 [error]: Import "fitz" could not be resolved

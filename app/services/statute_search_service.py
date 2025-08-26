@@ -17,7 +17,7 @@ from ..core.llm_manager import LLMManager
 from ..core.service_interface import HealthCheckResult, ServiceInterface, ServiceStatus
 from ..core.tool_registry import ToolCategory, ToolParameter, tool_registry
 from ..validators.document_validator import DocumentValidator
-from ..models.pipeline_schemas import ValidationResult
+from app.embedding_models.pipeline_schemas import ValidationResult
 
 logger = logging.getLogger(__name__)
 

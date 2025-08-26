@@ -1,0 +1,10 @@
+Pyright Diagnostic Report: reportOptionalCall
+================================================================================
+
+Total violations: 2
+
+
+/workspace/app/embedding_models/embedding_interface.py (2 violations)
+------------------------------------------------------
+  Line 189:26 [error]: Object of type "None" cannot be called
+  Line 196:27 [error]: Object of type "None" cannot be called

@@ -1,154 +1,570 @@
 {
   "version": "1.1.404",
-  "time": "1756164958303",
+  "time": "1756199456062",
   "generalDiagnostics": [
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/repositories/case_repository.py",
+      "file": "/workspace/alembic/env.py",
       "severity": "error",
-      "message": "Argument of type \"bool\" cannot be assigned to parameter \"onclause\" of type \"_OnClauseArgument | None\" in function \"join\"\n\u00a0\u00a0Type \"bool\" is not assignable to type \"_OnClauseArgument | None\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ColumnElement[Any]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is incompatible with protocol \"_HasClauseElement[Any]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"__clause_element__\" is not present\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"SQLCoreOperations[Any]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ExpressionElementRole[Any]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"TypedColumnsClauseRole[Any]\"\n\u00a0\u00a0\u00a0\u00a0Type \"bool\" is not assignable to type \"() -> ColumnElement[Any]\"\n  ...",
+      "message": "\"context\" is unknown import symbol",
       "range": {
         "start": {
-          "line": 64,
-          "character": 33
+          "line": 5,
+          "character": 20
         },
         "end": {
-          "line": 64,
-          "character": 60
-        }
-      },
-      "rule": "reportArgumentType"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/services/optimized_statute_search.py",
-      "severity": "error",
-      "message": "Argument of type \"list[Condition | tuple[str, Any]]\" cannot be assigned to parameter \"must\" of type \"Condition | List[Condition] | None\" in function \"__init__\"\n\u00a0\u00a0Type \"list[Condition | tuple[str, Any]]\" is not assignable to type \"Condition | List[Condition] | None\"\n\u00a0\u00a0\u00a0\u00a0\"list[Condition | tuple[str, Any]]\" is not assignable to \"List[Condition]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Type parameter \"_T@list\" is invariant, but \"Condition | tuple[str, Any]\" is not the same as \"Condition\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Consider switching from \"list\" to \"Sequence\" which is covariant\n\u00a0\u00a0\u00a0\u00a0\"list[Condition | tuple[str, Any]]\" is not assignable to \"FieldCondition\"\n\u00a0\u00a0\u00a0\u00a0\"list[Condition | tuple[str, Any]]\" is not assignable to \"IsEmptyCondition\"\n\u00a0\u00a0\u00a0\u00a0\"list[Condition | tuple[str, Any]]\" is not assignable to \"IsNullCondition\"\n\u00a0\u00a0\u00a0\u00a0\"list[Condition | tuple[str, Any]]\" is not assignable to \"HasIdCondition\"\n  ...",
-      "range": {
-        "start": {
-          "line": 109,
-          "character": 43
-        },
-        "end": {
-          "line": 109,
-          "character": 58
-        }
-      },
-      "rule": "reportArgumentType"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/services/supreme_court_service.py",
-      "severity": "information",
-      "message": "Cannot access attribute \"astext\" for class \"str\"\n\u00a0\u00a0Attribute \"astext\" is unknown",
-      "range": {
-        "start": {
-          "line": 300,
-          "character": 90
-        },
-        "end": {
-          "line": 300,
-          "character": 96
+          "line": 5,
+          "character": 27
         }
       },
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/services/supreme_court_service.py",
+      "file": "/workspace/alembic/versions/00df3e0ab26c_add_created_by_user_column_to_case.py",
       "severity": "error",
-      "message": "\"astext\" is not a known attribute of \"None\"",
+      "message": "\"op\" is unknown import symbol",
       "range": {
         "start": {
-          "line": 300,
-          "character": 90
+          "line": 9,
+          "character": 20
         },
         "end": {
-          "line": 300,
-          "character": 96
+          "line": 9,
+          "character": 22
+        }
+      },
+      "rule": "reportAttributeAccessIssue"
+    },
+    {
+      "file": "/workspace/app/embedding_models/embedding_interface.py",
+      "severity": "error",
+      "message": "Import \"sentence_transformers\" could not be resolved",
+      "range": {
+        "start": {
+          "line": 54,
+          "character": 17
+        },
+        "end": {
+          "line": 54,
+          "character": 38
+        }
+      },
+      "rule": "reportMissingImports"
+    },
+    {
+      "file": "/workspace/app/embedding_models/embedding_interface.py",
+      "severity": "error",
+      "message": "\"encode\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 74,
+          "character": 32
+        },
+        "end": {
+          "line": 74,
+          "character": 38
         }
       },
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/services/supreme_court_service.py",
-      "severity": "information",
+      "file": "/workspace/app/embedding_models/embedding_interface.py",
+      "severity": "error",
+      "message": "\"embeddings\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 124,
+          "character": 42
+        },
+        "end": {
+          "line": 124,
+          "character": 52
+        }
+      },
+      "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/app/embedding_models/embedding_interface.py",
+      "severity": "error",
+      "message": "Import \"transformers\" could not be resolved",
+      "range": {
+        "start": {
+          "line": 162,
+          "character": 25
+        },
+        "end": {
+          "line": 162,
+          "character": 37
+        }
+      },
+      "rule": "reportMissingImports"
+    },
+    {
+      "file": "/workspace/app/embedding_models/embedding_interface.py",
+      "severity": "error",
+      "message": "Import \"torch\" could not be resolved",
+      "range": {
+        "start": {
+          "line": 163,
+          "character": 27
+        },
+        "end": {
+          "line": 163,
+          "character": 32
+        }
+      },
+      "rule": "reportMissingImports"
+    },
+    {
+      "file": "/workspace/app/embedding_models/embedding_interface.py",
+      "severity": "error",
+      "message": "Import \"torch\" could not be resolved",
+      "range": {
+        "start": {
+          "line": 184,
+          "character": 15
+        },
+        "end": {
+          "line": 184,
+          "character": 20
+        }
+      },
+      "rule": "reportMissingImports"
+    },
+    {
+      "file": "/workspace/app/embedding_models/embedding_interface.py",
+      "severity": "error",
+      "message": "Object of type \"None\" cannot be called",
+      "range": {
+        "start": {
+          "line": 188,
+          "character": 25
+        },
+        "end": {
+          "line": 194,
+          "character": 17
+        }
+      },
+      "rule": "reportOptionalCall"
+    },
+    {
+      "file": "/workspace/app/embedding_models/embedding_interface.py",
+      "severity": "error",
+      "message": "Object of type \"None\" cannot be called",
+      "range": {
+        "start": {
+          "line": 195,
+          "character": 26
+        },
+        "end": {
+          "line": 195,
+          "character": 47
+        }
+      },
+      "rule": "reportOptionalCall"
+    },
+    {
+      "file": "/workspace/app/embedding_models/pipeline_schemas.py",
+      "severity": "error",
+      "message": "No overloads for \"Field\" match the provided arguments\n\u00a0\u00a0Argument types: (EllipsisType, Literal['^[A-Z0-9-]+)], Literal['Unique document identifier'])",
+      "range": {
+        "start": {
+          "line": 25,
+          "character": 14
+        },
+        "end": {
+          "line": 25,
+          "character": 88
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/app/embedding_models/pipeline_schemas.py",
+      "severity": "error",
+      "message": "No overloads for \"Field\" match the provided arguments\n\u00a0\u00a0Argument types: (EllipsisType, Literal[384], Literal[1536], Literal['Vector embedding of the chunk content'])",
+      "range": {
+        "start": {
+          "line": 73,
+          "character": 29
+        },
+        "end": {
+          "line": 78,
+          "character": 5
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/app/embedding_models/pipeline_schemas.py",
+      "severity": "error",
+      "message": "No overloads for \"Field\" match the provided arguments\n\u00a0\u00a0Argument types: (None, Literal['^[IVX]+ [A-Z]+ \\\\d+/\\\\d+)], Literal['Polish court case number format'])",
+      "range": {
+        "start": {
+          "line": 100,
+          "character": 33
+        },
+        "end": {
+          "line": 104,
+          "character": 5
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/app/main.py",
+      "severity": "error",
+      "message": "Argument missing for parameter \"llm_manager\"",
+      "range": {
+        "start": {
+          "line": 93,
+          "character": 21
+        },
+        "end": {
+          "line": 93,
+          "character": 57
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/app/services/fallback_parser.py",
+      "severity": "error",
+      "message": "Arguments missing for parameters \"case_number\", \"court\", \"date\", \"decision\", \"reasoning\"",
+      "range": {
+        "start": {
+          "line": 83,
+          "character": 21
+        },
+        "end": {
+          "line": 83,
+          "character": 38
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/app/services/openai_client.py",
+      "severity": "error",
+      "message": "Argument missing for parameter \"message\"",
+      "range": {
+        "start": {
+          "line": 41,
+          "character": 18
+        },
+        "end": {
+          "line": 41,
+          "character": 78
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/app/services/openai_client.py",
+      "severity": "error",
+      "message": "Argument missing for parameter \"message\"",
+      "range": {
+        "start": {
+          "line": 141,
+          "character": 22
+        },
+        "end": {
+          "line": 141,
+          "character": 104
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/app/services/openai_client.py",
+      "severity": "error",
+      "message": "Argument missing for parameter \"message\"",
+      "range": {
+        "start": {
+          "line": 183,
+          "character": 22
+        },
+        "end": {
+          "line": 183,
+          "character": 104
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/app/services/openai_client.py",
+      "severity": "error",
+      "message": "Argument missing for parameter \"message\"",
+      "range": {
+        "start": {
+          "line": 213,
+          "character": 18
+        },
+        "end": {
+          "line": 213,
+          "character": 71
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/app/services/openai_client.py",
+      "severity": "error",
+      "message": "Type \"str | None\" is not assignable to return type \"BaseModel | str\"\n\u00a0\u00a0Type \"str | None\" is not assignable to type \"BaseModel | str\"\n\u00a0\u00a0\u00a0\u00a0Type \"None\" is not assignable to type \"BaseModel | str\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"BaseModel\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"str\"",
+      "range": {
+        "start": {
+          "line": 295,
+          "character": 19
+        },
+        "end": {
+          "line": 295,
+          "character": 54
+        }
+      },
+      "rule": "reportReturnType"
+    },
+    {
+      "file": "/workspace/app/services/openai_client.py",
+      "severity": "error",
+      "message": "Type \"str | None\" is not assignable to return type \"BaseModel | str\"\n\u00a0\u00a0Type \"str | None\" is not assignable to type \"BaseModel | str\"\n\u00a0\u00a0\u00a0\u00a0Type \"None\" is not assignable to type \"BaseModel | str\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"BaseModel\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"str\"",
+      "range": {
+        "start": {
+          "line": 327,
+          "character": 19
+        },
+        "end": {
+          "line": 327,
+          "character": 54
+        }
+      },
+      "rule": "reportReturnType"
+    },
+    {
+      "file": "/workspace/app/services/optimized_statute_search.py",
+      "severity": "error",
+      "message": "Argument missing for parameter \"llm_manager\"",
+      "range": {
+        "start": {
+          "line": 30,
+          "character": 8
+        },
+        "end": {
+          "line": 30,
+          "character": 40
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/app/services/optimized_statute_search.py",
+      "severity": "error",
+      "message": "Cannot access attribute \"_embedder\" for class \"OptimizedStatuteSearchService*\"\n\u00a0\u00a0Attribute \"_embedder\" is unknown",
+      "range": {
+        "start": {
+          "line": 43,
+          "character": 56
+        },
+        "end": {
+          "line": 43,
+          "character": 65
+        }
+      },
+      "rule": "reportAttributeAccessIssue"
+    },
+    {
+      "file": "/workspace/app/services/optimized_statute_search.py",
+      "severity": "error",
+      "message": "Cannot access attribute \"_embedder\" for class \"OptimizedStatuteSearchService*\"\n\u00a0\u00a0Attribute \"_embedder\" is unknown",
+      "range": {
+        "start": {
+          "line": 51,
+          "character": 16
+        },
+        "end": {
+          "line": 51,
+          "character": 25
+        }
+      },
+      "rule": "reportAttributeAccessIssue"
+    },
+    {
+      "file": "/workspace/app/services/optimized_statute_search.py",
+      "severity": "error",
+      "message": "Cannot access attribute \"_embedder\" for class \"OptimizedStatuteSearchService*\"\n\u00a0\u00a0Attribute \"_embedder\" is unknown",
+      "range": {
+        "start": {
+          "line": 56,
+          "character": 26
+        },
+        "end": {
+          "line": 56,
+          "character": 35
+        }
+      },
+      "rule": "reportAttributeAccessIssue"
+    },
+    {
+      "file": "/workspace/app/services/statute_search_service.py",
+      "severity": "error",
+      "message": "\"group\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 403,
+          "character": 46
+        },
+        "end": {
+          "line": 403,
+          "character": 51
+        }
+      },
+      "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/app/services/supreme_court_service.py",
+      "severity": "error",
+      "message": "Import \"sentence_transformers\" could not be resolved",
+      "range": {
+        "start": {
+          "line": 14,
+          "character": 5
+        },
+        "end": {
+          "line": 14,
+          "character": 26
+        }
+      },
+      "rule": "reportMissingImports"
+    },
+    {
+      "file": "/workspace/app/services/supreme_court_service.py",
+      "severity": "error",
+      "message": "Cannot access attribute \"__table__\" for class \"type[SNRuling]\"\n\u00a0\u00a0Attribute \"__table__\" is unknown",
+      "range": {
+        "start": {
+          "line": 302,
+          "character": 33
+        },
+        "end": {
+          "line": 302,
+          "character": 42
+        }
+      },
+      "rule": "reportAttributeAccessIssue"
+    },
+    {
+      "file": "/workspace/app/services/supreme_court_service.py",
+      "severity": "error",
       "message": "Cannot access attribute \"meta\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"meta\" is unknown",
       "range": {
         "start": {
-          "line": 318,
+          "line": 322,
           "character": 28
         },
         "end": {
-          "line": 318,
+          "line": 322,
           "character": 32
         }
       },
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/services/supreme_court_service.py",
-      "severity": "information",
+      "file": "/workspace/app/services/supreme_court_service.py",
+      "severity": "error",
       "message": "Cannot access attribute \"meta\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"meta\" is unknown",
       "range": {
         "start": {
-          "line": 318,
+          "line": 322,
           "character": 64
         },
         "end": {
-          "line": 318,
+          "line": 322,
           "character": 68
         }
       },
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/services/supreme_court_service.py",
-      "severity": "information",
+      "file": "/workspace/app/services/supreme_court_service.py",
+      "severity": "error",
       "message": "Cannot access attribute \"meta\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"meta\" is unknown",
       "range": {
         "start": {
-          "line": 319,
+          "line": 323,
           "character": 26
         },
         "end": {
-          "line": 319,
+          "line": 323,
           "character": 30
         }
       },
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/services/supreme_court_service.py",
-      "severity": "information",
+      "file": "/workspace/app/services/supreme_court_service.py",
+      "severity": "error",
       "message": "Cannot access attribute \"meta\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"meta\" is unknown",
       "range": {
         "start": {
-          "line": 319,
+          "line": 323,
           "character": 57
         },
         "end": {
-          "line": 319,
+          "line": 323,
           "character": 61
         }
       },
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/task_processors.py",
-      "severity": "error",
-      "message": "Argument of type \"str | None\" cannot be assigned to parameter \"file_path\" of type \"str\" in function \"_read_document_content\"\n\u00a0\u00a0Type \"str | None\" is not assignable to type \"str\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"str\"",
+      "file": "/workspace/app/task_processors.py",
+      "severity": "warning",
+      "message": "Import \"aiofiles\" could not be resolved from source",
       "range": {
         "start": {
-          "line": 246,
-          "character": 60
+          "line": 7,
+          "character": 7
         },
         "end": {
-          "line": 246,
-          "character": 78
+          "line": 7,
+          "character": 15
         }
       },
-      "rule": "reportArgumentType"
+      "rule": "reportMissingModuleSource"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/task_processors.py",
-      "severity": "information",
+      "file": "/workspace/app/task_processors.py",
+      "severity": "error",
+      "message": "Import \"fitz\" could not be resolved",
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 7
+        },
+        "end": {
+          "line": 8,
+          "character": 11
+        }
+      },
+      "rule": "reportMissingImports"
+    },
+    {
+      "file": "/workspace/app/task_processors.py",
+      "severity": "error",
+      "message": "Import \"sentence_transformers\" could not be resolved",
+      "range": {
+        "start": {
+          "line": 15,
+          "character": 5
+        },
+        "end": {
+          "line": 15,
+          "character": 26
+        }
+      },
+      "rule": "reportMissingImports"
+    },
+    {
+      "file": "/workspace/app/task_processors.py",
+      "severity": "error",
       "message": "Cannot assign to attribute \"metadata\" for class \"Document\"\n\u00a0\u00a0Expression of type \"dict[Any, Any]\" cannot be assigned to attribute \"metadata\" of class \"Document\"\n\u00a0\u00a0\u00a0\u00a0\"dict[Any, Any]\" is not assignable to \"MetaData\"",
       "range": {
         "start": {
@@ -163,8 +579,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/task_processors.py",
-      "severity": "information",
+      "file": "/workspace/app/task_processors.py",
+      "severity": "error",
       "message": "Cannot access attribute \"update\" for class \"MetaData\"\n\u00a0\u00a0Attribute \"update\" is unknown",
       "range": {
         "start": {
@@ -179,71 +595,40 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/task_processors.py",
+      "file": "/workspace/app/validators/document_validator.py",
       "severity": "error",
-      "message": "Expected indented block",
+      "message": "Expression of type \"None\" cannot be assigned to parameter of type \"DocumentType\"\n\u00a0\u00a0\"None\" is not assignable to \"DocumentType\"",
       "range": {
         "start": {
-          "line": 327,
-          "character": 20
+          "line": 57,
+          "character": 81
         },
         "end": {
-          "line": 327,
-          "character": 28
-        }
-      }
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/task_processors.py",
-      "severity": "information",
-      "message": "Cannot assign to attribute \"metadata\" for class \"Document\"\n\u00a0\u00a0Expression of type \"dict[Any, Any]\" cannot be assigned to attribute \"metadata\" of class \"Document\"\n\u00a0\u00a0\u00a0\u00a0\"dict[Any, Any]\" is not assignable to \"MetaData\"",
-      "range": {
-        "start": {
-          "line": 330,
-          "character": 37
-        },
-        "end": {
-          "line": 330,
-          "character": 45
-        }
-      },
-      "rule": "reportAttributeAccessIssue"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/task_processors.py",
-      "severity": "information",
-      "message": "Cannot access attribute \"update\" for class \"MetaData\"\n\u00a0\u00a0Attribute \"update\" is unknown",
-      "range": {
-        "start": {
-          "line": 331,
-          "character": 42
-        },
-        "end": {
-          "line": 331,
-          "character": 48
-        }
-      },
-      "rule": "reportAttributeAccessIssue"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/base_task.py",
-      "severity": "error",
-      "message": "Argument of type \"ResponseT | str\" cannot be assigned to parameter \"s\" of type \"str | bytes | bytearray\" in function \"loads\"\n\u00a0\u00a0Type \"ResponseT | str\" is not assignable to type \"str | bytes | bytearray\"\n\u00a0\u00a0\u00a0\u00a0Type \"Awaitable[Any]\" is not assignable to type \"str | bytes | bytearray\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"Awaitable[Any]\" is not assignable to \"str\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"Awaitable[Any]\" is not assignable to \"bytes\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"Awaitable[Any]\" is not assignable to \"bytearray\"",
-      "range": {
-        "start": {
-          "line": 359,
-          "character": 38
-        },
-        "end": {
-          "line": 359,
-          "character": 51
+          "line": 57,
+          "character": 85
         }
       },
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py",
-      "severity": "information",
+      "file": "/workspace/app/worker/service_registry.py",
+      "severity": "error",
+      "message": "Argument missing for parameter \"llm_manager\"",
+      "range": {
+        "start": {
+          "line": 96,
+          "character": 47
+        },
+        "end": {
+          "line": 96,
+          "character": 83
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/case_tasks.py",
+      "severity": "error",
       "message": "Cannot access attribute \"ilike\" for class \"str\"\n\u00a0\u00a0Attribute \"ilike\" is unknown",
       "range": {
         "start": {
@@ -258,8 +643,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py",
-      "severity": "information",
+      "file": "/workspace/app/worker/tasks/case_tasks.py",
+      "severity": "error",
       "message": "Cannot access attribute \"ilike\" for class \"str\"\n\u00a0\u00a0Attribute \"ilike\" is unknown",
       "range": {
         "start": {
@@ -274,8 +659,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py",
-      "severity": "information",
+      "file": "/workspace/app/worker/tasks/case_tasks.py",
+      "severity": "error",
       "message": "Cannot access attribute \"ilike\" for class \"str\"\n\u00a0\u00a0Attribute \"ilike\" is unknown",
       "range": {
         "start": {
@@ -290,7 +675,23 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/embed.py",
+      "file": "/workspace/app/worker/tasks/embed.py",
+      "severity": "error",
+      "message": "Import \"sentence_transformers\" could not be resolved",
+      "range": {
+        "start": {
+          "line": 20,
+          "character": 5
+        },
+        "end": {
+          "line": 20,
+          "character": 26
+        }
+      },
+      "rule": "reportMissingImports"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/embed.py",
       "severity": "error",
       "message": "Argument missing for parameter \"type\"",
       "range": {
@@ -306,7 +707,7 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/embed.py",
+      "file": "/workspace/app/worker/tasks/embed.py",
       "severity": "error",
       "message": "Argument missing for parameter \"type\"",
       "range": {
@@ -322,7 +723,7 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/embed.py",
+      "file": "/workspace/app/worker/tasks/embed.py",
       "severity": "error",
       "message": "Argument missing for parameter \"type\"",
       "range": {
@@ -338,7 +739,7 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/embed.py",
+      "file": "/workspace/app/worker/tasks/embed.py",
       "severity": "error",
       "message": "Argument missing for parameter \"type\"",
       "range": {
@@ -354,7 +755,7 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/embed.py",
+      "file": "/workspace/app/worker/tasks/embed.py",
       "severity": "error",
       "message": "Argument missing for parameter \"type\"",
       "range": {
@@ -370,8 +771,8 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/embedding_tasks.py",
-      "severity": "information",
+      "file": "/workspace/app/worker/tasks/embedding_tasks.py",
+      "severity": "error",
       "message": "Cannot access attribute \"embedding_service\" for class \"WorkerServiceRegistry\"\n\u00a0\u00a0Attribute \"embedding_service\" is unknown",
       "range": {
         "start": {
@@ -386,71 +787,87 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/ingestion_pipeline.py",
-      "severity": "information",
+      "file": "/workspace/app/worker/tasks/ingestion_pipeline.py",
+      "severity": "error",
       "message": "\"generate_statute_embeddings\" is unknown import symbol",
       "range": {
         "start": {
-          "line": 12,
+          "line": 23,
           "character": 27
         },
         "end": {
-          "line": 12,
+          "line": 23,
           "character": 54
         }
       },
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/ingestion_pipeline.py",
+      "file": "/workspace/app/worker/tasks/ingestion_pipeline.py",
       "severity": "error",
       "message": "\"id\" is not a known attribute of \"None\"",
       "range": {
         "start": {
-          "line": 68,
+          "line": 79,
           "character": 59
         },
         "end": {
-          "line": 68,
+          "line": 79,
           "character": 61
         }
       },
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/ingestion_pipeline.py",
+      "file": "/workspace/app/worker/tasks/ingestion_pipeline.py",
       "severity": "error",
       "message": "\"id\" is not a known attribute of \"None\"",
       "range": {
         "start": {
-          "line": 136,
+          "line": 147,
           "character": 55
         },
         "end": {
-          "line": 136,
+          "line": 147,
           "character": 57
         }
       },
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/ingestion_pipeline.py",
+      "file": "/workspace/app/worker/tasks/ingestion_pipeline.py",
       "severity": "error",
       "message": "\"id\" is not a known attribute of \"None\"",
       "range": {
         "start": {
-          "line": 166,
+          "line": 177,
           "character": 59
         },
         "end": {
-          "line": 166,
+          "line": 177,
           "character": 61
         }
       },
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/pdf2chunks.py",
+      "file": "/workspace/app/worker/tasks/pdf2chunks.py",
+      "severity": "error",
+      "message": "Import \"pdfplumber\" could not be resolved",
+      "range": {
+        "start": {
+          "line": 8,
+          "character": 7
+        },
+        "end": {
+          "line": 8,
+          "character": 17
+        }
+      },
+      "rule": "reportMissingImports"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/pdf2chunks.py",
       "severity": "error",
       "message": "Argument of type \"Match[str] | None\" cannot be assigned to parameter \"text\" of type \"str\" in function \"_match_hierarchy_element\"\n\u00a0\u00a0Type \"Match[str] | None\" is not assignable to type \"str\"\n\u00a0\u00a0\u00a0\u00a0\"Match[str]\" is not assignable to \"str\"",
       "range": {
@@ -466,7 +883,7 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/pdf2chunks.py",
+      "file": "/workspace/app/worker/tasks/pdf2chunks.py",
       "severity": "error",
       "message": "Argument of type \"Dict[str, Any]\" cannot be assigned to parameter \"value\" of type \"str\" in function \"__setitem__\"\n\u00a0\u00a0\"Dict[str, Any]\" is not assignable to \"str\"",
       "range": {
@@ -482,7 +899,7 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/pdf2chunks.py",
+      "file": "/workspace/app/worker/tasks/pdf2chunks.py",
       "severity": "error",
       "message": "Argument of type \"str | None\" cannot be assigned to parameter \"title\" of type \"str\" in function \"__init__\"\n\u00a0\u00a0Type \"str | None\" is not assignable to type \"str\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"str\"",
       "range": {
@@ -498,7 +915,7 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/pdf2chunks.py",
+      "file": "/workspace/app/worker/tasks/pdf2chunks.py",
       "severity": "error",
       "message": "Argument of type \"str | None\" cannot be assigned to parameter \"title\" of type \"str\" in function \"__init__\"\n\u00a0\u00a0Type \"str | None\" is not assignable to type \"str\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"str\"",
       "range": {
@@ -514,168 +931,392 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py",
-      "severity": "information",
-      "message": "Cannot assign to attribute \"entities\" for class \"RulingParagraph\"\n\u00a0\u00a0Attribute \"entities\" is unknown",
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "warning",
+      "message": "Import \"dateparser\" could not be resolved from source",
       "range": {
         "start": {
-          "line": 369,
-          "character": 37
+          "line": 21,
+          "character": 7
         },
         "end": {
-          "line": 369,
-          "character": 45
+          "line": 21,
+          "character": 17
         }
       },
-      "rule": "reportAttributeAccessIssue"
+      "rule": "reportMissingModuleSource"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py",
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
       "severity": "error",
-      "message": "\"entities\" is not a known attribute of \"None\"",
+      "message": "Import \"fitz\" could not be resolved",
       "range": {
         "start": {
-          "line": 369,
-          "character": 71
+          "line": 22,
+          "character": 7
         },
         "end": {
-          "line": 369,
-          "character": 79
+          "line": 22,
+          "character": 11
+        }
+      },
+      "rule": "reportMissingImports"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "\"ChatOpenAI\" is not defined",
+      "range": {
+        "start": {
+          "line": 82,
+          "character": 42
+        },
+        "end": {
+          "line": 82,
+          "character": 52
+        }
+      },
+      "rule": "reportUndefinedVariable"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "\"ChatOpenAI\" is not defined",
+      "range": {
+        "start": {
+          "line": 86,
+          "character": 11
+        },
+        "end": {
+          "line": 86,
+          "character": 21
+        }
+      },
+      "rule": "reportUndefinedVariable"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "\"PydanticOutputParser\" is not defined",
+      "range": {
+        "start": {
+          "line": 139,
+          "character": 13
+        },
+        "end": {
+          "line": 139,
+          "character": 33
+        }
+      },
+      "rule": "reportUndefinedVariable"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "\"ParsedResponse\" is not defined",
+      "range": {
+        "start": {
+          "line": 164,
+          "character": 23
+        },
+        "end": {
+          "line": 164,
+          "character": 37
+        }
+      },
+      "rule": "reportUndefinedVariable"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "\"client\" is not defined",
+      "range": {
+        "start": {
+          "line": 166,
+          "character": 19
+        },
+        "end": {
+          "line": 166,
+          "character": 25
+        }
+      },
+      "rule": "reportUndefinedVariable"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "\"output_parsed\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 181,
+          "character": 20
+        },
+        "end": {
+          "line": 181,
+          "character": 33
         }
       },
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py",
-      "severity": "information",
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "\"output_parsed\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 185,
+          "character": 24
+        },
+        "end": {
+          "line": 185,
+          "character": 37
+        }
+      },
+      "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "\"PydanticOutputParser\" is not defined",
+      "range": {
+        "start": {
+          "line": 304,
+          "character": 17
+        },
+        "end": {
+          "line": 304,
+          "character": 37
+        }
+      },
+      "rule": "reportUndefinedVariable"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "\"ParsedResponse\" is not defined",
+      "range": {
+        "start": {
+          "line": 329,
+          "character": 22
+        },
+        "end": {
+          "line": 329,
+          "character": 36
+        }
+      },
+      "rule": "reportUndefinedVariable"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "\"client\" is not defined",
+      "range": {
+        "start": {
+          "line": 329,
+          "character": 54
+        },
+        "end": {
+          "line": 329,
+          "character": 60
+        }
+      },
+      "rule": "reportUndefinedVariable"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "error",
       "message": "Cannot assign to attribute \"entities\" for class \"RulingParagraph\"\n\u00a0\u00a0Attribute \"entities\" is unknown",
       "range": {
         "start": {
-          "line": 372,
+          "line": 341,
           "character": 37
         },
         "end": {
-          "line": 372,
+          "line": 341,
           "character": 45
         }
       },
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py",
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "Cannot assign to attribute \"entities\" for class \"RulingParagraph\"\n\u00a0\u00a0Attribute \"entities\" is unknown",
+      "range": {
+        "start": {
+          "line": 344,
+          "character": 37
+        },
+        "end": {
+          "line": 344,
+          "character": 45
+        }
+      },
+      "rule": "reportAttributeAccessIssue"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "\"PromptTemplate\" is not defined",
+      "range": {
+        "start": {
+          "line": 394,
+          "character": 28
+        },
+        "end": {
+          "line": 394,
+          "character": 42
+        }
+      },
+      "rule": "reportUndefinedVariable"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "\"HumanMessage\" is not defined",
+      "range": {
+        "start": {
+          "line": 431,
+          "character": 8
+        },
+        "end": {
+          "line": 431,
+          "character": 20
+        }
+      },
+      "rule": "reportUndefinedVariable"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
       "severity": "error",
       "message": "Argument of type \"Ruling\" cannot be assigned to parameter \"ruling\" of type \"ParsedRuling\" in function \"enhance_entities_with_o3\"\n\u00a0\u00a0\"Ruling\" is not assignable to \"ParsedRuling\"",
       "range": {
         "start": {
-          "line": 509,
+          "line": 481,
           "character": 48
         },
         "end": {
-          "line": 509,
+          "line": 481,
           "character": 54
         }
       },
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py",
-      "severity": "information",
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "error",
       "message": "Cannot access attribute \"paragraphs\" for class \"List[bytes]\"\n\u00a0\u00a0Attribute \"paragraphs\" is unknown",
       "range": {
         "start": {
-          "line": 518,
+          "line": 490,
           "character": 27
         },
         "end": {
-          "line": 518,
+          "line": 490,
           "character": 37
         }
       },
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py",
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "\"OpenAI\" is not defined",
+      "range": {
+        "start": {
+          "line": 527,
+          "character": 9
+        },
+        "end": {
+          "line": 527,
+          "character": 15
+        }
+      },
+      "rule": "reportUndefinedVariable"
+    },
+    {
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
       "severity": "error",
       "message": "No overloads for \"open\" match the provided arguments",
       "range": {
         "start": {
-          "line": 616,
+          "line": 588,
           "character": 13
         },
         "end": {
-          "line": 616,
+          "line": 588,
           "character": 57
         }
       },
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py",
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
       "severity": "error",
       "message": "Argument of type \"Path | None\" cannot be assigned to parameter \"file\" of type \"FileDescriptorOrPath\" in function \"open\"\n\u00a0\u00a0Type \"Path | None\" is not assignable to type \"FileDescriptorOrPath\"\n\u00a0\u00a0\u00a0\u00a0Type \"None\" is not assignable to type \"FileDescriptorOrPath\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"int\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"str\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"bytes\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is incompatible with protocol \"PathLike[str]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"__fspath__\" is not present\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is incompatible with protocol \"PathLike[bytes]\"\n  ...",
       "range": {
         "start": {
-          "line": 616,
+          "line": 588,
           "character": 18
         },
         "end": {
-          "line": 616,
+          "line": 588,
           "character": 33
         }
       },
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py",
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
       "severity": "error",
       "message": "\"paragraphs\" is not a known attribute of \"None\"",
       "range": {
         "start": {
-          "line": 671,
+          "line": 643,
           "character": 43
         },
         "end": {
-          "line": 671,
+          "line": 643,
           "character": 53
         }
       },
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py",
-      "severity": "information",
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
+      "severity": "error",
       "message": "Cannot assign to attribute \"name\" for class \"Ruling\"\n\u00a0\u00a0Type \"str | None\" is not assignable to type \"str\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"str\"",
       "range": {
         "start": {
-          "line": 701,
+          "line": 673,
           "character": 38
         },
         "end": {
-          "line": 701,
+          "line": 673,
           "character": 56
         }
       },
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py",
+      "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
       "severity": "error",
       "message": "Argument of type \"list[List[Dict[str, Any]] | None]\" cannot be assigned to parameter \"records\" of type \"List[Dict[str, Any]]\" in function \"validate_output\"\n\u00a0\u00a0\"list[List[Dict[str, Any]] | None]\" is not assignable to \"List[Dict[str, Any]]\"\n\u00a0\u00a0\u00a0\u00a0Type parameter \"_T@list\" is invariant, but \"List[Dict[str, Any]] | None\" is not the same as \"Dict[str, Any]\"\n\u00a0\u00a0\u00a0\u00a0Consider switching from \"list\" to \"Sequence\" which is covariant",
       "range": {
         "start": {
-          "line": 829,
+          "line": 801,
           "character": 65
         },
         "end": {
-          "line": 829,
+          "line": 801,
           "character": 72
         }
       },
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/search_tasks.py",
-      "severity": "information",
+      "file": "/workspace/app/worker/tasks/search_tasks.py",
+      "severity": "error",
       "message": "Cannot access attribute \"get\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"get\" is unknown",
       "range": {
         "start": {
@@ -690,8 +1331,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/search_tasks.py",
-      "severity": "information",
+      "file": "/workspace/app/worker/tasks/search_tasks.py",
+      "severity": "error",
       "message": "Cannot access attribute \"get\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"get\" is unknown",
       "range": {
         "start": {
@@ -706,8 +1347,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/search_tasks.py",
-      "severity": "information",
+      "file": "/workspace/app/worker/tasks/search_tasks.py",
+      "severity": "error",
       "message": "Cannot access attribute \"get\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"get\" is unknown",
       "range": {
         "start": {
@@ -722,8 +1363,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/search_tasks.py",
-      "severity": "information",
+      "file": "/workspace/app/worker/tasks/search_tasks.py",
+      "severity": "error",
       "message": "Cannot access attribute \"get\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"get\" is unknown",
       "range": {
         "start": {
@@ -738,8 +1379,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/search_tasks.py",
-      "severity": "information",
+      "file": "/workspace/app/worker/tasks/search_tasks.py",
+      "severity": "error",
       "message": "Cannot access attribute \"get\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"get\" is unknown",
       "range": {
         "start": {
@@ -754,8 +1395,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/search_tasks.py",
-      "severity": "information",
+      "file": "/workspace/app/worker/tasks/search_tasks.py",
+      "severity": "error",
       "message": "Cannot access attribute \"get\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"get\" is unknown",
       "range": {
         "start": {
@@ -770,56 +1411,56 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/sn.py",
-      "severity": "error",
-      "message": "Argument of type \"bool\" cannot be assigned to parameter \"whereclause\" of type \"_ColumnExpressionArgument[bool]\" in function \"where\"\n\u00a0\u00a0Type \"bool\" is not assignable to type \"_ColumnExpressionArgument[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ColumnElement[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is incompatible with protocol \"_HasClauseElement[bool]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"__clause_element__\" is not present\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"SQLCoreOperations[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ExpressionElementRole[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"TypedColumnsClauseRole[bool]\"\n\u00a0\u00a0\u00a0\u00a0Type \"bool\" is not assignable to type \"() -> ColumnElement[bool]\"\n  ...",
+      "file": "/workspace/app/worker/tasks/sn.py",
+      "severity": "warning",
+      "message": "Import \"dateparser\" could not be resolved from source",
       "range": {
         "start": {
-          "line": 93,
-          "character": 61
+          "line": 8,
+          "character": 7
         },
         "end": {
-          "line": 93,
-          "character": 92
+          "line": 8,
+          "character": 17
         }
       },
-      "rule": "reportArgumentType"
+      "rule": "reportMissingModuleSource"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/sn.py",
+      "file": "/workspace/app/worker/tasks/sn.py",
       "severity": "error",
-      "message": "Argument of type \"int | None\" cannot be assigned to parameter \"size\" of type \"int\" in function \"__init__\"\n\u00a0\u00a0Type \"int | None\" is not assignable to type \"int\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"int\"",
+      "message": "Import \"deepdiff\" could not be resolved",
       "range": {
         "start": {
-          "line": 219,
-          "character": 21
+          "line": 10,
+          "character": 5
         },
         "end": {
-          "line": 219,
-          "character": 35
+          "line": 10,
+          "character": 13
         }
       },
-      "rule": "reportArgumentType"
+      "rule": "reportMissingImports"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/sn.py",
+      "file": "/workspace/app/worker/tasks/sn.py",
       "severity": "error",
-      "message": "Argument of type \"int | None\" cannot be assigned to parameter \"size\" of type \"int\" in function \"__init__\"\n\u00a0\u00a0Type \"int | None\" is not assignable to type \"int\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"int\"",
+      "message": "Import \"sentence_transformers\" could not be resolved",
       "range": {
         "start": {
-          "line": 232,
-          "character": 21
+          "line": 13,
+          "character": 5
         },
         "end": {
-          "line": 232,
-          "character": 35
+          "line": 13,
+          "character": 26
         }
       },
-      "rule": "reportArgumentType"
+      "rule": "reportMissingImports"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/statute_tasks.py",
-      "severity": "information",
+      "file": "/workspace/app/worker/tasks/statute_tasks.py",
+      "severity": "error",
       "message": "Cannot access attribute \"statute_ingestion\" for class \"WorkerServiceRegistry\"\n\u00a0\u00a0Attribute \"statute_ingestion\" is unknown",
       "range": {
         "start": {
@@ -834,8 +1475,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/example_logger_usage.py",
-      "severity": "information",
+      "file": "/workspace/example_logger_usage.py",
+      "severity": "error",
       "message": "\"LOGGING_CONFIG\" is unknown import symbol",
       "range": {
         "start": {
@@ -850,8 +1491,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/example_logger_usage.py",
-      "severity": "information",
+      "file": "/workspace/example_logger_usage.py",
+      "severity": "error",
       "message": "\"configure_logging\" is unknown import symbol",
       "range": {
         "start": {
@@ -866,8 +1507,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/example_logger_usage.py",
-      "severity": "information",
+      "file": "/workspace/example_logger_usage.py",
+      "severity": "error",
       "message": "\"logger_manager\" is unknown import symbol",
       "range": {
         "start": {
@@ -882,8 +1523,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/example_logger_usage.py",
-      "severity": "information",
+      "file": "/workspace/example_logger_usage.py",
+      "severity": "error",
       "message": "\"LOGGING_PRESETS\" is unknown import symbol",
       "range": {
         "start": {
@@ -898,8 +1539,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/example_logger_usage.py",
-      "severity": "information",
+      "file": "/workspace/example_logger_usage.py",
+      "severity": "error",
       "message": "\"wrap_all_loggers\" is unknown import symbol",
       "range": {
         "start": {
@@ -914,8 +1555,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/example_service_logging.py",
-      "severity": "information",
+      "file": "/workspace/example_service_logging.py",
+      "severity": "error",
       "message": "\"service_operation_logger\" is unknown import symbol",
       "range": {
         "start": {
@@ -930,7 +1571,23 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py",
+      "file": "/workspace/ingest/embed.py",
+      "severity": "error",
+      "message": "Import \"sentence_transformers\" could not be resolved",
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 5
+        },
+        "end": {
+          "line": 2,
+          "character": 26
+        }
+      },
+      "rule": "reportMissingImports"
+    },
+    {
+      "file": "/workspace/ingest/embed.py",
       "severity": "error",
       "message": "Argument missing for parameter \"type\"",
       "range": {
@@ -946,7 +1603,7 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py",
+      "file": "/workspace/ingest/embed.py",
       "severity": "error",
       "message": "Argument missing for parameter \"type\"",
       "range": {
@@ -962,7 +1619,7 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py",
+      "file": "/workspace/ingest/embed.py",
       "severity": "error",
       "message": "Argument missing for parameter \"type\"",
       "range": {
@@ -978,7 +1635,7 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py",
+      "file": "/workspace/ingest/embed.py",
       "severity": "error",
       "message": "Argument missing for parameter \"type\"",
       "range": {
@@ -994,7 +1651,7 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py",
+      "file": "/workspace/ingest/embed.py",
       "severity": "error",
       "message": "Argument missing for parameter \"type\"",
       "range": {
@@ -1010,7 +1667,7 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py",
+      "file": "/workspace/ingest/embed.py",
       "severity": "error",
       "message": "Statements must be separated by newlines or semicolons",
       "range": {
@@ -1025,8 +1682,8 @@
       }
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "file": "/workspace/ingest/ingest_pipeline.py",
+      "severity": "error",
       "message": "Cannot access attribute \"qdrant\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"qdrant\" is unknown",
       "range": {
         "start": {
@@ -1041,8 +1698,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "file": "/workspace/ingest/ingest_pipeline.py",
+      "severity": "error",
       "message": "Cannot access attribute \"qdrant\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"qdrant\" is unknown",
       "range": {
         "start": {
@@ -1057,8 +1714,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "file": "/workspace/ingest/ingest_pipeline.py",
+      "severity": "error",
       "message": "Cannot access attribute \"qdrant\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"qdrant\" is unknown",
       "range": {
         "start": {
@@ -1073,8 +1730,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "file": "/workspace/ingest/ingest_pipeline.py",
+      "severity": "error",
       "message": "Cannot access attribute \"qdrant\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"qdrant\" is unknown",
       "range": {
         "start": {
@@ -1089,8 +1746,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "file": "/workspace/ingest/ingest_pipeline.py",
+      "severity": "error",
       "message": "Cannot access attribute \"qdrant\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"qdrant\" is unknown",
       "range": {
         "start": {
@@ -1105,8 +1762,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "file": "/workspace/ingest/ingest_pipeline.py",
+      "severity": "error",
       "message": "Cannot access attribute \"storage\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"storage\" is unknown",
       "range": {
         "start": {
@@ -1121,8 +1778,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "file": "/workspace/ingest/ingest_pipeline.py",
+      "severity": "error",
       "message": "Cannot access attribute \"storage\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"storage\" is unknown",
       "range": {
         "start": {
@@ -1137,8 +1794,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "file": "/workspace/ingest/ingest_pipeline.py",
+      "severity": "error",
       "message": "Cannot access attribute \"storage\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"storage\" is unknown",
       "range": {
         "start": {
@@ -1153,8 +1810,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "file": "/workspace/ingest/ingest_pipeline.py",
+      "severity": "error",
       "message": "Cannot access attribute \"storage\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"storage\" is unknown",
       "range": {
         "start": {
@@ -1169,8 +1826,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "file": "/workspace/ingest/ingest_pipeline.py",
+      "severity": "error",
       "message": "Cannot access attribute \"postgres\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"postgres\" is unknown",
       "range": {
         "start": {
@@ -1185,7 +1842,7 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py",
+      "file": "/workspace/ingest/ingest_pipeline.py",
       "severity": "error",
       "message": "No parameter named \"metadata\"",
       "range": {
@@ -1201,7 +1858,23 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/pdf2chunks.py",
+      "file": "/workspace/ingest/pdf2chunks.py",
+      "severity": "error",
+      "message": "Import \"pdfplumber\" could not be resolved",
+      "range": {
+        "start": {
+          "line": 2,
+          "character": 7
+        },
+        "end": {
+          "line": 2,
+          "character": 17
+        }
+      },
+      "rule": "reportMissingImports"
+    },
+    {
+      "file": "/workspace/ingest/pdf2chunks.py",
       "severity": "error",
       "message": "Argument of type \"Match[str] | None\" cannot be assigned to parameter \"text\" of type \"str\" in function \"_match_hierarchy_element\"\n\u00a0\u00a0Type \"Match[str] | None\" is not assignable to type \"str\"\n\u00a0\u00a0\u00a0\u00a0\"Match[str]\" is not assignable to \"str\"",
       "range": {
@@ -1217,7 +1890,7 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/pdf2chunks.py",
+      "file": "/workspace/ingest/pdf2chunks.py",
       "severity": "error",
       "message": "No overloads for \"update\" match the provided arguments",
       "range": {
@@ -1233,7 +1906,7 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/pdf2chunks.py",
+      "file": "/workspace/ingest/pdf2chunks.py",
       "severity": "error",
       "message": "Argument of type \"dict[str, Dict[str, Any]]\" cannot be assigned to parameter \"m\" of type \"Iterable[tuple[str, str]]\" in function \"update\"\n\u00a0\u00a0\"Literal['hierarchy']\" is not assignable to \"tuple[str, str]\"",
       "range": {
@@ -1249,7 +1922,7 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/pdf2chunks.py",
+      "file": "/workspace/ingest/pdf2chunks.py",
       "severity": "error",
       "message": "Argument of type \"str | None\" cannot be assigned to parameter \"title\" of type \"str\" in function \"__init__\"\n\u00a0\u00a0Type \"str | None\" is not assignable to type \"str\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"str\"",
       "range": {
@@ -1265,7 +1938,7 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/pdf2chunks.py",
+      "file": "/workspace/ingest/pdf2chunks.py",
       "severity": "error",
       "message": "Argument of type \"str | None\" cannot be assigned to parameter \"title\" of type \"str\" in function \"__init__\"\n\u00a0\u00a0Type \"str | None\" is not assignable to type \"str\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"str\"",
       "range": {
@@ -1281,264 +1954,360 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn.py",
-      "severity": "information",
-      "message": "Cannot access attribute \"get_text\" for class \"Page\"\n\u00a0\u00a0Attribute \"get_text\" is unknown",
+      "file": "/workspace/ingest/preprocess_sn.py",
+      "severity": "error",
+      "message": "Import \"fitz\" could not be resolved",
       "range": {
         "start": {
-          "line": 73,
-          "character": 25
+          "line": 23,
+          "character": 7
         },
         "end": {
-          "line": 73,
-          "character": 33
+          "line": 23,
+          "character": 11
         }
       },
-      "rule": "reportAttributeAccessIssue"
+      "rule": "reportMissingImports"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn.py",
-      "severity": "information",
-      "message": "\"open\" is not a known attribute of module \"fitz\"",
+      "file": "/workspace/ingest/preprocess_sn.py",
+      "severity": "error",
+      "message": "Import \"spacy\" could not be resolved",
       "range": {
         "start": {
-          "line": 128,
-          "character": 15
+          "line": 24,
+          "character": 7
         },
         "end": {
-          "line": 128,
+          "line": 24,
+          "character": 12
+        }
+      },
+      "rule": "reportMissingImports"
+    },
+    {
+      "file": "/workspace/ingest/preprocess_sn.py",
+      "severity": "error",
+      "message": "Import \"spacy.pipeline\" could not be resolved",
+      "range": {
+        "start": {
+          "line": 25,
+          "character": 5
+        },
+        "end": {
+          "line": 25,
           "character": 19
         }
       },
-      "rule": "reportAttributeAccessIssue"
+      "rule": "reportMissingImports"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py",
-      "severity": "information",
-      "message": "\"open\" is not a known attribute of module \"fitz\"",
+      "file": "/workspace/ingest/preprocess_sn.py",
+      "severity": "warning",
+      "message": "Import \"dateparser\" could not be resolved from source",
       "range": {
         "start": {
-          "line": 143,
+          "line": 26,
+          "character": 7
+        },
+        "end": {
+          "line": 26,
+          "character": 17
+        }
+      },
+      "rule": "reportMissingModuleSource"
+    },
+    {
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "Import \"fitz\" could not be resolved",
+      "range": {
+        "start": {
+          "line": 16,
+          "character": 7
+        },
+        "end": {
+          "line": 16,
+          "character": 11
+        }
+      },
+      "rule": "reportMissingImports"
+    },
+    {
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
+      "severity": "warning",
+      "message": "Import \"dateparser\" could not be resolved from source",
+      "range": {
+        "start": {
+          "line": 23,
+          "character": 7
+        },
+        "end": {
+          "line": 23,
+          "character": 17
+        }
+      },
+      "rule": "reportMissingModuleSource"
+    },
+    {
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "Type \"BaseModel\" is not assignable to return type \"ParsedRuling | bytes\"\n\u00a0\u00a0Type \"BaseModel\" is not assignable to type \"ParsedRuling | bytes\"\n\u00a0\u00a0\u00a0\u00a0\"BaseModel\" is not assignable to \"ParsedRuling\"\n\u00a0\u00a0\u00a0\u00a0\"BaseModel\" is not assignable to \"bytes\"",
+      "range": {
+        "start": {
+          "line": 153,
           "character": 15
         },
         "end": {
-          "line": 143,
-          "character": 19
+          "line": 153,
+          "character": 28
         }
       },
-      "rule": "reportAttributeAccessIssue"
+      "rule": "reportReturnType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py",
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
       "severity": "error",
       "message": "Argument missing for parameter \"name\"",
       "range": {
         "start": {
-          "line": 274,
+          "line": 239,
           "character": 11
         },
         "end": {
-          "line": 274,
+          "line": 239,
           "character": 66
         }
       },
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py",
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
       "severity": "error",
       "message": "No parameter named \"metadata\"",
       "range": {
         "start": {
-          "line": 274,
+          "line": 239,
           "character": 18
         },
         "end": {
-          "line": 274,
+          "line": 239,
           "character": 26
         }
       },
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py",
-      "severity": "information",
-      "message": "Cannot assign to attribute \"entities\" for class \"RulingParagraph\"\n\u00a0\u00a0Attribute \"entities\" is unknown",
-      "range": {
-        "start": {
-          "line": 332,
-          "character": 37
-        },
-        "end": {
-          "line": 332,
-          "character": 45
-        }
-      },
-      "rule": "reportAttributeAccessIssue"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py",
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
       "severity": "error",
-      "message": "\"entities\" is not a known attribute of \"None\"",
+      "message": "Cannot access attribute \"entities\" for class \"BaseModel\"\n\u00a0\u00a0Attribute \"entities\" is unknown",
       "range": {
         "start": {
-          "line": 332,
-          "character": 71
+          "line": 303,
+          "character": 41
         },
         "end": {
-          "line": 332,
-          "character": 79
-        }
-      },
-      "rule": "reportOptionalMemberAccess"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py",
-      "severity": "information",
-      "message": "Cannot assign to attribute \"entities\" for class \"RulingParagraph\"\n\u00a0\u00a0Attribute \"entities\" is unknown",
-      "range": {
-        "start": {
-          "line": 335,
-          "character": 37
-        },
-        "end": {
-          "line": 335,
-          "character": 45
+          "line": 303,
+          "character": 49
         }
       },
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py",
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "\"get_o3_client\" is not defined",
+      "range": {
+        "start": {
+          "line": 368,
+          "character": 10
+        },
+        "end": {
+          "line": 368,
+          "character": 23
+        }
+      },
+      "rule": "reportUndefinedVariable"
+    },
+    {
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "\"PromptTemplate\" is not defined",
+      "range": {
+        "start": {
+          "line": 370,
+          "character": 28
+        },
+        "end": {
+          "line": 370,
+          "character": 42
+        }
+      },
+      "rule": "reportUndefinedVariable"
+    },
+    {
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "\"HumanMessage\" is not defined",
+      "range": {
+        "start": {
+          "line": 406,
+          "character": 16
+        },
+        "end": {
+          "line": 406,
+          "character": 28
+        }
+      },
+      "rule": "reportUndefinedVariable"
+    },
+    {
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
       "severity": "error",
       "message": "Argument missing for parameter \"index\"",
       "range": {
         "start": {
-          "line": 462,
+          "line": 452,
           "character": 23
         },
         "end": {
-          "line": 462,
+          "line": 452,
           "character": 55
         }
       },
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py",
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
+      "severity": "error",
+      "message": "\"OpenAI\" is not defined",
+      "range": {
+        "start": {
+          "line": 492,
+          "character": 9
+        },
+        "end": {
+          "line": 492,
+          "character": 15
+        }
+      },
+      "rule": "reportUndefinedVariable"
+    },
+    {
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
       "severity": "error",
       "message": "No overloads for \"open\" match the provided arguments",
       "range": {
         "start": {
-          "line": 535,
+          "line": 525,
           "character": 13
         },
         "end": {
-          "line": 535,
+          "line": 525,
           "character": 57
         }
       },
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py",
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
       "severity": "error",
       "message": "Argument of type \"Path | None\" cannot be assigned to parameter \"file\" of type \"FileDescriptorOrPath\" in function \"open\"\n\u00a0\u00a0Type \"Path | None\" is not assignable to type \"FileDescriptorOrPath\"\n\u00a0\u00a0\u00a0\u00a0Type \"None\" is not assignable to type \"FileDescriptorOrPath\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"int\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"str\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"bytes\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is incompatible with protocol \"PathLike[str]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"__fspath__\" is not present\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is incompatible with protocol \"PathLike[bytes]\"\n  ...",
       "range": {
         "start": {
-          "line": 535,
+          "line": 525,
           "character": 18
         },
         "end": {
-          "line": 535,
+          "line": 525,
           "character": 33
         }
       },
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py",
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
       "severity": "error",
       "message": "No overloads for \"open\" match the provided arguments",
       "range": {
         "start": {
-          "line": 561,
+          "line": 551,
           "character": 13
         },
         "end": {
-          "line": 561,
+          "line": 551,
           "character": 57
         }
       },
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py",
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
       "severity": "error",
       "message": "Argument of type \"Path | None\" cannot be assigned to parameter \"file\" of type \"FileDescriptorOrPath\" in function \"open\"\n\u00a0\u00a0Type \"Path | None\" is not assignable to type \"FileDescriptorOrPath\"\n\u00a0\u00a0\u00a0\u00a0Type \"None\" is not assignable to type \"FileDescriptorOrPath\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"int\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"str\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"bytes\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is incompatible with protocol \"PathLike[str]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"__fspath__\" is not present\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"None\" is incompatible with protocol \"PathLike[bytes]\"\n  ...",
       "range": {
         "start": {
-          "line": 561,
+          "line": 551,
           "character": 18
         },
         "end": {
-          "line": 561,
+          "line": 551,
           "character": 33
         }
       },
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py",
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
       "severity": "error",
       "message": "\"paragraphs\" is not a known attribute of \"None\"",
       "range": {
         "start": {
-          "line": 608,
+          "line": 598,
           "character": 43
         },
         "end": {
-          "line": 608,
+          "line": 598,
           "character": 53
         }
       },
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py",
-      "severity": "information",
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
+      "severity": "error",
       "message": "Cannot assign to attribute \"name\" for class \"Ruling\"\n\u00a0\u00a0Type \"str | None\" is not assignable to type \"str\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"str\"",
       "range": {
         "start": {
-          "line": 631,
+          "line": 621,
           "character": 38
         },
         "end": {
-          "line": 631,
+          "line": 621,
           "character": 56
         }
       },
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py",
+      "file": "/workspace/ingest/preprocess_sn_o3.py",
       "severity": "error",
       "message": "Argument of type \"list[List[Dict[str, Any]] | None]\" cannot be assigned to parameter \"records\" of type \"List[Dict[str, Any]]\" in function \"validate_output\"\n\u00a0\u00a0\"list[List[Dict[str, Any]] | None]\" is not assignable to \"List[Dict[str, Any]]\"\n\u00a0\u00a0\u00a0\u00a0Type parameter \"_T@list\" is invariant, but \"List[Dict[str, Any]] | None\" is not the same as \"Dict[str, Any]\"\n\u00a0\u00a0\u00a0\u00a0Consider switching from \"list\" to \"Sequence\" which is covariant",
       "range": {
         "start": {
-          "line": 764,
+          "line": 754,
           "character": 65
         },
         "end": {
-          "line": 764,
+          "line": 754,
           "character": 72
         }
       },
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/refactored_ingest_pipeline.py",
-      "severity": "information",
+      "file": "/workspace/ingest/refactored_ingest_pipeline.py",
+      "severity": "error",
       "message": "Cannot access attribute \"get_ingestion_status\" for class \"None\"\n\u00a0\u00a0Attribute \"get_ingestion_status\" is unknown",
       "range": {
         "start": {
@@ -1553,8 +2322,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/refactored_ingest_pipeline.py",
-      "severity": "information",
+      "file": "/workspace/ingest/refactored_ingest_pipeline.py",
+      "severity": "error",
       "message": "Cannot access attribute \"get_sn_processing_status\" for class \"None\"\n\u00a0\u00a0Attribute \"get_sn_processing_status\" is unknown",
       "range": {
         "start": {
@@ -1569,8 +2338,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/refactored_ingest_pipeline.py",
-      "severity": "information",
+      "file": "/workspace/ingest/refactored_ingest_pipeline.py",
+      "severity": "error",
       "message": "Cannot access attribute \"get_embedding_statistics\" for class \"None\"\n\u00a0\u00a0Attribute \"get_embedding_statistics\" is unknown",
       "range": {
         "start": {
@@ -1585,7 +2354,55 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/sn.py",
+      "file": "/workspace/ingest/sn.py",
+      "severity": "error",
+      "message": "Import \"deepdiff\" could not be resolved",
+      "range": {
+        "start": {
+          "line": 7,
+          "character": 5
+        },
+        "end": {
+          "line": 7,
+          "character": 13
+        }
+      },
+      "rule": "reportMissingImports"
+    },
+    {
+      "file": "/workspace/ingest/sn.py",
+      "severity": "warning",
+      "message": "Import \"dateparser\" could not be resolved from source",
+      "range": {
+        "start": {
+          "line": 9,
+          "character": 7
+        },
+        "end": {
+          "line": 9,
+          "character": 17
+        }
+      },
+      "rule": "reportMissingModuleSource"
+    },
+    {
+      "file": "/workspace/ingest/sn.py",
+      "severity": "error",
+      "message": "Import \"sentence_transformers\" could not be resolved",
+      "range": {
+        "start": {
+          "line": 13,
+          "character": 5
+        },
+        "end": {
+          "line": 13,
+          "character": 26
+        }
+      },
+      "rule": "reportMissingImports"
+    },
+    {
+      "file": "/workspace/ingest/sn.py",
       "severity": "error",
       "message": "Argument of type \"bool\" cannot be assigned to parameter \"whereclause\" of type \"_ColumnExpressionArgument[bool]\" in function \"where\"\n\u00a0\u00a0Type \"bool\" is not assignable to type \"_ColumnExpressionArgument[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ColumnElement[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is incompatible with protocol \"_HasClauseElement[bool]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"__clause_element__\" is not present\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"SQLCoreOperations[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ExpressionElementRole[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"TypedColumnsClauseRole[bool]\"\n\u00a0\u00a0\u00a0\u00a0Type \"bool\" is not assignable to type \"() -> ColumnElement[bool]\"\n  ...",
       "range": {
@@ -1601,39 +2418,23 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/sn.py",
+      "file": "/workspace/ingest/templates.py",
       "severity": "error",
-      "message": "Argument of type \"int | None\" cannot be assigned to parameter \"size\" of type \"int\" in function \"__init__\"\n\u00a0\u00a0Type \"int | None\" is not assignable to type \"int\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"int\"",
+      "message": "Import \"sentence_transformers\" could not be resolved",
       "range": {
         "start": {
-          "line": 209,
-          "character": 52
+          "line": 12,
+          "character": 5
         },
         "end": {
-          "line": 209,
-          "character": 66
+          "line": 12,
+          "character": 26
         }
       },
-      "rule": "reportArgumentType"
+      "rule": "reportMissingImports"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/sn.py",
-      "severity": "error",
-      "message": "Argument of type \"int | None\" cannot be assigned to parameter \"size\" of type \"int\" in function \"__init__\"\n\u00a0\u00a0Type \"int | None\" is not assignable to type \"int\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"int\"",
-      "range": {
-        "start": {
-          "line": 221,
-          "character": 52
-        },
-        "end": {
-          "line": 221,
-          "character": 66
-        }
-      },
-      "rule": "reportArgumentType"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/templates.py",
+      "file": "/workspace/ingest/templates.py",
       "severity": "error",
       "message": "Argument of type \"Any | bool\" cannot be assigned to parameter \"whereclause\" of type \"_ColumnExpressionArgument[bool]\" in function \"where\"\n\u00a0\u00a0Type \"Any | bool\" is not assignable to type \"_ColumnExpressionArgument[bool]\"\n\u00a0\u00a0\u00a0\u00a0Type \"bool\" is not assignable to type \"_ColumnExpressionArgument[bool]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ColumnElement[bool]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"bool\" is incompatible with protocol \"_HasClauseElement[bool]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"__clause_element__\" is not present\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"SQLCoreOperations[bool]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ExpressionElementRole[bool]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"TypedColumnsClauseRole[bool]\"\n  ...",
       "range": {
@@ -1649,7 +2450,7 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/templates.py",
+      "file": "/workspace/ingest/templates.py",
       "severity": "error",
       "message": "Argument of type \"Literal['keyword']\" cannot be assigned to parameter \"field_schema\" of type \"qdrant_client.conversions.common_types.PayloadSchemaType | None\" in function \"create_payload_index\"\n\u00a0\u00a0Type \"Literal['keyword']\" is not assignable to type \"qdrant_client.conversions.common_types.PayloadSchemaType | None\"\n\u00a0\u00a0\u00a0\u00a0\"Literal['keyword']\" is not assignable to \"PayloadSchemaType\"\n\u00a0\u00a0\u00a0\u00a0\"Literal['keyword']\" is not assignable to \"KeywordIndexParams\"\n\u00a0\u00a0\u00a0\u00a0\"Literal['keyword']\" is not assignable to \"IntegerIndexParams\"\n\u00a0\u00a0\u00a0\u00a0\"Literal['keyword']\" is not assignable to \"FloatIndexParams\"\n\u00a0\u00a0\u00a0\u00a0\"Literal['keyword']\" is not assignable to \"GeoIndexParams\"\n\u00a0\u00a0\u00a0\u00a0\"Literal['keyword']\" is not assignable to \"TextIndexParams\"\n\u00a0\u00a0\u00a0\u00a0\"Literal['keyword']\" is not assignable to \"BoolIndexParams\"\n  ...",
       "range": {
@@ -1665,39 +2466,23 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/templates.py",
+      "file": "/workspace/ingest/templates_preprocess.py",
       "severity": "error",
-      "message": "Argument of type \"int | None\" cannot be assigned to parameter \"size\" of type \"int\" in function \"__init__\"\n\u00a0\u00a0Type \"int | None\" is not assignable to type \"int\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"int\"",
+      "message": "Import \"fitz\" could not be resolved",
       "range": {
         "start": {
-          "line": 166,
-          "character": 52
+          "line": 0,
+          "character": 7
         },
         "end": {
-          "line": 166,
-          "character": 66
+          "line": 0,
+          "character": 11
         }
       },
-      "rule": "reportArgumentType"
+      "rule": "reportMissingImports"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/templates_preprocess.py",
-      "severity": "information",
-      "message": "\"open\" is not a known attribute of module \"fitz\"",
-      "range": {
-        "start": {
-          "line": 79,
-          "character": 23
-        },
-        "end": {
-          "line": 79,
-          "character": 27
-        }
-      },
-      "rule": "reportAttributeAccessIssue"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/templates_preprocess.py",
+      "file": "/workspace/ingest/templates_preprocess.py",
       "severity": "error",
       "message": "Argument of type \"(t: Unknown = text) -> CoroutineType[Any, Any, Template | None]\" cannot be assigned to parameter \"object\" of type \"() -> Coroutine[Any, Any, Template]\" in function \"append\"\n\u00a0\u00a0Type \"(t: Unknown = text) -> CoroutineType[Any, Any, Template | None]\" is not assignable to type \"() -> Coroutine[Any, Any, Template]\"\n\u00a0\u00a0\u00a0\u00a0Function return type \"CoroutineType[Any, Any, Template | None]\" is incompatible with type \"Coroutine[Any, Any, Template]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"CoroutineType[Any, Any, Template | None]\" is not assignable to \"Coroutine[Any, Any, Template]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Type parameter \"_ReturnT_nd_co@Coroutine\" is covariant, but \"Template | None\" is not a subtype of \"Template\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0Type \"Template | None\" is not assignable to type \"Template\"",
       "range": {
@@ -1713,7 +2498,7 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/ingest/test_preprocess_o3.py",
+      "file": "/workspace/ingest/test_preprocess_o3.py",
       "severity": "error",
       "message": "No parameter named \"max_workers\"",
       "range": {
@@ -1729,7 +2514,7 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/init_database.py",
+      "file": "/workspace/init_database.py",
       "severity": "error",
       "message": "No overloads for \"execute\" match the provided arguments",
       "range": {
@@ -1745,7 +2530,7 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/init_database.py",
+      "file": "/workspace/init_database.py",
       "severity": "error",
       "message": "Argument of type \"Literal['\\n                SELECT tablename FROM pg_tables \\n\u2026']\" cannot be assigned to parameter \"statement\" of type \"Executable\" in function \"execute\"\n\u00a0\u00a0\"Literal['\\n                SELECT tablename FROM pg_tables \\n\u2026']\" is not assignable to \"Executable\"",
       "range": {
@@ -1761,7 +2546,7 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/init_database.py",
+      "file": "/workspace/init_database.py",
       "severity": "error",
       "message": "No overloads for \"execute\" match the provided arguments",
       "range": {
@@ -1777,7 +2562,7 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/init_database.py",
+      "file": "/workspace/init_database.py",
       "severity": "error",
       "message": "Argument of type \"Literal['\\n                SELECT tablename FROM pg_tables \\n\u2026']\" cannot be assigned to parameter \"statement\" of type \"Executable\" in function \"execute\"\n\u00a0\u00a0\"Literal['\\n                SELECT tablename FROM pg_tables \\n\u2026']\" is not assignable to \"Executable\"",
       "range": {
@@ -1793,71 +2578,23 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/celery/conftest.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
+      "file": "/workspace/schema_cmp.py",
+      "severity": "warning",
+      "message": "Import \"psycopg2\" could not be resolved from source",
       "range": {
         "start": {
-          "line": 0,
+          "line": 22,
           "character": 7
         },
         "end": {
-          "line": 0,
-          "character": 13
+          "line": 22,
+          "character": 15
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportMissingModuleSource"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/celery/test_celery_integration.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 1,
-          "character": 7
-        },
-        "end": {
-          "line": 1,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/celery/test_celery_tasks.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 0,
-          "character": 7
-        },
-        "end": {
-          "line": 0,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 4,
-          "character": 11
-        },
-        "end": {
-          "line": 4,
-          "character": 17
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py",
+      "file": "/workspace/tests/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -1873,7 +2610,7 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py",
+      "file": "/workspace/tests/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -1889,7 +2626,7 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py",
+      "file": "/workspace/tests/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -1905,7 +2642,7 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py",
+      "file": "/workspace/tests/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -1921,7 +2658,7 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py",
+      "file": "/workspace/tests/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -1937,7 +2674,7 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py",
+      "file": "/workspace/tests/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -1953,7 +2690,7 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py",
+      "file": "/workspace/tests/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -1969,7 +2706,7 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py",
+      "file": "/workspace/tests/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -1985,7 +2722,7 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py",
+      "file": "/workspace/tests/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -2001,7 +2738,7 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py",
+      "file": "/workspace/tests/conftest.py",
       "severity": "error",
       "message": "\"mark\" is not a known attribute of \"None\"",
       "range": {
@@ -2017,23 +2754,7 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 1,
-          "character": 11
-        },
-        "end": {
-          "line": 1,
-          "character": 17
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py",
+      "file": "/workspace/tests/integration/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -2049,7 +2770,7 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py",
+      "file": "/workspace/tests/integration/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -2065,7 +2786,7 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py",
+      "file": "/workspace/tests/integration/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -2081,8 +2802,8 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/conftest.py",
+      "severity": "error",
       "message": "Cannot access attribute \"close\" for class \"DatabaseManager\"\n\u00a0\u00a0Attribute \"close\" is unknown",
       "range": {
         "start": {
@@ -2097,7 +2818,7 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py",
+      "file": "/workspace/tests/integration/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -2113,7 +2834,7 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py",
+      "file": "/workspace/tests/integration/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -2129,7 +2850,23 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py",
+      "file": "/workspace/tests/integration/conftest.py",
+      "severity": "error",
+      "message": "Cannot access attribute \"aclose\" for class \"Redis[Any]\"\n\u00a0\u00a0Attribute \"aclose\" is unknown",
+      "range": {
+        "start": {
+          "line": 68,
+          "character": 17
+        },
+        "end": {
+          "line": 68,
+          "character": 23
+        }
+      },
+      "rule": "reportAttributeAccessIssue"
+    },
+    {
+      "file": "/workspace/tests/integration/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -2145,24 +2882,104 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py",
+      "file": "/workspace/tests/integration/test_ai_functionality.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
+      "message": "Argument of type \"Any | None\" cannot be assigned to parameter \"embedded_at\" of type \"datetime\" in function \"__init__\"\n\u00a0\u00a0Type \"Any | None\" is not assignable to type \"datetime\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"datetime\"",
       "range": {
         "start": {
-          "line": 1,
-          "character": 7
+          "line": 110,
+          "character": 28
         },
         "end": {
-          "line": 1,
+          "line": 110,
+          "character": 61
+        }
+      },
+      "rule": "reportArgumentType"
+    },
+    {
+      "file": "/workspace/tests/integration/test_ai_functionality.py",
+      "severity": "error",
+      "message": "\"case_number\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 154,
+          "character": 42
+        },
+        "end": {
+          "line": 154,
+          "character": 53
+        }
+      },
+      "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/tests/integration/test_ai_functionality.py",
+      "severity": "error",
+      "message": "\"parties\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 155,
+          "character": 57
+        },
+        "end": {
+          "line": 155,
+          "character": 64
+        }
+      },
+      "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/tests/integration/test_ai_functionality.py",
+      "severity": "error",
+      "message": "\"legal_basis\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 156,
+          "character": 46
+        },
+        "end": {
+          "line": 156,
+          "character": 57
+        }
+      },
+      "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/tests/integration/test_ai_functionality.py",
+      "severity": "error",
+      "message": "Arguments missing for parameters \"date\", \"reasoning\"",
+      "range": {
+        "start": {
+          "line": 342,
+          "character": 19
+        },
+        "end": {
+          "line": 348,
           "character": 13
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_ai_functionality.py",
+      "severity": "error",
+      "message": "Arguments missing for parameters \"case_number\", \"court\", \"date\", \"decision\", \"reasoning\"",
+      "range": {
+        "start": {
+          "line": 388,
+          "character": 25
+        },
+        "end": {
+          "line": 388,
+          "character": 63
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/tests/integration/test_api.py",
+      "severity": "error",
       "message": "\"AsyncSessionLocal\" is unknown import symbol",
       "range": {
         "start": {
@@ -2177,8 +2994,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_api.py",
+      "severity": "error",
       "message": "\"init_db\" is unknown import symbol",
       "range": {
         "start": {
@@ -2193,7 +3010,7 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py",
+      "file": "/workspace/tests/integration/test_api.py",
       "severity": "error",
       "message": "Argument of type \"bool\" cannot be assigned to parameter \"onclause\" of type \"_OnClauseArgument | None\" in function \"join\"\n\u00a0\u00a0Type \"bool\" is not assignable to type \"_OnClauseArgument | None\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ColumnElement[Any]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is incompatible with protocol \"_HasClauseElement[Any]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"__clause_element__\" is not present\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"SQLCoreOperations[Any]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ExpressionElementRole[Any]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"TypedColumnsClauseRole[Any]\"\n\u00a0\u00a0\u00a0\u00a0Type \"bool\" is not assignable to type \"() -> ColumnElement[Any]\"\n  ...",
       "range": {
@@ -2209,7 +3026,7 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py",
+      "file": "/workspace/tests/integration/test_api.py",
       "severity": "error",
       "message": "Argument of type \"bool\" cannot be assigned to parameter \"whereclause\" of type \"_ColumnExpressionArgument[bool]\" in function \"where\"\n\u00a0\u00a0Type \"bool\" is not assignable to type \"_ColumnExpressionArgument[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ColumnElement[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is incompatible with protocol \"_HasClauseElement[bool]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"__clause_element__\" is not present\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"SQLCoreOperations[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"ExpressionElementRole[bool]\"\n\u00a0\u00a0\u00a0\u00a0\"bool\" is not assignable to \"TypedColumnsClauseRole[bool]\"\n\u00a0\u00a0\u00a0\u00a0Type \"bool\" is not assignable to type \"() -> ColumnElement[bool]\"\n  ...",
       "range": {
@@ -2225,7 +3042,7 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py",
+      "file": "/workspace/tests/integration/test_api.py",
       "severity": "error",
       "message": "Argument of type \"datetime | None\" cannot be assigned to parameter \"column\" of type \"_ColumnExpressionOrStrLabelArgument[_T@desc]\" in function \"desc\"\n\u00a0\u00a0Type \"datetime | None\" is not assignable to type \"_ColumnExpressionOrStrLabelArgument[_T@desc]\"\n\u00a0\u00a0\u00a0\u00a0Type \"datetime\" is not assignable to type \"_ColumnExpressionOrStrLabelArgument[_T@desc]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"datetime\" is not assignable to \"LambdaElement\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"datetime\" is not assignable to \"str\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"datetime\" is not assignable to \"ColumnElement[_T@desc]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"datetime\" is not assignable to \"ExpressionElementRole[_T@desc]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"datetime\" is not assignable to \"SQLCoreOperations[_T@desc]\"\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\"datetime\" is not assignable to \"TypedColumnsClauseRole[_T@desc]\"\n  ...",
       "range": {
@@ -2241,39 +3058,7 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_conversation_manager.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 3,
-          "character": 7
-        },
-        "end": {
-          "line": 3,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_database_manager.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 3,
-          "character": 7
-        },
-        "end": {
-          "line": 3,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_database_manager.py",
+      "file": "/workspace/tests/integration/test_database_manager.py",
       "severity": "error",
       "message": "Argument missing for parameter \"config_service\"",
       "range": {
@@ -2289,7 +3074,7 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_database_manager.py",
+      "file": "/workspace/tests/integration/test_database_manager.py",
       "severity": "error",
       "message": "Argument missing for parameter \"config_service\"",
       "range": {
@@ -2305,7 +3090,7 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_database_manager.py",
+      "file": "/workspace/tests/integration/test_database_manager.py",
       "severity": "error",
       "message": "Argument of type \"None\" cannot be assigned to parameter \"orig\" of type \"BaseException\" in function \"__init__\"\n\u00a0\u00a0\"None\" is not assignable to \"BaseException\"",
       "range": {
@@ -2321,7 +3106,7 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_database_manager.py",
+      "file": "/workspace/tests/integration/test_database_manager.py",
       "severity": "error",
       "message": "Argument of type \"None\" cannot be assigned to parameter \"orig\" of type \"BaseException\" in function \"__init__\"\n\u00a0\u00a0\"None\" is not assignable to \"BaseException\"",
       "range": {
@@ -2337,24 +3122,8 @@
       "rule": "reportArgumentType"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py",
+      "file": "/workspace/tests/integration/test_integration.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 4,
-          "character": 7
-        },
-        "end": {
-          "line": 4,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py",
-      "severity": "information",
       "message": "\"initialize_services\" is unknown import symbol",
       "range": {
         "start": {
@@ -2369,7 +3138,7 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py",
+      "file": "/workspace/tests/integration/test_integration.py",
       "severity": "error",
       "message": "Argument missing for parameter \"config_service\"",
       "range": {
@@ -2385,7 +3154,7 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py",
+      "file": "/workspace/tests/integration/test_integration.py",
       "severity": "error",
       "message": "Argument missing for parameter \"config_service\"",
       "range": {
@@ -2401,8 +3170,8 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_integration.py",
+      "severity": "error",
       "message": "\"cached_query\" is unknown import symbol",
       "range": {
         "start": {
@@ -2417,24 +3186,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py",
+      "file": "/workspace/tests/integration/test_integration_refactored.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 4,
-          "character": 7
-        },
-        "end": {
-          "line": 4,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py",
-      "severity": "information",
       "message": "\"setup_structured_logging\" is unknown import symbol",
       "range": {
         "start": {
@@ -2449,8 +3202,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_integration_refactored.py",
+      "severity": "error",
       "message": "\"initialize_services\" is unknown import symbol",
       "range": {
         "start": {
@@ -2465,8 +3218,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_integration_refactored.py",
+      "severity": "error",
       "message": "\"get\" is not a known attribute of module \"app.core.service_container\"",
       "range": {
         "start": {
@@ -2481,8 +3234,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_integration_refactored.py",
+      "severity": "error",
       "message": "\"get\" is not a known attribute of module \"app.core.service_container\"",
       "range": {
         "start": {
@@ -2497,41 +3250,73 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_migration.py",
+      "file": "/workspace/tests/integration/test_openai_integration.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
+      "message": "\"config\" is not a known attribute of module \"pytest\"",
       "range": {
         "start": {
-          "line": 1,
-          "character": 7
+          "line": 82,
+          "character": 19
         },
         "end": {
-          "line": 1,
-          "character": 13
+          "line": 82,
+          "character": 25
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py",
+      "file": "/workspace/tests/integration/test_openai_integration.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
+      "message": "\"config\" is not a known attribute of module \"pytest\"",
       "range": {
         "start": {
-          "line": 4,
-          "character": 7
+          "line": 110,
+          "character": 19
         },
         "end": {
-          "line": 4,
-          "character": 13
+          "line": 110,
+          "character": 25
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py",
+      "file": "/workspace/tests/integration/test_openai_integration.py",
       "severity": "error",
-      "message": "Argument missing for parameter \"config_service\"",
+      "message": "\"i\" is unbound",
+      "range": {
+        "start": {
+          "line": 175,
+          "character": 86
+        },
+        "end": {
+          "line": 175,
+          "character": 87
+        }
+      },
+      "rule": "reportUnboundVariable"
+    },
+    {
+      "file": "/workspace/tests/integration/test_openai_integration.py",
+      "severity": "error",
+      "message": "\"config\" is not a known attribute of module \"pytest\"",
+      "range": {
+        "start": {
+          "line": 232,
+          "character": 19
+        },
+        "end": {
+          "line": 232,
+          "character": 25
+        }
+      },
+      "rule": "reportAttributeAccessIssue"
+    },
+    {
+      "file": "/workspace/tests/integration/test_refactored_services.py",
+      "severity": "error",
+      "message": "Arguments missing for parameters \"config_service\", \"llm_manager\"",
       "range": {
         "start": {
           "line": 70,
@@ -2545,8 +3330,24 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_refactored_services.py",
+      "severity": "error",
+      "message": "Cannot assign to attribute \"_embedder\" for class \"StatuteSearchService\"\n\u00a0\u00a0Attribute \"_embedder\" is unknown",
+      "range": {
+        "start": {
+          "line": 74,
+          "character": 20
+        },
+        "end": {
+          "line": 74,
+          "character": 29
+        }
+      },
+      "rule": "reportAttributeAccessIssue"
+    },
+    {
+      "file": "/workspace/tests/integration/test_refactored_services.py",
+      "severity": "error",
       "message": "Cannot assign to attribute \"_llm\" for class \"StatuteSearchService\"\n\u00a0\u00a0Attribute \"_llm\" is unknown",
       "range": {
         "start": {
@@ -2561,8 +3362,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_refactored_services.py",
+      "severity": "error",
       "message": "Cannot assign to attribute \"_llm\" for class \"DocumentGenerationService\"\n\u00a0\u00a0Attribute \"_llm\" is unknown",
       "range": {
         "start": {
@@ -2577,9 +3378,9 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py",
+      "file": "/workspace/tests/integration/test_refactored_services.py",
       "severity": "error",
-      "message": "Argument missing for parameter \"config_service\"",
+      "message": "Arguments missing for parameters \"config_service\", \"llm_manager\"",
       "range": {
         "start": {
           "line": 313,
@@ -2593,9 +3394,9 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py",
+      "file": "/workspace/tests/integration/test_refactored_services.py",
       "severity": "error",
-      "message": "Argument missing for parameter \"config_service\"",
+      "message": "Arguments missing for parameters \"config_service\", \"llm_manager\"",
       "range": {
         "start": {
           "line": 351,
@@ -2609,24 +3410,8 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming.py",
+      "file": "/workspace/tests/integration/test_streaming.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 1,
-          "character": 7
-        },
-        "end": {
-          "line": 1,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming.py",
-      "severity": "information",
       "message": "\"ParalegalAgent\" is unknown import symbol",
       "range": {
         "start": {
@@ -2641,24 +3426,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py",
+      "file": "/workspace/tests/integration/test_streaming_handler.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 3,
-          "character": 7
-        },
-        "end": {
-          "line": 3,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py",
-      "severity": "information",
       "message": "Cannot assign to attribute \"transform\" for class \"MockStreamProcessor\"\n\u00a0\u00a0Expression of type \"(event: StreamEvent) -> StreamEvent\" cannot be assigned to attribute \"transform\" of class \"MockStreamProcessor\"\n\u00a0\u00a0\u00a0\u00a0\"FunctionType\" is not assignable to \"None\"",
       "range": {
         "start": {
@@ -2673,8 +3442,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_streaming_handler.py",
+      "severity": "error",
       "message": "Cannot access attribute \"chunks_received\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"chunks_received\" is unknown",
       "range": {
         "start": {
@@ -2689,8 +3458,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_streaming_handler.py",
+      "severity": "error",
       "message": "Cannot access attribute \"events_by_type\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"events_by_type\" is unknown",
       "range": {
         "start": {
@@ -2705,8 +3474,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_streaming_handler.py",
+      "severity": "error",
       "message": "Cannot access attribute \"text_deltas\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"text_deltas\" is unknown",
       "range": {
         "start": {
@@ -2721,8 +3490,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_streaming_handler.py",
+      "severity": "error",
       "message": "Cannot access attribute \"tool_calls\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"tool_calls\" is unknown",
       "range": {
         "start": {
@@ -2737,8 +3506,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_streaming_handler.py",
+      "severity": "error",
       "message": "Cannot access attribute \"errors\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"errors\" is unknown",
       "range": {
         "start": {
@@ -2753,8 +3522,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_streaming_handler.py",
+      "severity": "error",
       "message": "Cannot access attribute \"start_time\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"start_time\" is unknown",
       "range": {
         "start": {
@@ -2769,8 +3538,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_streaming_handler.py",
+      "severity": "error",
       "message": "Cannot assign to attribute \"chunks_received\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"chunks_received\" is unknown",
       "range": {
         "start": {
@@ -2785,8 +3554,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_streaming_handler.py",
+      "severity": "error",
       "message": "Cannot assign to attribute \"chunks_received\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"chunks_received\" is unknown",
       "range": {
         "start": {
@@ -2801,8 +3570,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_streaming_handler.py",
+      "severity": "error",
       "message": "Cannot assign to attribute \"text_deltas\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"text_deltas\" is unknown",
       "range": {
         "start": {
@@ -2817,8 +3586,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_streaming_handler.py",
+      "severity": "error",
       "message": "Cannot assign to attribute \"errors\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"errors\" is unknown",
       "range": {
         "start": {
@@ -2833,8 +3602,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_streaming_handler.py",
+      "severity": "error",
       "message": "Cannot access attribute \"chunks_received\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"chunks_received\" is unknown",
       "range": {
         "start": {
@@ -2849,8 +3618,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_streaming_handler.py",
+      "severity": "error",
       "message": "Cannot access attribute \"text_deltas\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"text_deltas\" is unknown",
       "range": {
         "start": {
@@ -2865,8 +3634,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_streaming_handler.py",
+      "severity": "error",
       "message": "Cannot access attribute \"errors\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"errors\" is unknown",
       "range": {
         "start": {
@@ -2881,8 +3650,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "file": "/workspace/tests/integration/test_streaming_handler.py",
+      "severity": "error",
       "message": "Cannot access attribute \"events_by_type\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"events_by_type\" is unknown",
       "range": {
         "start": {
@@ -2897,23 +3666,7 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/unit/conftest.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 1,
-          "character": 11
-        },
-        "end": {
-          "line": 1,
-          "character": 17
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/unit/conftest.py",
+      "file": "/workspace/tests/unit/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -2929,7 +3682,7 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/unit/conftest.py",
+      "file": "/workspace/tests/unit/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -2945,7 +3698,7 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/unit/conftest.py",
+      "file": "/workspace/tests/unit/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -2961,7 +3714,7 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/unit/conftest.py",
+      "file": "/workspace/tests/unit/conftest.py",
       "severity": "error",
       "message": "\"fixture\" is not a known attribute of \"None\"",
       "range": {
@@ -2977,23 +3730,7 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py",
-      "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 1,
-          "character": 7
-        },
-        "end": {
-          "line": 1,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py",
+      "file": "/workspace/tests/unit/test_agent_sdk.py",
       "severity": "error",
       "message": "Arguments missing for parameters \"config_service\", \"conversation_manager\", \"tool_executor\"",
       "range": {
@@ -3009,7 +3746,7 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py",
+      "file": "/workspace/tests/unit/test_agent_sdk.py",
       "severity": "error",
       "message": "Arguments missing for parameters \"config_service\", \"conversation_manager\", \"tool_executor\"",
       "range": {
@@ -3025,55 +3762,215 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_performance_utils.py",
+      "file": "/workspace/tests/unit/test_openai_integration.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
+      "message": "\"case_number\" is not a known attribute of \"None\"",
       "range": {
         "start": {
-          "line": 3,
-          "character": 7
+          "line": 72,
+          "character": 33
         },
         "end": {
-          "line": 3,
-          "character": 13
+          "line": 72,
+          "character": 44
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_registration_key.py",
+      "file": "/workspace/tests/unit/test_openai_integration.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
+      "message": "\"court\" is not a known attribute of \"None\"",
       "range": {
         "start": {
-          "line": 1,
-          "character": 7
+          "line": 73,
+          "character": 33
         },
         "end": {
-          "line": 1,
-          "character": 13
+          "line": 73,
+          "character": 38
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_executor.py",
+      "file": "/workspace/tests/unit/test_openai_integration.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
+      "message": "\"parties\" is not a known attribute of \"None\"",
       "range": {
         "start": {
-          "line": 3,
-          "character": 7
+          "line": 74,
+          "character": 37
         },
         "end": {
-          "line": 3,
-          "character": 13
+          "line": 74,
+          "character": 44
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_executor.py",
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "\"parties\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 75,
+          "character": 48
+        },
+        "end": {
+          "line": 75,
+          "character": 55
+        }
+      },
+      "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "\"legal_basis\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 76,
+          "character": 37
+        },
+        "end": {
+          "line": 76,
+          "character": 48
+        }
+      },
+      "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "\"legal_basis\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 77,
+          "character": 52
+        },
+        "end": {
+          "line": 77,
+          "character": 63
+        }
+      },
+      "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "Arguments missing for parameters \"request\", \"body\"",
+      "range": {
+        "start": {
+          "line": 89,
+          "character": 65
+        },
+        "end": {
+          "line": 89,
+          "character": 86
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "Argument of type \"Literal['Request timeout']\" cannot be assigned to parameter \"request\" of type \"Request\" in function \"__init__\"\n\u00a0\u00a0\"Literal['Request timeout']\" is not assignable to \"Request\"",
+      "range": {
+        "start": {
+          "line": 122,
+          "character": 81
+        },
+        "end": {
+          "line": 122,
+          "character": 98
+        }
+      },
+      "rule": "reportArgumentType"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "Arguments missing for parameters \"date\", \"decision\", \"reasoning\"",
+      "range": {
+        "start": {
+          "line": 202,
+          "character": 27
+        },
+        "end": {
+          "line": 207,
+          "character": 9
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "Arguments missing for parameters \"court\", \"date\", \"decision\", \"reasoning\"",
+      "range": {
+        "start": {
+          "line": 214,
+          "character": 29
+        },
+        "end": {
+          "line": 217,
+          "character": 9
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "Argument of type \"Literal['Timeout']\" cannot be assigned to parameter \"request\" of type \"Request\" in function \"__init__\"\n\u00a0\u00a0\"Literal['Timeout']\" is not assignable to \"Request\"",
+      "range": {
+        "start": {
+          "line": 235,
+          "character": 28
+        },
+        "end": {
+          "line": 235,
+          "character": 37
+        }
+      },
+      "rule": "reportArgumentType"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "\"case_number\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 247,
+          "character": 33
+        },
+        "end": {
+          "line": 247,
+          "character": 44
+        }
+      },
+      "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "Arguments missing for parameters \"case_number\", \"court\", \"date\", \"decision\", \"reasoning\"",
+      "range": {
+        "start": {
+          "line": 390,
+          "character": 19
+        },
+        "end": {
+          "line": 390,
+          "character": 36
+        }
+      },
+      "rule": "reportCallIssue"
+    },
+    {
+      "file": "/workspace/tests/unit/test_tool_executor.py",
       "severity": "error",
       "message": "Argument missing for parameter \"config_service\"",
       "range": {
@@ -3089,24 +3986,8 @@
       "rule": "reportCallIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_registry.py",
+      "file": "/workspace/tests/unit/test_tool_registry.py",
       "severity": "error",
-      "message": "Import \"pytest\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 3,
-          "character": 7
-        },
-        "end": {
-          "line": 3,
-          "character": 13
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_registry.py",
-      "severity": "information",
       "message": "Cannot access attribute \"name\" for class \"BaseModel\"\n\u00a0\u00a0Attribute \"name\" is unknown",
       "range": {
         "start": {
@@ -3121,8 +4002,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_registry.py",
-      "severity": "information",
+      "file": "/workspace/tests/unit/test_tool_registry.py",
+      "severity": "error",
       "message": "Cannot access attribute \"age\" for class \"BaseModel\"\n\u00a0\u00a0Attribute \"age\" is unknown",
       "range": {
         "start": {
@@ -3137,8 +4018,8 @@
       "rule": "reportAttributeAccessIssue"
     },
     {
-      "file": "/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_registry.py",
-      "severity": "information",
+      "file": "/workspace/tests/unit/test_tool_registry.py",
+      "severity": "error",
       "message": "Cannot access attribute \"active\" for class \"BaseModel\"\n\u00a0\u00a0Attribute \"active\" is unknown",
       "range": {
         "start": {
@@ -3154,10 +4035,10 @@
     }
   ],
   "summary": {
-    "filesAnalyzed": 104,
-    "errorCount": 116,
-    "warningCount": 0,
-    "informationCount": 81,
-    "timeInSec": 4.432
+    "filesAnalyzed": 128,
+    "errorCount": 245,
+    "warningCount": 7,
+    "informationCount": 0,
+    "timeInSec": 7.484
   }
 }
