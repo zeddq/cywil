@@ -1,0 +1,7 @@
+imports:
+  - from: "from app.models.pipeline_schemas import"
+    to:   "from app.embedding_models.pipeline_schemas import"
+  - from: "import app.models.pipeline_schemas"
+    to:   "import app.embedding_models.pipeline_schemas"
+  - from: "from app.models import pipeline_schemas"
+    to:   "from app.embedding_models import pipeline_schemas"
