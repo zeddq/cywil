@@ -8,6 +8,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 from app.core.logger_manager import get_logger
+from app.core.service_interface import ServiceInterface
 from app.worker.celery_app import celery_app
 from app.worker.service_registry import get_worker_services
 
@@ -177,11 +178,12 @@ def cleanup_statute_data(code_type: Optional[str] = None) -> Dict[str, Any]:
         services = get_worker_services()
 
         db_manager = services.db_manager
-        service = None
+        service: Optional[ServiceInterface] = None
 
         try:
-            service = services.statute_ingestion
-            await service.initialize()
+            # TODO: Use statute ingestion service when available
+            # service = services.statute_ingestion
+            # await service.initialize()
 
             # This would need implementation in StatuteIngestionService
             # For now, return a placeholder

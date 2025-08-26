@@ -28,7 +28,7 @@ class OptimizedStatuteSearchService(StatuteSearchService):
     """
 
     def __init__(self, config_service: ConfigService, llm_manager: LLMManager):
-        super().__init__(config_service)
+        super().__init__(config_service, llm_manager)
         self._llm_manager = llm_manager
         self._embedding_batcher: Optional[EmbeddingBatcher] = None
         # Create a simple batch processor function for embeddings
@@ -40,21 +40,21 @@ class OptimizedStatuteSearchService(StatuteSearchService):
         """Initialize with optimizations"""
         await super()._initialize_impl()
 
-        # Create embedding batcher
-        self._embedding_batcher = EmbeddingBatcher(self._embedder, batch_size=16, max_wait=0.2)
+        # Create embedding batcher using LLM manager instead of direct embedder
+        self._embedding_batcher = EmbeddingBatcher(self._llm_manager, batch_size=16, max_wait=0.2)
 
         logger.info("Optimized statute search service initialized")
 
     async def _process_embedding_batch(self, items):
         """Process a batch of embedding requests"""
         # This would be implemented with actual batch processing logic
-        # For now, just process them individually
-        if self._embedder is None:
-            raise RuntimeError("Embedder not initialized")
+        # For now, just process them individually using LLM manager
+        if not self._llm_manager._initialized:
+            raise RuntimeError("LLM Manager not initialized")
         results = []
         for item in items:
-            # SentenceTransformer.encode is synchronous, not async, and there\'s no embed method
-            result = self._embedder.encode(item)
+            # Use LLM manager's embedding functionality
+            result = await self._llm_manager.get_embedding_single(item, model_name="multilingual")
             results.append(result)
         return results
 

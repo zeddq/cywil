@@ -39,7 +39,7 @@ class OpenAIService:
         api_key = self.config.openai.api_key.get_secret_value()
         
         if not api_key:
-            raise OpenAIError("OpenAI API key is required but not configured")
+            raise OpenAIError("OpenAI", "OpenAI API key is required but not configured")
         
         # Initialize both sync and async clients
         self.client = OpenAI(
@@ -139,7 +139,7 @@ class OpenAIService:
                 return self._fallback_parse(content, response_format)
             except Exception as fallback_error:
                 logger.error(f"Fallback parsing also failed: {fallback_error}")
-                raise OpenAIError(f"Both structured and fallback parsing failed: {e}, {fallback_error}")
+                raise OpenAIError("OpenAI", f"Both structured and fallback parsing failed: {e}, {fallback_error}")
     
     async def async_parse_structured_output(
         self,
@@ -181,7 +181,7 @@ class OpenAIService:
                 return self._fallback_parse(content, response_format)
             except Exception as fallback_error:
                 logger.error(f"Fallback parsing also failed: {fallback_error}")
-                raise OpenAIError(f"Both structured and fallback parsing failed: {e}, {fallback_error}")
+                raise OpenAIError("OpenAI", f"Both structured and fallback parsing failed: {e}, {fallback_error}")
     
     def _fallback_parse(self, content: str, response_format: Type[BaseModel]) -> BaseModel:
         """
@@ -211,7 +211,7 @@ class OpenAIService:
         except (json.JSONDecodeError, ValueError) as e:
             logger.error(f"Failed to parse JSON from response: {e}")
             logger.debug(f"Raw content: {content}")
-            raise OpenAIError(f"Failed to parse response as JSON: {e}")
+            raise OpenAIError("OpenAI", f"Failed to parse response as JSON: {e}")
     
     def create_completion(
         self,
@@ -293,7 +293,10 @@ class OpenAIService:
                 messages=messages,
                 **kwargs
             )
-            return response.choices[0].message.content
+            content = response.choices[0].message.content
+            if content is None:
+                raise OpenAIError("OpenAI", "Received empty response content from API")
+            return content
     
     async def async_process_document(
         self,
@@ -325,7 +328,10 @@ class OpenAIService:
                 messages=messages,
                 **kwargs
             )
-            return response.choices[0].message.content
+            content = response.choices[0].message.content
+            if content is None:
+                raise OpenAIError("OpenAI", "Received empty response content from API")
+            return content
 
 
 # Global service instance

@@ -11,6 +11,7 @@ from sqlalchemy.pool import NullPool
 
 from app.core.database_manager import DatabaseManager, UnitOfWork, DatabaseTransaction
 from app.core.service_interface import ServiceStatus
+from app.core.config_service import ConfigService
 
 
 @pytest.fixture
@@ -29,7 +30,8 @@ def mock_config():
 async def db_manager(mock_config):
     """Create DatabaseManager instance with mocked config"""
     with patch('app.core.database_manager.get_config', return_value=mock_config):
-        manager = DatabaseManager()
+        config_service = ConfigService()
+        manager = DatabaseManager(config_service)
         yield manager
         # Cleanup
         if manager._initialized:
@@ -103,7 +105,8 @@ class TestConnectionPooling:
         """Test that pool is configured correctly"""
         with patch('app.core.database_manager.create_async_engine') as mock_create:
             with patch('app.core.database_manager.get_config', return_value=mock_config):
-                manager = DatabaseManager()
+                config_service = ConfigService()
+                manager = DatabaseManager(config_service)
                 
                 # Initialize to trigger engine creation
                 mock_engine = Mock()
@@ -135,7 +138,7 @@ class TestConnectionPooling:
         db_manager._initialized = True
         
         # Simulate pool exhaustion
-        mock_session_factory.side_effect = OperationalError("QueuePool limit exceeded", None, None)
+        mock_session_factory.side_effect = OperationalError("QueuePool limit exceeded", None, Exception("Pool exhausted"))
         
         with pytest.raises(OperationalError, match="QueuePool limit exceeded"):
             async with db_manager.get_session() as session:
@@ -334,7 +337,7 @@ class TestHealthCheck:
         db_manager._initialized = True
         
         # Mock connection failure
-        mock_engine.begin = AsyncMock(side_effect=OperationalError("Connection refused", None, None))
+        mock_engine.begin = AsyncMock(side_effect=OperationalError("Connection refused", None, Exception("Connection refused")))
         
         result = await db_manager.health_check()
         

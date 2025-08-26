@@ -65,7 +65,7 @@ async def test_batch_processing():
     logger.info(f"Testing batch processing of {len(pdf_files)} files")
     
     try:
-        records = await process_batch(pdf_files, max_workers=2)
+        records = await process_batch(pdf_files)
         logger.info(f"Successfully processed {len(records)} total paragraphs")
         
     except Exception as e:

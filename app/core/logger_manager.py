@@ -9,6 +9,7 @@ import logging
 import logging.config
 import sys
 import traceback
+from types import FunctionType
 import uuid
 from datetime import datetime
 from functools import wraps
@@ -698,7 +699,7 @@ def service_operation_logger(service_name: str):
     Decorator for logging service operations.
     """
 
-    def decorator(func):
+    def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         @wraps(func)
         async def async_wrapper(*args, **kwargs):
             operation_name = func.__name__

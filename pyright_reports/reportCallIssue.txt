@@ -1,75 +1,13 @@
 Pyright Diagnostic Report: reportCallIssue
 ================================================================================
 
-Total violations: 31
+Total violations: 2
 
 
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/embed.py (5 violations)
---------------------------------------------------------------
-  Line 75:30 [error]: Argument missing for parameter "type"
-  Line 81:30 [error]: Argument missing for parameter "type"
-  Line 87:30 [error]: Argument missing for parameter "type"
-  Line 308:78 [error]: Argument missing for parameter "type"
-  Line 320:30 [error]: Argument missing for parameter "type"
+/Volumes/code/cywil/ai-paralegal-poc/ingest/templates.py (1 violations)
+--------------------------------------------------------
+  Line 136:30 [error]: Argument missing for parameter "type"
 
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (1 violations)
--------------------------------------------------------------------------
-  Line 617:14 [error]: No overloads for "open" match the provided arguments
-
-/Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py (5 violations)
-----------------------------------------------------
-  Line 75:30 [error]: Argument missing for parameter "type"
-  Line 81:30 [error]: Argument missing for parameter "type"
-  Line 87:30 [error]: Argument missing for parameter "type"
-  Line 308:26 [error]: Argument missing for parameter "type"
-  Line 320:30 [error]: Argument missing for parameter "type"
-
-/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py (1 violations)
---------------------------------------------------------------
-  Line 145:21 [error]: No parameter named "metadata"
-
-/Volumes/code/cywil/ai-paralegal-poc/ingest/pdf2chunks.py (1 violations)
----------------------------------------------------------
-  Line 226:13 [error]: No overloads for "update" match the provided arguments
-
-/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py (5 violations)
----------------------------------------------------------------
-  Line 275:12 [error]: Argument missing for parameter "name"
-  Line 275:19 [error]: No parameter named "metadata"
-  Line 463:24 [error]: Argument missing for parameter "index"
-  Line 536:14 [error]: No overloads for "open" match the provided arguments
-  Line 562:14 [error]: No overloads for "open" match the provided arguments
-
-/Volumes/code/cywil/ai-paralegal-poc/ingest/test_preprocess_o3.py (1 violations)
------------------------------------------------------------------
-  Line 68:50 [error]: No parameter named "max_workers"
-
-/Volumes/code/cywil/ai-paralegal-poc/init_database.py (2 violations)
------------------------------------------------------
-  Line 49:28 [error]: No overloads for "execute" match the provided arguments
-  Line 77:28 [error]: No overloads for "execute" match the provided arguments
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_database_manager.py (2 violations)
--------------------------------------------------------------------------------
-  Line 32:19 [error]: Argument missing for parameter "config_service"
-  Line 106:27 [error]: Argument missing for parameter "config_service"
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py (2 violations)
+/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_integration.py (1 violations)
 --------------------------------------------------------------------------
-  Line 296:20 [error]: Argument missing for parameter "config_service"
-  Line 397:24 [error]: Argument missing for parameter "config_service"
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py (3 violations)
-----------------------------------------------------------------------------------
-  Line 71:23 [error]: Argument missing for parameter "config_service"
-  Line 314:13 [error]: Argument missing for parameter "config_service"
-  Line 352:23 [error]: Argument missing for parameter "config_service"
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py (2 violations)
------------------------------------------------------------------
-  Line 24:13 [error]: Arguments missing for parameters "config_service", "conversation_manager", "tool_executor"
-  Line 56:13 [error]: Arguments missing for parameters "config_service", "conversation_manager", "tool_executor"
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_executor.py (1 violations)
----------------------------------------------------------------------
-  Line 31:20 [error]: Argument missing for parameter "config_service"
+  Line 90:66 [error]: Arguments missing for parameters "request", "body"

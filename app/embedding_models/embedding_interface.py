@@ -4,7 +4,7 @@ Abstract interface for embedding models to support multiple backends.
 
 import asyncio
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Optional, Any
 
 import numpy as np
 
@@ -45,9 +45,9 @@ class LocalEmbedder(EmbeddingModel):
     
     def __init__(self, model_name: str = "paraphrase-multilingual-mpnet-base-v2"):
         self.model_name = model_name
-        self._model = None
+        self._model: Optional[Any] = None
         self._lock = asyncio.Lock()
-        self._dimension = None
+        self._dimension: Optional[int] = None
     
     async def _ensure_model_loaded(self):
         """Lazy load the model on first use."""
@@ -66,13 +66,24 @@ class LocalEmbedder(EmbeddingModel):
         batch_size: int = 32
     ) -> np.ndarray:
         """Generate embeddings for text batch with async support."""
+
         await self._ensure_model_loaded()
+
+        def _embedding_function():
+            if self._model is None:
+                raise RuntimeError("Model not initialized")
+            return self._model.encode(texts, batch_size=batch_size, convert_to_numpy=True)
         
+        if self._model is None:
+            raise RuntimeError("Model not initialized")
         # Run CPU-intensive operation in thread pool
         loop = asyncio.get_event_loop()
+        model = self._model
+        if model is None:
+            raise RuntimeError("Model not initialized")
         embeddings = await loop.run_in_executor(
             None, 
-            lambda: self._model.encode(texts, batch_size=batch_size, convert_to_numpy=True)
+            _embedding_function
         )
         return embeddings
     
@@ -86,8 +97,14 @@ class LocalEmbedder(EmbeddingModel):
         if self._dimension is None:
             if self._model is None:
                 # Default dimension for multilingual-mpnet-base-v2
-                return 768
-            self._dimension = self._model.get_sentence_embedding_dimension()
+                self._dimension = 768
+            else:
+                dimension = self._model.get_sentence_embedding_dimension()
+                if dimension is None:
+                    # Fallback in case sentence transformer returns None
+                    self._dimension = 768
+                else:
+                    self._dimension = dimension
         return self._dimension
     
     async def warmup(self) -> None:
@@ -101,7 +118,7 @@ class OpenAIEmbedder(EmbeddingModel):
     def __init__(self, api_key: str, model_name: str = "text-embedding-3-small"):
         self.model_name = model_name
         self._api_key = api_key
-        self._client = None
+        self._client: Optional[Any] = None
         self._dimension = 1536  # Default for text-embedding-3-small
     
     async def _ensure_client_initialized(self):
@@ -118,6 +135,10 @@ class OpenAIEmbedder(EmbeddingModel):
         """Generate embeddings using OpenAI API."""
         await self._ensure_client_initialized()
         
+        # Ensure client is initialized
+        if self._client is None:
+            raise RuntimeError("OpenAI client not initialized")
+            
         # Process in batches to avoid API limits
         all_embeddings = []
         for i in range(0, len(texts), batch_size):
@@ -150,10 +171,10 @@ class HuggingFaceEmbedder(EmbeddingModel):
     
     def __init__(self, model_name: str):
         self.model_name = model_name
-        self._model = None
-        self._tokenizer = None
+        self._model: Optional[Any] = None
+        self._tokenizer: Optional[Any] = None
         self._lock = asyncio.Lock()
-        self._dimension = None
+        self._dimension: Optional[int] = None
     
     async def _ensure_model_loaded(self):
         """Lazy load the model on first use."""
@@ -172,7 +193,8 @@ class HuggingFaceEmbedder(EmbeddingModel):
                         )
                     )
                     # Set to eval mode for inference
-                    self._model.eval()
+                    if self._model is not None:
+                        self._model.eval()
     
     async def create_embeddings(
         self, 
@@ -186,6 +208,9 @@ class HuggingFaceEmbedder(EmbeddingModel):
         
         def _encode_batch(batch_texts):
             with torch.no_grad():
+                if self._tokenizer is None or self._model is None:
+                    raise RuntimeError("Model or tokenizer not initialized")
+                
                 inputs = self._tokenizer(
                     batch_texts, 
                     return_tensors="pt", 
@@ -193,7 +218,7 @@ class HuggingFaceEmbedder(EmbeddingModel):
                     truncation=True,
                     max_length=512
                 )
-                outputs = self._model(**inputs)
+                outputs = model(**inputs)
                 # Use mean pooling
                 embeddings = torch.mean(outputs.last_hidden_state, dim=1)
                 return embeddings.cpu().numpy()

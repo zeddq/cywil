@@ -9,7 +9,7 @@ from unittest.mock import Mock, patch, AsyncMock
 from pathlib import Path
 from typing import List, Dict, Any
 
-from app.models.pipeline_schemas import (
+from app.embedding_models.pipeline_schemas import (
     RawDocument,
     ProcessedChunk,
     EmbeddedChunk,
@@ -316,7 +316,7 @@ class TestAIProcessingPipeline:
         processing_time = int((end_time - start_time) * 1000)  # Convert to milliseconds
         
         # Create metrics
-        from app.models.pipeline_schemas import PipelineMetrics
+        from app.embedding_models.pipeline_schemas import PipelineMetrics
         metrics = PipelineMetrics(
             stage="chunking",
             processing_time_ms=processing_time,
