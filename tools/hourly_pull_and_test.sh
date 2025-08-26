@@ -12,6 +12,9 @@ PARENT_BRANCH="refactor/ai-sdk-integration-fix"
 
 cd "$REPO_DIR"
 
+# Ensure venv bin is on PATH so console scripts (pyright) are found
+export PATH="$VENV/bin:$PATH"
+
 # Ensure venv exists
 if [[ ! -x "$VENV/bin/python" ]]; then
   echo "Test venv not found at $VENV. Creating..."
