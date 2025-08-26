@@ -421,3 +421,21 @@ ERROR tests/unit/test_openai_service.py
 Running pyright analysis...
 Error: pyright not found. Please install it with: pip install pyright
 [2025-08-26T12:23:52Z] Committing and pushing cycle outputs to cursor/run-tests-hourly-after-pulling-changes-b4fb...
+[cursor/run-tests-hourly-after-pulling-changes-b4fb 64f57b1] chore(ci): hourly run 2025-08-26T12:23:35Z (pytest=2 periodic=1 pyright=1)
+ 14 files changed, 3416 insertions(+), 51 deletions(-)
+ create mode 100644 reports/20250826-122341/index.json
+ create mode 100644 reports/20250826-122341/test_celery_monitoring/assets/style.css
+ create mode 100644 reports/20250826-122341/test_celery_monitoring/test_celery_monitoring.html
+ create mode 100644 reports/20250826-122341/test_celery_monitoring/test_celery_monitoring.json
+ create mode 100644 reports/20250826-122341/test_celery_monitoring/test_celery_monitoring.xml
+ create mode 100644 reports/20250826-122341/test_celery_refactor/assets/style.css
+ create mode 100644 reports/20250826-122341/test_celery_refactor/test_celery_refactor.html
+ create mode 100644 reports/20250826-122341/test_celery_refactor/test_celery_refactor.json
+ create mode 100644 reports/20250826-122341/test_celery_refactor/test_celery_refactor.xml
+ create mode 100644 reports/20250826-122341/test_openai_implementation/assets/style.css
+ create mode 100644 reports/20250826-122341/test_openai_implementation/test_openai_implementation.html
+ create mode 100644 reports/20250826-122341/test_openai_implementation/test_openai_implementation.json
+ create mode 100644 reports/20250826-122341/test_openai_implementation/test_openai_implementation.xml
+To https://github.com/zeddq/cywil
+   3922977..64f57b1  cursor/run-tests-hourly-after-pulling-changes-b4fb -> cursor/run-tests-hourly-after-pulling-changes-b4fb
+[2025-08-26T12:23:53Z] Cycle complete. pytest=2 periodic=1 pyright=1
