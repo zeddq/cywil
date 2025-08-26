@@ -11,6 +11,7 @@ from qdrant_client.models import (
     CreateCollection, OptimizersConfigDiff,
     KeywordIndexParams, TextIndexParams
 )
+from qdrant_client.http.models import models as qmodels
 import logging
 from tqdm import tqdm
 import hashlib
@@ -72,19 +73,19 @@ class PolishLegalEmbedder:
             self.client.create_payload_index(
                 collection_name=collection_name,
                 field_name="code",
-                field_schema=KeywordIndexParams()
+                field_schema=KeywordIndexParams(type=qmodels.KeywordIndexType.keyword)
             )
             
             self.client.create_payload_index(
                 collection_name=collection_name,
                 field_name="article",
-                field_schema=KeywordIndexParams()
+                field_schema=KeywordIndexParams(type=qmodels.KeywordIndexType.keyword)
             )
             
             self.client.create_payload_index(
                 collection_name=collection_name,
                 field_name="status",
-                field_schema=KeywordIndexParams()
+                field_schema=KeywordIndexParams(type=qmodels.KeywordIndexType.keyword)
             )
             
             logger.info(f"Created collection '{collection_name}' with indexes")
@@ -305,7 +306,7 @@ def create_hybrid_search_index(
         client.create_payload_index(
             collection_name=collection_name,
             field_name="text",
-            field_schema=TextIndexParams()
+            field_schema=TextIndexParams(type=qmodels.TextIndexType.text)
         )
         logger.info("Created text search index")
     except Exception as e:
@@ -317,7 +318,7 @@ def create_hybrid_search_index(
             client.create_payload_index(
                 collection_name=collection_name,
                 field_name=field,
-                field_schema=KeywordIndexParams()
+                field_schema=KeywordIndexParams(type=qmodels.KeywordIndexType.keyword)
             )
             logger.info(f"Created index for field: {field}")
         except Exception as e:
@@ -381,7 +382,8 @@ def search_statutes(
     formatted_results = []
     for result in results:
         if result.payload is None:
-            continue        formatted_results.append({
+            continue
+        formatted_results.append({
             "score": result.score,
             "article": result.payload.get("article"),
             "code": result.payload.get("code"),

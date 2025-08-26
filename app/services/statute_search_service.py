@@ -17,7 +17,7 @@ from ..core.llm_manager import LLMManager
 from ..core.service_interface import HealthCheckResult, ServiceInterface, ServiceStatus
 from ..core.tool_registry import ToolCategory, ToolParameter, tool_registry
 from ..validators.document_validator import DocumentValidator
-from ..models.pipeline_schemas import ValidationResult
+from app.embedding_models.pipeline_schemas import ValidationResult
 
 logger = logging.getLogger(__name__)
 
@@ -399,8 +399,8 @@ Podsumowanie:"""
         logger.info(f"Search returned {len(results)} results for query: '{query[:50]}...'")
         
         # Check relevance for specific article queries
-        if re.search(r'art\.?\s*(\d+)', query, re.IGNORECASE):
-            article_match = re.search(r'art\.?\s*(\d+)', query, re.IGNORECASE)
+        article_match = re.search(r'art\.?\s*(\d+)', query, re.IGNORECASE)
+        if article_match is not None:
             requested_article = article_match.group(1)
             
             found_articles = [r.get('article') for r in results]
