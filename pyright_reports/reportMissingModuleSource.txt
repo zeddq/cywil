@@ -1,0 +1,62 @@
+Pyright Diagnostic Report: reportMissingModuleSource
+================================================================================
+
+Total violations: 18
+
+
+/workspace/app/auth.py (3 violations)
+----------------------
+  Line 7:6 [warning]: Import "jose" could not be resolved from source
+  Line 7:28 [warning]: Import "jose.jwt" could not be resolved from source
+  Line 8:6 [warning]: Import "passlib.context" could not be resolved from source
+
+/workspace/app/routes/auth.py (2 violations)
+-----------------------------
+  Line 12:6 [warning]: Import "jose" could not be resolved from source
+  Line 12:28 [warning]: Import "jose.jwt" could not be resolved from source
+
+/workspace/app/task_processors.py (1 violations)
+---------------------------------
+  Line 8:8 [warning]: Import "aiofiles" could not be resolved from source
+
+/workspace/app/worker/tasks/preprocess_sn_o3.py (2 violations)
+-----------------------------------------------
+  Line 22:8 [warning]: Import "dateparser" could not be resolved from source
+  Line 25:6 [warning]: Import "tqdm" could not be resolved from source
+
+/workspace/app/worker/tasks/sn.py (1 violations)
+---------------------------------
+  Line 9:8 [warning]: Import "dateparser" could not be resolved from source
+
+/workspace/ingest/embed.py (1 violations)
+--------------------------
+  Line 15:6 [warning]: Import "tqdm" could not be resolved from source
+
+/workspace/ingest/preprocess_sn.py (1 violations)
+----------------------------------
+  Line 27:8 [warning]: Import "dateparser" could not be resolved from source
+
+/workspace/ingest/preprocess_sn_o3.py (2 violations)
+-------------------------------------
+  Line 24:8 [warning]: Import "dateparser" could not be resolved from source
+  Line 25:6 [warning]: Import "tqdm" could not be resolved from source
+
+/workspace/ingest/sn.py (1 violations)
+-----------------------
+  Line 10:8 [warning]: Import "dateparser" could not be resolved from source
+
+/workspace/schema_cmp.py (1 violations)
+------------------------
+  Line 23:8 [warning]: Import "psycopg2" could not be resolved from source
+
+/workspace/tests/integration/test_api.py (1 violations)
+----------------------------------------
+  Line 10:8 [warning]: Import "requests" could not be resolved from source
+
+/workspace/tests/integration/test_openai_integration.py (1 violations)
+-------------------------------------------------------
+  Line 239:16 [warning]: Import "psutil" could not be resolved from source
+
+/workspace/tests/unit/test_registration_key.py (1 violations)
+----------------------------------------------
+  Line 8:8 [warning]: Import "requests" could not be resolved from source

@@ -1,85 +1,500 @@
 Pyright Diagnostic Report: reportMissingImports
 ================================================================================
 
-Total violations: 20
+Total violations: 228
 
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/celery/conftest.py (1 violations)
--------------------------------------------------------------
-  Line 1:8 [error]: Import "pytest" could not be resolved
+/workspace/alembic/env.py (2 violations)
+-------------------------
+  Line 3:6 [error]: Import "sqlalchemy" could not be resolved
+  Line 4:6 [error]: Import "sqlalchemy" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/celery/test_celery_integration.py (1 violations)
-----------------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
+/workspace/alembic/versions/00df3e0ab26c_add_created_by_user_column_to_case.py (3 violations)
+------------------------------------------------------------------------------
+  Line 11:8 [error]: Import "sqlalchemy" could not be resolved
+  Line 12:6 [error]: Import "sqlalchemy.dialects" could not be resolved
+  Line 13:8 [error]: Import "sqlmodel" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/celery/test_celery_tasks.py (1 violations)
-----------------------------------------------------------------------
-  Line 1:8 [error]: Import "pytest" could not be resolved
+/workspace/app/auth.py (3 violations)
+----------------------
+  Line 5:6 [error]: Import "fastapi" could not be resolved
+  Line 6:6 [error]: Import "fastapi.security" could not be resolved
+  Line 9:6 [error]: Import "sqlalchemy.ext.asyncio" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py (1 violations)
+/workspace/app/core/ai_client_factory.py (1 violations)
+----------------------------------------
+  Line 9:6 [error]: Import "pydantic" could not be resolved
+
+/workspace/app/core/celery_service_wrapper.py (2 violations)
+---------------------------------------------
+  Line 11:6 [error]: Import "celery.result" could not be resolved
+  Line 263:14 [error]: Import "celery.exceptions" could not be resolved
+
+/workspace/app/core/config_service.py (2 violations)
+-------------------------------------
+  Line 12:6 [error]: Import "pydantic" could not be resolved
+  Line 13:6 [error]: Import "pydantic_settings" could not be resolved
+
+/workspace/app/core/conversation_manager.py (3 violations)
+-------------------------------------------
+  Line 12:8 [error]: Import "redis.asyncio" could not be resolved
+  Line 13:6 [error]: Import "fastapi" could not be resolved
+  Line 14:6 [error]: Import "sqlmodel" could not be resolved
+
+/workspace/app/core/database_manager.py (7 violations)
+---------------------------------------
+  Line 9:6 [error]: Import "fastapi" could not be resolved
+  Line 10:6 [error]: Import "sqlalchemy" could not be resolved
+  Line 11:6 [error]: Import "sqlalchemy.ext.asyncio" could not be resolved
+  Line 17:6 [error]: Import "sqlalchemy.orm" could not be resolved
+  Line 67:14 [error]: Import "sqlalchemy.orm" could not be resolved
+  Line 76:26 [error]: Import "sqlalchemy" could not be resolved
+  Line 109:22 [error]: Import "sqlalchemy" could not be resolved
+
+/workspace/app/core/db_optimizations.py (2 violations)
+---------------------------------------
+  Line 8:6 [error]: Import "sqlalchemy" could not be resolved
+  Line 9:6 [error]: Import "sqlalchemy.ext.asyncio" could not be resolved
+
+/workspace/app/core/llm_manager.py (4 violations)
+----------------------------------
+  Line 10:8 [error]: Import "numpy" could not be resolved
+  Line 11:6 [error]: Import "fastapi" could not be resolved
+  Line 12:6 [error]: Import "openai" could not be resolved
+  Line 13:6 [error]: Import "tenacity" could not be resolved
+
+/workspace/app/core/logger_manager.py (8 violations)
+-------------------------------------
+  Line 18:6 [error]: Import "opentelemetry" could not be resolved
+  Line 19:6 [error]: Import "opentelemetry.instrumentation.logging" could not be resolved
+  Line 20:6 [error]: Import "opentelemetry.sdk.resources" could not be resolved
+  Line 21:6 [error]: Import "opentelemetry.sdk.trace" could not be resolved
+  Line 22:6 [error]: Import "opentelemetry.sdk.trace.export" could not be resolved
+  Line 23:6 [error]: Import "opentelemetry.trace" could not be resolved
+  Line 24:6 [error]: Import "starlette.requests" could not be resolved
+  Line 624:10 [error]: Import "fastapi" could not be resolved
+
+/workspace/app/core/streaming_handler.py (1 violations)
+----------------------------------------
+  Line 11:6 [error]: Import "openai.types.responses" could not be resolved
+
+/workspace/app/core/tool_executor.py (1 violations)
+------------------------------------
+  Line 12:6 [error]: Import "fastapi" could not be resolved
+
+/workspace/app/core/tool_registry.py (1 violations)
+------------------------------------
+  Line 13:6 [error]: Import "pydantic" could not be resolved
+
+/workspace/app/dependencies.py (2 violations)
+------------------------------
+  Line 3:6 [error]: Import "fastapi" could not be resolved
+  Line 4:6 [error]: Import "sqlalchemy.ext.asyncio" could not be resolved
+
+/workspace/app/embedding_models/embedding_interface.py (6 violations)
 ------------------------------------------------------
+  Line 9:8 [error]: Import "numpy" could not be resolved
+  Line 55:18 [error]: Import "sentence_transformers" could not be resolved
+  Line 110:18 [error]: Import "openai" could not be resolved
+  Line 163:26 [error]: Import "transformers" could not be resolved
+  Line 164:28 [error]: Import "torch" could not be resolved
+  Line 185:16 [error]: Import "torch" could not be resolved
+
+/workspace/app/embedding_models/pipeline_schemas.py (2 violations)
+---------------------------------------------------
+  Line 11:8 [error]: Import "numpy" could not be resolved
+  Line 12:6 [error]: Import "pydantic" could not be resolved
+
+/workspace/app/main.py (4 violations)
+----------------------
+  Line 13:6 [error]: Import "fastapi" could not be resolved
+  Line 21:6 [error]: Import "fastapi.middleware.cors" could not be resolved
+  Line 22:6 [error]: Import "fastapi.responses" could not be resolved
+  Line 36:6 [error]: Import "opentelemetry" could not be resolved
+
+/workspace/app/models.py (3 violations)
+------------------------
+  Line 6:6 [error]: Import "pydantic" could not be resolved
+  Line 7:6 [error]: Import "sqlalchemy" could not be resolved
+  Line 8:6 [error]: Import "sqlmodel" could not be resolved
+
+/workspace/app/paralegal_agents/refactored_agent_sdk.py (1 violations)
+-------------------------------------------------------
+  Line 24:6 [error]: Import "openai" could not be resolved
+
+/workspace/app/repositories/case_repository.py (3 violations)
+----------------------------------------------
+  Line 3:6 [error]: Import "sqlalchemy.ext.asyncio" could not be resolved
+  Line 4:6 [error]: Import "sqlmodel" could not be resolved
+  Line 8:6 [error]: Import "fastapi" could not be resolved
+
+/workspace/app/repositories/user_repository.py (3 violations)
+----------------------------------------------
+  Line 4:6 [error]: Import "fastapi" could not be resolved
+  Line 5:6 [error]: Import "sqlalchemy.ext.asyncio" could not be resolved
+  Line 6:6 [error]: Import "sqlmodel" could not be resolved
+
+/workspace/app/routes/auth.py (5 violations)
+-----------------------------
+  Line 10:6 [error]: Import "fastapi" could not be resolved
+  Line 11:6 [error]: Import "fastapi.security" could not be resolved
+  Line 13:6 [error]: Import "pydantic" could not be resolved
+  Line 14:6 [error]: Import "sqlmodel" could not be resolved
+  Line 15:6 [error]: Import "sqlmodel" could not be resolved
+
+/workspace/app/routes/case_management_routes.py (1 violations)
+-----------------------------------------------
+  Line 9:6 [error]: Import "fastapi" could not be resolved
+
+/workspace/app/routes/monitoring_routes.py (3 violations)
+------------------------------------------
+  Line 8:6 [error]: Import "fastapi" could not be resolved
+  Line 9:6 [error]: Import "pydantic" could not be resolved
+  Line 145:14 [error]: Import "celery.result" could not be resolved
+
+/workspace/app/services/case_management_service.py (1 violations)
+--------------------------------------------------
+  Line 7:6 [error]: Import "fastapi" could not be resolved
+
+/workspace/app/services/document_generation_service.py (3 violations)
+------------------------------------------------------
+  Line 9:6 [error]: Import "fastapi" could not be resolved
+  Line 10:6 [error]: Import "openai" could not be resolved
+  Line 11:6 [error]: Import "sqlalchemy" could not be resolved
+
+/workspace/app/services/fallback_parser.py (1 violations)
+------------------------------------------
+  Line 10:6 [error]: Import "app.models.pipeline_schemas" could not be resolved
+
+/workspace/app/services/openai_client.py (4 violations)
+----------------------------------------
+  Line 10:6 [error]: Import "openai" could not be resolved
+  Line 11:6 [error]: Import "openai.types.chat" could not be resolved
+  Line 12:6 [error]: Import "pydantic" could not be resolved
+  Line 13:6 [error]: Import "tenacity" could not be resolved
+
+/workspace/app/services/optimized_statute_search.py (1 violations)
+---------------------------------------------------
+  Line 10:6 [error]: Import "qdrant_client.models" could not be resolved
+
+/workspace/app/services/statute_search_service.py (5 violations)
+-------------------------------------------------
+  Line 10:6 [error]: Import "fastapi" could not be resolved
+  Line 11:6 [error]: Import "openai" could not be resolved
+  Line 12:6 [error]: Import "qdrant_client" could not be resolved
+  Line 13:6 [error]: Import "qdrant_client.models" could not be resolved
+  Line 20:6 [error]: Import "..models.pipeline_schemas" could not be resolved
+
+/workspace/app/services/supreme_court_service.py (6 violations)
+------------------------------------------------
+  Line 11:6 [error]: Import "fastapi" could not be resolved
+  Line 12:6 [error]: Import "openai" could not be resolved
+  Line 13:6 [error]: Import "qdrant_client" could not be resolved
+  Line 14:6 [error]: Import "qdrant_client.models" could not be resolved
+  Line 15:6 [error]: Import "sentence_transformers" could not be resolved
+  Line 16:6 [error]: Import "sqlalchemy" could not be resolved
+
+/workspace/app/task_processors.py (4 violations)
+---------------------------------
+  Line 9:8 [error]: Import "fitz" could not be resolved
+  Line 10:6 [error]: Import "qdrant_client" could not be resolved
+  Line 11:6 [error]: Import "qdrant_client.models" could not be resolved
+  Line 16:6 [error]: Import "sentence_transformers" could not be resolved
+
+/workspace/app/validator.py (2 violations)
+---------------------------
+  Line 4:6 [error]: Import "openai" could not be resolved
+  Line 5:6 [error]: Import "pydantic" could not be resolved
+
+/workspace/app/validators/document_validator.py (2 violations)
+-----------------------------------------------
+  Line 8:6 [error]: Import "pydantic" could not be resolved
+  Line 10:6 [error]: Import "app.models.pipeline_schemas" could not be resolved
+
+/workspace/app/worker/base_task.py (3 violations)
+----------------------------------
+  Line 10:6 [error]: Import "celery" could not be resolved
+  Line 11:6 [error]: Import "celery.exceptions" could not be resolved
+  Line 12:6 [error]: Import "kombu.exceptions" could not be resolved
+
+/workspace/app/worker/celery_app.py (1 violations)
+-----------------------------------
+  Line 7:6 [error]: Import "celery" could not be resolved
+
+/workspace/app/worker/config.py (1 violations)
+-------------------------------
+  Line 9:6 [error]: Import "kombu" could not be resolved
+
+/workspace/app/worker/ingestion_api.py (5 violations)
+--------------------------------------
+  Line 7:6 [error]: Import "celery.result" could not be resolved
+  Line 8:6 [error]: Import "fastapi" could not be resolved
+  Line 9:6 [error]: Import "fastapi.responses" could not be resolved
+  Line 10:6 [error]: Import "pydantic" could not be resolved
+  Line 327:12 [error]: Import "uvicorn" could not be resolved
+
+/workspace/app/worker/logging_config.py (2 violations)
+---------------------------------------
+  Line 12:6 [error]: Import "pythonjsonlogger" could not be resolved
+  Line 24:14 [error]: Import "celery" could not be resolved
+
+/workspace/app/worker/monitoring.py (2 violations)
+-----------------------------------
+  Line 12:8 [error]: Import "redis" could not be resolved
+  Line 13:6 [error]: Import "celery.signals" could not be resolved
+
+/workspace/app/worker/service_registry.py (2 violations)
+-----------------------------------------
+  Line 10:8 [error]: Import "redis" could not be resolved
+  Line 14:6 [error]: Import "celery.signals" could not be resolved
+
+/workspace/app/worker/tasks/case_tasks.py (2 violations)
+-----------------------------------------
+  Line 385:22 [error]: Import "sqlalchemy" could not be resolved
+  Line 386:22 [error]: Import "sqlalchemy.orm" could not be resolved
+
+/workspace/app/worker/tasks/embed.py (4 violations)
+------------------------------------
+  Line 8:8 [error]: Import "numpy" could not be resolved
+  Line 9:6 [error]: Import "qdrant_client" could not be resolved
+  Line 10:6 [error]: Import "qdrant_client.models" could not be resolved
+  Line 21:6 [error]: Import "sentence_transformers" could not be resolved
+
+/workspace/app/worker/tasks/embedding_tasks.py (1 violations)
+----------------------------------------------
+  Line 187:18 [error]: Import "qdrant_client" could not be resolved
+
+/workspace/app/worker/tasks/ingestion_pipeline.py (2 violations)
+-------------------------------------------------
+  Line 7:6 [error]: Import "celery" could not be resolved
+  Line 11:6 [error]: Import "app.models.pipeline_schemas" could not be resolved
+
+/workspace/app/worker/tasks/maintenance.py (4 violations)
+------------------------------------------
+  Line 10:8 [error]: Import "redis" could not be resolved
+  Line 73:22 [error]: Import "sqlalchemy" could not be resolved
+  Line 100:22 [error]: Import "qdrant_client" could not be resolved
+  Line 468:14 [error]: Import "qdrant_client" could not be resolved
+
+/workspace/app/worker/tasks/pdf2chunks.py (1 violations)
+-----------------------------------------
+  Line 9:8 [error]: Import "pdfplumber" could not be resolved
+
+/workspace/app/worker/tasks/preprocess_sn_o3.py (2 violations)
+-----------------------------------------------
+  Line 23:8 [error]: Import "fitz" could not be resolved
+  Line 24:6 [error]: Import "pydantic" could not be resolved
+
+/workspace/app/worker/tasks/sn.py (7 violations)
+---------------------------------
+  Line 10:8 [error]: Import "openai" could not be resolved
+  Line 11:6 [error]: Import "deepdiff" could not be resolved
+  Line 12:6 [error]: Import "dotenv" could not be resolved
+  Line 13:6 [error]: Import "qdrant_client" could not be resolved
+  Line 14:6 [error]: Import "sentence_transformers" could not be resolved
+  Line 15:6 [error]: Import "sqlalchemy" could not be resolved
+  Line 16:6 [error]: Import "sqlalchemy.ext.asyncio" could not be resolved
+
+/workspace/app/worker/tasks/validation_tasks.py (1 violations)
+-----------------------------------------------
+  Line 9:6 [error]: Import "app.models.pipeline_schemas" could not be resolved
+
+/workspace/ingest/embed.py (4 violations)
+--------------------------
+  Line 2:8 [error]: Import "numpy" could not be resolved
+  Line 3:6 [error]: Import "sentence_transformers" could not be resolved
+  Line 7:6 [error]: Import "qdrant_client" could not be resolved
+  Line 8:6 [error]: Import "qdrant_client.models" could not be resolved
+
+/workspace/ingest/ingest_pipeline.py (2 violations)
+------------------------------------
+  Line 22:6 [error]: Import "sqlalchemy" could not be resolved
+  Line 23:6 [error]: Import "sqlalchemy.orm" could not be resolved
+
+/workspace/ingest/pdf2chunks.py (1 violations)
+-------------------------------
+  Line 3:8 [error]: Import "pdfplumber" could not be resolved
+
+/workspace/ingest/preprocess_sn.py (3 violations)
+----------------------------------
+  Line 24:8 [error]: Import "fitz" could not be resolved
+  Line 25:8 [error]: Import "spacy" could not be resolved
+  Line 26:6 [error]: Import "spacy.pipeline" could not be resolved
+
+/workspace/ingest/preprocess_sn_o3.py (2 violations)
+-------------------------------------
+  Line 17:8 [error]: Import "fitz" could not be resolved
+  Line 22:6 [error]: Import "pydantic" could not be resolved
+
+/workspace/ingest/sn.py (7 violations)
+-----------------------
+  Line 8:6 [error]: Import "deepdiff" could not be resolved
+  Line 11:8 [error]: Import "openai" could not be resolved
+  Line 12:6 [error]: Import "dotenv" could not be resolved
+  Line 13:6 [error]: Import "qdrant_client" could not be resolved
+  Line 14:6 [error]: Import "sentence_transformers" could not be resolved
+  Line 15:6 [error]: Import "sqlalchemy" could not be resolved
+  Line 16:6 [error]: Import "sqlalchemy.ext.asyncio" could not be resolved
+
+/workspace/ingest/templates.py (6 violations)
+------------------------------
+  Line 10:8 [error]: Import "openai" could not be resolved
+  Line 11:6 [error]: Import "dotenv" could not be resolved
+  Line 12:6 [error]: Import "qdrant_client" could not be resolved
+  Line 13:6 [error]: Import "sentence_transformers" could not be resolved
+  Line 14:6 [error]: Import "sqlalchemy" could not be resolved
+  Line 15:6 [error]: Import "sqlalchemy.ext.asyncio" could not be resolved
+
+/workspace/ingest/templates_preprocess.py (3 violations)
+-----------------------------------------
+  Line 1:8 [error]: Import "fitz" could not be resolved
+  Line 3:8 [error]: Import "openai" could not be resolved
+  Line 11:6 [error]: Import "pydantic" could not be resolved
+
+/workspace/init_database.py (1 violations)
+---------------------------
+  Line 15:6 [error]: Import "sqlmodel" could not be resolved
+
+/workspace/test_celery_refactor.py (1 violations)
+----------------------------------
+  Line 95:10 [error]: Import "celery" could not be resolved
+
+/workspace/test_openai_implementation.py (1 violations)
+----------------------------------------
+  Line 8:6 [error]: Import "pydantic" could not be resolved
+
+/workspace/tests/celery/conftest.py (1 violations)
+-----------------------------------
+  Line 1:8 [error]: Import "pytest" could not be resolved
+
+/workspace/tests/celery/test_celery_integration.py (2 violations)
+--------------------------------------------------
+  Line 2:8 [error]: Import "pytest" could not be resolved
+  Line 24:6 [error]: Import "celery.result" could not be resolved
+
+/workspace/tests/celery/test_celery_tasks.py (1 violations)
+--------------------------------------------
+  Line 1:8 [error]: Import "pytest" could not be resolved
+
+/workspace/tests/conftest.py (2 violations)
+----------------------------
   Line 5:12 [error]: Import "pytest" could not be resolved
+  Line 79:10 [error]: Import "qdrant_client" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py (1 violations)
-------------------------------------------------------------------
+/workspace/tests/fixtures/legal_documents/test_data_loader.py (1 violations)
+-------------------------------------------------------------
+  Line 8:6 [error]: Import "app.models.pipeline_schemas" could not be resolved
+
+/workspace/tests/integration/conftest.py (6 violations)
+----------------------------------------
   Line 2:12 [error]: Import "pytest" could not be resolved
+  Line 11:12 [error]: Import "asyncpg" could not be resolved
+  Line 12:10 [error]: Import "qdrant_client" could not be resolved
+  Line 13:10 [error]: Import "qdrant_client.models" could not be resolved
+  Line 14:12 [error]: Import "redis.asyncio" could not be resolved
+  Line 36:14 [error]: Import "dotenv" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py (1 violations)
-------------------------------------------------------------------
+/workspace/tests/integration/test_ai_functionality.py (4 violations)
+-----------------------------------------------------
+  Line 7:8 [error]: Import "pytest" could not be resolved
+  Line 12:6 [error]: Import "app.models.pipeline_schemas" could not be resolved
+  Line 62:16 [error]: Import "numpy" could not be resolved
+  Line 319:14 [error]: Import "app.models.pipeline_schemas" could not be resolved
+
+/workspace/tests/integration/test_api.py (2 violations)
+----------------------------------------
   Line 2:8 [error]: Import "pytest" could not be resolved
+  Line 20:6 [error]: Import "sqlalchemy" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_conversation_manager.py (1 violations)
------------------------------------------------------------------------------------
+/workspace/tests/integration/test_conversation_manager.py (3 violations)
+---------------------------------------------------------
   Line 4:8 [error]: Import "pytest" could not be resolved
+  Line 9:8 [error]: Import "redis.asyncio" could not be resolved
+  Line 10:6 [error]: Import "sqlalchemy" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_database_manager.py (1 violations)
--------------------------------------------------------------------------------
+/workspace/tests/integration/test_database_manager.py (8 violations)
+-----------------------------------------------------
   Line 4:8 [error]: Import "pytest" could not be resolved
+  Line 8:6 [error]: Import "sqlalchemy.ext.asyncio" could not be resolved
+  Line 9:6 [error]: Import "sqlalchemy.exc" could not be resolved
+  Line 10:6 [error]: Import "sqlalchemy.pool" could not be resolved
+  Line 64:18 [error]: Import "sqlalchemy" could not be resolved
+  Line 164:18 [error]: Import "sqlalchemy" could not be resolved
+  Line 234:18 [error]: Import "sqlalchemy" could not be resolved
+  Line 369:22 [error]: Import "sqlalchemy" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py (1 violations)
---------------------------------------------------------------------------
+/workspace/tests/integration/test_embedding_pipeline.py (2 violations)
+-------------------------------------------------------
+  Line 6:8 [error]: Import "pytest" could not be resolved
+  Line 7:8 [error]: Import "numpy" could not be resolved
+
+/workspace/tests/integration/test_integration.py (2 violations)
+------------------------------------------------
   Line 5:8 [error]: Import "pytest" could not be resolved
+  Line 24:6 [error]: Import "openai.types.responses" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py (1 violations)
--------------------------------------------------------------------------------------
-  Line 5:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_migration.py (1 violations)
-------------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py (1 violations)
-----------------------------------------------------------------------------------
-  Line 5:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming.py (1 violations)
-------------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py (1 violations)
---------------------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/conftest.py (1 violations)
+/workspace/tests/integration/test_integration_refactored.py (1 violations)
 -----------------------------------------------------------
+  Line 5:8 [error]: Import "pytest" could not be resolved
+
+/workspace/tests/integration/test_migration.py (1 violations)
+----------------------------------------------
+  Line 2:8 [error]: Import "pytest" could not be resolved
+
+/workspace/tests/integration/test_openai_integration.py (2 violations)
+-------------------------------------------------------
+  Line 7:8 [error]: Import "pytest" could not be resolved
+  Line 9:6 [error]: Import "pydantic" could not be resolved
+
+/workspace/tests/integration/test_refactored_services.py (1 violations)
+--------------------------------------------------------
+  Line 5:8 [error]: Import "pytest" could not be resolved
+
+/workspace/tests/integration/test_streaming.py (1 violations)
+----------------------------------------------
+  Line 2:8 [error]: Import "pytest" could not be resolved
+
+/workspace/tests/integration/test_streaming_handler.py (2 violations)
+------------------------------------------------------
+  Line 4:8 [error]: Import "pytest" could not be resolved
+  Line 13:6 [error]: Import "openai.types.responses" could not be resolved
+
+/workspace/tests/unit/conftest.py (1 violations)
+---------------------------------
   Line 2:12 [error]: Import "pytest" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py (1 violations)
------------------------------------------------------------------
+/workspace/tests/unit/test_agent_sdk.py (1 violations)
+---------------------------------------
   Line 2:8 [error]: Import "pytest" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_performance_utils.py (1 violations)
--------------------------------------------------------------------------
+/workspace/tests/unit/test_llm_manager.py (2 violations)
+-----------------------------------------
+  Line 6:8 [error]: Import "pytest" could not be resolved
+  Line 7:8 [error]: Import "numpy" could not be resolved
+
+/workspace/tests/unit/test_openai_integration.py (3 violations)
+------------------------------------------------
+  Line 5:8 [error]: Import "pytest" could not be resolved
+  Line 8:6 [error]: Import "openai" could not be resolved
+  Line 10:6 [error]: Import "app.models.pipeline_schemas" could not be resolved
+
+/workspace/tests/unit/test_openai_service.py (2 violations)
+--------------------------------------------
+  Line 6:8 [error]: Import "pytest" could not be resolved
+  Line 8:6 [error]: Import "pydantic" could not be resolved
+
+/workspace/tests/unit/test_performance_utils.py (1 violations)
+-----------------------------------------------
   Line 4:8 [error]: Import "pytest" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_registration_key.py (1 violations)
-------------------------------------------------------------------------
+/workspace/tests/unit/test_registration_key.py (1 violations)
+----------------------------------------------
   Line 2:8 [error]: Import "pytest" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_executor.py (1 violations)
----------------------------------------------------------------------
+/workspace/tests/unit/test_tool_executor.py (1 violations)
+-------------------------------------------
   Line 4:8 [error]: Import "pytest" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_registry.py (1 violations)
----------------------------------------------------------------------
+/workspace/tests/unit/test_tool_registry.py (1 violations)
+-------------------------------------------
   Line 4:8 [error]: Import "pytest" could not be resolved

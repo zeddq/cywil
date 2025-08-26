@@ -1,52 +1,11 @@
 Pyright Diagnostic Report: reportArgumentType
 ================================================================================
 
-Total violations: 35
+Total violations: 14
 
 
-/Volumes/code/cywil/ai-paralegal-poc/app/repositories/case_repository.py (1 violations)
-------------------------------------------------------------------------
-  Line 65:34 [error]: Argument of type "bool" cannot be assigned to parameter "onclause" of type "_OnClauseArgument | None" in function "join"
-  Type "bool" is not assignable to type "_OnClauseArgument | None"
-    "bool" is not assignable to "ColumnElement[Any]"
-    "bool" is incompatible with protocol "_HasClauseElement[Any]"
-      "__clause_element__" is not present
-    "bool" is not assignable to "SQLCoreOperations[Any]"
-    "bool" is not assignable to "ExpressionElementRole[Any]"
-    "bool" is not assignable to "TypedColumnsClauseRole[Any]"
-    Type "bool" is not assignable to type "() -> ColumnElement[Any]"
-  ...
-
-/Volumes/code/cywil/ai-paralegal-poc/app/services/optimized_statute_search.py (1 violations)
------------------------------------------------------------------------------
-  Line 110:44 [error]: Argument of type "list[Condition | tuple[str, Any]]" cannot be assigned to parameter "must" of type "Condition | List[Condition] | None" in function "__init__"
-  Type "list[Condition | tuple[str, Any]]" is not assignable to type "Condition | List[Condition] | None"
-    "list[Condition | tuple[str, Any]]" is not assignable to "List[Condition]"
-      Type parameter "_T@list" is invariant, but "Condition | tuple[str, Any]" is not the same as "Condition"
-      Consider switching from "list" to "Sequence" which is covariant
-    "list[Condition | tuple[str, Any]]" is not assignable to "FieldCondition"
-    "list[Condition | tuple[str, Any]]" is not assignable to "IsEmptyCondition"
-    "list[Condition | tuple[str, Any]]" is not assignable to "IsNullCondition"
-    "list[Condition | tuple[str, Any]]" is not assignable to "HasIdCondition"
-  ...
-
-/Volumes/code/cywil/ai-paralegal-poc/app/task_processors.py (1 violations)
------------------------------------------------------------
-  Line 247:61 [error]: Argument of type "str | None" cannot be assigned to parameter "file_path" of type "str" in function "_read_document_content"
-  Type "str | None" is not assignable to type "str"
-    "None" is not assignable to "str"
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/base_task.py (1 violations)
-------------------------------------------------------------
-  Line 360:39 [error]: Argument of type "ResponseT | str" cannot be assigned to parameter "s" of type "str | bytes | bytearray" in function "loads"
-  Type "ResponseT | str" is not assignable to type "str | bytes | bytearray"
-    Type "Awaitable[Any]" is not assignable to type "str | bytes | bytearray"
-      "Awaitable[Any]" is not assignable to "str"
-      "Awaitable[Any]" is not assignable to "bytes"
-      "Awaitable[Any]" is not assignable to "bytearray"
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/pdf2chunks.py (4 violations)
--------------------------------------------------------------------
+/workspace/app/worker/tasks/pdf2chunks.py (4 violations)
+-----------------------------------------
   Line 158:59 [error]: Argument of type "Match[str] | None" cannot be assigned to parameter "text" of type "str" in function "_match_hierarchy_element"
   Type "Match[str] | None" is not assignable to type "str"
     "Match[str]" is not assignable to "str"
@@ -59,11 +18,9 @@ Total violations: 35
   Type "str | None" is not assignable to type "str"
     "None" is not assignable to "str"
 
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (3 violations)
--------------------------------------------------------------------------
-  Line 510:49 [error]: Argument of type "Ruling" cannot be assigned to parameter "ruling" of type "ParsedRuling" in function "enhance_entities_with_o3"
-  "Ruling" is not assignable to "ParsedRuling"
-  Line 617:19 [error]: Argument of type "Path | None" cannot be assigned to parameter "file" of type "FileDescriptorOrPath" in function "open"
+/workspace/app/worker/tasks/preprocess_sn_o3.py (2 violations)
+-----------------------------------------------
+  Line 589:19 [error]: Argument of type "Path | None" cannot be assigned to parameter "file" of type "FileDescriptorOrPath" in function "open"
   Type "Path | None" is not assignable to type "FileDescriptorOrPath"
     Type "None" is not assignable to type "FileDescriptorOrPath"
       "None" is not assignable to "int"
@@ -73,32 +30,13 @@ Total violations: 35
         "__fspath__" is not present
       "None" is incompatible with protocol "PathLike[bytes]"
   ...
-  Line 830:66 [error]: Argument of type "list[List[Dict[str, Any]] | None]" cannot be assigned to parameter "records" of type "List[Dict[str, Any]]" in function "validate_output"
+  Line 802:66 [error]: Argument of type "list[List[Dict[str, Any]] | None]" cannot be assigned to parameter "records" of type "List[Dict[str, Any]]" in function "validate_output"
   "list[List[Dict[str, Any]] | None]" is not assignable to "List[Dict[str, Any]]"
     Type parameter "_T@list" is invariant, but "List[Dict[str, Any]] | None" is not the same as "Dict[str, Any]"
     Consider switching from "list" to "Sequence" which is covariant
 
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/sn.py (3 violations)
------------------------------------------------------------
-  Line 94:62 [error]: Argument of type "bool" cannot be assigned to parameter "whereclause" of type "_ColumnExpressionArgument[bool]" in function "where"
-  Type "bool" is not assignable to type "_ColumnExpressionArgument[bool]"
-    "bool" is not assignable to "ColumnElement[bool]"
-    "bool" is incompatible with protocol "_HasClauseElement[bool]"
-      "__clause_element__" is not present
-    "bool" is not assignable to "SQLCoreOperations[bool]"
-    "bool" is not assignable to "ExpressionElementRole[bool]"
-    "bool" is not assignable to "TypedColumnsClauseRole[bool]"
-    Type "bool" is not assignable to type "() -> ColumnElement[bool]"
-  ...
-  Line 220:22 [error]: Argument of type "int | None" cannot be assigned to parameter "size" of type "int" in function "__init__"
-  Type "int | None" is not assignable to type "int"
-    "None" is not assignable to "int"
-  Line 233:22 [error]: Argument of type "int | None" cannot be assigned to parameter "size" of type "int" in function "__init__"
-  Type "int | None" is not assignable to type "int"
-    "None" is not assignable to "int"
-
-/Volumes/code/cywil/ai-paralegal-poc/ingest/pdf2chunks.py (4 violations)
----------------------------------------------------------
+/workspace/ingest/pdf2chunks.py (4 violations)
+-------------------------------
   Line 147:106 [error]: Argument of type "Match[str] | None" cannot be assigned to parameter "text" of type "str" in function "_match_hierarchy_element"
   Type "Match[str] | None" is not assignable to type "str"
     "Match[str]" is not assignable to "str"
@@ -111,9 +49,9 @@ Total violations: 35
   Type "str | None" is not assignable to type "str"
     "None" is not assignable to "str"
 
-/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py (3 violations)
----------------------------------------------------------------
-  Line 536:19 [error]: Argument of type "Path | None" cannot be assigned to parameter "file" of type "FileDescriptorOrPath" in function "open"
+/workspace/ingest/preprocess_sn_o3.py (3 violations)
+-------------------------------------
+  Line 526:19 [error]: Argument of type "Path | None" cannot be assigned to parameter "file" of type "FileDescriptorOrPath" in function "open"
   Type "Path | None" is not assignable to type "FileDescriptorOrPath"
     Type "None" is not assignable to type "FileDescriptorOrPath"
       "None" is not assignable to "int"
@@ -123,7 +61,7 @@ Total violations: 35
         "__fspath__" is not present
       "None" is incompatible with protocol "PathLike[bytes]"
   ...
-  Line 562:19 [error]: Argument of type "Path | None" cannot be assigned to parameter "file" of type "FileDescriptorOrPath" in function "open"
+  Line 552:19 [error]: Argument of type "Path | None" cannot be assigned to parameter "file" of type "FileDescriptorOrPath" in function "open"
   Type "Path | None" is not assignable to type "FileDescriptorOrPath"
     Type "None" is not assignable to type "FileDescriptorOrPath"
       "None" is not assignable to "int"
@@ -133,108 +71,16 @@ Total violations: 35
         "__fspath__" is not present
       "None" is incompatible with protocol "PathLike[bytes]"
   ...
-  Line 765:66 [error]: Argument of type "list[List[Dict[str, Any]] | None]" cannot be assigned to parameter "records" of type "List[Dict[str, Any]]" in function "validate_output"
+  Line 755:66 [error]: Argument of type "list[List[Dict[str, Any]] | None]" cannot be assigned to parameter "records" of type "List[Dict[str, Any]]" in function "validate_output"
   "list[List[Dict[str, Any]] | None]" is not assignable to "List[Dict[str, Any]]"
     Type parameter "_T@list" is invariant, but "List[Dict[str, Any]] | None" is not the same as "Dict[str, Any]"
     Consider switching from "list" to "Sequence" which is covariant
 
-/Volumes/code/cywil/ai-paralegal-poc/ingest/sn.py (3 violations)
--------------------------------------------------
-  Line 95:62 [error]: Argument of type "bool" cannot be assigned to parameter "whereclause" of type "_ColumnExpressionArgument[bool]" in function "where"
-  Type "bool" is not assignable to type "_ColumnExpressionArgument[bool]"
-    "bool" is not assignable to "ColumnElement[bool]"
-    "bool" is incompatible with protocol "_HasClauseElement[bool]"
-      "__clause_element__" is not present
-    "bool" is not assignable to "SQLCoreOperations[bool]"
-    "bool" is not assignable to "ExpressionElementRole[bool]"
-    "bool" is not assignable to "TypedColumnsClauseRole[bool]"
-    Type "bool" is not assignable to type "() -> ColumnElement[bool]"
-  ...
-  Line 210:53 [error]: Argument of type "int | None" cannot be assigned to parameter "size" of type "int" in function "__init__"
-  Type "int | None" is not assignable to type "int"
-    "None" is not assignable to "int"
-  Line 222:53 [error]: Argument of type "int | None" cannot be assigned to parameter "size" of type "int" in function "__init__"
-  Type "int | None" is not assignable to type "int"
-    "None" is not assignable to "int"
-
-/Volumes/code/cywil/ai-paralegal-poc/ingest/templates.py (3 violations)
---------------------------------------------------------
-  Line 100:66 [error]: Argument of type "Any | bool" cannot be assigned to parameter "whereclause" of type "_ColumnExpressionArgument[bool]" in function "where"
-  Type "Any | bool" is not assignable to type "_ColumnExpressionArgument[bool]"
-    Type "bool" is not assignable to type "_ColumnExpressionArgument[bool]"
-      "bool" is not assignable to "ColumnElement[bool]"
-      "bool" is incompatible with protocol "_HasClauseElement[bool]"
-        "__clause_element__" is not present
-      "bool" is not assignable to "SQLCoreOperations[bool]"
-      "bool" is not assignable to "ExpressionElementRole[bool]"
-      "bool" is not assignable to "TypedColumnsClauseRole[bool]"
-  ...
-  Line 136:30 [error]: Argument of type "Literal['keyword']" cannot be assigned to parameter "field_schema" of type "qdrant_client.conversions.common_types.PayloadSchemaType | None" in function "create_payload_index"
-  Type "Literal['keyword']" is not assignable to type "qdrant_client.conversions.common_types.PayloadSchemaType | None"
-    "Literal['keyword']" is not assignable to "PayloadSchemaType"
-    "Literal['keyword']" is not assignable to "KeywordIndexParams"
-    "Literal['keyword']" is not assignable to "IntegerIndexParams"
-    "Literal['keyword']" is not assignable to "FloatIndexParams"
-    "Literal['keyword']" is not assignable to "GeoIndexParams"
-    "Literal['keyword']" is not assignable to "TextIndexParams"
-    "Literal['keyword']" is not assignable to "BoolIndexParams"
-  ...
-  Line 167:53 [error]: Argument of type "int | None" cannot be assigned to parameter "size" of type "int" in function "__init__"
-  Type "int | None" is not assignable to type "int"
-    "None" is not assignable to "int"
-
-/Volumes/code/cywil/ai-paralegal-poc/ingest/templates_preprocess.py (1 violations)
--------------------------------------------------------------------
-  Line 86:35 [error]: Argument of type "(t: Unknown = text) -> CoroutineType[Any, Any, Template | None]" cannot be assigned to parameter "object" of type "() -> Coroutine[Any, Any, Template]" in function "append"
-  Type "(t: Unknown = text) -> CoroutineType[Any, Any, Template | None]" is not assignable to type "() -> Coroutine[Any, Any, Template]"
-    Function return type "CoroutineType[Any, Any, Template | None]" is incompatible with type "Coroutine[Any, Any, Template]"
-      "CoroutineType[Any, Any, Template | None]" is not assignable to "Coroutine[Any, Any, Template]"
-        Type parameter "_ReturnT_nd_co@Coroutine" is covariant, but "Template | None" is not a subtype of "Template"
-          Type "Template | None" is not assignable to type "Template"
-
-/Volumes/code/cywil/ai-paralegal-poc/init_database.py (2 violations)
------------------------------------------------------
-  Line 50:17 [error]: Argument of type "Literal['\n                SELECT tablename FROM pg_tables \n…']" cannot be assigned to parameter "statement" of type "Executable" in function "execute"
-  "Literal['\n                SELECT tablename FROM pg_tables \n…']" is not assignable to "Executable"
-  Line 78:17 [error]: Argument of type "Literal['\n                SELECT tablename FROM pg_tables \n…']" cannot be assigned to parameter "statement" of type "Executable" in function "execute"
-  "Literal['\n                SELECT tablename FROM pg_tables \n…']" is not assignable to "Executable"
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py (3 violations)
-------------------------------------------------------------------
-  Line 138:29 [error]: Argument of type "bool" cannot be assigned to parameter "onclause" of type "_OnClauseArgument | None" in function "join"
-  Type "bool" is not assignable to type "_OnClauseArgument | None"
-    "bool" is not assignable to "ColumnElement[Any]"
-    "bool" is incompatible with protocol "_HasClauseElement[Any]"
-      "__clause_element__" is not present
-    "bool" is not assignable to "SQLCoreOperations[Any]"
-    "bool" is not assignable to "ExpressionElementRole[Any]"
-    "bool" is not assignable to "TypedColumnsClauseRole[Any]"
-    Type "bool" is not assignable to type "() -> ColumnElement[Any]"
-  ...
-  Line 139:24 [error]: Argument of type "bool" cannot be assigned to parameter "whereclause" of type "_ColumnExpressionArgument[bool]" in function "where"
-  Type "bool" is not assignable to type "_ColumnExpressionArgument[bool]"
-    "bool" is not assignable to "ColumnElement[bool]"
-    "bool" is incompatible with protocol "_HasClauseElement[bool]"
-      "__clause_element__" is not present
-    "bool" is not assignable to "SQLCoreOperations[bool]"
-    "bool" is not assignable to "ExpressionElementRole[bool]"
-    "bool" is not assignable to "TypedColumnsClauseRole[bool]"
-    Type "bool" is not assignable to type "() -> ColumnElement[bool]"
-  ...
-  Line 140:32 [error]: Argument of type "datetime | None" cannot be assigned to parameter "column" of type "_ColumnExpressionOrStrLabelArgument[_T@desc]" in function "desc"
-  Type "datetime | None" is not assignable to type "_ColumnExpressionOrStrLabelArgument[_T@desc]"
-    Type "datetime" is not assignable to type "_ColumnExpressionOrStrLabelArgument[_T@desc]"
-      "datetime" is not assignable to "LambdaElement"
-      "datetime" is not assignable to "str"
-      "datetime" is not assignable to "ColumnElement[_T@desc]"
-      "datetime" is not assignable to "ExpressionElementRole[_T@desc]"
-      "datetime" is not assignable to "SQLCoreOperations[_T@desc]"
-      "datetime" is not assignable to "TypedColumnsClauseRole[_T@desc]"
-  ...
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_database_manager.py (2 violations)
--------------------------------------------------------------------------------
-  Line 138:95 [error]: Argument of type "None" cannot be assigned to parameter "orig" of type "BaseException" in function "__init__"
-  "None" is not assignable to "BaseException"
-  Line 337:96 [error]: Argument of type "None" cannot be assigned to parameter "orig" of type "BaseException" in function "__init__"
-  "None" is not assignable to "BaseException"
+/workspace/ingest/templates_preprocess.py (1 violations)
+-----------------------------------------
+  Line 86:35 [error]: Argument of type "(t: Unknown = text) -> CoroutineType[Any, Any, Unknown | None]" cannot be assigned to parameter "object" of type "() -> Coroutine[Any, Any, Template]" in function "append"
+  Type "(t: Unknown = text) -> CoroutineType[Any, Any, Unknown | None]" is not assignable to type "() -> Coroutine[Any, Any, Template]"
+    Function return type "CoroutineType[Any, Any, Unknown | None]" is incompatible with type "Coroutine[Any, Any, Template]"
+      "CoroutineType[Any, Any, Unknown | None]" is not assignable to "Coroutine[Any, Any, Template]"
+        Type parameter "_ReturnT_nd_co@Coroutine" is covariant, but "Unknown | None" is not a subtype of "Template"
+          Type "Unknown | None" is not assignable to type "Template"

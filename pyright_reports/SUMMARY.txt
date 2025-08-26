@@ -1,14 +1,19 @@
 Pyright Diagnostics Summary
 ================================================================================
 
-Total rules with violations: 6
-Total violations: 197
+Total rules with violations: 11
+Total violations: 426
 
 Violations by Rule:
 --------------------------------------------------
-reportAttributeAccessIssue                     81 violations
-reportArgumentType                             35 violations
-reportCallIssue                                31 violations
-reportOptionalMemberAccess                     28 violations
-reportMissingImports                           20 violations
-unknown                                         2 violations
+reportMissingImports                          228 violations
+reportAttributeAccessIssue                     72 violations
+reportCallIssue                                33 violations
+reportOptionalMemberAccess                     32 violations
+reportMissingModuleSource                      18 violations
+reportUndefinedVariable                        15 violations
+reportArgumentType                             14 violations
+reportGeneralTypeIssues                        10 violations
+reportOptionalCall                              2 violations
+unknown                                         1 violations
+reportUnboundVariable                           1 violations
