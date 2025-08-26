@@ -213,6 +213,8 @@ async def main():
     except Exception:
         print(f"Creating Qdrant collection '{QDRANT_COLLECTION_NAME}'...")
         embedding_size = embedding_model.get_sentence_embedding_dimension()
+        if embedding_size is None:
+            raise ValueError("Could not determine embedding dimension")
         await qdrant_client.recreate_collection(
             collection_name=QDRANT_COLLECTION_NAME,
             vectors_config=models.VectorParams(
@@ -226,6 +228,8 @@ async def main():
     if args.force:
         await qdrant_client.delete_collection(collection_name=QDRANT_COLLECTION_NAME)
         embedding_size = embedding_model.get_sentence_embedding_dimension()
+        if embedding_size is None:
+            raise ValueError("Could not determine embedding dimension")
         await qdrant_client.recreate_collection(
             collection_name=QDRANT_COLLECTION_NAME,
             vectors_config=models.VectorParams(

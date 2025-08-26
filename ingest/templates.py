@@ -133,7 +133,7 @@ async def process_template_file(file_path: Path, session: AsyncSession):
             qdrant_client.create_payload_index(
                 collection_name=QDRANT_COLLECTION_NAME,
                 field_name=field,
-                field_schema="keyword"
+                field_schema=models.KeywordIndexParams()
             )
             print(f"Created index for field: {field}")
         except Exception as e:
@@ -162,6 +162,8 @@ async def main():
     except Exception:
         print(f"Creating Qdrant collection '{QDRANT_COLLECTION_NAME}'...")
         embedding_size = embedding_model.get_sentence_embedding_dimension()
+        if embedding_size is None:
+            raise ValueError("Could not determine embedding dimension")
         qdrant_client.recreate_collection(
             collection_name=QDRANT_COLLECTION_NAME,
             vectors_config=models.VectorParams(size=embedding_size, distance=models.Distance.COSINE),

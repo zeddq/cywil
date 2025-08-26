@@ -23,7 +23,7 @@ class DocumentType(str, Enum):
 
 class RawDocument(BaseModel):
     """Input document for processing pipeline."""
-    id: str = Field(..., regex="^[A-Z0-9-]+$", description="Unique document identifier")
+    id: str = Field(..., pattern="^[A-Z0-9-]+$", description="Unique document identifier")
     content: str = Field(..., min_length=10, max_length=1000000, description="Document text content")
     document_type: DocumentType = Field(..., description="Type of document being processed")
     source_path: str = Field(..., description="Path to original source file")
@@ -73,8 +73,8 @@ class EmbeddedChunk(ProcessedChunk):
     """Chunk with embedding vector."""
     embedding: List[float] = Field(
         ..., 
-        min_items=384, 
-        max_items=1536,
+        min_length=384, 
+        max_length=1536,
         description="Vector embedding of the chunk content"
     )
     embedding_model: str = Field(..., description="Name of the embedding model used")
@@ -100,7 +100,7 @@ class LegalExtraction(BaseModel):
     """Extracted legal information from documents."""
     case_number: Optional[str] = Field(
         None, 
-        regex=r"^[IVX]+ [A-Z]+ \d+/\d+$",
+        pattern=r"^[IVX]+ [A-Z]+ \d+/\d+$",
         description="Polish court case number format"
     )
     court: Optional[str] = Field(None, description="Court name")

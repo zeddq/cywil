@@ -180,8 +180,9 @@ def cleanup_statute_data(code_type: Optional[str] = None) -> Dict[str, Any]:
         service = None
 
         try:
-            service = services.statute_ingestion
-            await service.initialize()
+            # TODO: Use statute ingestion service when available
+            # service = services.statute_ingestion
+            # await service.initialize()
 
             # This would need implementation in StatuteIngestionService
             # For now, return a placeholder

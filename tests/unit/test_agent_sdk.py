@@ -9,13 +9,12 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app.paralegal_agents import ParalegalAgentSDK
-# Tool wrappers removed during refactoring
-# from app.paralegal_agents.tool_wrappers import (
-#     search_sn_rulings_tool,
-#     search_statute_tool,
-#     SearchSNRulingsParams,
-#     SearchStatuteParams,
-# )
+from app.paralegal_agents.tool_wrappers import (
+    search_sn_rulings_tool,
+    search_statute_tool,
+    SearchSNRulingsParams,
+    SearchStatuteParams,
+)
 
 
 @pytest.mark.asyncio
@@ -39,15 +38,53 @@ async def test_agent_initialization():
 @pytest.mark.asyncio
 async def test_search_sn_rulings_tool():
     """Test the Supreme Court rulings search tool wrapper."""
-    # Tool wrappers removed during refactoring - test disabled
-    pass
+    # Mock the service
+    with patch('app.agents.tool_wrappers.inject_service') as mock_inject:
+        mock_service = MagicMock()
+        mock_service.search_sn_rulings = AsyncMock(return_value=[])
+        mock_inject.return_value = mock_service
+        
+        params = SearchSNRulingsParams(
+            query="wyrok o odszkodowaniu",
+            top_k=3
+        )
+        
+        result = await search_sn_rulings_tool(params)
+        
+        assert isinstance(result, str)
+        assert "[]" in result  # Empty list as JSON
+        mock_service.search_sn_rulings.assert_called_once_with(
+            query="wyrok o odszkodowaniu",
+            top_k=3,
+            filters=None
+        )
 
 
 @pytest.mark.asyncio
 async def test_search_statute_tool():
     """Test the statute search tool wrapper."""
-    # Tool wrappers removed during refactoring - test disabled
-    pass
+    with patch('app.agents.tool_wrappers.inject_service') as mock_inject:
+        mock_service = MagicMock()
+        mock_service.search_statute = AsyncMock(return_value=[
+            {
+                "article": "415",
+                "code": "KC",
+                "text": "Kto z winy swej wyrządził drugiemu szkodę...",
+                "citation": "art. 415 KC"
+            }
+        ])
+        mock_inject.return_value = mock_service
+        
+        params = SearchStatuteParams(
+            query="odpowiedzialność deliktowa",
+            code="KC"
+        )
+        
+        result = await search_statute_tool(params)
+        
+        assert isinstance(result, str)
+        assert "415" in result
+        assert "KC" in result
 
 
 @pytest.mark.asyncio

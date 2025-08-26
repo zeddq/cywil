@@ -4,12 +4,16 @@
     "reportAttributeAccessIssue":"information",
     "executionEnvironments": [
       {
-        "root": ".",          // everything under tests/*
-        "venv": ".venv-tests"     // resolve imports using .venv-tests
+        "root": "tests",
+        "venv": ".venv-tests"
       },
       {
         "root": "app",
-        "venv": ".venv"           // resolve imports using .venv
+        "venv": ".venv"
+      },
+      {
+        "root": ".",
+        "venv": ".venv"
       }
     ]
   }

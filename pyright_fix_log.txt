@@ -1,0 +1,29 @@
+Pyright Unknown Issues Fix Log
+====================================
+
+Date: 2025-08-26
+Report File: pyright_reports/unknown.txt
+
+Issues Found:
+1. /Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py (Line 384:29)
+   - Error: "Statements must be separated by newlines or semicolons"
+   - Root Cause: Missing newline between `continue` statement and `formatted_results.append({`
+
+Fixes Applied:
+1. ingest/embed.py (Line 384):
+   - Added proper newline after `continue` statement
+   - Moved `formatted_results.append({` to its own line with proper indentation
+   - This ensures Python syntax compliance for statement separation
+
+Verification:
+- Ran pyright on ingest/embed.py after fix
+- Confirmed the "Statements must be separated by newlines or semicolons" error is resolved
+- No remaining "unknown" category errors found
+- Other errors present are different issues not covered by the unknown.txt report
+
+Files Modified:
+- /Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py
+
+Summary:
+Successfully fixed 1 unknown category linter issue by adding proper statement separation.
+The file now follows Python syntax rules for statement termination.

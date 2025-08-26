@@ -7,7 +7,7 @@ import re
 from typing import Any, Dict, List, Tuple
 from pydantic import ValidationError
 
-from app.models.pipeline_schemas import (
+from app.embedding_models.pipeline_schemas import (
     RawDocument,
     ProcessedChunk,
     EmbeddedChunk,

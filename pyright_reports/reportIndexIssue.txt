@@ -1,0 +1,15 @@
+Pyright Diagnostic Report: reportIndexIssue
+================================================================================
+
+Total violations: 7
+
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (7 violations)
+-------------------------------------------------------------------------
+  Line 404:28 [error]: "__getitem__" method not defined on type "RulingParagraph"
+  Line 405:28 [error]: "__getitem__" method not defined on type "RulingParagraph"
+  Line 406:25 [error]: "__getitem__" method not defined on type "RulingParagraph"
+  Line 415:28 [error]: "__getitem__" method not defined on type "RulingParagraph"
+  Line 416:28 [error]: "__getitem__" method not defined on type "RulingParagraph"
+  Line 417:25 [error]: "__getitem__" method not defined on type "RulingParagraph"
+  Line 418:52 [error]: "__getitem__" method not defined on type "RulingParagraph"

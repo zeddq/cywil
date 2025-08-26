@@ -7,7 +7,7 @@ from unittest.mock import Mock, AsyncMock, patch
 import json
 from openai import AsyncOpenAI, APIError, RateLimitError, APITimeoutError
 
-from app.models.pipeline_schemas import (
+from app.embedding_models.pipeline_schemas import (
     RawDocument,
     LegalExtraction,
     FallbackResult,
@@ -120,7 +120,9 @@ class TestOpenAIIntegration:
     @pytest.mark.asyncio
     async def test_timeout_handling(self, mock_openai_client, sample_legal_document):
         """Test handling of API timeout errors."""
-        mock_openai_client.chat.completions.create.side_effect = APITimeoutError("Request timeout")
+        from unittest.mock import Mock
+        mock_request = Mock()
+        mock_openai_client.chat.completions.create.side_effect = APITimeoutError(request=mock_request)
         
         result = await self._extract_with_fallback(
             mock_openai_client,
@@ -233,7 +235,7 @@ class TestOpenAIIntegration:
         })
         
         mock_openai_client.chat.completions.create.side_effect = [
-            APITimeoutError("Timeout"),  # First call fails
+            APITimeoutError(request=Mock()),  # First call fails
             valid_response  # Second call succeeds
         ]
         

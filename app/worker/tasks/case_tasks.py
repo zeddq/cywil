@@ -6,6 +6,9 @@ import asyncio
 from datetime import datetime
 from typing import Any, Dict, Optional
 
+from sqlalchemy import or_, select
+from sqlalchemy.orm import selectinload
+
 from app.core.logger_manager import get_logger
 from app.models import Case, Document
 from app.worker.celery_app import celery_app
@@ -50,7 +53,7 @@ def create_case(self, case_data: Dict[str, Any], user_id: str) -> Dict[str, Any]
 
             # Create case object
             case = Case(**case_data)
-            case.user_id = user_id
+            case.created_by_id = user_id
             case.created_at = datetime.utcnow()
             case.updated_at = datetime.utcnow()
 
@@ -172,7 +175,6 @@ def add_document_to_case(
                 # Create document
                 document = Document(**document_data)
                 document.case_id = case_id
-                document.uploaded_by = user_id
                 document.created_at = datetime.utcnow()
                 document.updated_at = datetime.utcnow()
 
@@ -225,7 +227,7 @@ def search_cases(
             async with db_manager.get_session() as session:
 
                 # Base query
-                stmt = select(Case).where(Case.user_id == user_id)  # type: ignore
+                stmt = select(Case).where(Case.created_by_id == user_id)  # type: ignore
 
                 # Add text search
                 if query:
@@ -382,8 +384,6 @@ def generate_case_summary(self, case_id: str, user_id: str) -> Dict[str, Any]:
         try:
 
             async with db_manager.get_session() as session:
-                from sqlalchemy import select
-                from sqlalchemy.orm import selectinload
 
                 # Fetch case with related data
                 stmt = (

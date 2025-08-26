@@ -1,0 +1,9 @@
+Pyright Diagnostic Report: reportGeneralTypeIssues
+================================================================================
+
+Total violations: 1
+
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/statute_tasks.py (1 violations)
+----------------------------------------------------------------------
+  Line 199:23 [error]: "Never" is not awaitable

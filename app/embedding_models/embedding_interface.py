@@ -66,13 +66,19 @@ class LocalEmbedder(EmbeddingModel):
         batch_size: int = 32
     ) -> np.ndarray:
         """Generate embeddings for text batch with async support."""
+
         await self._ensure_model_loaded()
+
+        def _embedding_function():
+            if self._model is None:
+                raise RuntimeError("Model not initialized")
+            return self._model.encode(texts, batch_size=batch_size, convert_to_numpy=True)
         
         # Run CPU-intensive operation in thread pool
         loop = asyncio.get_event_loop()
         embeddings = await loop.run_in_executor(
             None, 
-            lambda: self._model.encode(texts, batch_size=batch_size, convert_to_numpy=True)
+            _embedding_function
         )
         return embeddings
     
@@ -86,8 +92,14 @@ class LocalEmbedder(EmbeddingModel):
         if self._dimension is None:
             if self._model is None:
                 # Default dimension for multilingual-mpnet-base-v2
-                return 768
-            self._dimension = self._model.get_sentence_embedding_dimension()
+                self._dimension = 768
+            else:
+                dimension = self._model.get_sentence_embedding_dimension()
+                if dimension is None:
+                    # Fallback in case sentence transformer returns None
+                    self._dimension = 768
+                else:
+                    self._dimension = dimension
         return self._dimension
     
     async def warmup(self) -> None:
@@ -118,6 +130,10 @@ class OpenAIEmbedder(EmbeddingModel):
         """Generate embeddings using OpenAI API."""
         await self._ensure_client_initialized()
         
+        # Ensure client is initialized
+        if self._client is None:
+            raise RuntimeError("OpenAI client not initialized")
+            
         # Process in batches to avoid API limits
         all_embeddings = []
         for i in range(0, len(texts), batch_size):
@@ -186,6 +202,9 @@ class HuggingFaceEmbedder(EmbeddingModel):
         
         def _encode_batch(batch_texts):
             with torch.no_grad():
+                if self._tokenizer is None or self._model is None:
+                    raise RuntimeError("Model or tokenizer not initialized")
+                
                 inputs = self._tokenizer(
                     batch_texts, 
                     return_tensors="pt", 

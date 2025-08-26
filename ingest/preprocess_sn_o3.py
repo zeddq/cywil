@@ -24,6 +24,9 @@ from datetime import datetime
 import dateparser
 from tqdm import tqdm
 
+# OpenAI imports
+from openai import OpenAI
+
 # Import OpenAI service from the app
 from app.core.ai_client_factory import get_ai_client, AIProvider
 from app.services.openai_client import get_openai_service
@@ -72,6 +75,30 @@ class Ruling(BaseModel):
 
 # ---------- 2  OpenAI service configuration --------------------------------- #
 # OpenAI service is initialized globally and configured via the app's config system
+
+def get_o3_client(stream: bool = True):
+    """Initialize o3/o1 chat client with appropriate settings"""
+    # Note: Using o3-mini as the model
+    # This is a placeholder function since the original file expects this function
+    return openai_service  # Return the OpenAI service instance
+
+
+# ---------- Stub implementations for compatibility -------------------------- #
+
+class PromptTemplate:
+    """Stub implementation to replace LangChain PromptTemplate"""
+    def __init__(self, input_variables=None, template=""):
+        self.input_variables = input_variables or []
+        self.template = template
+    
+    def format(self, **kwargs):
+        return self.template.format(**kwargs)
+
+
+class HumanMessage:
+    """Stub implementation to replace LangChain HumanMessage"""
+    def __init__(self, content):
+        self.content = content
 
 # ---------- 3  PDF parsing with o3 ------------------------------------------ #
 
@@ -151,6 +178,9 @@ async def extract_pdf_with_o3(pdf_path: Path, is_batch: bool = False) -> ParsedR
             max_tokens=100000,
         )
         
+        # Cast to ensure proper return type
+        if not isinstance(parsed_ruling, ParsedRuling):
+            raise RuntimeError(f"Expected ParsedRuling but got {type(parsed_ruling)}")
         return parsed_ruling
         
     except Exception as e:
@@ -237,7 +267,7 @@ async def fallback_parse(text: str) -> Ruling:
             entities=[]
         ))
     
-    return Ruling(metadata=metadata, paragraphs=ruling_paragraphs)
+    return Ruling(name="fallback_ruling", meta=metadata, paragraphs=ruling_paragraphs)
 
 # ---------- 5  Enhanced entity extraction with o3 --------------------------- #
 
@@ -450,7 +480,7 @@ async def preprocess_sn_rulings(pdf_path: Path) -> List[Dict[str, Any]]:
 
         # Step 2: Enhance entity extraction
         logger.info("Step 2: Enhancing entity recognition with o3")
-        ruling = await enhance_entities_with_o3(ruling)
+        ruling = await enhance_entities_with_o3(ruling, 0)
         
         # Step 3: Improve section classification
         # logger.info("Step 3: Classifying document sections with o3")
@@ -523,6 +553,8 @@ async def process_batch(pdf_files: List[Path], extracted_jsonl: Optional[Path] =
         logger.info(f"Using extracted JSONL file: {extracted_jsonl}")
         all_records = []
         all_jsonl_bytes = []
+        if extracted_jsonl is None:
+            raise ValueError("extracted_jsonl path is required")
         with open(extracted_jsonl, "r", encoding="utf-8") as f:
             for line in f:
                 if line.strip():
@@ -549,6 +581,8 @@ async def process_batch(pdf_files: List[Path], extracted_jsonl: Optional[Path] =
 
     else:
         parsed_rulings = []
+        if extracted_jsonl is None:
+            raise ValueError("extracted_jsonl path is required")
         with open(extracted_jsonl, "r", encoding="utf-8") as f:
             for line in f:
                 if line.strip():
@@ -596,7 +630,7 @@ async def process_batch(pdf_files: List[Path], extracted_jsonl: Optional[Path] =
             docket = None
             date = None
             panel = []
-            for para in [p for p in ruling.paragraphs if p.section == "header"]:
+            for para in [p for p in ruling.paragraphs if p.section == "header"] if ruling is not None else []:
                 d = [e for e in para.entities if e.label == "DOCKET"]
                 if d and not docket:
                     docket = d[0].text
@@ -752,7 +786,13 @@ async def main():
             records = await process_async(pdf_files, max_workers=args.workers)
             logger.info(f"Processed {len(records)} PDF files")
             if args.validate:
-                valid_records, invalid_records = validate_output(records)
+                # Flatten the list of records, filtering out None values
+                flattened_records = [
+                    record for record_list in records 
+                    if record_list is not None 
+                    for record in record_list
+                ]
+                valid_records, invalid_records = validate_output(flattened_records)
                 logger.info(f"Valid records: {len(valid_records)}")
                 logger.info(f"Invalid records: {len(invalid_records)}")
             if args.merge:
