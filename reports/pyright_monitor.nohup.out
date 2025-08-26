@@ -1,6 +1,6 @@
 nohup: ignoring input
-[2025-08-26T07:49:16Z] Starting pyright monitor on branch cursor/check-pyright-issues-and-report-fixes-5261
-[2025-08-26T07:49:16Z] Detected new commit: aeddded9d848 (prev: )
+[2025-08-26T08:40:37Z] Starting pyright monitor on branch cursor/check-pyright-issues-and-report-fixes-5261
+[2025-08-26T08:40:37Z] Detected new commit: c2e0cc83e90b (prev: )
     Running pyright analysis...
     
     Found 11 different rules with violations
@@ -22,4 +22,4 @@ nohup: ignoring input
     Saved raw JSON output: pyright_reports/raw_pyright_output.json
     
     All reports generated in: /workspace/pyright_reports
-[2025-08-26T07:49:20Z] No previous CSV to compare; initial baseline established.
+[2025-08-26T08:40:41Z] No previous CSV to compare; initial baseline established.

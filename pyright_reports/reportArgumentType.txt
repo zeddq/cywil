@@ -1,8 +1,13 @@
 Pyright Diagnostic Report: reportArgumentType
 ================================================================================
 
-Total violations: 14
+Total violations: 15
 
+
+/workspace/app/validators/document_validator.py (1 violations)
+-----------------------------------------------
+  Line 58:82 [error]: Expression of type "None" cannot be assigned to parameter of type "DocumentType"
+  "None" is not assignable to "DocumentType"
 
 /workspace/app/worker/tasks/pdf2chunks.py (4 violations)
 -----------------------------------------

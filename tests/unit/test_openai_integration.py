@@ -7,7 +7,7 @@ from unittest.mock import Mock, AsyncMock, patch
 import json
 from openai import AsyncOpenAI, APIError, RateLimitError, APITimeoutError
 
-from app.models.pipeline_schemas import (
+from app.embedding_models.pipeline_schemas import (
     RawDocument,
     LegalExtraction,
     FallbackResult,

@@ -1,6 +1,6 @@
 {
   "version": "1.1.404",
-  "time": "1756194560336",
+  "time": "1756197776270",
   "generalDiagnostics": [
     {
       "file": "/workspace/alembic/env.py",
@@ -1779,22 +1779,6 @@
       "rule": "reportMissingImports"
     },
     {
-      "file": "/workspace/app/services/fallback_parser.py",
-      "severity": "error",
-      "message": "Import \"app.models.pipeline_schemas\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 9,
-          "character": 5
-        },
-        "end": {
-          "line": 9,
-          "character": 32
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
       "file": "/workspace/app/services/openai_client.py",
       "severity": "error",
       "message": "Import \"openai\" could not be resolved",
@@ -2405,18 +2389,18 @@
     {
       "file": "/workspace/app/validators/document_validator.py",
       "severity": "error",
-      "message": "Import \"app.models.pipeline_schemas\" could not be resolved",
+      "message": "Expression of type \"None\" cannot be assigned to parameter of type \"DocumentType\"\n\u00a0\u00a0\"None\" is not assignable to \"DocumentType\"",
       "range": {
         "start": {
-          "line": 9,
-          "character": 5
+          "line": 57,
+          "character": 81
         },
         "end": {
-          "line": 9,
-          "character": 32
+          "line": 57,
+          "character": 85
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportArgumentType"
     },
     {
       "file": "/workspace/app/worker/base_task.py",
@@ -2878,22 +2862,6 @@
         "end": {
           "line": 6,
           "character": 11
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/app/worker/tasks/ingestion_pipeline.py",
-      "severity": "error",
-      "message": "Import \"app.models.pipeline_schemas\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 10,
-          "character": 5
-        },
-        "end": {
-          "line": 10,
-          "character": 32
         }
       },
       "rule": "reportMissingImports"
@@ -3649,22 +3617,6 @@
         }
       },
       "rule": "reportAttributeAccessIssue"
-    },
-    {
-      "file": "/workspace/app/worker/tasks/validation_tasks.py",
-      "severity": "error",
-      "message": "Import \"app.models.pipeline_schemas\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 8,
-          "character": 5
-        },
-        "end": {
-          "line": 8,
-          "character": 32
-        }
-      },
-      "rule": "reportMissingImports"
     },
     {
       "file": "/workspace/example_logger_usage.py",
@@ -5138,22 +5090,6 @@
       "rule": "reportOptionalMemberAccess"
     },
     {
-      "file": "/workspace/tests/fixtures/legal_documents/test_data_loader.py",
-      "severity": "error",
-      "message": "Import \"app.models.pipeline_schemas\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 7,
-          "character": 5
-        },
-        "end": {
-          "line": 7,
-          "character": 32
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
       "file": "/workspace/tests/integration/conftest.py",
       "severity": "error",
       "message": "Import \"pytest\" could not be resolved",
@@ -5380,22 +5316,6 @@
     {
       "file": "/workspace/tests/integration/test_ai_functionality.py",
       "severity": "error",
-      "message": "Import \"app.models.pipeline_schemas\" could not be resolved",
-      "range": {
-        "start": {
-          "line": 11,
-          "character": 5
-        },
-        "end": {
-          "line": 11,
-          "character": 32
-        }
-      },
-      "rule": "reportMissingImports"
-    },
-    {
-      "file": "/workspace/tests/integration/test_ai_functionality.py",
-      "severity": "error",
       "message": "Import \"numpy\" could not be resolved",
       "range": {
         "start": {
@@ -5412,18 +5332,50 @@
     {
       "file": "/workspace/tests/integration/test_ai_functionality.py",
       "severity": "error",
-      "message": "Import \"app.models.pipeline_schemas\" could not be resolved",
+      "message": "\"case_number\" is not a known attribute of \"None\"",
       "range": {
         "start": {
-          "line": 318,
-          "character": 13
+          "line": 154,
+          "character": 42
         },
         "end": {
-          "line": 318,
-          "character": 40
+          "line": 154,
+          "character": 53
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/tests/integration/test_ai_functionality.py",
+      "severity": "error",
+      "message": "\"parties\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 155,
+          "character": 57
+        },
+        "end": {
+          "line": 155,
+          "character": 64
+        }
+      },
+      "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/tests/integration/test_ai_functionality.py",
+      "severity": "error",
+      "message": "\"legal_basis\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 156,
+          "character": 46
+        },
+        "end": {
+          "line": 156,
+          "character": 57
+        }
+      },
+      "rule": "reportOptionalMemberAccess"
     },
     {
       "file": "/workspace/tests/integration/test_api.py",
@@ -6676,18 +6628,114 @@
     {
       "file": "/workspace/tests/unit/test_openai_integration.py",
       "severity": "error",
-      "message": "Import \"app.models.pipeline_schemas\" could not be resolved",
+      "message": "\"case_number\" is not a known attribute of \"None\"",
       "range": {
         "start": {
-          "line": 9,
-          "character": 5
+          "line": 72,
+          "character": 33
         },
         "end": {
-          "line": 9,
-          "character": 32
+          "line": 72,
+          "character": 44
         }
       },
-      "rule": "reportMissingImports"
+      "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "\"court\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 73,
+          "character": 33
+        },
+        "end": {
+          "line": 73,
+          "character": 38
+        }
+      },
+      "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "\"parties\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 74,
+          "character": 37
+        },
+        "end": {
+          "line": 74,
+          "character": 44
+        }
+      },
+      "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "\"parties\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 75,
+          "character": 48
+        },
+        "end": {
+          "line": 75,
+          "character": 55
+        }
+      },
+      "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "\"legal_basis\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 76,
+          "character": 37
+        },
+        "end": {
+          "line": 76,
+          "character": 48
+        }
+      },
+      "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "\"legal_basis\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 77,
+          "character": 52
+        },
+        "end": {
+          "line": 77,
+          "character": 63
+        }
+      },
+      "rule": "reportOptionalMemberAccess"
+    },
+    {
+      "file": "/workspace/tests/unit/test_openai_integration.py",
+      "severity": "error",
+      "message": "\"case_number\" is not a known attribute of \"None\"",
+      "range": {
+        "start": {
+          "line": 247,
+          "character": 33
+        },
+        "end": {
+          "line": 247,
+          "character": 44
+        }
+      },
+      "rule": "reportOptionalMemberAccess"
     },
     {
       "file": "/workspace/tests/unit/test_openai_service.py",
@@ -6819,10 +6867,10 @@
     }
   ],
   "summary": {
-    "filesAnalyzed": 127,
-    "errorCount": 336,
+    "filesAnalyzed": 128,
+    "errorCount": 339,
     "warningCount": 18,
     "informationCount": 72,
-    "timeInSec": 3.059
+    "timeInSec": 3.623
   }
 }

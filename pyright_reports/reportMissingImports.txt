@@ -1,7 +1,7 @@
 Pyright Diagnostic Report: reportMissingImports
 ================================================================================
 
-Total violations: 228
+Total violations: 220
 
 
 /workspace/alembic/env.py (2 violations)
@@ -162,10 +162,6 @@ Total violations: 228
   Line 10:6 [error]: Import "openai" could not be resolved
   Line 11:6 [error]: Import "sqlalchemy" could not be resolved
 
-/workspace/app/services/fallback_parser.py (1 violations)
-------------------------------------------
-  Line 10:6 [error]: Import "app.models.pipeline_schemas" could not be resolved
-
 /workspace/app/services/openai_client.py (4 violations)
 ----------------------------------------
   Line 10:6 [error]: Import "openai" could not be resolved
@@ -206,10 +202,9 @@ Total violations: 228
   Line 4:6 [error]: Import "openai" could not be resolved
   Line 5:6 [error]: Import "pydantic" could not be resolved
 
-/workspace/app/validators/document_validator.py (2 violations)
+/workspace/app/validators/document_validator.py (1 violations)
 -----------------------------------------------
   Line 8:6 [error]: Import "pydantic" could not be resolved
-  Line 10:6 [error]: Import "app.models.pipeline_schemas" could not be resolved
 
 /workspace/app/worker/base_task.py (3 violations)
 ----------------------------------
@@ -264,10 +259,9 @@ Total violations: 228
 ----------------------------------------------
   Line 187:18 [error]: Import "qdrant_client" could not be resolved
 
-/workspace/app/worker/tasks/ingestion_pipeline.py (2 violations)
+/workspace/app/worker/tasks/ingestion_pipeline.py (1 violations)
 -------------------------------------------------
   Line 7:6 [error]: Import "celery" could not be resolved
-  Line 11:6 [error]: Import "app.models.pipeline_schemas" could not be resolved
 
 /workspace/app/worker/tasks/maintenance.py (4 violations)
 ------------------------------------------
@@ -294,10 +288,6 @@ Total violations: 228
   Line 14:6 [error]: Import "sentence_transformers" could not be resolved
   Line 15:6 [error]: Import "sqlalchemy" could not be resolved
   Line 16:6 [error]: Import "sqlalchemy.ext.asyncio" could not be resolved
-
-/workspace/app/worker/tasks/validation_tasks.py (1 violations)
------------------------------------------------
-  Line 9:6 [error]: Import "app.models.pipeline_schemas" could not be resolved
 
 /workspace/ingest/embed.py (4 violations)
 --------------------------
@@ -381,10 +371,6 @@ Total violations: 228
   Line 5:12 [error]: Import "pytest" could not be resolved
   Line 79:10 [error]: Import "qdrant_client" could not be resolved
 
-/workspace/tests/fixtures/legal_documents/test_data_loader.py (1 violations)
--------------------------------------------------------------
-  Line 8:6 [error]: Import "app.models.pipeline_schemas" could not be resolved
-
 /workspace/tests/integration/conftest.py (6 violations)
 ----------------------------------------
   Line 2:12 [error]: Import "pytest" could not be resolved
@@ -394,12 +380,10 @@ Total violations: 228
   Line 14:12 [error]: Import "redis.asyncio" could not be resolved
   Line 36:14 [error]: Import "dotenv" could not be resolved
 
-/workspace/tests/integration/test_ai_functionality.py (4 violations)
+/workspace/tests/integration/test_ai_functionality.py (2 violations)
 -----------------------------------------------------
   Line 7:8 [error]: Import "pytest" could not be resolved
-  Line 12:6 [error]: Import "app.models.pipeline_schemas" could not be resolved
   Line 62:16 [error]: Import "numpy" could not be resolved
-  Line 319:14 [error]: Import "app.models.pipeline_schemas" could not be resolved
 
 /workspace/tests/integration/test_api.py (2 violations)
 ----------------------------------------
@@ -472,11 +456,10 @@ Total violations: 228
   Line 6:8 [error]: Import "pytest" could not be resolved
   Line 7:8 [error]: Import "numpy" could not be resolved
 
-/workspace/tests/unit/test_openai_integration.py (3 violations)
+/workspace/tests/unit/test_openai_integration.py (2 violations)
 ------------------------------------------------
   Line 5:8 [error]: Import "pytest" could not be resolved
   Line 8:6 [error]: Import "openai" could not be resolved
-  Line 10:6 [error]: Import "app.models.pipeline_schemas" could not be resolved
 
 /workspace/tests/unit/test_openai_service.py (2 violations)
 --------------------------------------------

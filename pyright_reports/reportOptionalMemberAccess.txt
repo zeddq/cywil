@@ -1,7 +1,7 @@
 Pyright Diagnostic Report: reportOptionalMemberAccess
 ================================================================================
 
-Total violations: 32
+Total violations: 42
 
 
 /workspace/app/embedding_models/embedding_interface.py (2 violations)
@@ -46,6 +46,12 @@ Total violations: 32
   Line 64:9 [error]: "fixture" is not a known attribute of "None"
   Line 72:9 [error]: "fixture" is not a known attribute of "None"
 
+/workspace/tests/integration/test_ai_functionality.py (3 violations)
+-----------------------------------------------------
+  Line 155:43 [error]: "case_number" is not a known attribute of "None"
+  Line 156:58 [error]: "parties" is not a known attribute of "None"
+  Line 157:47 [error]: "legal_basis" is not a known attribute of "None"
+
 /workspace/tests/integration/test_integration.py (4 violations)
 ------------------------------------------------
   Line 401:36 [error]: "get" is not a known attribute of "None"
@@ -59,3 +65,13 @@ Total violations: 32
   Line 25:9 [error]: "fixture" is not a known attribute of "None"
   Line 40:9 [error]: "fixture" is not a known attribute of "None"
   Line 48:9 [error]: "fixture" is not a known attribute of "None"
+
+/workspace/tests/unit/test_openai_integration.py (7 violations)
+------------------------------------------------
+  Line 73:34 [error]: "case_number" is not a known attribute of "None"
+  Line 74:34 [error]: "court" is not a known attribute of "None"
+  Line 75:38 [error]: "parties" is not a known attribute of "None"
+  Line 76:49 [error]: "parties" is not a known attribute of "None"
+  Line 77:38 [error]: "legal_basis" is not a known attribute of "None"
+  Line 78:53 [error]: "legal_basis" is not a known attribute of "None"
+  Line 248:34 [error]: "case_number" is not a known attribute of "None"
