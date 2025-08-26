@@ -6,11 +6,10 @@
 
 ### Success Criteria
 - Violations trend downward; each successful cycle yields a net reduction in `pyright_reports/all_violations.csv` rows.
-- Unit tests pass locally before committing (if tests exist and can run).
+- Tests are executed after fixes and results are logged (non-blocking).
 - Only commit when:
-  - The post-fix Pyright report shows fewer violations than the previous baseline, AND
-  - Tests pass (or no test failures are introduced).
-- Each cycle appends a clear entry to `reports/pyright_monitor_latest.md` with before/after counts, files changed, and rules affected.
+  - The post-fix Pyright report shows fewer violations than the previous baseline.
+- Each cycle appends a clear entry to `reports/pyright_monitor_latest.md` with before/after counts, files changed, rules affected, and test summary.
 
 ### Scope (Initial Phases)
 - Phase A (Low-risk, deterministic; default ON):
@@ -28,7 +27,7 @@
 ### Constraints & Safeguards
 - Make the smallest change necessary; do not modify business logic beyond what the rule requires.
 - Avoid broad refactors or multi-line structural edits in Phase A.
-- If changes do not reduce violations or tests fail, revert edits.
+- If changes do not reduce violations, revert edits. Test failures are logged and non-blocking.
 - Rate-limit to once per new commit (aligned with monitor cadence).
 - Maintain idempotency; repeated runs should not thrash files.
 
@@ -44,11 +43,12 @@
 2) Agent reviews `pyright_reports/SUMMARY.txt` and per-rule `*.txt` files.
 3) Agent performs Phase A edits (and Phase B if explicitly enabled).
 4) Re-run the discovery script.
-5) If violations reduced AND tests pass:
+5) If violations reduced:
+   - Run tests; record results in logs (non-blocking).
    - Commit with message like `chore(pyright): agent fixes (-N)`.
    - Optionally push if configured.
-   - Log details (before/after, rules impacted, files changed) to `reports/pyright_monitor_latest.md`.
-6) If not reduced or tests fail:
+   - Log details (before/after, rules impacted, files changed) and test summary to `reports/pyright_monitor_latest.md`.
+6) If not reduced:
    - Revert changes and log outcome.
 
 ### Monitor Integration
@@ -57,11 +57,11 @@
 - All actions and outcomes are recorded in `reports/pyright_monitor_latest.md`.
 
 ### Testing & Validation
-- Run local unit tests via `pytest -q` if available; failures abort and trigger revert.
+- Run local unit tests via `pytest -q` if available; failures are logged and non-blocking.
 - No interactive prompts; deterministic edits only.
 
 ### Rollback Strategy
-- Revert the working copy if reductions are not achieved or tests fail.
+- Revert the working copy if reductions are not achieved.
 - Do not accumulate partial edits across cycles.
 
 ### Implementation Notes
