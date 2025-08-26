@@ -1,10 +1,10 @@
 {
   "version": "1.1.404",
-  "time": "1756199126734",
+  "time": "1756199456062",
   "generalDiagnostics": [
     {
       "file": "/workspace/alembic/env.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"context\" is unknown import symbol",
       "range": {
         "start": {
@@ -20,7 +20,7 @@
     },
     {
       "file": "/workspace/alembic/versions/00df3e0ab26c_add_created_by_user_column_to_case.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"op\" is unknown import symbol",
       "range": {
         "start": {
@@ -356,7 +356,7 @@
     },
     {
       "file": "/workspace/app/services/optimized_statute_search.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"_embedder\" for class \"OptimizedStatuteSearchService*\"\n\u00a0\u00a0Attribute \"_embedder\" is unknown",
       "range": {
         "start": {
@@ -372,7 +372,7 @@
     },
     {
       "file": "/workspace/app/services/optimized_statute_search.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"_embedder\" for class \"OptimizedStatuteSearchService*\"\n\u00a0\u00a0Attribute \"_embedder\" is unknown",
       "range": {
         "start": {
@@ -388,7 +388,7 @@
     },
     {
       "file": "/workspace/app/services/optimized_statute_search.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"_embedder\" for class \"OptimizedStatuteSearchService*\"\n\u00a0\u00a0Attribute \"_embedder\" is unknown",
       "range": {
         "start": {
@@ -436,7 +436,7 @@
     },
     {
       "file": "/workspace/app/services/supreme_court_service.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"__table__\" for class \"type[SNRuling]\"\n\u00a0\u00a0Attribute \"__table__\" is unknown",
       "range": {
         "start": {
@@ -452,7 +452,7 @@
     },
     {
       "file": "/workspace/app/services/supreme_court_service.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"meta\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"meta\" is unknown",
       "range": {
         "start": {
@@ -468,7 +468,7 @@
     },
     {
       "file": "/workspace/app/services/supreme_court_service.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"meta\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"meta\" is unknown",
       "range": {
         "start": {
@@ -484,7 +484,7 @@
     },
     {
       "file": "/workspace/app/services/supreme_court_service.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"meta\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"meta\" is unknown",
       "range": {
         "start": {
@@ -500,7 +500,7 @@
     },
     {
       "file": "/workspace/app/services/supreme_court_service.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"meta\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"meta\" is unknown",
       "range": {
         "start": {
@@ -564,7 +564,7 @@
     },
     {
       "file": "/workspace/app/task_processors.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot assign to attribute \"metadata\" for class \"Document\"\n\u00a0\u00a0Expression of type \"dict[Any, Any]\" cannot be assigned to attribute \"metadata\" of class \"Document\"\n\u00a0\u00a0\u00a0\u00a0\"dict[Any, Any]\" is not assignable to \"MetaData\"",
       "range": {
         "start": {
@@ -580,7 +580,7 @@
     },
     {
       "file": "/workspace/app/task_processors.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"update\" for class \"MetaData\"\n\u00a0\u00a0Attribute \"update\" is unknown",
       "range": {
         "start": {
@@ -628,7 +628,7 @@
     },
     {
       "file": "/workspace/app/worker/tasks/case_tasks.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"ilike\" for class \"str\"\n\u00a0\u00a0Attribute \"ilike\" is unknown",
       "range": {
         "start": {
@@ -644,7 +644,7 @@
     },
     {
       "file": "/workspace/app/worker/tasks/case_tasks.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"ilike\" for class \"str\"\n\u00a0\u00a0Attribute \"ilike\" is unknown",
       "range": {
         "start": {
@@ -660,7 +660,7 @@
     },
     {
       "file": "/workspace/app/worker/tasks/case_tasks.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"ilike\" for class \"str\"\n\u00a0\u00a0Attribute \"ilike\" is unknown",
       "range": {
         "start": {
@@ -772,7 +772,7 @@
     },
     {
       "file": "/workspace/app/worker/tasks/embedding_tasks.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"embedding_service\" for class \"WorkerServiceRegistry\"\n\u00a0\u00a0Attribute \"embedding_service\" is unknown",
       "range": {
         "start": {
@@ -788,7 +788,7 @@
     },
     {
       "file": "/workspace/app/worker/tasks/ingestion_pipeline.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"generate_statute_embeddings\" is unknown import symbol",
       "range": {
         "start": {
@@ -1124,7 +1124,7 @@
     },
     {
       "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot assign to attribute \"entities\" for class \"RulingParagraph\"\n\u00a0\u00a0Attribute \"entities\" is unknown",
       "range": {
         "start": {
@@ -1140,7 +1140,7 @@
     },
     {
       "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot assign to attribute \"entities\" for class \"RulingParagraph\"\n\u00a0\u00a0Attribute \"entities\" is unknown",
       "range": {
         "start": {
@@ -1204,7 +1204,7 @@
     },
     {
       "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"paragraphs\" for class \"List[bytes]\"\n\u00a0\u00a0Attribute \"paragraphs\" is unknown",
       "range": {
         "start": {
@@ -1284,7 +1284,7 @@
     },
     {
       "file": "/workspace/app/worker/tasks/preprocess_sn_o3.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot assign to attribute \"name\" for class \"Ruling\"\n\u00a0\u00a0Type \"str | None\" is not assignable to type \"str\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"str\"",
       "range": {
         "start": {
@@ -1316,7 +1316,7 @@
     },
     {
       "file": "/workspace/app/worker/tasks/search_tasks.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"get\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"get\" is unknown",
       "range": {
         "start": {
@@ -1332,7 +1332,7 @@
     },
     {
       "file": "/workspace/app/worker/tasks/search_tasks.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"get\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"get\" is unknown",
       "range": {
         "start": {
@@ -1348,7 +1348,7 @@
     },
     {
       "file": "/workspace/app/worker/tasks/search_tasks.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"get\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"get\" is unknown",
       "range": {
         "start": {
@@ -1364,7 +1364,7 @@
     },
     {
       "file": "/workspace/app/worker/tasks/search_tasks.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"get\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"get\" is unknown",
       "range": {
         "start": {
@@ -1380,7 +1380,7 @@
     },
     {
       "file": "/workspace/app/worker/tasks/search_tasks.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"get\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"get\" is unknown",
       "range": {
         "start": {
@@ -1396,7 +1396,7 @@
     },
     {
       "file": "/workspace/app/worker/tasks/search_tasks.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"get\" for class \"RulingPayload\"\n\u00a0\u00a0Attribute \"get\" is unknown",
       "range": {
         "start": {
@@ -1460,7 +1460,7 @@
     },
     {
       "file": "/workspace/app/worker/tasks/statute_tasks.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"statute_ingestion\" for class \"WorkerServiceRegistry\"\n\u00a0\u00a0Attribute \"statute_ingestion\" is unknown",
       "range": {
         "start": {
@@ -1476,7 +1476,7 @@
     },
     {
       "file": "/workspace/example_logger_usage.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"LOGGING_CONFIG\" is unknown import symbol",
       "range": {
         "start": {
@@ -1492,7 +1492,7 @@
     },
     {
       "file": "/workspace/example_logger_usage.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"configure_logging\" is unknown import symbol",
       "range": {
         "start": {
@@ -1508,7 +1508,7 @@
     },
     {
       "file": "/workspace/example_logger_usage.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"logger_manager\" is unknown import symbol",
       "range": {
         "start": {
@@ -1524,7 +1524,7 @@
     },
     {
       "file": "/workspace/example_logger_usage.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"LOGGING_PRESETS\" is unknown import symbol",
       "range": {
         "start": {
@@ -1540,7 +1540,7 @@
     },
     {
       "file": "/workspace/example_logger_usage.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"wrap_all_loggers\" is unknown import symbol",
       "range": {
         "start": {
@@ -1556,7 +1556,7 @@
     },
     {
       "file": "/workspace/example_service_logging.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"service_operation_logger\" is unknown import symbol",
       "range": {
         "start": {
@@ -1683,7 +1683,7 @@
     },
     {
       "file": "/workspace/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"qdrant\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"qdrant\" is unknown",
       "range": {
         "start": {
@@ -1699,7 +1699,7 @@
     },
     {
       "file": "/workspace/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"qdrant\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"qdrant\" is unknown",
       "range": {
         "start": {
@@ -1715,7 +1715,7 @@
     },
     {
       "file": "/workspace/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"qdrant\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"qdrant\" is unknown",
       "range": {
         "start": {
@@ -1731,7 +1731,7 @@
     },
     {
       "file": "/workspace/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"qdrant\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"qdrant\" is unknown",
       "range": {
         "start": {
@@ -1747,7 +1747,7 @@
     },
     {
       "file": "/workspace/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"qdrant\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"qdrant\" is unknown",
       "range": {
         "start": {
@@ -1763,7 +1763,7 @@
     },
     {
       "file": "/workspace/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"storage\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"storage\" is unknown",
       "range": {
         "start": {
@@ -1779,7 +1779,7 @@
     },
     {
       "file": "/workspace/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"storage\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"storage\" is unknown",
       "range": {
         "start": {
@@ -1795,7 +1795,7 @@
     },
     {
       "file": "/workspace/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"storage\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"storage\" is unknown",
       "range": {
         "start": {
@@ -1811,7 +1811,7 @@
     },
     {
       "file": "/workspace/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"storage\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"storage\" is unknown",
       "range": {
         "start": {
@@ -1827,7 +1827,7 @@
     },
     {
       "file": "/workspace/ingest/ingest_pipeline.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"postgres\" for class \"Dict[Unknown, Unknown]\"\n\u00a0\u00a0Attribute \"postgres\" is unknown",
       "range": {
         "start": {
@@ -2099,7 +2099,7 @@
     },
     {
       "file": "/workspace/ingest/preprocess_sn_o3.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"entities\" for class \"BaseModel\"\n\u00a0\u00a0Attribute \"entities\" is unknown",
       "range": {
         "start": {
@@ -2275,7 +2275,7 @@
     },
     {
       "file": "/workspace/ingest/preprocess_sn_o3.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot assign to attribute \"name\" for class \"Ruling\"\n\u00a0\u00a0Type \"str | None\" is not assignable to type \"str\"\n\u00a0\u00a0\u00a0\u00a0\"None\" is not assignable to \"str\"",
       "range": {
         "start": {
@@ -2307,7 +2307,7 @@
     },
     {
       "file": "/workspace/ingest/refactored_ingest_pipeline.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"get_ingestion_status\" for class \"None\"\n\u00a0\u00a0Attribute \"get_ingestion_status\" is unknown",
       "range": {
         "start": {
@@ -2323,7 +2323,7 @@
     },
     {
       "file": "/workspace/ingest/refactored_ingest_pipeline.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"get_sn_processing_status\" for class \"None\"\n\u00a0\u00a0Attribute \"get_sn_processing_status\" is unknown",
       "range": {
         "start": {
@@ -2339,7 +2339,7 @@
     },
     {
       "file": "/workspace/ingest/refactored_ingest_pipeline.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"get_embedding_statistics\" for class \"None\"\n\u00a0\u00a0Attribute \"get_embedding_statistics\" is unknown",
       "range": {
         "start": {
@@ -2803,7 +2803,7 @@
     },
     {
       "file": "/workspace/tests/integration/conftest.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"close\" for class \"DatabaseManager\"\n\u00a0\u00a0Attribute \"close\" is unknown",
       "range": {
         "start": {
@@ -2851,7 +2851,7 @@
     },
     {
       "file": "/workspace/tests/integration/conftest.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"aclose\" for class \"Redis[Any]\"\n\u00a0\u00a0Attribute \"aclose\" is unknown",
       "range": {
         "start": {
@@ -2979,7 +2979,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_api.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"AsyncSessionLocal\" is unknown import symbol",
       "range": {
         "start": {
@@ -2995,7 +2995,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_api.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"init_db\" is unknown import symbol",
       "range": {
         "start": {
@@ -3123,7 +3123,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_integration.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"initialize_services\" is unknown import symbol",
       "range": {
         "start": {
@@ -3171,7 +3171,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_integration.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"cached_query\" is unknown import symbol",
       "range": {
         "start": {
@@ -3187,7 +3187,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_integration_refactored.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"setup_structured_logging\" is unknown import symbol",
       "range": {
         "start": {
@@ -3203,7 +3203,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_integration_refactored.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"initialize_services\" is unknown import symbol",
       "range": {
         "start": {
@@ -3219,7 +3219,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_integration_refactored.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"get\" is not a known attribute of module \"app.core.service_container\"",
       "range": {
         "start": {
@@ -3235,7 +3235,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_integration_refactored.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"get\" is not a known attribute of module \"app.core.service_container\"",
       "range": {
         "start": {
@@ -3251,7 +3251,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_openai_integration.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"config\" is not a known attribute of module \"pytest\"",
       "range": {
         "start": {
@@ -3267,7 +3267,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_openai_integration.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"config\" is not a known attribute of module \"pytest\"",
       "range": {
         "start": {
@@ -3299,7 +3299,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_openai_integration.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"config\" is not a known attribute of module \"pytest\"",
       "range": {
         "start": {
@@ -3331,7 +3331,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_refactored_services.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot assign to attribute \"_embedder\" for class \"StatuteSearchService\"\n\u00a0\u00a0Attribute \"_embedder\" is unknown",
       "range": {
         "start": {
@@ -3347,7 +3347,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_refactored_services.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot assign to attribute \"_llm\" for class \"StatuteSearchService\"\n\u00a0\u00a0Attribute \"_llm\" is unknown",
       "range": {
         "start": {
@@ -3363,7 +3363,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_refactored_services.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot assign to attribute \"_llm\" for class \"DocumentGenerationService\"\n\u00a0\u00a0Attribute \"_llm\" is unknown",
       "range": {
         "start": {
@@ -3411,7 +3411,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_streaming.py",
-      "severity": "information",
+      "severity": "error",
       "message": "\"ParalegalAgent\" is unknown import symbol",
       "range": {
         "start": {
@@ -3427,7 +3427,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot assign to attribute \"transform\" for class \"MockStreamProcessor\"\n\u00a0\u00a0Expression of type \"(event: StreamEvent) -> StreamEvent\" cannot be assigned to attribute \"transform\" of class \"MockStreamProcessor\"\n\u00a0\u00a0\u00a0\u00a0\"FunctionType\" is not assignable to \"None\"",
       "range": {
         "start": {
@@ -3443,7 +3443,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"chunks_received\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"chunks_received\" is unknown",
       "range": {
         "start": {
@@ -3459,7 +3459,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"events_by_type\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"events_by_type\" is unknown",
       "range": {
         "start": {
@@ -3475,7 +3475,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"text_deltas\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"text_deltas\" is unknown",
       "range": {
         "start": {
@@ -3491,7 +3491,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"tool_calls\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"tool_calls\" is unknown",
       "range": {
         "start": {
@@ -3507,7 +3507,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"errors\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"errors\" is unknown",
       "range": {
         "start": {
@@ -3523,7 +3523,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"start_time\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"start_time\" is unknown",
       "range": {
         "start": {
@@ -3539,7 +3539,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot assign to attribute \"chunks_received\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"chunks_received\" is unknown",
       "range": {
         "start": {
@@ -3555,7 +3555,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot assign to attribute \"chunks_received\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"chunks_received\" is unknown",
       "range": {
         "start": {
@@ -3571,7 +3571,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot assign to attribute \"text_deltas\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"text_deltas\" is unknown",
       "range": {
         "start": {
@@ -3587,7 +3587,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot assign to attribute \"errors\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"errors\" is unknown",
       "range": {
         "start": {
@@ -3603,7 +3603,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"chunks_received\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"chunks_received\" is unknown",
       "range": {
         "start": {
@@ -3619,7 +3619,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"text_deltas\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"text_deltas\" is unknown",
       "range": {
         "start": {
@@ -3635,7 +3635,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"errors\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"errors\" is unknown",
       "range": {
         "start": {
@@ -3651,7 +3651,7 @@
     },
     {
       "file": "/workspace/tests/integration/test_streaming_handler.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"events_by_type\" for class \"MetricsCollector\"\n\u00a0\u00a0Attribute \"events_by_type\" is unknown",
       "range": {
         "start": {
@@ -3987,7 +3987,7 @@
     },
     {
       "file": "/workspace/tests/unit/test_tool_registry.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"name\" for class \"BaseModel\"\n\u00a0\u00a0Attribute \"name\" is unknown",
       "range": {
         "start": {
@@ -4003,7 +4003,7 @@
     },
     {
       "file": "/workspace/tests/unit/test_tool_registry.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"age\" for class \"BaseModel\"\n\u00a0\u00a0Attribute \"age\" is unknown",
       "range": {
         "start": {
@@ -4019,7 +4019,7 @@
     },
     {
       "file": "/workspace/tests/unit/test_tool_registry.py",
-      "severity": "information",
+      "severity": "error",
       "message": "Cannot access attribute \"active\" for class \"BaseModel\"\n\u00a0\u00a0Attribute \"active\" is unknown",
       "range": {
         "start": {
@@ -4036,9 +4036,9 @@
   ],
   "summary": {
     "filesAnalyzed": 128,
-    "errorCount": 161,
+    "errorCount": 245,
     "warningCount": 7,
-    "informationCount": 84,
-    "timeInSec": 7.276
+    "informationCount": 0,
+    "timeInSec": 7.484
   }
 }
