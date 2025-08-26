@@ -28,7 +28,7 @@ class OptimizedStatuteSearchService(StatuteSearchService):
     """
 
     def __init__(self, config_service: ConfigService, llm_manager: LLMManager):
-        super().__init__(config_service)
+        super().__init__(config_service, llm_manager)
         self._llm_manager = llm_manager
         self._embedding_batcher: Optional[EmbeddingBatcher] = None
         # Create a simple batch processor function for embeddings

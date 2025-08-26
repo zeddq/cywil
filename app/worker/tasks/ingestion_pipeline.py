@@ -8,7 +8,7 @@ from celery import chain, chord, group
 
 from app.core.logger_manager import get_logger
 from app.worker.celery_app import celery_app
-from app.models.pipeline_schemas import (
+from app.embedding_models.pipeline_schemas import (
     RawDocument, 
     ProcessedChunk, 
     EmbeddedChunk, 

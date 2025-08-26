@@ -91,7 +91,7 @@ def initialize_services():
 
 
     # Domain services
-    statute_search = StatuteSearchService(config_service)
+    statute_search = StatuteSearchService(config_service, llm_manager)
     supreme_court = SupremeCourtService(db_manager, config_service, llm_manager)
     document_generation = DocumentGenerationService(db_manager, statute_search, supreme_court)
     case_management = CaseManagementService(db_manager)

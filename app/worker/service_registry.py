@@ -94,7 +94,7 @@ class WorkerServiceRegistry:
             # embedding_service = self._services["embedding_service"]
             # await embedding_service.initialize()
 
-            self._services["statute_search"] = StatuteSearchService(config_service)
+            self._services["statute_search"] = StatuteSearchService(config_service, llm_manager)
             statute_search = self._services["statute_search"]
             await statute_search.initialize()
 

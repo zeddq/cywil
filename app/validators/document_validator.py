@@ -4,10 +4,10 @@ Validates documents at pipeline boundaries and ensures data integrity.
 """
 
 import re
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Tuple, Optional
 from pydantic import ValidationError
 
-from app.models.pipeline_schemas import (
+from app.embedding_models.pipeline_schemas import (
     RawDocument,
     ProcessedChunk,
     EmbeddedChunk,
@@ -55,7 +55,7 @@ class DocumentValidator:
     }
     
     @classmethod
-    def validate_legal_document(cls, content: str, document_type: DocumentType = None) -> ValidationResult:
+    def validate_legal_document(cls, content: str, document_type: Optional[DocumentType] = None) -> ValidationResult:
         """
         Validate Polish legal document format and content.
         

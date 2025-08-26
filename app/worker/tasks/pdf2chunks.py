@@ -4,7 +4,7 @@ import re
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Match, Optional, Tuple, Any
+from typing import Any, Dict, List, Optional, Tuple, Union, Match
 
 import pdfplumber
 
@@ -133,10 +133,13 @@ class PolishStatuteParser:
         self.HIERARCHY_MAP = {element.name: element for element in self.HIERARCHY_ELEMENTS}
         self.KEYWORDS = [element.keyword for element in self.HIERARCHY_ELEMENTS]
 
-    def _match_hierarchy_element(self, text: str) -> Optional[Tuple[Match[str], HierarchyElement]]:
-        """Match a hierarchy element in the text"""
+    def _match_hierarchy_element(self, text: Optional[Union[str, Match[str]]]) -> Optional[Tuple[Match[str], HierarchyElement]]:
+        """Try matching any hierarchy element"""
+        if text is None:
+            return None
+        search_text = text.group() if hasattr(text, 'group') else text
         for element in self.HIERARCHY_ELEMENTS:
-            match = element.pattern.search(text)
+            match = element.pattern.search(search_text)
             if match:
                 return match, element
         return None
@@ -156,7 +159,7 @@ class PolishStatuteParser:
             if element.level < self.HIERARCHY_MAP[
                 "article"
             ].level and not self._match_hierarchy_element(next_line):
-                element.current_title = next_line.group() if next_line else None
+                element.current_title = next_line.group() if next_line is not None else None
             else:
                 element.current_title = None
         elif len(match_list) == 3:

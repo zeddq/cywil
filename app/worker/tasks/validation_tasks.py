@@ -6,7 +6,7 @@ import time
 from typing import Any, Dict, List
 
 from app.core.logger_manager import get_logger
-from app.models.pipeline_schemas import (
+from app.embedding_models.pipeline_schemas import (
     RawDocument,
     ProcessedChunk, 
     EmbeddedChunk,

@@ -10,6 +10,7 @@ from typing import Any, Awaitable, Callable
 import openai
 from dotenv import load_dotenv
 from qdrant_client import QdrantClient, models
+from qdrant_client.http.models import models as qmodels
 from sentence_transformers import SentenceTransformer
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
@@ -133,7 +134,7 @@ async def process_template_file(file_path: Path, session: AsyncSession):
             qdrant_client.create_payload_index(
                 collection_name=QDRANT_COLLECTION_NAME,
                 field_name=field,
-                field_schema="keyword"
+                field_schema=models.KeywordIndexParams(type=qmodels.KeywordIndexType.keyword)
             )
             print(f"Created index for field: {field}")
         except Exception as e:

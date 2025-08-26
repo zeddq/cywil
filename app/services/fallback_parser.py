@@ -7,7 +7,7 @@ import re
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 
-from app.models.pipeline_schemas import (
+from app.embedding_models.pipeline_schemas import (
     LegalExtraction,
     FallbackResult,
     DocumentType,
@@ -81,7 +81,7 @@ class FallbackParser:
         Returns:
             FallbackResult with extracted information
         """
-        extraction = LegalExtraction()
+        extraction = LegalExtraction(case_number=None, court=None, date=None, parties=[], legal_basis=[], decision=None, reasoning=None)
         errors = []
         confidence_scores = []
         
