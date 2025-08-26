@@ -1,10 +1,47 @@
 Pyright Diagnostic Report: reportUndefinedVariable
 ================================================================================
 
-Total violations: 2
+Total violations: 30
 
 
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/embedding_tasks.py (2 violations)
-------------------------------------------------------------------------
+/workspace/app/embedding_models/embedding_interface.py (1 violations)
+------------------------------------------------------
+  Line 221:27 [error]: "model" is not defined
+
+/workspace/app/services/fallback_parser.py (14 violations)
+------------------------------------------
+  Line 100:44 [error]: "cls" is not defined
+  Line 100:69 [error]: "text" is not defined
+  Line 106:39 [error]: "cls" is not defined
+  Line 106:58 [error]: "text" is not defined
+  Line 112:37 [error]: "cls" is not defined
+  Line 112:55 [error]: "text" is not defined
+  Line 118:43 [error]: "cls" is not defined
+  Line 118:64 [error]: "text" is not defined
+  Line 124:45 [error]: "cls" is not defined
+  Line 124:70 [error]: "text" is not defined
+  Line 130:45 [error]: "cls" is not defined
+  Line 130:67 [error]: "text" is not defined
+  Line 136:25 [error]: "cls" is not defined
+  Line 136:48 [error]: "text" is not defined
+
+/workspace/app/worker/tasks/embed.py (13 violations)
+------------------------------------
+  Line 75:35 [error]: "OptimizersConfigDiff" is not defined
+  Line 84:30 [error]: "KeywordIndexParams" is not defined
+  Line 84:54 [error]: "KeywordIndexType" is not defined
+  Line 90:30 [error]: "KeywordIndexParams" is not defined
+  Line 90:54 [error]: "KeywordIndexType" is not defined
+  Line 96:30 [error]: "KeywordIndexParams" is not defined
+  Line 96:54 [error]: "KeywordIndexType" is not defined
+  Line 317:78 [error]: "TextIndexParams" is not defined
+  Line 317:99 [error]: "TextIndexType" is not defined
+  Line 329:30 [error]: "KeywordIndexParams" is not defined
+  Line 329:54 [error]: "KeywordIndexType" is not defined
+  Line 368:19 [error]: "FieldCondition" is not defined
+  Line 368:52 [error]: "MatchValue" is not defined
+
+/workspace/app/worker/tasks/embedding_tasks.py (2 violations)
+----------------------------------------------
   Line 277:16 [error]: "embedding_service" is not defined
   Line 278:23 [error]: "embedding_service" is not defined

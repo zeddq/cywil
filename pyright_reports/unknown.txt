@@ -1,0 +1,30 @@
+Pyright Diagnostic Report: unknown
+================================================================================
+
+Total violations: 19
+
+
+/workspace/app/services/fallback_parser.py (16 violations)
+------------------------------------------
+  Line 84:1 [error]: Expected expression
+  Line 85:1 [error]: Unexpected indentation
+  Line 92:1 [error]: Unindent not expected
+  Line 92:1 [error]: Expected expression
+  Line 93:1 [error]: Unexpected indentation
+  Line 94:1 [error]: Unindent not expected
+  Line 94:1 [error]: Expected expression
+  Line 95:1 [error]: Unexpected indentation
+  Line 145:13 [error]: "return" can be used only within a function
+  Line 156:13 [error]: "return" can be used only within a function
+  Line 165:5 [error]: Unindent not expected
+  Line 166:1 [error]: Expected function or class declaration after decorator
+  Line 166:1 [error]: Unexpected indentation
+  Line 459:1 [error]: Unindent not expected
+  Line 459:1 [error]: Expected expression
+  Line 459:1 [error]: Statements must be separated by newlines or semicolons
+
+/workspace/app/worker/tasks/embed.py (3 violations)
+------------------------------------
+  Line 11:34 [error]: "(" was not closed
+  Line 16:1 [error]: Statements must be separated by newlines or semicolons
+  Line 16:1 [error]: Expected expression

@@ -1,13 +1,25 @@
 Pyright Diagnostic Report: reportOptionalMemberAccess
 ================================================================================
 
-Total violations: 2
+Total violations: 11
 
 
-/Volumes/code/cywil/ai-paralegal-poc/app/embedding_models/embedding_interface.py (1 violations)
---------------------------------------------------------------------------------
-  Line 75:33 [error]: "encode" is not a known attribute of "None"
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (1 violations)
--------------------------------------------------------------------------
+/workspace/app/worker/tasks/preprocess_sn_o3.py (1 violations)
+-----------------------------------------------
   Line 407:52 [error]: "entities" is not a known attribute of "None"
+
+/workspace/tests/integration/test_ai_functionality.py (3 violations)
+-----------------------------------------------------
+  Line 155:43 [error]: "case_number" is not a known attribute of "None"
+  Line 156:58 [error]: "parties" is not a known attribute of "None"
+  Line 157:47 [error]: "legal_basis" is not a known attribute of "None"
+
+/workspace/tests/unit/test_openai_integration.py (7 violations)
+------------------------------------------------
+  Line 73:34 [error]: "case_number" is not a known attribute of "None"
+  Line 74:34 [error]: "court" is not a known attribute of "None"
+  Line 75:38 [error]: "parties" is not a known attribute of "None"
+  Line 76:49 [error]: "parties" is not a known attribute of "None"
+  Line 77:38 [error]: "legal_basis" is not a known attribute of "None"
+  Line 78:53 [error]: "legal_basis" is not a known attribute of "None"
+  Line 250:34 [error]: "case_number" is not a known attribute of "None"

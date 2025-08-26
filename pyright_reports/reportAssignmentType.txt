@@ -4,8 +4,8 @@ Pyright Diagnostic Report: reportAssignmentType
 Total violations: 2
 
 
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (2 violations)
--------------------------------------------------------------------------
+/workspace/app/worker/tasks/preprocess_sn_o3.py (2 violations)
+-----------------------------------------------
   Line 226:20 [error]: Type "ParsedResponse[ParsedRuling]" is not assignable to declared type "ParsedResponse | None"
   Type "ParsedResponse[ParsedRuling]" is not assignable to type "ParsedResponse | None"
     "ParsedResponse[ParsedRuling]" is not assignable to "ParsedResponse"

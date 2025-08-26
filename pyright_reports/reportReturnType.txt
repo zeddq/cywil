@@ -1,0 +1,16 @@
+Pyright Diagnostic Report: reportReturnType
+================================================================================
+
+Total violations: 2
+
+
+/workspace/app/embedding_models/embedding_interface.py (1 violations)
+------------------------------------------------------
+  Line 108:16 [error]: Type "int | None" is not assignable to return type "int"
+  Type "int | None" is not assignable to type "int"
+    "None" is not assignable to "int"
+
+/workspace/app/services/fallback_parser.py (1 violations)
+------------------------------------------
+  Line 74:46 [error]: Function with declared return type "FallbackResult" must return value on all code paths
+  "None" is not assignable to "FallbackResult"

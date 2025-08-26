@@ -1,27 +1,69 @@
 Pyright Diagnostic Report: reportAttributeAccessIssue
 ================================================================================
 
-Total violations: 29
+Total violations: 78
 
 
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/ingestion_pipeline.py (1 violations)
----------------------------------------------------------------------------
+/workspace/alembic/env.py (1 violations)
+-------------------------
+  Line 6:21 [information]: "context" is unknown import symbol
+
+/workspace/alembic/versions/00df3e0ab26c_add_created_by_user_column_to_case.py (1 violations)
+------------------------------------------------------------------------------
+  Line 10:21 [information]: "op" is unknown import symbol
+
+/workspace/app/worker/tasks/case_tasks.py (3 violations)
+-----------------------------------------
+  Line 236:46 [information]: Cannot access attribute "ilike" for class "str"
+  Attribute "ilike" is unknown
+  Line 237:51 [information]: Cannot access attribute "ilike" for class "str"
+  Attribute "ilike" is unknown
+  Line 238:46 [information]: Cannot access attribute "ilike" for class "str"
+  Attribute "ilike" is unknown
+
+/workspace/app/worker/tasks/ingestion_pipeline.py (1 violations)
+-------------------------------------------------
   Line 24:28 [information]: "generate_statute_embeddings" is unknown import symbol
 
-/Volumes/code/cywil/ai-paralegal-poc/example_logger_usage.py (5 violations)
-------------------------------------------------------------
+/workspace/app/worker/tasks/pdf2chunks.py (1 violations)
+-----------------------------------------
+  Line 140:28 [information]: Cannot access attribute "group" for class "str"
+  Attribute "group" is unknown
+
+/workspace/app/worker/tasks/search_tasks.py (6 violations)
+-------------------------------------------
+  Line 232:43 [information]: Cannot access attribute "get" for class "RulingPayload"
+  Attribute "get" is unknown
+  Line 233:45 [information]: Cannot access attribute "get" for class "RulingPayload"
+  Attribute "get" is unknown
+  Line 234:43 [information]: Cannot access attribute "get" for class "RulingPayload"
+  Attribute "get" is unknown
+  Line 235:51 [information]: Cannot access attribute "get" for class "RulingPayload"
+  Attribute "get" is unknown
+  Line 236:40 [information]: Cannot access attribute "get" for class "RulingPayload"
+  Attribute "get" is unknown
+  Line 237:41 [information]: Cannot access attribute "get" for class "RulingPayload"
+  Attribute "get" is unknown
+
+/workspace/app/worker/tasks/validation_tasks.py (1 violations)
+-----------------------------------------------
+  Line 264:41 [information]: Cannot access attribute "basic_chunking" for class "type[FallbackParser]"
+  Attribute "basic_chunking" is unknown
+
+/workspace/example_logger_usage.py (5 violations)
+----------------------------------
   Line 4:39 [information]: "LOGGING_CONFIG" is unknown import symbol
   Line 7:5 [information]: "configure_logging" is unknown import symbol
   Line 8:5 [information]: "logger_manager" is unknown import symbol
   Line 9:5 [information]: "LOGGING_PRESETS" is unknown import symbol
   Line 10:5 [information]: "wrap_all_loggers" is unknown import symbol
 
-/Volumes/code/cywil/ai-paralegal-poc/example_service_logging.py (1 violations)
----------------------------------------------------------------
+/workspace/example_service_logging.py (1 violations)
+-------------------------------------
   Line 4:36 [information]: "service_operation_logger" is unknown import symbol
 
-/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py (10 violations)
---------------------------------------------------------------
+/workspace/ingest/ingest_pipeline.py (10 violations)
+------------------------------------
   Line 46:35 [information]: Cannot access attribute "qdrant" for class "Dict[Unknown, Unknown]"
   Attribute "qdrant" is unknown
   Line 47:35 [information]: Cannot access attribute "qdrant" for class "Dict[Unknown, Unknown]"
@@ -43,15 +85,8 @@ Total violations: 29
   Line 65:44 [information]: Cannot access attribute "postgres" for class "Dict[Unknown, Unknown]"
   Attribute "postgres" is unknown
 
-/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn.py (2 violations)
-------------------------------------------------------------
-  Line 74:26 [information]: Cannot access attribute "get_text" for class "Page"
-  Attribute "get_text" is unknown
-  Line 129:16 [information]: "open" is not a known attribute of module "fitz"
-
-/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py (5 violations)
----------------------------------------------------------------
-  Line 133:16 [information]: "open" is not a known attribute of module "fitz"
+/workspace/ingest/preprocess_sn_o3.py (4 violations)
+-------------------------------------
   Line 334:42 [information]: Cannot access attribute "entities" for class "BaseModel"
   Attribute "entities" is unknown
   Line 442:24 [information]: Cannot access attribute "invoke" for class "OpenAIService"
@@ -62,8 +97,8 @@ Total violations: 29
   Type "str | None" is not assignable to type "str"
     "None" is not assignable to "str"
 
-/Volumes/code/cywil/ai-paralegal-poc/ingest/refactored_ingest_pipeline.py (3 violations)
--------------------------------------------------------------------------
+/workspace/ingest/refactored_ingest_pipeline.py (3 violations)
+-----------------------------------------------
   Line 298:53 [information]: Cannot access attribute "get_ingestion_status" for class "None"
   Attribute "get_ingestion_status" is unknown
   Line 299:49 [information]: Cannot access attribute "get_sn_processing_status" for class "None"
@@ -71,12 +106,103 @@ Total violations: 29
   Line 300:56 [information]: Cannot access attribute "get_embedding_statistics" for class "None"
   Attribute "get_embedding_statistics" is unknown
 
-/Volumes/code/cywil/ai-paralegal-poc/ingest/templates_preprocess.py (1 violations)
--------------------------------------------------------------------
-  Line 84:24 [information]: "open" is not a known attribute of module "fitz"
+/workspace/tests/integration/conftest.py (2 violations)
+----------------------------------------
+  Line 55:22 [information]: Cannot access attribute "close" for class "DatabaseManager"
+  Attribute "close" is unknown
+  Line 75:18 [information]: Cannot access attribute "aclose" for class "Redis[Any]"
+  Attribute "aclose" is unknown
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py (1 violations)
---------------------------------------------------------------------------------
+/workspace/tests/integration/test_ai_functionality.py (6 violations)
+-----------------------------------------------------
+  Line 87:33 [information]: Cannot access attribute "basic_chunking" for class "type[FallbackParser]"
+  Attribute "basic_chunking" is unknown
+  Line 187:47 [information]: Cannot access attribute "categorize_document_type" for class "type[FallbackParser]"
+  Attribute "categorize_document_type" is unknown
+  Line 193:47 [information]: Cannot access attribute "categorize_document_type" for class "type[FallbackParser]"
+  Attribute "categorize_document_type" is unknown
+  Line 226:37 [information]: Cannot access attribute "basic_chunking" for class "type[FallbackParser]"
+  Attribute "basic_chunking" is unknown
+  Line 297:33 [information]: Cannot access attribute "basic_chunking" for class "type[FallbackParser]"
+  Attribute "basic_chunking" is unknown
+  Line 313:33 [information]: Cannot access attribute "basic_chunking" for class "type[FallbackParser]"
+  Attribute "basic_chunking" is unknown
+
+/workspace/tests/integration/test_api.py (2 violations)
+----------------------------------------
+  Line 21:26 [information]: "AsyncSessionLocal" is unknown import symbol
+  Line 21:45 [information]: "init_db" is unknown import symbol
+
+/workspace/tests/integration/test_integration.py (2 violations)
+------------------------------------------------
+  Line 14:5 [information]: "initialize_services" is unknown import symbol
+  Line 481:48 [information]: "cached_query" is unknown import symbol
+
+/workspace/tests/integration/test_integration_refactored.py (4 violations)
+-----------------------------------------------------------
+  Line 16:37 [information]: "setup_structured_logging" is unknown import symbol
+  Line 17:26 [information]: "initialize_services" is unknown import symbol
+  Line 190:42 [information]: "get" is not a known attribute of module "app.core.service_container"
+  Line 247:47 [information]: "get" is not a known attribute of module "app.core.service_container"
+
+/workspace/tests/integration/test_openai_integration.py (3 violations)
+-------------------------------------------------------
+  Line 83:20 [information]: "config" is not a known attribute of module "pytest"
+  Line 111:20 [information]: "config" is not a known attribute of module "pytest"
+  Line 232:20 [information]: "config" is not a known attribute of module "pytest"
+
+/workspace/tests/integration/test_refactored_services.py (3 violations)
+--------------------------------------------------------
+  Line 75:21 [information]: Cannot assign to attribute "_embedder" for class "StatuteSearchService"
+  Attribute "_embedder" is unknown
+  Line 76:21 [information]: Cannot assign to attribute "_llm" for class "StatuteSearchService"
+  Attribute "_llm" is unknown
+  Line 163:21 [information]: Cannot assign to attribute "_llm" for class "DocumentGenerationService"
+  Attribute "_llm" is unknown
+
+/workspace/tests/integration/test_streaming.py (1 violations)
+----------------------------------------------
+  Line 16:30 [information]: "ParalegalAgent" is unknown import symbol
+
+/workspace/tests/integration/test_streaming_handler.py (15 violations)
+------------------------------------------------------
   Line 319:19 [information]: Cannot assign to attribute "transform" for class "MockStreamProcessor"
-  Expression of type "(event: Unknown) -> Unknown" cannot be assigned to attribute "transform" of class "MockStreamProcessor"
+  Expression of type "(event: StreamEvent) -> StreamEvent" cannot be assigned to attribute "transform" of class "MockStreamProcessor"
     "FunctionType" is not assignable to "None"
+  Line 378:26 [information]: Cannot access attribute "chunks_received" for class "MetricsCollector"
+  Attribute "chunks_received" is unknown
+  Line 379:26 [information]: Cannot access attribute "events_by_type" for class "MetricsCollector"
+  Attribute "events_by_type" is unknown
+  Line 380:26 [information]: Cannot access attribute "text_deltas" for class "MetricsCollector"
+  Attribute "text_deltas" is unknown
+  Line 381:26 [information]: Cannot access attribute "tool_calls" for class "MetricsCollector"
+  Attribute "tool_calls" is unknown
+  Line 382:26 [information]: Cannot access attribute "errors" for class "MetricsCollector"
+  Attribute "errors" is unknown
+  Line 383:26 [information]: Cannot access attribute "start_time" for class "MetricsCollector"
+  Attribute "start_time" is unknown
+  Line 402:19 [information]: Cannot assign to attribute "chunks_received" for class "MetricsCollector"
+  Attribute "chunks_received" is unknown
+  Line 419:19 [information]: Cannot assign to attribute "chunks_received" for class "MetricsCollector"
+  Attribute "chunks_received" is unknown
+  Line 420:19 [information]: Cannot assign to attribute "text_deltas" for class "MetricsCollector"
+  Attribute "text_deltas" is unknown
+  Line 421:19 [information]: Cannot assign to attribute "errors" for class "MetricsCollector"
+  Attribute "errors" is unknown
+  Line 425:26 [information]: Cannot access attribute "chunks_received" for class "MetricsCollector"
+  Attribute "chunks_received" is unknown
+  Line 426:26 [information]: Cannot access attribute "text_deltas" for class "MetricsCollector"
+  Attribute "text_deltas" is unknown
+  Line 427:26 [information]: Cannot access attribute "errors" for class "MetricsCollector"
+  Attribute "errors" is unknown
+  Line 428:26 [information]: Cannot access attribute "events_by_type" for class "MetricsCollector"
+  Attribute "events_by_type" is unknown
+
+/workspace/tests/unit/test_tool_registry.py (3 violations)
+-------------------------------------------
+  Line 166:25 [information]: Cannot access attribute "name" for class "BaseModel"
+  Attribute "name" is unknown
+  Line 167:25 [information]: Cannot access attribute "age" for class "BaseModel"
+  Attribute "age" is unknown
+  Line 168:25 [information]: Cannot access attribute "active" for class "BaseModel"
+  Attribute "active" is unknown

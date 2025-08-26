@@ -1,397 +1,73 @@
 Pyright Diagnostic Report: reportMissingImports
 ================================================================================
 
-Total violations: 230
+Total violations: 23
 
 
-/Volumes/code/cywil/ai-paralegal-poc/app/core/ai_client_factory.py (3 violations)
-------------------------------------------------------------------
-  Line 11:6 [error]: Import "app.services.openai_client" could not be resolved
-  Line 176:18 [error]: Import "app.services.openai_client" could not be resolved
-  Line 192:14 [error]: Import "app.services.openai_client" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/core/celery_service_wrapper.py (6 violations)
------------------------------------------------------------------------
-  Line 13:6 [error]: Import "app.core.logger_manager" could not be resolved
-  Line 226:18 [error]: Import "app.worker.celery_app" could not be resolved
-  Line 243:14 [error]: Import "app.worker.celery_app" could not be resolved
-  Line 444:14 [error]: Import "app.worker.celery_app" could not be resolved
-  Line 466:14 [error]: Import "app.worker.celery_app" could not be resolved
-  Line 481:14 [error]: Import "app.worker.celery_app" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/dependencies.py (1 violations)
---------------------------------------------------------
-  Line 6:6 [error]: Import "app.core.database_manager" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/main.py (7 violations)
-------------------------------------------------
-  Line 171:30 [error]: Import "app.worker.celery_app" could not be resolved
-  Line 246:26 [error]: Import "app.worker.celery_app" could not be resolved
-  Line 483:14 [error]: Import "app.worker.tasks.maintenance" could not be resolved
-  Line 500:14 [error]: Import "app.worker.tasks.maintenance" could not be resolved
-  Line 552:14 [error]: Import "app.worker.tasks.search_tasks" could not be resolved
-  Line 593:14 [error]: Import "app.worker.tasks.document_tasks" could not be resolved
-  Line 626:14 [error]: Import "app.worker.tasks.ingestion_pipeline" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/routes/monitoring_routes.py (6 violations)
---------------------------------------------------------------------
-  Line 11:6 [error]: Import "app.auth" could not be resolved
-  Line 12:6 [error]: Import "app.core.logger_manager" could not be resolved
-  Line 13:6 [error]: Import "app.models" could not be resolved
-  Line 14:6 [error]: Import "app.worker.celery_app" could not be resolved
-  Line 15:6 [error]: Import "app.worker.monitoring" could not be resolved
-  Line 16:6 [error]: Import "app.worker.tasks.maintenance" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/services/fallback_parser.py (1 violations)
---------------------------------------------------------------------
-  Line 10:6 [error]: Import "app.embedding_models.pipeline_schemas" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/services/openai_client.py (2 violations)
-------------------------------------------------------------------
-  Line 20:6 [error]: Import "app.core.config_service" could not be resolved
-  Line 21:6 [error]: Import "app.core.exceptions" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/validators/document_validator.py (1 violations)
--------------------------------------------------------------------------
-  Line 10:6 [error]: Import "app.embedding_models.pipeline_schemas" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/base_task.py (3 violations)
-------------------------------------------------------------
-  Line 14:6 [error]: Import "app.core.logger_manager" could not be resolved
-  Line 15:6 [error]: Import "app.worker.service_registry" could not be resolved
-  Line 221:18 [error]: Import "app.worker.tasks.maintenance" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/celery_app.py (3 violations)
--------------------------------------------------------------
-  Line 9:6 [error]: Import "app.core.logger_manager" could not be resolved
-  Line 10:6 [error]: Import "app.worker.config" could not be resolved
-  Line 13:6 [error]: Import "app.worker.logging_config" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/config.py (1 violations)
----------------------------------------------------------
-  Line 14:6 [error]: Import "app.core.config_service" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/ingestion_api.py (14 violations)
-----------------------------------------------------------------
-  Line 12:6 [error]: Import "app.models" could not be resolved
-  Line 13:6 [error]: Import "app.auth" could not be resolved
-  Line 14:6 [error]: Import "app.core.logger_manager" could not be resolved
-  Line 15:6 [error]: Import "app.worker.celery_app" could not be resolved
-  Line 97:18 [error]: Import "app.worker.tasks.statute_tasks" could not be resolved
-  Line 104:18 [error]: Import "app.worker.tasks.statute_tasks" could not be resolved
-  Line 122:14 [error]: Import "app.worker.tasks.statute_tasks" could not be resolved
-  Line 139:14 [error]: Import "app.worker.tasks.ruling_tasks" could not be resolved
-  Line 157:14 [error]: Import "app.worker.tasks.ruling_tasks" could not be resolved
-  Line 177:18 [error]: Import "app.worker.tasks.embedding_tasks" could not be resolved
-  Line 199:14 [error]: Import "app.worker.tasks.embedding_tasks" could not be resolved
-  Line 216:14 [error]: Import "app.worker.tasks.ingestion_pipeline" could not be resolved
-  Line 236:14 [error]: Import "app.worker.tasks.ingestion_pipeline" could not be resolved
-  Line 254:14 [error]: Import "app.worker.tasks.ingestion_pipeline" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/logging_config.py (1 violations)
------------------------------------------------------------------
-  Line 14:6 [error]: Import "app.core.config_service" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/monitoring.py (4 violations)
--------------------------------------------------------------
-  Line 30:6 [error]: Import "app.core.config_service" could not be resolved
-  Line 31:6 [error]: Import "app.core.logger_manager" could not be resolved
-  Line 129:22 [error]: Import "app.worker.service_registry" could not be resolved
-  Line 578:18 [error]: Import "app.worker.config" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/service_registry.py (10 violations)
--------------------------------------------------------------------
-  Line 16:6 [error]: Import "app.core.config_service" could not be resolved
-  Line 17:6 [error]: Import "app.core.database_manager" could not be resolved
-  Line 18:6 [error]: Import "app.core.llm_manager" could not be resolved
-  Line 19:6 [error]: Import "app.core.logger_manager" could not be resolved
-  Line 20:6 [error]: Import "app.repositories.case_repository" could not be resolved
-  Line 23:6 [error]: Import "app.repositories.user_repository" could not be resolved
-  Line 24:6 [error]: Import "app.services.case_management_service" could not be resolved
-  Line 25:6 [error]: Import "app.services.document_generation_service" could not be resolved
-  Line 29:6 [error]: Import "app.services.statute_search_service" could not be resolved
-  Line 30:6 [error]: Import "app.services.supreme_court_service" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py (4 violations)
--------------------------------------------------------------------
-  Line 12:6 [error]: Import "app.core.logger_manager" could not be resolved
-  Line 13:6 [error]: Import "app.models" could not be resolved
-  Line 14:6 [error]: Import "app.worker.celery_app" could not be resolved
-  Line 15:6 [error]: Import "app.worker.service_registry" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/document_tasks.py (3 violations)
------------------------------------------------------------------------
-  Line 11:6 [error]: Import "app.core.logger_manager" could not be resolved
-  Line 12:6 [error]: Import "app.worker.celery_app" could not be resolved
-  Line 13:6 [error]: Import "app.worker.service_registry" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/embedding_tasks.py (4 violations)
-------------------------------------------------------------------------
-  Line 10:6 [error]: Import "app.core.config_service" could not be resolved
-  Line 11:6 [error]: Import "app.core.logger_manager" could not be resolved
-  Line 12:6 [error]: Import "app.worker.celery_app" could not be resolved
-  Line 13:6 [error]: Import "app.worker.service_registry" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/example.py (3 violations)
-----------------------------------------------------------------
-  Line 9:6 [error]: Import "app.core.logger_manager" could not be resolved
-  Line 10:6 [error]: Import "app.worker.base_task" could not be resolved
-  Line 11:6 [error]: Import "app.worker.celery_app" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/ingestion_pipeline.py (5 violations)
----------------------------------------------------------------------------
-  Line 9:6 [error]: Import "app.core.logger_manager" could not be resolved
-  Line 10:6 [error]: Import "app.worker.celery_app" could not be resolved
-  Line 11:6 [error]: Import "app.embedding_models.pipeline_schemas" could not be resolved
-  Line 20:6 [error]: Import "app.validators.document_validator" could not be resolved
-  Line 21:6 [error]: Import "app.services.fallback_parser" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/maintenance.py (4 violations)
---------------------------------------------------------------------
-  Line 12:6 [error]: Import "app.core.config_service" could not be resolved
-  Line 13:6 [error]: Import "app.core.logger_manager" could not be resolved
-  Line 14:6 [error]: Import "app.worker.celery_app" could not be resolved
-  Line 15:6 [error]: Import "app.worker.service_registry" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (2 violations)
--------------------------------------------------------------------------
-  Line 31:6 [error]: Import "app.core.ai_client_factory" could not be resolved
-  Line 32:6 [error]: Import "app.services.openai_client" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/ruling_tasks.py (3 violations)
----------------------------------------------------------------------
-  Line 9:6 [error]: Import "app.core.logger_manager" could not be resolved
-  Line 10:6 [error]: Import "app.worker.celery_app" could not be resolved
-  Line 11:6 [error]: Import "app.worker.service_registry" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/search_tasks.py (5 violations)
----------------------------------------------------------------------
-  Line 9:6 [error]: Import "app.core.logger_manager" could not be resolved
-  Line 10:6 [error]: Import "app.worker.celery_app" could not be resolved
-  Line 11:6 [error]: Import "app.worker.service_registry" could not be resolved
-  Line 366:22 [error]: Import "app.worker.tasks.embedding_tasks" could not be resolved
-  Line 381:22 [error]: Import "app.worker.tasks.embedding_tasks" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/sn.py (2 violations)
------------------------------------------------------------
-  Line 22:6 [error]: Import "app.core.config_service" could not be resolved
-  Line 23:6 [error]: Import "app.models" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/statute_tasks.py (3 violations)
-----------------------------------------------------------------------
-  Line 10:6 [error]: Import "app.core.logger_manager" could not be resolved
-  Line 11:6 [error]: Import "app.worker.celery_app" could not be resolved
-  Line 12:6 [error]: Import "app.worker.service_registry" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py (5 violations)
--------------------------------------------------------------------------
-  Line 8:6 [error]: Import "app.core.logger_manager" could not be resolved
-  Line 9:6 [error]: Import "app.embedding_models.pipeline_schemas" could not be resolved
-  Line 15:6 [error]: Import "app.validators.document_validator" could not be resolved
-  Line 16:6 [error]: Import "app.services.fallback_parser" could not be resolved
-  Line 17:6 [error]: Import "app.worker.celery_app" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/celery/conftest.py (2 violations)
--------------------------------------------------------------
-  Line 1:8 [error]: Import "pytest" could not be resolved
-  Line 6:6 [error]: Import "app.worker.celery_app" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/celery/test_celery_integration.py (9 violations)
-----------------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
-  Line 22:6 [error]: Import "app.worker.celery_app" could not be resolved
-  Line 23:6 [error]: Import "app.core.config_service" could not be resolved
-  Line 79:18 [error]: Import "app.worker.tasks.maintenance" could not be resolved
-  Line 110:18 [error]: Import "app.worker.tasks.search_tasks" could not be resolved
-  Line 159:18 [error]: Import "app.worker.tasks.document_tasks" could not be resolved
-  Line 213:18 [error]: Import "app.worker.tasks.case_tasks" could not be resolved
-  Line 269:18 [error]: Import "app.worker.tasks.maintenance" could not be resolved
-  Line 360:18 [error]: Import "app.worker.config" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/celery/test_celery_tasks.py (4 violations)
-----------------------------------------------------------------------
-  Line 1:8 [error]: Import "pytest" could not be resolved
-  Line 2:6 [error]: Import "app.worker.tasks.statute_tasks" could not be resolved
-  Line 3:6 [error]: Import "app.worker.tasks.ruling_tasks" could not be resolved
-  Line 4:6 [error]: Import "app.worker.tasks.embedding_tasks" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py (6 violations)
+/workspace/app/embedding_models/embedding_interface.py (4 violations)
 ------------------------------------------------------
-  Line 5:12 [error]: Import "pytest" could not be resolved
-  Line 43:10 [error]: Import "app.core.service_container" could not be resolved
-  Line 48:10 [error]: Import "app.core.tool_registry" could not be resolved
-  Line 105:10 [error]: Import "app.core.conversation_manager" could not be resolved
-  Line 122:10 [error]: Import "app.core.tool_registry" could not be resolved
-  Line 143:10 [error]: Import "app.core.streaming_handler" could not be resolved
+  Line 55:18 [error]: Import "sentence_transformers" could not be resolved
+  Line 184:26 [error]: Import "transformers" could not be resolved
+  Line 185:28 [error]: Import "torch" could not be resolved
+  Line 207:16 [error]: Import "torch" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/fixtures/legal_documents/test_data_loader.py (1 violations)
----------------------------------------------------------------------------------------
-  Line 8:6 [error]: Import "app.embedding_models.pipeline_schemas" could not be resolved
+/workspace/app/services/supreme_court_service.py (1 violations)
+------------------------------------------------
+  Line 15:6 [error]: Import "sentence_transformers" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py (3 violations)
-------------------------------------------------------------------
-  Line 2:12 [error]: Import "pytest" could not be resolved
-  Line 22:10 [error]: Import "app.core.config_service" could not be resolved
-  Line 23:10 [error]: Import "app.core.database_manager" could not be resolved
+/workspace/app/task_processors.py (2 violations)
+---------------------------------
+  Line 9:8 [error]: Import "fitz" could not be resolved
+  Line 16:6 [error]: Import "sentence_transformers" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_ai_functionality.py (6 violations)
--------------------------------------------------------------------------------
-  Line 7:8 [error]: Import "pytest" could not be resolved
-  Line 12:6 [error]: Import "app.embedding_models.pipeline_schemas" could not be resolved
-  Line 22:6 [error]: Import "app.validators.document_validator" could not be resolved
-  Line 23:6 [error]: Import "app.services.fallback_parser" could not be resolved
-  Line 24:6 [error]: Import "tests.fixtures.legal_documents.test_data_loader" could not be resolved
-  Line 319:14 [error]: Import "app.embedding_models.pipeline_schemas" could not be resolved
+/workspace/app/worker/tasks/embed.py (1 violations)
+------------------------------------
+  Line 30:6 [error]: Import "sentence_transformers" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py (3 violations)
-------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
-  Line 21:6 [error]: Import "app.database" could not be resolved
-  Line 22:6 [error]: Import "app.models" could not be resolved
+/workspace/app/worker/tasks/pdf2chunks.py (1 violations)
+-----------------------------------------
+  Line 9:8 [error]: Import "pdfplumber" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_conversation_manager.py (6 violations)
------------------------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
-  Line 12:6 [error]: Import "app.core.conversation_manager" could not be resolved
-  Line 13:6 [error]: Import "app.core.database_manager" could not be resolved
-  Line 14:6 [error]: Import "app.core.config_service" could not be resolved
-  Line 15:6 [error]: Import "app.core.service_interface" could not be resolved
-  Line 16:6 [error]: Import "app.models" could not be resolved
+/workspace/app/worker/tasks/preprocess_sn_o3.py (1 violations)
+-----------------------------------------------
+  Line 23:8 [error]: Import "fitz" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_database_manager.py (4 violations)
--------------------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
-  Line 12:6 [error]: Import "app.core.database_manager" could not be resolved
-  Line 13:6 [error]: Import "app.core.service_interface" could not be resolved
-  Line 14:6 [error]: Import "app.core.config_service" could not be resolved
+/workspace/app/worker/tasks/sn.py (2 violations)
+---------------------------------
+  Line 11:6 [error]: Import "deepdiff" could not be resolved
+  Line 14:6 [error]: Import "sentence_transformers" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_embedding_pipeline.py (5 violations)
----------------------------------------------------------------------------------
-  Line 6:8 [error]: Import "pytest" could not be resolved
-  Line 10:6 [error]: Import "app.core.llm_manager" could not be resolved
-  Line 11:6 [error]: Import "app.core.config_service" could not be resolved
-  Line 12:6 [error]: Import "app.services.statute_search_service" could not be resolved
-  Line 13:6 [error]: Import "app.embedding_models.embedding_interface" could not be resolved
+/workspace/ingest/embed.py (1 violations)
+--------------------------
+  Line 3:6 [error]: Import "sentence_transformers" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py (11 violations)
---------------------------------------------------------------------------
-  Line 5:8 [error]: Import "pytest" could not be resolved
-  Line 11:6 [error]: Import "app.core" could not be resolved
-  Line 17:6 [error]: Import "app.core.database_manager" could not be resolved
-  Line 18:6 [error]: Import "app.core.tool_executor" could not be resolved
-  Line 19:6 [error]: Import "app.core.conversation_manager" could not be resolved
-  Line 20:6 [error]: Import "app.core.streaming_handler" could not be resolved
-  Line 21:6 [error]: Import "app.paralegal_agents.refactored_agent_sdk" could not be resolved
-  Line 22:6 [error]: Import "app.core.service_interface" could not be resolved
-  Line 23:6 [error]: Import "app.services" could not be resolved
-  Line 444:14 [error]: Import "app.core.performance_utils" could not be resolved
-  Line 481:14 [error]: Import "app.core.performance_utils" could not be resolved
+/workspace/ingest/pdf2chunks.py (1 violations)
+-------------------------------
+  Line 3:8 [error]: Import "pdfplumber" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py (6 violations)
--------------------------------------------------------------------------------------
-  Line 5:8 [error]: Import "pytest" could not be resolved
-  Line 11:6 [error]: Import "app.core" could not be resolved
-  Line 16:6 [error]: Import "app.core.logger_manager" could not be resolved
-  Line 17:6 [error]: Import "app.services" could not be resolved
-  Line 18:6 [error]: Import "app.paralegal_agents.refactored_agent_sdk" could not be resolved
-  Line 209:14 [error]: Import "app.core.exceptions" could not be resolved
+/workspace/ingest/preprocess_sn.py (3 violations)
+----------------------------------
+  Line 24:8 [error]: Import "fitz" could not be resolved
+  Line 25:8 [error]: Import "spacy" could not be resolved
+  Line 26:6 [error]: Import "spacy.pipeline" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_migration.py (14 violations)
-------------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
-  Line 33:14 [error]: Import "app.core.config_service" could not be resolved
-  Line 34:14 [error]: Import "app.core.llm_manager" could not be resolved
-  Line 35:14 [error]: Import "app.core.database_manager" could not be resolved
-  Line 36:14 [error]: Import "app.core.conversation_manager" could not be resolved
-  Line 37:14 [error]: Import "app.core.tool_executor" could not be resolved
-  Line 41:14 [error]: Import "app.services.statute_search_service" could not be resolved
-  Line 42:14 [error]: Import "app.services.supreme_court_service" could not be resolved
-  Line 43:14 [error]: Import "app.services.document_generation_service" could not be resolved
-  Line 44:14 [error]: Import "app.services.case_management_service" could not be resolved
-  Line 48:14 [error]: Import "app.paralegal_agents.refactored_agent_sdk" could not be resolved
-  Line 52:14 [error]: Import "app.main" could not be resolved
-  Line 71:14 [error]: Import "app.core.config_service" could not be resolved
-  Line 72:14 [error]: Import "app.core.llm_manager" could not be resolved
+/workspace/ingest/preprocess_sn_o3.py (1 violations)
+-------------------------------------
+  Line 17:8 [error]: Import "fitz" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_openai_integration.py (3 violations)
----------------------------------------------------------------------------------
-  Line 7:8 [error]: Import "pytest" could not be resolved
-  Line 12:6 [error]: Import "app.services.openai_client" could not be resolved
-  Line 13:6 [error]: Import "app.core.ai_client_factory" could not be resolved
+/workspace/ingest/sn.py (2 violations)
+-----------------------
+  Line 8:6 [error]: Import "deepdiff" could not be resolved
+  Line 14:6 [error]: Import "sentence_transformers" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py (6 violations)
-----------------------------------------------------------------------------------
-  Line 5:8 [error]: Import "pytest" could not be resolved
-  Line 9:6 [error]: Import "app.core" could not be resolved
-  Line 18:6 [error]: Import "app.services" could not be resolved
-  Line 287:14 [error]: Import "app.core" could not be resolved
-  Line 336:14 [error]: Import "app.services" could not be resolved
-  Line 343:14 [error]: Import "app.services" could not be resolved
+/workspace/ingest/templates.py (1 violations)
+------------------------------
+  Line 14:6 [error]: Import "sentence_transformers" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming.py (2 violations)
-------------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
-  Line 16:6 [error]: Import "app.orchestrator" could not be resolved
+/workspace/ingest/templates_preprocess.py (1 violations)
+-----------------------------------------
+  Line 1:8 [error]: Import "fitz" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py (2 violations)
---------------------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
-  Line 9:6 [error]: Import "app.core.streaming_handler" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/conftest.py (1 violations)
------------------------------------------------------------
-  Line 2:12 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py (2 violations)
------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
-  Line 11:6 [error]: Import "app.paralegal_agents" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_llm_manager.py (4 violations)
--------------------------------------------------------------------
-  Line 6:8 [error]: Import "pytest" could not be resolved
-  Line 10:6 [error]: Import "app.core.llm_manager" could not be resolved
-  Line 11:6 [error]: Import "app.core.config_service" could not be resolved
-  Line 12:6 [error]: Import "app.embedding_models.embedding_interface" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_integration.py (5 violations)
---------------------------------------------------------------------------
-  Line 5:8 [error]: Import "pytest" could not be resolved
-  Line 10:6 [error]: Import "app.embedding_models.pipeline_schemas" could not be resolved
-  Line 17:6 [error]: Import "app.validators.document_validator" could not be resolved
-  Line 18:6 [error]: Import "app.services.fallback_parser" could not be resolved
-  Line 19:6 [error]: Import "tests.fixtures.legal_documents.test_data_loader" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_service.py (3 violations)
-----------------------------------------------------------------------
-  Line 6:8 [error]: Import "pytest" could not be resolved
-  Line 11:6 [error]: Import "app.services.openai_client" could not be resolved
-  Line 12:6 [error]: Import "app.core.config_service" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_performance_utils.py (6 violations)
--------------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
-  Line 10:6 [error]: Import "app.core.performance_utils" could not be resolved
-  Line 530:14 [error]: Import "app.core.performance_utils" could not be resolved
-  Line 531:14 [error]: Import "app.core.performance_utils" could not be resolved
-  Line 538:14 [error]: Import "app.core.performance_utils" could not be resolved
-  Line 539:14 [error]: Import "app.core.performance_utils" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_registration_key.py (1 violations)
-------------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_executor.py (4 violations)
----------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
-  Line 10:6 [error]: Import "app.core.tool_executor" could not be resolved
-  Line 14:6 [error]: Import "app.core.exceptions" could not be resolved
-  Line 17:6 [error]: Import "app.core.service_interface" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_registry.py (5 violations)
----------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
-  Line 9:6 [error]: Import "app.core.tool_registry" could not be resolved
-  Line 13:6 [error]: Import "app.core.exceptions" could not be resolved
-  Line 399:14 [error]: Import "app.core.tool_registry" could not be resolved
-  Line 400:14 [error]: Import "app.core.tool_registry" could not be resolved
+/workspace/tests/unit/test_agent_sdk.py (1 violations)
+---------------------------------------
+  Line 12:6 [error]: Import "app.paralegal_agents.tool_wrappers" could not be resolved
