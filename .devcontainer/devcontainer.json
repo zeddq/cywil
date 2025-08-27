@@ -1,33 +1,81 @@
 {
-    "features": {
-      "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
-    },
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "anthropics.anthropics-claude-code"
-            ]
-        }
-    },
-    "settings": {
-        "terminal.integrated.env.linux": {
-            "PATH": "/home/agent/.local/bin:${env:PATH}"
-        }
-    },
-    "workspaceMount": "source=../${WORKSPACE_FOLDER},target=/home/agent/app,type=bind",
-    "containerUser": "agent",
-    "postCreateCommand": "jujutsu pull https://github.com/anthropics/anthropics-claude-code.git",
+    "name": "python-subagent",
     "build": {
-        "dockerfile": "Dockerfile",
-        "context": ".."
+      "dockerfile": "Dockerfile",
+      "context": "..",
+      "args": {
+        "PYTHON_VERSION": "3.11"
+      }
     },
+  
+    // Reuse common extras without editing the Dockerfile
+    "features": {
+      "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+      "ghcr.io/devcontainers/features/common-utils:2": {
+        "username": "vscode"
+      },
+        "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
+    },
+  
+    // VS Code customizations
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "ms-python.python",
+          "ms-python.vscode-pylance",
+          "charliermarsh.ruff",
+          "ms-azuretools.vscode-docker",
+          "github.vscode-github-actions",
+          "anthropics.anthropics-claude-code"
+        ],
+        "settings": {
+          "python.defaultInterpreterPath": "/usr/local/bin/python",
+          "python.testing.pytestEnabled": true,
+          "editor.formatOnSave": true,
+          "files.exclude": {
+            "**/__pycache__": true
+          }
+        }
+      }
+    },
+  
+    // Mount the workspace and keep Claude hooks/env visible
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces,type=bind",
+    "workspaceFolder": "/workspaces",
+  
+    // Persist caches and Python packages between rebuilds
     "mounts": [
-        "source=${env:HOME}/.claude,target=/home/agent/.claude,type=bind"
+      // pip/uv cache
+      "type=volume,source=pycache,target=/home/vscode/.cache",
+      // optional: share SSH for private repos
+      // "type=bind,source=${env:HOME}/.ssh,target=/home/vscode/.ssh,readonly"
+      // keep .claude runtime across container restarts if desired
+      // "type=volume,source=claude-runtime,target=/workspaces/.claude"
     ],
-    "containerEnv": {
-        "MY_APP_ENV": "${env:MY_APP_ENV}",
-        "DEBUG": "${env:DEBUG}",
-        "NODE_ENV": "development"
-    },
-    "runArgs": ["--env-file", ".env"]
+  
+    // Make selected host env available to sub-agents and hooks
+    "forwardEnv": [
+      "OPENAI_API_KEY",
+      "ANTHROPIC_API_KEY",
+      "CI_TOKEN",
+      "MY_ORG",
+      "HTTP_PROXY",
+      "HTTPS_PROXY",
+      "NO_PROXY"
+    ],
+  
+    // Lifecycle
+    "onCreateCommand": "git config --global --add safe.directory /workspaces",
+    "postCreateCommand": "pre-commit install || true",
+    "postStartCommand": "echo 'eval \"$(direnv hook bash)\"' >> ~/.bashrc && direnv allow || true",
+  
+    // Run as the non-root user created in the Dockerfile
+    "remoteUser": "vscode",
+  
+    // Helpful ports
+    "forwardPorts": [8000, 8888],
+    "portsAttributes": {
+      "8888": { "label": "Jupyter" }
+    }
   }
+  

@@ -1,19 +1,74 @@
-FROM python:3.11-slim-bookworm
-ENV DEBIAN_FRONTEND=noninteractive
+ARG PYTHON_VERSION=3.11
+FROM python:${PYTHON_VERSION}-slim-bookworm
 
-# (Optional) print UTC clock for debugging
-RUN date -u
+# Avoid interactive tzdata prompts
+ENV DEBIAN_FRONTEND=noninteractive \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    PIP_NO_CACHE_DIR=1 \
+    UV_SYSTEM_PYTHON=1
 
-# Temporarily ignore repo "not valid yet" timestamps
-RUN printf 'Acquire::Check-Valid-Until "false";\nAcquire::Check-Date "false";\n' \
-  > /etc/apt/apt.conf.d/99-no-date-check \
-  && apt-get update \
-  && apt-get install -y --no-install-recommends \
-  xvfb xauth libx11-6 libxext6 libxrender1 libxtst6 \
-  git curl gcc g++ make libpq-dev wget tmux jujutsu gh cron \
-  && rm -rf /var/lib/apt/lists/*
+# Base OS deps for building common Python wheels and using git/tools
+RUN --mount=type=cache,target=/var/cache/apt \
+    apt-get update && apt-get install -y --no-install-recommends \
+      git curl ca-certificates build-essential pkg-config \
+      libffi-dev libssl-dev libpq-dev libsqlite3-dev \
+      bash-completion less vim direnv \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN service cron start || /etc/init.d/cron start || true
+# Install uv (fast Python package manager) and pipx
+# See: https://docs.astral.sh/uv/guides/integration/docker/
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh \
+    && python -m pip install --upgrade pip pipx \
+    && python -m pipx ensurepath
 
-RUN useradd -m -u 1000 agent
-WORKDIR /home/agent
+# Optional: Poetry via pipx (pin to avoid surprise upgrades)
+# See Poetry docs and community Docker guidance
+RUN pipx install "poetry==1.8.3"
+# Optional: pre-commit for repo hooks
+RUN pipx install pre-commit
+
+# Create non-root user matching VS Code devcontainers convention
+ARG USERNAME=vscode
+ARG UID=1000
+ARG GID=1000
+RUN groupadd --gid ${GID} ${USERNAME} \
+    && useradd -s /bin/bash --uid ${UID} --gid ${GID} -m ${USERNAME} \
+    && usermod -aG sudo ${USERNAME} || true
+
+# direnv enablement for login shells
+RUN echo 'eval "$(direnv hook bash)"' >> /etc/bash.bashrc
+
+# Devcontainer defaults
+WORKDIR /workspaces
+
+# Copy project metadata first to leverage build cache during installs
+# If you use uv: pyproject.toml + uv.lock
+# If you use Poetry: pyproject.toml + poetry.lock
+COPY pyproject.toml* uv.lock* poetry.lock* /tmp/app/
+# Install deps into system Python (dev workflow; adjust for venv if desired)
+# Prefer uv when lockfile present; fall back to Poetry export + pip
+RUN --mount=type=cache,target=/root/.cache \
+    if [ -f /tmp/app/uv.lock ]; then \
+        /root/.local/bin/uv pip install -r /tmp/app/uv.lock; \
+    elif [ -f /tmp/app/pyproject.toml ]; then \
+        /root/.local/bin/pipx run --spec "poetry==1.8.3" \
+          poetry export --with dev --format requirements.txt -o /tmp/req.txt \
+        && python -m pip install -r /tmp/req.txt; \
+    fi
+
+# Claude Code hook scripts will live inside the repo; ensure executable bit works
+# You can mount the repo at runtime; no copy needed here.
+
+# Environment files used by your orchestrator hooks:
+# .claude/.agent.env is read by sub-agents or sourced into Bash (your hook writes it).
+# Keep a conventional path visible inside the container.
+VOLUME ["/workspaces"]
+
+# Minimal health and tool visibility
+ENV PATH="/root/.local/bin:/root/.cargo/bin:/usr/local/bin:/usr/bin:/bin:${PATH}"
+
+USER ${USERNAME}
+
+# Helpful defaults inside the devcontainer
+# (devcontainers will override entrypoint/cmd; keep this simple)
+CMD ["bash"]
