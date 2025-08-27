@@ -5,7 +5,7 @@
     "executionEnvironments": [
       {
         "root": ".",          // everything under tests/*
-        "venv": ".venv-tests"     // resolve imports using .venv-tests
+        "venv": ".venv-tests",     // resolve imports using .venv-tests
       },
       {
         "root": "app",
