@@ -105,7 +105,7 @@ class LocalEmbedder(EmbeddingModel):
                     self._dimension = 768
                 else:
                     self._dimension = dimension
-        return self._dimension
+        return self._dimension if self._dimension is not None else 0
     
     async def warmup(self) -> None:
         """Warm up the model by running a test inference."""
@@ -218,7 +218,7 @@ class HuggingFaceEmbedder(EmbeddingModel):
                     truncation=True,
                     max_length=512
                 )
-                outputs = model(**inputs)
+                outputs = self._model(**inputs)
                 # Use mean pooling
                 embeddings = torch.mean(outputs.last_hidden_state, dim=1)
                 return embeddings.cpu().numpy()

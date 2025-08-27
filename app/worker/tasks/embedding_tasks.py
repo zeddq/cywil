@@ -262,6 +262,7 @@ def optimize_embeddings(collection_name: str) -> Dict[str, Any]:
             async with db_manager.get_session() as session:
                 # LLM manager should already be initialized by worker registry
 
+                llm_manager.get_embeddings(texts=["test"], model_name="multilingual")
                 # This would need implementation in EmbeddingService
                 # For now, return a placeholder
                 return {
@@ -273,10 +274,5 @@ def optimize_embeddings(collection_name: str) -> Dict[str, Any]:
         except Exception as e:
             logger.error(f"Error optimizing embeddings: {e}", exc_info=True)
             return {"status": "error", "error": str(e)}
-        finally:
-            if embedding_service:
-                await embedding_service.shutdown()
-            if db_manager:
-                await db_manager.shutdown()
 
     return run_async(_process())

@@ -1,0 +1,33 @@
+{
+    "features": {
+      "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "anthropics.anthropics-claude-code"
+            ]
+        }
+    },
+    "settings": {
+        "terminal.integrated.env.linux": {
+            "PATH": "/home/agent/.local/bin:${env:PATH}"
+        }
+    },
+    "workspaceMount": "source=../${WORKSPACE_FOLDER},target=/home/agent/app,type=bind",
+    "containerUser": "agent",
+    "postCreateCommand": "jujutsu pull https://github.com/anthropics/anthropics-claude-code.git",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "mounts": [
+        "source=${env:HOME}/.claude,target=/home/agent/.claude,type=bind"
+    ],
+    "containerEnv": {
+        "MY_APP_ENV": "${env:MY_APP_ENV}",
+        "DEBUG": "${env:DEBUG}",
+        "NODE_ENV": "development"
+    },
+    "runArgs": ["--env-file", ".env"]
+  }

@@ -81,17 +81,7 @@ class FallbackParser:
         Returns:
             FallbackResult with extracted information
         """
-<<<<<<< Current (Your changes)
-        extraction = LegalExtraction(
-            case_number=None,
-            court=None,
-            date=None,
-            decision=None,
-            reasoning=None,
-        )
-=======
         extraction = LegalExtraction(case_number=None, court=None, date=None, parties=[], legal_basis=[], decision=None, reasoning=None)
->>>>>>> Incoming (Background Agent changes)
         errors = []
         confidence_scores = []
         

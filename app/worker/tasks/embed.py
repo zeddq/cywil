@@ -13,13 +13,9 @@ from qdrant_client.models import (
     VectorParams,
     PointStruct,
     Filter,
-<<<<<<< Current (Your changes)
     TextIndexType,
     KeywordIndexParams,
     KeywordIndexType,
-=======
-    FieldCondition,
->>>>>>> Incoming (Background Agent changes)
     MatchValue,
     CreateCollection,
     OptimizersConfigDiff,
@@ -365,7 +361,7 @@ def search_statutes(
     search_filter = None
     if code_filter:
         search_filter = Filter(
-            must=[FieldCondition(key="code", match=MatchValue(value=code_filter))]
+            must=[qmodels.FieldCondition(key="code", match=MatchValue(value=code_filter))]
         )
 
     # Search
