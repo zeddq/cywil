@@ -121,21 +121,6 @@ async def extract_pdf_with_o5(
 ) -> ParsedRuling | bytes:
     """Use o3 to intelligently parse PDF structure and content"""
 
-    llm = get_openai_service().async_responses_parse(
-        model="gpt-5",
-        input=[
-            {
-                "role": "user",
-                "content": extract_prompt_template.format(pdf_path=pdf_path),
-            }
-        ],
-        text_format=ParsedRuling,
-        max_output_tokens=100000,
-        timeout=600,
-    )
-    response = await llm
-    logger.info(response)
-
     # Extract raw text from PDF first
     doc = fitz.open(pdf_path)  # type: ignore
     full_text = ""
@@ -147,8 +132,10 @@ async def extract_pdf_with_o5(
         full_text += f"\n--- PAGE {page_num + 1} ---\n{page_text}\n"
 
     doc.close()
-    response = await llm.get_response(
-        system_instructions=None,
+    
+    llm_service = get_openai_service()
+    response = await llm_service.async_responses_parse(
+        model="gpt-5",
         input=[
             {
                 "role": "user",

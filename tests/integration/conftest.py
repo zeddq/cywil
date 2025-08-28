@@ -52,7 +52,7 @@ async def test_db_pool(test_config):
     db_manager = DatabaseManager(test_config)
     await db_manager.initialize()
     yield db_manager
-    await db_manager.close()
+    await db_manager.shutdown()
 
 
 @pytest.fixture(scope="function")

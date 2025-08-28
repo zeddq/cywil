@@ -81,7 +81,7 @@ async def main():
         print(f"Processing {file_path}")
         pages_call: List[Callable[[], Coroutine[Any, Any, Template]]] = []
         try:
-            doc = fitz.open(file_path)
+            doc = fitz.open(file_path)  # type: ignore
             for page in doc:
                 text = page.get_text("text", flags=1)
                 print("\n--- Extracted Text ---\n")

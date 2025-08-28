@@ -21,7 +21,7 @@ from app.validators.document_validator import DocumentValidator
 from app.services.fallback_parser import FallbackParser
 
 from .ruling_tasks import process_ruling_batch
-from .statute_tasks import generate_statute_embeddings, ingest_all_statutes
+from .statute_tasks import ingest_all_statutes
 
 logger = get_logger(__name__)
 

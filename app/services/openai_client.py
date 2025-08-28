@@ -5,10 +5,10 @@ OpenAI SDK Integration Service
 import asyncio
 import json
 import logging
-from typing import Awaitable, Any, Callable, Dict, List, Optional, Type, TypeVar, Union
+from typing import Awaitable, Any, Callable, Dict, List, Optional, Type, TypeVar, Union, cast
 
 from openai import AsyncOpenAI, OpenAI
-from openai.types.chat import ChatCompletion
+from openai.types.chat import ChatCompletion, ChatCompletionMessage
 from openai.types.responses import ParsedResponse
 from pydantic import BaseModel
 from tenacity import (
@@ -129,11 +129,14 @@ class OpenAIService:
                 logger.warning(
                     "Structured output parsing returned None, attempting fallback"
                 )
-                return self._fallback_parse(
-                    response.choices[0].message.content or "", response_format
-                )
+                # For ParsedResponse, we need to access the raw response differently
+                if hasattr(response, 'raw_response') and hasattr(response.raw_response, 'choices'):
+                    content = response.raw_response.choices[0].message.content or ""
+                    return self._fallback_parse(content, response_format)
+                else:
+                    raise OpenAIError("OpenAI", "No content available for fallback parsing")
 
-            return response.parsed
+            return cast(BaseModel, response.output_parsed)
 
         except Exception as e:
             logger.error(f"Failed to parse structured output: {e}")

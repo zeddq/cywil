@@ -130,7 +130,7 @@ async def extract_pdf_with_o3(pdf_path: Path, is_batch: bool = False) -> ParsedR
 
     
     # Extract raw text from PDF first
-    doc = fitz.open(pdf_path)
+    doc = fitz.open(pdf_path)  # type: ignore
     full_text = ""
     page_texts = []
     
@@ -331,7 +331,7 @@ Uwaga: Odpowiedz w formacie JSON zgodnym ze schematem LegalEntities.
             # Create new ruling paragraph with entities
             enhanced_paragraph = RulingParagraphEnriched(
                 **ruling.paragraphs[index].model_dump(),
-                entities=parsed_entities.entities
+                entities=parsed_entities.entities  # type: ignore
             )
             
             # Update the ruling with enhanced paragraph
@@ -439,10 +439,15 @@ Wskazówki:
     ))]
     
     try:
-        response = llm.invoke(messages)
+        # Use parse_structured_output or a similar method from OpenAIService
+        response = llm.call_with_retry(
+            llm.client.chat.completions.create,
+            model="gpt-4",
+            messages=[{"role": m.get("role", "user"), "content": m.get("content", "")} for m in messages]
+        )
         
         # Extract JSON from response
-        content = response.content.strip()
+        content = response.choices[0].message.content.strip() if response.choices else ""
         if content.startswith("```json"):
             content = content[7:]
         if content.endswith("```"):
@@ -489,7 +494,7 @@ async def preprocess_sn_rulings(pdf_path: Path) -> List[Dict[str, Any]]:
         # Convert to output format
         records = []
         
-        for para in ruling.paragraphs:
+        for para in ruling.paragraphs:  # type: ignore
             record = {
                 "source_file": pdf_path.name,
                 "section": para.section,
@@ -653,7 +658,7 @@ async def process_batch(pdf_files: List[Path], extracted_jsonl: Optional[Path] =
                 if ruling:
                     is_valid = ruling.meta.docket and (int(bool(ruling.meta.date)) + int(bool(ruling.meta.panel))) >= 1
                     if is_valid:
-                        ruling.name = ruling.meta.docket
+                        ruling.name = ruling.meta.docket or ""
                         f.write(ruling.model_dump_json() + "\n")
 
 
