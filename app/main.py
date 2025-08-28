@@ -89,11 +89,12 @@ def initialize_services():
     service_container.register_singleton(ConversationManager, conversation_manager)
     service_container.register_singleton(ToolExecutor, tool_executor)
 
-
     # Domain services
     statute_search = StatuteSearchService(config_service, llm_manager)
     supreme_court = SupremeCourtService(db_manager, config_service, llm_manager)
-    document_generation = DocumentGenerationService(db_manager, statute_search, supreme_court)
+    document_generation = DocumentGenerationService(
+        db_manager, statute_search, supreme_court
+    )
     case_management = CaseManagementService(db_manager)
 
     if USE_CELERY:
@@ -108,7 +109,9 @@ def initialize_services():
 
         # Register document generation service
         doc_proxy = celery_service_manager.register_service(
-            "document_generation", document_generation, default_mode=ExecutionMode.CELERY_ASYNC
+            "document_generation",
+            document_generation,
+            default_mode=ExecutionMode.CELERY_ASYNC,
         )
         service_container.register_singleton(DocumentGenerationService, doc_proxy)  # type: ignore[arg-type]
 
@@ -130,7 +133,9 @@ def initialize_services():
         # Register services directly without Celery
         service_container.register_singleton(StatuteSearchService, statute_search)
         service_container.register_singleton(SupremeCourtService, supreme_court)
-        service_container.register_singleton(DocumentGenerationService, document_generation)
+        service_container.register_singleton(
+            DocumentGenerationService, document_generation
+        )
         service_container.register_singleton(CaseManagementService, case_management)
 
     logger.info("All services registered successfully")
@@ -168,7 +173,7 @@ async def lifespan(app: FastAPI):
                 if USE_CELERY:
                     # Verify Celery workers are available
                     try:
-                        from app.worker.celery_app import celery_app
+                        from .worker.celery_app import celery_app
 
                         inspect = celery_app.control.inspect()
                         active_workers = inspect.active_queues()
@@ -189,7 +194,9 @@ async def lifespan(app: FastAPI):
                 yield
 
             except Exception as e:
-                logger.error(f"LIFESPAN: Critical error during startup: {e}", exc_info=True)
+                logger.error(
+                    f"LIFESPAN: Critical error during startup: {e}", exc_info=True
+                )
                 raise
 
             finally:
@@ -243,7 +250,7 @@ async def health_check(req: Request):
             celery_status = "disabled"
             if USE_CELERY:
                 try:
-                    from app.worker.celery_app import celery_app
+                    from .worker.celery_app import celery_app
 
                     inspect = celery_app.control.inspect()
                     active_workers = inspect.active_queues()
@@ -277,7 +284,9 @@ async def chat(
     agent = req.app.state.agent
 
     with correlation_context() as correlation_id:
-        with tracer.start_as_current_span("chat", attributes={"correlation_id": correlation_id}):
+        with tracer.start_as_current_span(
+            "chat", attributes={"correlation_id": correlation_id}
+        ):
             logger.info(
                 f"Chat request received",
                 extra={
@@ -309,7 +318,9 @@ async def chat(
                         for tool in chunk["tools"]:
                             tool_results.append(
                                 ToolResult(
-                                    name=tool["name"], status=tool["status"], call_id=tool["id"]
+                                    name=tool["name"],
+                                    status=tool["status"],
+                                    call_id=tool["id"],
                                 )
                             )
                     elif chunk["type"] == "error":
@@ -336,7 +347,12 @@ async def chat(
             except Exception as e:
                 logger.error(
                     "Failed to process chat request",
-                    extra={"extra_fields": {"event": "chat_error", "error_type": type(e).__name__}},
+                    extra={
+                        "extra_fields": {
+                            "event": "chat_error",
+                            "error_type": type(e).__name__,
+                        }
+                    },
                     exc_info=True,
                 )
                 raise HTTPException(status_code=500, detail=str(e))
@@ -404,7 +420,9 @@ async def websocket_chat(websocket: WebSocket, req: Request):
 
             logger.info(
                 "WebSocket connection established",
-                extra={"extra_fields": {"event": "websocket_connect", "user_id": user_id}},
+                extra={
+                    "extra_fields": {"event": "websocket_connect", "user_id": user_id}
+                },
             )
 
             try:
@@ -425,7 +443,12 @@ async def websocket_chat(websocket: WebSocket, req: Request):
             except WebSocketDisconnect:
                 logger.info(
                     "WebSocket disconnected",
-                    extra={"extra_fields": {"event": "websocket_disconnect", "user_id": user_id}},
+                    extra={
+                        "extra_fields": {
+                            "event": "websocket_disconnect",
+                            "user_id": user_id,
+                        }
+                    },
                 )
             except Exception as e:
                 logger.error("WebSocket error", exc_info=True)
@@ -462,7 +485,9 @@ async def reset_circuit_breaker(tool_name: str, req: Request):
         ):
             logger.warning(
                 f"Circuit breaker reset requested",
-                extra={"extra_fields": {"event": "circuit_reset", "tool_name": tool_name}},
+                extra={
+                    "extra_fields": {"event": "circuit_reset", "tool_name": tool_name}
+                },
             )
 
             await agent.reset_circuit(tool_name)
@@ -480,7 +505,7 @@ async def celery_health():
         return {"status": "disabled", "message": "Celery is disabled"}
 
     try:
-        from app.worker.tasks.maintenance import health_check_all_services
+        from .worker.tasks.maintenance import health_check_all_services
 
         result = health_check_all_services.apply_async()
         health_status = result.get(timeout=10)
@@ -497,7 +522,7 @@ async def celery_stats():
         return {"status": "disabled", "message": "Celery is disabled"}
 
     try:
-        from app.worker.tasks.maintenance import get_worker_statistics
+        from .worker.tasks.maintenance import get_worker_statistics
 
         result = get_worker_statistics.apply_async()
         stats = result.get(timeout=10)
@@ -549,7 +574,7 @@ async def async_search(
         return {"status": "disabled", "message": "Celery is disabled"}
 
     try:
-        from app.worker.tasks.search_tasks import (
+        from .worker.tasks.search_tasks import (
             hybrid_search,
             search_rulings,
             search_statutes,
@@ -590,7 +615,7 @@ async def async_generate_document(
         return {"status": "disabled", "message": "Celery is disabled"}
 
     try:
-        from app.worker.tasks.document_tasks import generate_legal_document
+        from .worker.tasks.document_tasks import generate_legal_document
 
         result = generate_legal_document.apply_async(
             args=[document_type, context, str(current_user.id)]
@@ -623,7 +648,7 @@ async def trigger_ingestion(
         raise HTTPException(status_code=403, detail="Admin access required")
 
     try:
-        from app.worker.tasks.ingestion_pipeline import run_full_pipeline
+        from .worker.tasks.ingestion_pipeline import run_full_pipeline
 
         result = run_full_pipeline.apply_async(
             kwargs={

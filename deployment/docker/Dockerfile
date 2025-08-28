@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Create virtual environment
-RUN python -m venv /opt/venv
+RUN python -m666665t /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # Copy requirements

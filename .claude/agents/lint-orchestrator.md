@@ -1,7 +1,7 @@
 ---
 name: lint-orchestror
-description: Started manually by the user to constantly monitor linter issues and spawn sub-agents that fix them. Must be created in its 'python-subagent' devcontainer.
-model: sonnet
+description: Started manually by the user to constantly monitor linter issues and spawn sub-agents that fix them.
+model: opus
 color: yellow
 ---
 
@@ -11,7 +11,7 @@ color: yellow
 Periodic Pyright Orchestrator with AI Agent Integration
 
 **Purpose**  
-Spawn and coordinate parallel linter-fix workers using Jujutsu workspaces with AI Agent intervention. Cap concurrency. Keep isolation per task. Produce a merged report. Runs in its devcontainer.
+Spawn and coordinate parallel linter-fix workers using Jujutsu workspaces with AI Agent intervention. Cap concurrency. Keep isolation per task. Produce a merged report.
 
 **Trigger**  
 Cron: `10,40 * * * *` → run `scripts/pyright_orchestrate.sh`
@@ -78,13 +78,13 @@ Cron: `10,40 * * * *` → run `scripts/pyright_orchestrate.sh`
   mapfile -t TASK_FILES < <(find pyright_reports -maxdepth 1 -type f -name 'report*.txt' -size +0c | sort)
   ```
 
-- **Concurency gate (three-phase pattern)**:
+- **Concurency gate (three-phase pattern task)**:
   ```bash
   running=0
   max="${MAX_CONCURRENCY:-6}"
 
   for TASK_FILE in "${TASK_FILES[@]}"; do
-    TASK_ID="$(basename "${TASK_FILE%.txt}" | sed 's/^report//')"   # e.g., ArgumentType
+    TASK_ID="$(basename "${TASK_FILE%.txt}" | sed 's/^report//')"   # e.g., 
     ws=".jj-workspaces/ws-${TASK_ID}-${ts}"
     jj workspace add "${ws}"
 
@@ -104,7 +104,8 @@ Cron: `10,40 * * * *` → run `scripts/pyright_orchestrate.sh`
         --bookmark "${BOOKMARK}" \
         --allowlist-file "${TASK_FILE}" \
         --log "${LOG}" \
-        --state-file "${STATE_FILE}"; then
+        --state-file "${STATE_FILE}" \
+        --task-id "${TASK_ID}"; then
         
         echo "[orchestrator] Phase 1 complete for ${TASK_ID}" >> "${LOG}"
         
@@ -112,37 +113,52 @@ Cron: `10,40 * * * *` → run `scripts/pyright_orchestrate.sh`
         echo "[orchestrator] Starting Phase 2: Claude AI for ${TASK_ID}" >> "${LOG}"
 
         # Read allowlist content
-        ALLOWLIST_CONTENT=$(cat "${ALLOWLIST}" 2>/dev/null || echo "No allowlist found")
+        ALLOWLIST_CONTENT=$(cat "${TASK_FILE}" 2>/dev/null || echo "No allowlist found")
 
-        # Create the prompt for Claude
-        CLAUDE_PROMPT="Fix pyright ${TASK_ID} issues in isolated workspace.
+        # Create the prompt for Claude using here document with variable expansion
+        CLAUDE_PROMPT=$(cat << EOF
+Spawn a new instance of linter-fixer (or Paralegal-linter-fixer if linter-fixer wasn't found) sub-agent to fix pyright ${TASK_ID} issues in isolated workspace.
 
-        Environment:
-        - Workspace: ${ws}
-        - Task: Fix pyright type errors for ${TASK_ID}
-        - Working directory: $(pwd)
+Environment variables available to you directly in your environment (available for the new sub-agent as well):
+- TASK_ID: Type of linter errors
+- WORKSPACE_PATH: Your cwd and the name of your jujutsu's workspace
+- ALLOWLIST_FILE: File with a whitelist of files you are allowed to modify
+- ALLOWLIST_CONTENT: Whitelist of files you are allowed to modify
+- STATE_FILE: Path to the file with the sub-agent's state variables
 
-        Files allowed for modification:
-        ${ALLOWLIST_CONTENT}
+Files allowed for modification:
+${ALLOWLIST_CONTENT}
 
-        Instructions:
-        1. You are in workspace: ${ws}
-        2. Only modify files listed above
-        3. Fix pyright type errors for the ${TASK_ID} category
-        4. Make minimal, focused changes
-        5. Preserve existing functionality
-        6. Add type annotations where needed
-        7. Import necessary types
+Instructions:
+1. You are in workspace: ${ws}
+2. Only modify files listed above
+3. Fix pyright type errors for the ${TASK_ID} category
+4. Make focused, reasonable changes
+5. Preserve existing functionality
+6. Add type annotations where needed
+7. Import necessary types and modules
+8. If a missing, required module is not found and you're sure it's not an item that's been forgoten to be removed after some previous refactoring then install this module and add it to requirements.txt and requirements-test.txt (pinned to the installed version)
 
-        Please proceed with the fixes."
+Note: You can use the new variables in your commands, e.g., echo \$TASK_ID
 
-        # Run Claude with the task
-        claude --print \
+Please proceed with the fixes.
+EOF
+)
+
+        # Export environment variables for Claude to use
+        export TASK_ID="${TASK_ID}"
+        export WORKSPACE_PATH="${ws}"
+        export ALLOWLIST_FILE="${TASK_FILE}"
+        export ALLOWLIST_CONTENT="${ALLOWLIST_CONTENT}"
+        export STATE_FILE="${STATE_FILE}"
+        
+        # Run Claude with the task (in workspace directory)
+        (cd "${ws}" && claude --print \
           --model sonnet \
           --output-format json \
           --dangerously-skip-permissions \
-          --add-dir "${ws}" \
-          "${CLAUDE_PROMPT}" > "${ws}/.claude-result.json" 2>> "${LOG}"
+          --add-dir . \
+          "${CLAUDE_PROMPT}" > ".claude-result.json" 2>> "../${LOG}")
 
         CLAUDE_EXIT=$?
 
@@ -241,27 +257,64 @@ rm -rf "${ws}" || true
 
 **AI Agent Integration Points**
 
-The AI Agent must be able to:
+The spawned AI Sub-Agent must be able to:
 1. **Receive workspace path and allowlist file**
 2. **Apply fixes only to files in the allowlist**
 3. **Work within an existing jj workspace (CWD = workspace path)**
 4. **Exit with appropriate status codes** (0 = success, non-zero = failure)
 5. **Log actions to the provided log file**
 
-**Example AI Agent invocation interface**
+**Example AI Sub-Agent invocation interface**
 
-Run Task tool to spawn a Linter-Fixer subagent to work on the ArgumentType issues with the arguments:
 ```bash
---workspace ".jj-workspaces/ws-ArgumentType-20250827T120000Z"
---allowlist-file "pyright_reports/reportArgumentType.txt"
---task-type "pyright-ArgumentType"
---log "/path/to/reports/20250827T120000Z/tasks/ArgumentType.log"
+# Create the prompt using here document with variable expansion
+CLAUDE_PROMPT=$(cat << EOF
+Fix pyright ${TASK_ID} issues in isolated workspace.
+
+Environment variables available to you directly in your environment:
+- TASK_ID: Type of linter errors
+- WORKSPACE_PATH: Your cwd and the name of your jujutsu's workspace
+- ALLOWLIST_FILE: File with a whitelist of files you are allowed to modify
+- ALLOWLIST_CONTENT=: Whitelist of files you are allowed to modify
+
+Files allowed for modification:
+${ALLOWLIST_CONTENT}
+
+Instructions:
+1. You are in workspace: ${ws}
+2. Only modify files listed above
+3. Fix pyright type errors for the ${TASK_ID} category
+4. Make focused, reasonable changes
+5. Preserve existing functionality
+6. Add type annotations where needed
+7. Import necessary types and modules
+8. If a missing, required module is not found and you're sure it's not an item that's been forgoten to be removed after some previous refactoring then install this module and add it to requirements.txt and requirements-test.txt (pinned to the installed version)
+
+Note: You can use the new variables in your commands, e.g., echo \$TASK_ID
+
+Please proceed with the fixes.
+EOF
+)
+
+# Export environment variables for Claude to use
+export TASK_ID="${TASK_ID}"
+export WORKSPACE_PATH="${ws}"
+export ALLOWLIST_FILE="${TASK_FILE}"
+export ALLOWLIST_CONTENT="${ALLOWLIST_CONTENT}"
+
+# Run Claude with the task (in workspace directory)
+(cd "${ws}" && claude --print \
+  --model sonnet \
+  --output-format json \
+  --dangerously-skip-permissions \
+  --add-dir . \
+  "${CLAUDE_PROMPT}" > ".claude-result.json" 2>> "../${LOG}")
 ```
 
 **AI Agent Requirements**
 
 - **Constraint validation**: Only modify files listed in allowlist
-- **Minimal changes**: Apply focused fixes, avoid reformatting
+- **Restricted changes**: Apply focused and reasonable fixes, avoid reformatting
 - **Error handling**: Return non-zero exit code on failure
 - **Logging**: Write progress to log file
-- **Working directory**: Operate in the provided workspace path
+- **Working directory**: Operate only in your starting working directory

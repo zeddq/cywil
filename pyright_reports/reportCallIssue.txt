@@ -1,13 +1,41 @@
 Pyright Diagnostic Report: reportCallIssue
 ================================================================================
 
-Total violations: 2
+Total violations: 15
 
 
 /Volumes/code/cywil/ai-paralegal-poc/ingest/templates.py (1 violations)
 --------------------------------------------------------
-  Line 136:30 [error]: Argument missing for parameter "type"
+  Line 137:30 [error]: Argument missing for parameter "type"
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_integration.py (1 violations)
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_ai_functionality.py (2 violations)
+-------------------------------------------------------------------------------
+  Line 343:20 [error]: Arguments missing for parameters "date", "reasoning"
+  Line 389:26 [error]: Arguments missing for parameters "case_number", "court", "date", "decision", "reasoning"
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py (2 violations)
+--------------------------------------------------------------------------
+  Line 296:20 [error]: Argument missing for parameter "config_service"
+  Line 397:24 [error]: Argument missing for parameter "config_service"
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py (3 violations)
+----------------------------------------------------------------------------------
+  Line 71:23 [error]: Arguments missing for parameters "config_service", "llm_manager"
+  Line 314:13 [error]: Arguments missing for parameters "config_service", "llm_manager"
+  Line 352:23 [error]: Arguments missing for parameters "config_service", "llm_manager"
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py (2 violations)
+-----------------------------------------------------------------
+  Line 23:13 [error]: Arguments missing for parameters "config_service", "conversation_manager", "tool_executor"
+  Line 93:13 [error]: Arguments missing for parameters "config_service", "conversation_manager", "tool_executor"
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_integration.py (4 violations)
 --------------------------------------------------------------------------
   Line 90:66 [error]: Arguments missing for parameters "request", "body"
+  Line 205:28 [error]: Arguments missing for parameters "date", "decision", "reasoning"
+  Line 217:30 [error]: Arguments missing for parameters "court", "date", "decision", "reasoning"
+  Line 393:20 [error]: Arguments missing for parameters "case_number", "court", "date", "decision", "reasoning"
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_executor.py (1 violations)
+---------------------------------------------------------------------
+  Line 31:20 [error]: Argument missing for parameter "config_service"

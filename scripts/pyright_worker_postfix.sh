@@ -9,7 +9,8 @@ usage() {
   cat <<'USAGE'
 Usage:
   pyright_worker_postfix.sh --workspace PATH [--state-file PATH]
-                            [--summary PATH] [--diff PATH] [--log PATH] [--pr-meta PATH]
+                            [--summary PATH] [--diff PATH] [--log PATH]
+                            [--pr-meta PATH]
 Inputs:
   - Expects WORKSPACE_READY marker file to exist
   - Reads state from --state-file if provided
@@ -101,7 +102,8 @@ check_allowlist() {
     return 1
   }
   
-  local tmp="$(mktemp)"
+  local tmp
+  tmp="$(mktemp)"
   grep -v '^[[:space:]]*$' "$ALLOWLIST_FILE" | sed 's|\r$||' | sort -u > "$tmp"
   local ok=0
   while IFS= read -r f; do
@@ -166,7 +168,7 @@ fi
 
 # -------- commit --------
 echo "[postfix] committing changes"
-jj commit -m "chore(pyright): ${BOOKMARK:-automated} minimal fixes
+jj commit -m "chore(pyright): ${BOOKMARK:-automated} linter fixes
 
 AI agent applied fixes for files in allowlist.
 Prefix timestamp: ${PREFIX_TIMESTAMP:-unknown}"

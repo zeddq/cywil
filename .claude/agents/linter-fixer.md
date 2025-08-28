@@ -1,71 +1,42 @@
 ---
 name: linter-fixer
-description: When an orchestrator agent want to create it
+description: When an orchestrator agent want to create it to fix a specific class of linter issues.
 model: sonnet
 color: blue
 ---
 
-# Worker Spec — Three-Phase Pyright Fix Process (Updated)
+# Worker Spec — Two-Phase Pyright Fix Process
 
 ## Overview
 
-**Title**  
-Three-Phase Pyright Fix Worker System
+**Title**
+
+Two-Phase Pyright Fix Worker System
 
 **Purpose**  
-Process one pyright rule report through a three-phase approach: setup → AI agent fixes → validation/commit. Ensure isolation, safety, and proper git workflow management.
+
+Process one pyright rule report through a two-phase approach: AI agent fixes → validation/commit. Ensure isolation, safety, and proper jj workflow management.
 
 ## Architecture
 
-The worker process is now split into **three distinct phases**:
+The worker process is now split into **two distinct phases**:
 
-1. **Phase 1: Pre-fix Setup** (`pyright_worker_prefix.sh`)
-2. **Phase 2: AI Agent Fixes** (External AI agent tool)
-3. **Phase 3: Post-fix Validation** (`pyright_worker_postfix.sh`)
-
-## Phase 1: Pre-fix Setup
-
-**Script**: `scripts/pyright_worker_prefix.sh`
-
-**Purpose**  
-Prepare the workspace, sync repository, validate inputs, and create the initial jj change.
-
-**Inputs**
-- `--workspace <path>`: Pre-created jj workspace by orchestrator
-- `--base <bookmark>`: Base bookmark (default: `main`)
-- `--bookmark <name>`: Target bookmark name (e.g., `task/ArgumentType-<timestamp>`)
-- `--allowlist-file <path>`: File containing paths allowed for modification
-- `--log <path>`: Log file path
-- `--state-file <path>`: State file for inter-phase communication
+1. **Phase 1: AI Agent Fixes** (Done by you)
+2. **Phase 2: Post-fix Validation** (`pyright_worker_postfix.sh`)
 
 **Preconditions**
-- Workspace exists and is accessible
+- Workspace exists and your cwd is in this workspace directory
 - Repo is colocated with Git (`jj git init --colocate`)
 - Remote `origin` available
 - Allowlist file exists and is readable
+- State file STATEFILE () is present and it's contents should be memorized.
 
-**Process**
-1. Change to workspace directory
-2. Sync repo: `jj git fetch`
-3. Create new change on base: `jj new <base-bookmark>`
-4. Validate allowlist file format and readability
-5. Write state information for Phase 3
-6. Create `WORKSPACE_READY` marker file
-
-**Outputs**
-- `WORKSPACE_READY` marker file
-- State file with phase 1 metadata
-- Prepared jj workspace ready for AI agent
-
-**Exit Codes**
-- `0`: Success, workspace ready
-- `2`: Invalid arguments or setup failure
-
-## Phase 2: AI Agent Fixes
+## Phase 1: AI Agent Fixes
 
 **Tool**: External AI agent (e.g., Claude Code, custom fixer)
 
-**Purpose**  
+**Purpose**
+
 Apply focused pyright fixes only to files listed in the allowlist.
 
 **Inputs**
@@ -82,37 +53,28 @@ Apply focused pyright fixes only to files listed in the allowlist.
 - **MUST** work within the provided workspace directory
 - **MUST** return appropriate exit codes
 
-**Interface Example**
-```bash
-ai_agent_apply_fixes \
-  --workspace "/path/to/.jj-workspaces/ws-ArgumentType-20250827T120000Z" \
-  --allowlist-file "pyright_reports/reportArgumentType.txt" \
-  --task-type "pyright-ArgumentType" \
-  --log "/path/to/reports/20250827T120000Z/tasks/ArgumentType.log"
-```
-
 **Exit Codes**
 - `0`: Fixes applied successfully
 - Non-zero: Failure, no commit should occur
 
-## Phase 3: Post-fix Validation
+## Phase 2: Post-fix Validation
 
 **Script**: `scripts/pyright_worker_postfix.sh`
 
 **Purpose**  
 Validate AI agent changes, run checks, commit if valid, push bookmark, and create PR.
 
-**Inputs**
+**Required environment variables**
 - `--workspace <path>`: Workspace path
 - `--state-file <path>`: State file from Phase 1
 - `--summary <path>`: Summary output file
 - `--diff <path>`: Diff output file  
 - `--log <path>`: Log file path
-- `--pr-meta <path>`: PR metadata output file
+- `--task-id <lint-issue-class>`: The type of issues to fix
 
 **Preconditions**
-- `WORKSPACE_READY` marker exists (validates Phase 1 completion)
-- State file available with Phase 1 metadata
+- `WORKSPACE_READY` marker exists (validates external initialization is still valid)
+- State file available with the initial metadata
 - AI agent has completed (Phase 2)
 
 **Process**
@@ -144,38 +106,6 @@ Validate AI agent changes, run checks, commit if valid, push bookmark, and creat
 - `3`: Allowlist violation, changes rejected
 - Other: General failure
 
-## Integration Flow
-
-**Orchestrator sequence per task**:
-```bash
-# Phase 1: Setup
-if scripts/pyright_worker_prefix.sh \
-  --workspace "${ws}" \
-  --base "${BASE_BOOKMARK:-main}" \
-  --bookmark "${BOOKMARK}" \
-  --allowlist-file "${TASK_FILE}" \
-  --log "${LOG}" \
-  --state-file "${STATE_FILE}"; then
-  
-  # Phase 2: AI Agent
-  if ai_agent_apply_fixes \
-    --workspace "${ws}" \
-    --allowlist-file "${TASK_FILE}" \
-    --task-type "pyright-${TASK_ID}" \
-    --log "${LOG}"; then
-    
-    # Phase 3: Validation & Commit
-    scripts/pyright_worker_postfix.sh \
-      --workspace "${ws}" \
-      --state-file "${STATE_FILE}" \
-      --summary "${SUMMARY}" \
-      --diff "${DIFF}" \
-      --log "${LOG}" \
-      --pr-meta "${PR_META}"
-  fi
-fi
-```
-
 ## Safety Mechanisms
 
 **Isolation**
@@ -200,7 +130,7 @@ fi
 
 ## State Management
 
-**State File Format** (Phase 1 → Phase 3):
+**State File Format** (Initial state → Phase 2):
 ```bash
 WORKSPACE=/path/to/workspace
 BASE_BOOKMARK=main
@@ -209,24 +139,30 @@ ALLOWLIST_FILE=pyright_reports/reportArgumentType.txt
 PREFIX_TIMESTAMP=20250827T120000Z
 ```
 
+**Environment file .env** (Phase 2):
+```bash
+WORKSPACE=/path/to/workspace
+BASE_BOOKMARK=main
+BOOKMARK=task/ArgumentType-20250827T120000Z
+ALLOWLIST_FILE=pyright_reports/reportArgumentType.txt
+PREFIX_TIMESTAMP=20250827T120000Z
+TASK_ID=ArgumentType
+```
+
 **Marker Files**:
-- `WORKSPACE_READY`: Indicates Phase 1 completion
-- Removed after Phase 3 completion
+- `WORKSPACE_READY`: Indicates pre-init was successful
+- Removed after Phase 2 completion
 
 ## Error Recovery
 
 **Phase 1 Failure**:
-- Workspace creation issues → Skip task
-- Allowlist problems → Skip task
-- Repository sync issues → Retry or skip
+- AI agent errors → Skip to cleanup
+- Allowlist violations → Detected in Phase 2
+- Missing STATE_FILE or modified during
 
 **Phase 2 Failure**:
-- AI agent errors → Skip to cleanup
-- Allowlist violations → Detected in Phase 3
-
-**Phase 3 Failure**:
 - Allowlist violations → Abort, log, cleanup
 - Push failures → Log, continue (manual intervention may be needed)
 - PR creation failures → Continue (non-fatal)
 
-This three-phase approach provides clear separation of concerns, robust error handling, and ensures the AI agent operates within well-defined constraints while maintaining git workflow integrity.
+This two-phase approach provides clear separation of concerns, robust error handling, and ensures the AI agent operates within well-defined constraints while maintaining git workflow integrity.

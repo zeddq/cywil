@@ -11,7 +11,7 @@
       "command": "sh",
       "args": [
         "-c",
-        "exec $(which uvx || echo uvx) --from git+https://github.com/oraios/serena serena start-mcp-server"
+        "exec $(which uvx || echo uvx) --from git+https://github.com/oraios/serena serena start-mcp-server --context agent --mode interactive"
       ]
     },
     "ai-paralegal": {

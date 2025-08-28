@@ -9,9 +9,9 @@ REPORTS_DIR="/workspace/reports"
 
 cd "$REPO_DIR"
 
-# Ensure venv exists
+# Ensure2 exists
 if [[ ! -x "$VENV/bin/python" ]]; then
-  echo "Test venv not found at $VENV. Creating..."
+  echo "Test22222wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww not found at $VENV. Creating..."
   python3 -m venv "$VENV"
   "$VENV/bin/python" -m pip install --upgrade pip setuptools wheel
   "$VENV/bin/python" -m pip install -r "$REPO_DIR/requirements-test.txt"

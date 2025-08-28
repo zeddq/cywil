@@ -1,12 +1,53 @@
 Pyright Diagnostic Report: reportAttributeAccessIssue
 ================================================================================
 
-Total violations: 29
+Total violations: 72
 
+
+/Volumes/code/cywil/ai-paralegal-poc/app/services/openai_client.py (2 violations)
+------------------------------------------------------------------
+  Line 133:30 [information]: Cannot access attribute "choices" for class "ParsedResponse[Any]"
+  Attribute "choices" is unknown
+  Line 136:29 [information]: Cannot access attribute "parsed" for class "ParsedResponse[Any]"
+  Attribute "parsed" is unknown
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py (3 violations)
+-------------------------------------------------------------------
+  Line 236:46 [information]: Cannot access attribute "ilike" for class "str"
+  Attribute "ilike" is unknown
+  Line 237:51 [information]: Cannot access attribute "ilike" for class "str"
+  Attribute "ilike" is unknown
+  Line 238:46 [information]: Cannot access attribute "ilike" for class "str"
+  Attribute "ilike" is unknown
 
 /Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/ingestion_pipeline.py (1 violations)
 ---------------------------------------------------------------------------
   Line 24:28 [information]: "generate_statute_embeddings" is unknown import symbol
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/pdf2chunks.py (1 violations)
+-------------------------------------------------------------------
+  Line 140:28 [information]: Cannot access attribute "group" for class "str"
+  Attribute "group" is unknown
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (1 violations)
+-------------------------------------------------------------------------
+  Line 150:26 [information]: Cannot access attribute "get_response" for class "CoroutineType[Any, Any, ParsedResponse[Unknown]]"
+  Attribute "get_response" is unknown
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/search_tasks.py (6 violations)
+---------------------------------------------------------------------
+  Line 232:43 [information]: Cannot access attribute "get" for class "RulingPayload"
+  Attribute "get" is unknown
+  Line 233:45 [information]: Cannot access attribute "get" for class "RulingPayload"
+  Attribute "get" is unknown
+  Line 234:43 [information]: Cannot access attribute "get" for class "RulingPayload"
+  Attribute "get" is unknown
+  Line 235:51 [information]: Cannot access attribute "get" for class "RulingPayload"
+  Attribute "get" is unknown
+  Line 236:40 [information]: Cannot access attribute "get" for class "RulingPayload"
+  Attribute "get" is unknown
+  Line 237:41 [information]: Cannot access attribute "get" for class "RulingPayload"
+  Attribute "get" is unknown
 
 /Volumes/code/cywil/ai-paralegal-poc/example_logger_usage.py (5 violations)
 ------------------------------------------------------------
@@ -75,8 +116,80 @@ Total violations: 29
 -------------------------------------------------------------------
   Line 84:24 [information]: "open" is not a known attribute of module "fitz"
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py (1 violations)
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py (1 violations)
+------------------------------------------------------------------
+  Line 55:22 [information]: Cannot access attribute "close" for class "DatabaseManager"
+  Attribute "close" is unknown
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py (2 violations)
+------------------------------------------------------------------
+  Line 21:26 [information]: "AsyncSessionLocal" is unknown import symbol
+  Line 21:45 [information]: "init_db" is unknown import symbol
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py (2 violations)
+--------------------------------------------------------------------------
+  Line 14:5 [information]: "initialize_services" is unknown import symbol
+  Line 481:48 [information]: "cached_query" is unknown import symbol
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py (4 violations)
+-------------------------------------------------------------------------------------
+  Line 16:37 [information]: "setup_structured_logging" is unknown import symbol
+  Line 17:26 [information]: "initialize_services" is unknown import symbol
+  Line 190:42 [information]: "get" is not a known attribute of module "app.core.service_container"
+  Line 247:47 [information]: "get" is not a known attribute of module "app.core.service_container"
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py (3 violations)
+----------------------------------------------------------------------------------
+  Line 75:21 [information]: Cannot assign to attribute "_embedder" for class "StatuteSearchService"
+  Attribute "_embedder" is unknown
+  Line 76:21 [information]: Cannot assign to attribute "_llm" for class "StatuteSearchService"
+  Attribute "_llm" is unknown
+  Line 163:21 [information]: Cannot assign to attribute "_llm" for class "DocumentGenerationService"
+  Attribute "_llm" is unknown
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming.py (1 violations)
+------------------------------------------------------------------------
+  Line 16:30 [information]: "ParalegalAgent" is unknown import symbol
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py (15 violations)
 --------------------------------------------------------------------------------
   Line 319:19 [information]: Cannot assign to attribute "transform" for class "MockStreamProcessor"
-  Expression of type "(event: Unknown) -> Unknown" cannot be assigned to attribute "transform" of class "MockStreamProcessor"
+  Expression of type "(event: StreamEvent) -> StreamEvent" cannot be assigned to attribute "transform" of class "MockStreamProcessor"
     "FunctionType" is not assignable to "None"
+  Line 378:26 [information]: Cannot access attribute "chunks_received" for class "MetricsCollector"
+  Attribute "chunks_received" is unknown
+  Line 379:26 [information]: Cannot access attribute "events_by_type" for class "MetricsCollector"
+  Attribute "events_by_type" is unknown
+  Line 380:26 [information]: Cannot access attribute "text_deltas" for class "MetricsCollector"
+  Attribute "text_deltas" is unknown
+  Line 381:26 [information]: Cannot access attribute "tool_calls" for class "MetricsCollector"
+  Attribute "tool_calls" is unknown
+  Line 382:26 [information]: Cannot access attribute "errors" for class "MetricsCollector"
+  Attribute "errors" is unknown
+  Line 383:26 [information]: Cannot access attribute "start_time" for class "MetricsCollector"
+  Attribute "start_time" is unknown
+  Line 402:19 [information]: Cannot assign to attribute "chunks_received" for class "MetricsCollector"
+  Attribute "chunks_received" is unknown
+  Line 419:19 [information]: Cannot assign to attribute "chunks_received" for class "MetricsCollector"
+  Attribute "chunks_received" is unknown
+  Line 420:19 [information]: Cannot assign to attribute "text_deltas" for class "MetricsCollector"
+  Attribute "text_deltas" is unknown
+  Line 421:19 [information]: Cannot assign to attribute "errors" for class "MetricsCollector"
+  Attribute "errors" is unknown
+  Line 425:26 [information]: Cannot access attribute "chunks_received" for class "MetricsCollector"
+  Attribute "chunks_received" is unknown
+  Line 426:26 [information]: Cannot access attribute "text_deltas" for class "MetricsCollector"
+  Attribute "text_deltas" is unknown
+  Line 427:26 [information]: Cannot access attribute "errors" for class "MetricsCollector"
+  Attribute "errors" is unknown
+  Line 428:26 [information]: Cannot access attribute "events_by_type" for class "MetricsCollector"
+  Attribute "events_by_type" is unknown
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_registry.py (3 violations)
+---------------------------------------------------------------------
+  Line 166:25 [information]: Cannot access attribute "name" for class "BaseModel"
+  Attribute "name" is unknown
+  Line 167:25 [information]: Cannot access attribute "age" for class "BaseModel"
+  Attribute "age" is unknown
+  Line 168:25 [information]: Cannot access attribute "active" for class "BaseModel"
+  Attribute "active" is unknown

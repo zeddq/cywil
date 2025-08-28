@@ -10,6 +10,7 @@ usage() {
 Usage:
   pyright_worker_prefix.sh --workspace PATH --bookmark NAME --allowlist-file FILE
                            [--base BOOKMARK] [--log PATH] [--state-file PATH]
+                           [--task-id TASK_ID]
 Outputs:
   - Sets up jj workspace and creates new change
   - Validates allowlist file exists and is readable
@@ -28,6 +29,7 @@ BOOKMARK=""
 ALLOWLIST_FILE=""
 LOG=""
 STATE_FILE=""
+TASK_ID=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -37,6 +39,7 @@ while [[ $# -gt 0 ]]; do
     --allowlist-file)  ALLOWLIST_FILE="$2"; shift 2 ;;
     --log)             LOG="$2"; shift 2 ;;
     --state-file)      STATE_FILE="$2"; shift 2 ;;
+    --task-id)         TASK_ID="$2"; shift 2 ;;
     -h|--help)         usage; exit 0 ;;
     *) echo "unknown arg: $1" >&2; usage; exit 2 ;;
   esac
@@ -56,7 +59,18 @@ fi
 echo "[prefix] ws=$WORKSPACE base=$BASE_BOOKMARK bookmark=$BOOKMARK"
 echo "[prefix] allowlist=$ALLOWLIST_FILE"
 
-cd "$WORKSPACE"
+# The orchestrator should run this script in the workspace directory
+# We verify we are in a jj workspace rather than trying to cd
+if ! jj root >/dev/null 2>&1; then
+  echo "[prefix] ERROR: not in a jj workspace or jj command failed" >&2
+  exit 2
+fi
+
+# Verify we are in the expected workspace directory
+if [[ "$(pwd)" != "$WORKSPACE" ]]; then
+  echo "[prefix] ERROR: expected to be in $WORKSPACE, but in $(pwd)" >&2
+  exit 2
+fi
 
 # -------- helpers --------
 # return 0 if working-copy has no diff vs parent
@@ -73,7 +87,8 @@ changed_files() {
 
 # verify all changed files are in allowlist
 check_allowlist() {
-  local tmp="$(mktemp)"
+  local tmp
+  tmp="$(mktemp)"
   grep -v '^[[:space:]]*$' "$ALLOWLIST_FILE" | sed 's|\r$||' | sort -u > "$tmp"
   local ok=0
   while IFS= read -r f; do
@@ -87,7 +102,7 @@ check_allowlist() {
   return $ok
 }
 
-# -------- setup phase --------
+# -------- setup phase for the sub-agent --------
 echo "[prefix] syncing repo"
 jj git fetch
 
@@ -105,6 +120,8 @@ echo "[prefix] allowlist contains ${#ALLOW_FILES[@]} files"
 
 # Write state file for postfix script
 if [[ -n "$STATE_FILE" ]]; then
+  # Ensure directory exists
+  mkdir -p "$(dirname "$STATE_FILE")" 2>/dev/null || true
   cat > "$STATE_FILE" <<EOF
 WORKSPACE=$WORKSPACE
 BASE_BOOKMARK=$BASE_BOOKMARK
@@ -117,6 +134,7 @@ fi
 
 # Create ready marker
 echo "[prefix] workspace ready for AI agent fixes"
-touch "$WORKSPACE/WORKSPACE_READY"
+# We are already in the workspace directory, so create the marker here
+touch "WORKSPACE_READY"
 
 echo "[prefix] setup complete - ready for AI agent phase"

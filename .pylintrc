@@ -1,0 +1,33 @@
+[MASTER]
+# Analyze all Python files recursively
+recursive=yes
+ignore=.venv,.venv-tests,venv,__pycache__,node_modules,.git,alembic
+ignore-patterns=.*
+
+[MESSAGES CONTROL]
+# Disable some common warnings for initial analysis
+disable=
+    C0111,  # missing-docstring
+    C0103,  # invalid-name
+    R0903,  # too-few-public-methods
+    R0913,  # too-many-arguments
+    W0511,  # fixme
+
+[FORMAT]
+max-line-length=120
+
+[DESIGN]
+max-args=10
+max-locals=25
+max-returns=11
+max-branches=20
+max-statements=100
+max-parents=15
+max-attributes=20
+min-public-methods=0
+max-public-methods=50
+
+[TYPECHECK]
+# Ignore missing imports
+ignored-modules=
+ignored-classes=
