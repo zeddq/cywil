@@ -5,7 +5,7 @@ model: opus
 color: yellow
 ---
 
-# Orchestrator Spec — Periodic Pyright Fix Agents (Updated)
+# Orchestrator Spec — Periodic Pyright Fix Agents
 
 **Title**  
 Periodic Pyright Orchestrator with AI Agent Integration
