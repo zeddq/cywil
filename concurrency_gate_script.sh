@@ -48,8 +48,11 @@ for TASK_FILE in "${TASK_FILES[@]}"; do
   PR_META="${out_dir}/tasks/${TASK_ID}.pr.json"
   STATE_FILE="${out_dir}/tasks/${TASK_ID}.state"
 
-  # Orchestrator
-  {
+  # Orchestrator - run in isolated background job
+  (
+    # Ensure each background job has its own error handling
+    set +e  # Disable errexit for this subshell
+    
     # Phase 1
     if ./scripts/pyright_worker_prefix.sh \
       --workspace "${ws}" \
@@ -96,19 +99,27 @@ Note: You can use the new variables in your commands, e.g., echo \$TASK_ID
 Please proceed with the fixes.
 EOF
 
-      export TASK_ID WORKSPACE_PATH ALLOWLIST_FILE ALLOWLIST_CONTENT STATE_FILE
+      # Set variables before export
       WORKSPACE_PATH="${ws}"
       ALLOWLIST_FILE="${TASK_FILE}"
+      export TASK_ID WORKSPACE_PATH ALLOWLIST_FILE ALLOWLIST_CONTENT STATE_FILE
 
+      # Run claude in a subshell with proper environment
       (
-        cd "${ws}"
+        cd "${ws}" || { echo "[orchestrator] Failed to cd to ${ws}" >> "${LOG}"; exit 1; }
+        
+        # Debug: log environment for troubleshooting
+        echo "[orchestrator] Running Claude in workspace: $(pwd)" >> "${LOG}"
+        echo "[orchestrator] TASK_ID=${TASK_ID}, WORKSPACE_PATH=${WORKSPACE_PATH}" >> "${LOG}"
+        
+        # Run claude command
         claude --print \
           --model sonnet \
           --output-format json \
           --dangerously-skip-permissions \
           --add-dir . \
           "${CLAUDE_PROMPT}" \
-          > ".claude-result.json" 2>> "../${LOG}"
+          > ".claude-result.json" 2>> "${LOG}"
       )
       CLAUDE_EXIT=$?
 
@@ -130,7 +141,7 @@ EOF
     else
       echo "[orchestrator] Phase 1 failed for ${TASK_ID}" >> "${LOG}"
     fi
-  } &
+  ) &
 
   running=$((running+1))
   if (( running >= max )); then

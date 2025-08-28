@@ -1,0 +1,31 @@
+[project]
+name = "ai-paralegal-poc"
+version = "0.1.0"
+description = "Paralegal AI app"
+authors = [
+    {name = "zeddq",email = "zeddq1@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "aiofiles (>=24.1.0,<25.0.0)",
+    "pymupdf (>=1.26.4,<2.0.0)",
+    "sentence-transformers (>=5.1.0,<6.0.0)",
+]
+
+[tool.poetry]
+
+[tool.poetry.group.dev.dependencies]
+sqlalchemy = "^2.0.43"
+celery = "^5.5.3"
+pydantic = "^2.11.7"
+pyright = "^1.1.404"
+black = "^25.1.0"
+pylint = "^3.3.8"
+mypy = "^1.17.1"
+basedpyright = "^1.31.3"
+pylance = "^0.34.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

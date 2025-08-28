@@ -130,10 +130,10 @@ class OpenAIService:
                     "Structured output parsing returned None, attempting fallback"
                 )
                 return self._fallback_parse(
-                    response.choices[0].message.content or "", response_format
+                    response.output_parsed or "", response_format
                 )
 
-            return response.parsed
+            return response.output_parsed
 
         except Exception as e:
             logger.error(f"Failed to parse structured output: {e}")
