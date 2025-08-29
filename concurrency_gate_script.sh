@@ -60,8 +60,7 @@ for TASK_FILE in "${TASK_FILES[@]}"; do
       --bookmark "${BOOKMARK}" \
       --allowlist-file "$(pwd)/${TASK_FILE}" \
       --log "$(pwd)/${LOG}" \
-      --state-file "$(pwd)/${STATE_FILE}" \
-      --task-id "${TASK_ID}")
+      --state-file "$(pwd)/${STATE_FILE}")
     then
       echo "[orchestrator] Phase 1 complete for ${TASK_ID}" >> "${LOG}"
 

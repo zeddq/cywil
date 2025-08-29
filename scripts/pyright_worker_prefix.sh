@@ -10,7 +10,6 @@ usage() {
 Usage:
   pyright_worker_prefix.sh --workspace PATH --bookmark NAME --allowlist-file FILE
                            [--base BOOKMARK] [--log PATH] [--state-file PATH]
-                           [--task-id TASK_ID]
 Outputs:
   - Sets up jj workspace and creates new change
   - Validates allowlist file exists and is readable
