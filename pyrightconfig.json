@@ -12,5 +12,6 @@
     ".venv-tests",
     "alembic"
   ],
-  "reportAttributeAccessIssue": "information"
+  "reportAttributeAccessIssue": "information",
+  "extraPaths": ["."]
 }

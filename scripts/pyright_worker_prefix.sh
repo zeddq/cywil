@@ -29,7 +29,6 @@ BOOKMARK=""
 ALLOWLIST_FILE=""
 LOG=""
 STATE_FILE=""
-TASK_ID=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -39,7 +38,6 @@ while [[ $# -gt 0 ]]; do
     --allowlist-file)  ALLOWLIST_FILE="$2"; shift 2 ;;
     --log)             LOG="$2"; shift 2 ;;
     --state-file)      STATE_FILE="$2"; shift 2 ;;
-    --task-id)         TASK_ID="$2"; shift 2 ;;
     -h|--help)         usage; exit 0 ;;
     *) echo "unknown arg: $1" >&2; usage; exit 2 ;;
   esac
@@ -66,11 +64,8 @@ if ! jj root >/dev/null 2>&1; then
   exit 2
 fi
 
-# Verify we are in the expected workspace directory
-if [[ "$(pwd)" != "$WORKSPACE" ]]; then
-  echo "[prefix] ERROR: expected to be in $WORKSPACE, but in $(pwd)" >&2
-  exit 2
-fi
+# Verify we are in a jj workspace (path validation removed since orchestrator ensures correct directory)
+echo "[prefix] working in directory: $(pwd)"
 
 # -------- helpers --------
 # return 0 if working-copy has no diff vs parent

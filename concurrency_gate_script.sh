@@ -53,15 +53,15 @@ for TASK_FILE in "${TASK_FILES[@]}"; do
     # Ensure each background job has its own error handling
     set +e  # Disable errexit for this subshell
     
-    # Phase 1
-    if ./scripts/pyright_worker_prefix.sh \
+    # Phase 1 - run prefix script from within the workspace
+    if (cd "${ws}" && "./scripts/pyright_worker_prefix.sh" \
       --workspace "${ws}" \
       --base "${BASE_BOOKMARK}" \
       --bookmark "${BOOKMARK}" \
-      --allowlist-file "${TASK_FILE}" \
-      --log "${LOG}" \
-      --state-file "${STATE_FILE}" \
-      --task-id "${TASK_ID}"
+      --allowlist-file "$(pwd)/${TASK_FILE}" \
+      --log "$(pwd)/${LOG}" \
+      --state-file "$(pwd)/${STATE_FILE}" \
+      --task-id "${TASK_ID}")
     then
       echo "[orchestrator] Phase 1 complete for ${TASK_ID}" >> "${LOG}"
 
@@ -130,7 +130,7 @@ EOF
         echo "[orchestrator] Phase 2 failed for ${TASK_ID} with exit code: ${CLAUDE_EXIT}" >> "${LOG}"
       fi
 
-      # Phase 3
+      # Phase 3 - run postfix script with absolute paths
       ./scripts/pyright_worker_postfix.sh \
         --workspace "${ws}" \
         --state-file "${STATE_FILE}" \

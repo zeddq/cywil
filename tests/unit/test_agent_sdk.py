@@ -9,12 +9,14 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from app.paralegal_agents import ParalegalAgentSDK
-from app.paralegal_agents.tool_wrappers import (
-    search_sn_rulings_tool,
-    search_statute_tool,
-    SearchSNRulingsParams,
-    SearchStatuteParams,
-)
+# The following imports and associated tests were removed as tool_wrappers
+# no longer exists after refactoring to use direct tool registry access.
+# from app.paralegal_agents.tool_wrappers import (
+#     search_sn_rulings_tool,
+#     search_statute_tool,
+#     SearchSNRulingsParams,
+#     SearchStatuteParams,
+# )
 
 
 @pytest.mark.asyncio

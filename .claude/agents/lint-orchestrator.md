@@ -13,9 +13,6 @@ Periodic Pyright Orchestrator with AI Agent Integration
 **Purpose**  
 Spawn and coordinate parallel linter-fix workers using Jujutsu workspaces with AI Agent intervention. Cap concurrency. Keep isolation per task. Produce a merged report.
 
-**Trigger**  
-Cron: `10,40 * * * *` → run `scripts/pyright_orchestrate.sh`
-
 **Inputs**  
 - Base bookmark: `main` (configurable: `$BASE_BOOKMARK`, default `main`)
 - Pyright rule reports dir: `pyright_reports/`
