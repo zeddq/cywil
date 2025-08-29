@@ -12,3 +12,5 @@ nginx/certificates/
 .venv*/
 htmlcov/
 reports/
+.jj-workspaces/
+.serena/

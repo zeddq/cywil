@@ -8,6 +8,7 @@ import pytest
 from unittest.mock import Mock, patch, AsyncMock
 from pathlib import Path
 from typing import List, Dict, Any
+from datetime import datetime
 
 from app.embedding_models.pipeline_schemas import (
     RawDocument,
@@ -108,7 +109,7 @@ class TestAIProcessingPipeline:
                 metadata=chunk.metadata,
                 embedding=embedding,
                 embedding_model="test-model",
-                embedded_at=chunk.metadata.get("embedded_at")
+                embedded_at=chunk.metadata.get("embedded_at") or datetime.now()
             )
             embedded_chunks.append(embedded_chunk)
         
@@ -152,9 +153,11 @@ class TestAIProcessingPipeline:
         fallback_result = FallbackParser.extract_case_info(polish_document.content)
         assert fallback_result.success
         assert fallback_result.confidence > 0.5
-        assert fallback_result.extraction.case_number == "II CSK 123/20"
-        assert "Jan Nowak" in fallback_result.extraction.parties
-        assert len(fallback_result.extraction.legal_basis) > 0
+        assert fallback_result.extraction is not None
+        extraction = fallback_result.extraction
+        assert extraction.case_number == "II CSK 123/20"
+        assert "Jan Nowak" in extraction.parties
+        assert len(extraction.legal_basis) > 0
     
     @pytest.mark.asyncio
     async def test_fallback_mechanisms(self, sample_legal_documents):
@@ -345,7 +348,9 @@ class TestAIProcessingPipeline:
                 court="Sąd Najwyższy", 
                 parties=["Jan Nowak", "Spółka ABC sp. z o.o."],
                 legal_basis=["art. 415 k.c."],
-                decision="oddala kasację"
+                decision="oddala kasację",
+                date=datetime(2020, 10, 15),
+                reasoning="Mock reasoning for testing"
             )
 
 
@@ -386,7 +391,14 @@ class TestPolishLegalValidation:
         ]
         
         for article in valid_articles:
-            extraction = LegalExtraction(legal_basis=[article])
+            extraction = LegalExtraction(
+                case_number="II CSK 123/20",
+                court="Sąd Najwyższy",
+                date=datetime(2020, 10, 15),
+                decision="Test decision",
+                reasoning="Test reasoning",
+                legal_basis=[article]
+            )
             # Should not raise validation error
             assert article in extraction.legal_basis
     

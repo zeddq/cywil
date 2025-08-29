@@ -52,7 +52,7 @@ async def test_db_pool(test_config):
     db_manager = DatabaseManager(test_config)
     await db_manager.initialize()
     yield db_manager
-    await db_manager.close()
+    await db_manager.shutdown()
 
 
 @pytest.fixture(scope="function")
@@ -72,7 +72,7 @@ async def test_redis_client(test_config):
     """Create test Redis client"""
     client = redis.from_url(test_config.redis_url)
     yield client
-    await client.aclose()
+    await client.close()  # type: ignore[attr-defined]
 
 
 @pytest.fixture(scope="function")

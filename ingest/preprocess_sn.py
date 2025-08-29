@@ -21,7 +21,7 @@ import argparse, json, re, unicodedata, datetime, logging, os
 from pathlib import Path
 from typing import Dict, List, Any, Iterable, Tuple
 
-import fitz                                    # PyMuPDF
+import fitz  # type: ignore  # PyMuPDF
 import spacy
 from spacy.pipeline import EntityRuler
 import dateparser

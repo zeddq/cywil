@@ -1,0 +1,29 @@
+Pyright Diagnostic Report: reportMissingModuleSource
+================================================================================
+
+Total violations: 6
+
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (1 violations)
+-------------------------------------------------------------------------
+  Line 23:8 [warning]: Import "dateparser" could not be resolved from source
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/sn.py (1 violations)
+-----------------------------------------------------------
+  Line 9:8 [warning]: Import "dateparser" could not be resolved from source
+
+/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn.py (1 violations)
+------------------------------------------------------------
+  Line 27:8 [warning]: Import "dateparser" could not be resolved from source
+
+/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py (1 violations)
+---------------------------------------------------------------
+  Line 24:8 [warning]: Import "dateparser" could not be resolved from source
+
+/Volumes/code/cywil/ai-paralegal-poc/ingest/sn.py (1 violations)
+-------------------------------------------------
+  Line 10:8 [warning]: Import "dateparser" could not be resolved from source
+
+/Volumes/code/cywil/ai-paralegal-poc/schema_cmp.py (1 violations)
+--------------------------------------------------
+  Line 23:8 [warning]: Import "psycopg2" could not be resolved from source

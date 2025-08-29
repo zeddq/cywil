@@ -12,7 +12,10 @@ import openai
 from dotenv import load_dotenv
 from qdrant_client import AsyncQdrantClient, models
 from sentence_transformers import SentenceTransformer
-from sqlalchemy import select, Result, Select, Tuple, delete
+from sqlalchemy import select, Result, Select, Tuple, delete, text
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from sqlalchemy.sql import ColumnElement
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 
 sys.path.append(str(Path(__file__).parent.parent))
@@ -92,11 +95,18 @@ async def process_sn_ruling_file(line: str, session: AsyncSession):
     ruling = SNRulingBase.model_validate_json(line)
 
     sn_ruling_name = ruling.name
-    result_db = await session.execute(select(SNRuling).where(SNRuling.name == sn_ruling_name))
+    # Use parameterized query to avoid type issues with SQLModel column comparison
+    result_db = await session.execute(
+        select(SNRuling).where(text("name = :name_param")), {"name_param": sn_ruling_name}
+    )
     result = result_db.scalars().first()
     id = None
     if result:
-        if DeepDiff(ruling.paragraphs, result.paragraphs) == {} and DeepDiff(ruling.meta, result.meta) == {}:
+        # Check if content is different (DeepDiff returns empty dict when same)
+        paragraphs_diff = DeepDiff(ruling.paragraphs, result.paragraphs)
+        meta_diff = DeepDiff(ruling.meta, result.meta)
+        
+        if paragraphs_diff or meta_diff:
             print(f"SN Ruling '{sn_ruling_name}' already exists in the database but has different content. Updating.")
             id = result.id
         else:

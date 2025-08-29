@@ -31,7 +31,6 @@ from .core.logger_manager import (
     get_logger,
     log_api_middleware,
     set_user_id,
-    trace,
 )
 from opentelemetry import trace
 from .core.service_interface import ServiceContainer, ServiceLifecycleManager

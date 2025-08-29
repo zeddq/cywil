@@ -66,7 +66,12 @@ async def test_batch_processing():
     
     try:
         records = await process_batch(pdf_files)
-        logger.info(f"Successfully processed {len(records)} total paragraphs")
+        if records is not None and len(records) > 0:
+            logger.info(f"Successfully processed {len(records)} total paragraphs")
+        elif records is not None:
+            logger.info("Successfully processed 0 total paragraphs")
+        else:
+            logger.warning("process_batch returned None")
         
     except Exception as e:
         logger.error(f"Batch test failed: {e}", exc_info=True)

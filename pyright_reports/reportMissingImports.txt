@@ -1,110 +1,86 @@
 Pyright Diagnostic Report: reportMissingImports
 ================================================================================
 
-Total violations: 27
+Total violations: 30
 
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/celery/conftest.py (1 violations)
--------------------------------------------------------------
-  Line 1:8 [error]: Import "pytest" could not be resolved
+/Volumes/code/cywil/ai-paralegal-poc/app/core/logger_manager.py (6 violations)
+---------------------------------------------------------------
+  Line 19:6 [error]: Import "opentelemetry" could not be resolved
+  Line 20:6 [error]: Import "opentelemetry.instrumentation.logging" could not be resolved
+  Line 21:6 [error]: Import "opentelemetry.sdk.resources" could not be resolved
+  Line 22:6 [error]: Import "opentelemetry.sdk.trace" could not be resolved
+  Line 23:6 [error]: Import "opentelemetry.sdk.trace.export" could not be resolved
+  Line 24:6 [error]: Import "opentelemetry.trace" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/celery/test_celery_integration.py (1 violations)
-----------------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/celery/test_celery_tasks.py (1 violations)
-----------------------------------------------------------------------
-  Line 1:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py (1 violations)
-------------------------------------------------------
-  Line 5:12 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py (1 violations)
-------------------------------------------------------------------
-  Line 2:12 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_ai_functionality.py (1 violations)
--------------------------------------------------------------------------------
-  Line 7:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py (1 violations)
-------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_conversation_manager.py (1 violations)
------------------------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_database_manager.py (1 violations)
--------------------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_embedding_pipeline.py (1 violations)
----------------------------------------------------------------------------------
-  Line 6:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py (1 violations)
---------------------------------------------------------------------------
-  Line 5:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py (1 violations)
--------------------------------------------------------------------------------------
-  Line 5:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_migration.py (1 violations)
-------------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_openai_integration.py (1 violations)
----------------------------------------------------------------------------------
-  Line 7:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py (1 violations)
-----------------------------------------------------------------------------------
-  Line 5:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming.py (1 violations)
-------------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py (1 violations)
+/Volumes/code/cywil/ai-paralegal-poc/app/embedding_models/embedding_interface.py (4 violations)
 --------------------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
+  Line 55:18 [error]: Import "sentence_transformers" could not be resolved
+  Line 184:26 [error]: Import "transformers" could not be resolved
+  Line 185:28 [error]: Import "torch" could not be resolved
+  Line 207:16 [error]: Import "torch" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/conftest.py (1 violations)
------------------------------------------------------------
-  Line 2:12 [error]: Import "pytest" could not be resolved
+/Volumes/code/cywil/ai-paralegal-poc/app/main.py (1 violations)
+------------------------------------------------
+  Line 35:6 [error]: Import "opentelemetry" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py (2 violations)
------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
-  Line 12:6 [error]: Import "app.paralegal_agents.tool_wrappers" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_llm_manager.py (1 violations)
--------------------------------------------------------------------
-  Line 6:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_integration.py (1 violations)
---------------------------------------------------------------------------
-  Line 5:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_service.py (1 violations)
-----------------------------------------------------------------------
-  Line 6:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_performance_utils.py (1 violations)
--------------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_registration_key.py (1 violations)
+/Volumes/code/cywil/ai-paralegal-poc/app/repositories/case_repository.py (1 violations)
 ------------------------------------------------------------------------
-  Line 2:8 [error]: Import "pytest" could not be resolved
+  Line 12:6 [error]: Import "..dependencies" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_executor.py (1 violations)
----------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
+/Volumes/code/cywil/ai-paralegal-poc/app/repositories/user_repository.py (1 violations)
+------------------------------------------------------------------------
+  Line 8:6 [error]: Import "..dependencies" could not be resolved
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_registry.py (1 violations)
----------------------------------------------------------------------
-  Line 4:8 [error]: Import "pytest" could not be resolved
+/Volumes/code/cywil/ai-paralegal-poc/app/services/supreme_court_service.py (1 violations)
+--------------------------------------------------------------------------
+  Line 15:6 [error]: Import "sentence_transformers" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/app/task_processors.py (2 violations)
+-----------------------------------------------------------
+  Line 9:8 [error]: Import "fitz" could not be resolved
+  Line 16:6 [error]: Import "sentence_transformers" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/embed.py (1 violations)
+--------------------------------------------------------------
+  Line 26:6 [error]: Import "sentence_transformers" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/pdf2chunks.py (1 violations)
+-------------------------------------------------------------------
+  Line 9:8 [error]: Import "pdfplumber" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (2 violations)
+-------------------------------------------------------------------------
+  Line 22:6 [error]: Import "agents" could not be resolved
+  Line 24:8 [error]: Import "fitz" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/sn.py (2 violations)
+-----------------------------------------------------------
+  Line 11:6 [error]: Import "deepdiff" could not be resolved
+  Line 14:6 [error]: Import "sentence_transformers" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py (1 violations)
+-------------------------------------------------------------------------
+  Line 132:39 [error]: Import "the" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py (1 violations)
+----------------------------------------------------
+  Line 3:6 [error]: Import "sentence_transformers" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/ingest/pdf2chunks.py (1 violations)
+---------------------------------------------------------
+  Line 3:8 [error]: Import "pdfplumber" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn.py (2 violations)
+------------------------------------------------------------
+  Line 25:8 [error]: Import "spacy" could not be resolved
+  Line 26:6 [error]: Import "spacy.pipeline" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/ingest/sn.py (2 violations)
+-------------------------------------------------
+  Line 8:6 [error]: Import "deepdiff" could not be resolved
+  Line 14:6 [error]: Import "sentence_transformers" could not be resolved
+
+/Volumes/code/cywil/ai-paralegal-poc/ingest/templates.py (1 violations)
+--------------------------------------------------------
+  Line 15:6 [error]: Import "sentence_transformers" could not be resolved

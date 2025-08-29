@@ -8,3 +8,4 @@ exec env -i \
     USER="$USER" \
     TERM="$TERM" \
     /opt/homebrew/bin/jj "$@"
+

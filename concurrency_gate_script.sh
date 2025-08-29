@@ -9,7 +9,7 @@ mapfile -t TASK_FILES < <(find pyright_reports -maxdepth 1 -type f -name 'report
 
 # --- config and guards ---
 : "${MAX_CONCURRENCY:=6}"
-: "${BASE_BOOKMARK:=main}"
+: "${BASE_BOOKMARK:=refactor/ai-sdk-integration-fix}"
 : "${out_dir:=out}"              # original script used out_dir; normalize to out_dir
 : "${TASK_FILES:?TASK_FILES must be a bash array of allowlist files}"
 
@@ -69,8 +69,16 @@ for TASK_FILE in "${TASK_FILES[@]}"; do
 
       ALLOWLIST_CONTENT="$(cat "${TASK_FILE}" 2>/dev/null || echo "No allowlist found")"
 
-      # Prompt with expansion enabled; literal $ in prompt is escaped as \$ where needed
-      read -r -d '' CLAUDE_PROMPT <<EOF || true
+      # Set variables before export
+      WORKSPACE_PATH="${ws}"
+      ALLOWLIST_FILE="${TASK_FILE}"
+      export TASK_ID WORKSPACE_PATH ALLOWLIST_FILE ALLOWLIST_CONTENT STATE_FILE
+
+      # Run claude in a subshell with proper environment
+      (
+        cd "${ws}" || { echo "[orchestrator] Failed to cd to ${ws}" >> "${LOG}"; exit 1; }
+
+      CLAUDE_PROMPT="$(cat <<EOF
 Spawn a new instance of linter-fixer (or Paralegal-linter-fixer if linter-fixer wasn't found) sub-agent to fix pyright ${TASK_ID} issues in isolated workspace.
 
 Environment variables available to you directly in your environment (available for the new sub-agent as well):
@@ -97,27 +105,21 @@ Note: You can use the new variables in your commands, e.g., echo \$TASK_ID
 
 Please proceed with the fixes.
 EOF
+)"
 
-      # Set variables before export
-      WORKSPACE_PATH="${ws}"
-      ALLOWLIST_FILE="${TASK_FILE}"
-      export TASK_ID WORKSPACE_PATH ALLOWLIST_FILE ALLOWLIST_CONTENT STATE_FILE
+       echo "${CLAUDE_PROMPT}" >> "${LOG}"
 
-      # Run claude in a subshell with proper environment
-      (
-        cd "${ws}" || { echo "[orchestrator] Failed to cd to ${ws}" >> "${LOG}"; exit 1; }
-        
         # Debug: log environment for troubleshooting
         echo "[orchestrator] Running Claude in workspace: $(pwd)" >> "${LOG}"
         echo "[orchestrator] TASK_ID=${TASK_ID}, WORKSPACE_PATH=${WORKSPACE_PATH}" >> "${LOG}"
         
         # Run claude command
-        claude --print \
-          --model sonnet \
-          --output-format json \
+        echo "${CLAUDE_PROMPT}" | claude --print \
+          --model opus \
+          --output-format stream-json \
           --dangerously-skip-permissions \
+          --verbose \
           --add-dir . \
-          "${CLAUDE_PROMPT}" \
           > ".claude-result.json" 2>> "${LOG}"
       )
       CLAUDE_EXIT=$?

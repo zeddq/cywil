@@ -11,8 +11,9 @@ import openai
 from dotenv import load_dotenv
 from qdrant_client import QdrantClient, models
 from qdrant_client.http.models import models as qmodels
+from qdrant_client.models import KeywordIndexType
 from sentence_transformers import SentenceTransformer
-from sqlalchemy import select
+from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
 
 sys.path.append(str(Path(__file__).parent.parent))
@@ -98,7 +99,10 @@ async def process_template_file(file_path: Path, session: AsyncSession):
     template_variables: list[str] = data["variables"]
 
     id = None
-    result_db = await session.execute(select(FormTemplate).where(FormTemplate.name == template_name))
+    # Use parameterized query to avoid type issues with SQLModel column comparison
+    result_db = await session.execute(
+        select(FormTemplate).where(text("name = :name_param")), {"name_param": template_name}
+    )
     result = result_db.scalars().first()
     if result:
         if template_text.strip() != result.content.strip():
@@ -134,7 +138,7 @@ async def process_template_file(file_path: Path, session: AsyncSession):
             qdrant_client.create_payload_index(
                 collection_name=QDRANT_COLLECTION_NAME,
                 field_name=field,
-                field_schema=models.KeywordIndexParams()
+                field_schema=models.KeywordIndexParams(type=KeywordIndexType.KEYWORD)
             )
             print(f"Created index for field: {field}")
         except Exception as e:

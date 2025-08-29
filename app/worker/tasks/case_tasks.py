@@ -1,4 +1,5 @@
 """
+"""
 Celery tasks for case management operations.
 """
 
@@ -9,10 +10,10 @@ from typing import Any, Dict, Optional
 from sqlalchemy import or_, select
 from sqlalchemy.orm import selectinload
 
-import get_logger
-from .app.models import Case, Document
-from .app.worker.celery_app import celery_app
-from .app.worker.service_registry import get_worker_services
+from app.core.logger_manager import get_logger
+from app.models import Case, Document
+from app.worker.celery_app import celery_app
+from app.worker.service_registry import get_worker_services
 
 logger = get_logger(__name__)
 
@@ -243,12 +244,12 @@ def search_cases(
                     stmt = stmt.where(  # type: ignore
                         or_(  # type: ignore
                             (
-                                Case.description.ilike(f"%{query}%")
+                                Case.description.ilike(f"%{query}%")  # type: ignore[attr-defined]
                                 if Case.description
                                 else False
                             ),
-                            Case.reference_number.ilike(f"%{query}%"),
-                            Case.client_name.ilike(f"%{query}%"),
+                            Case.reference_number.ilike(f"%{query}%"),  # type: ignore[attr-defined]
+                            Case.client_name.ilike(f"%{query}%"),  # type: ignore[attr-defined]
                         )
                     )
 

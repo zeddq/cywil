@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple, Literal
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import re
-import fitz  # PyMuPDF
+import fitz  # type: ignore  # PyMuPDF
 
 # Add parent directories to Python path to import app modules
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -321,7 +321,7 @@ Uwaga: Odpowiedz w formacie JSON zgodnym ze schematem LegalEntities.
                 {"role": "user", "content": entity_prompt.format(text=ruling.paragraphs[index].text)}
             ]
             
-            parsed_entities = await openai_service.async_parse_structured_output(
+            parsed_entities: LegalEntities = await openai_service.async_parse_structured_output(
                 model="o3-mini",
                 messages=messages,
                 response_format=LegalEntities,
@@ -439,10 +439,17 @@ Wskazówki:
     ))]
     
     try:
-        response = llm.invoke(messages)
+        # Convert HumanMessage to OpenAI format  
+        openai_messages = [{"role": "user", "content": messages[0].content}]
+        response = llm.create_completion(
+            model="gpt-4o-mini", 
+            messages=openai_messages,
+            max_tokens=4000,
+            temperature=0.1
+        )
         
         # Extract JSON from response
-        content = response.content.strip()
+        content = response.choices[0].message.content.strip()  # type: ignore[attr-defined]
         if content.startswith("```json"):
             content = content[7:]
         if content.endswith("```"):
@@ -480,7 +487,15 @@ async def preprocess_sn_rulings(pdf_path: Path) -> List[Dict[str, Any]]:
 
         # Step 2: Enhance entity extraction
         logger.info("Step 2: Enhancing entity recognition with o3")
-        ruling = await enhance_entities_with_o3(ruling, 0)
+        # Convert Ruling to ParsedRuling for the enhancement function
+        # Convert Ruling to ParsedRuling for the enhancement function
+        parsed_paragraphs = []
+        for p in ruling.paragraphs:
+            # Convert RulingParagraphEnriched back to RulingParagraph
+            para_dict = p.model_dump(exclude={'entities'})
+            parsed_paragraphs.append(RulingParagraph(**para_dict))
+        parsed_for_enhancement = ParsedRuling(paragraphs=parsed_paragraphs)
+        ruling = await enhance_entities_with_o3(parsed_for_enhancement, 0)
         
         # Step 3: Improve section classification
         # logger.info("Step 3: Classifying document sections with o3")
@@ -653,7 +668,7 @@ async def process_batch(pdf_files: List[Path], extracted_jsonl: Optional[Path] =
                 if ruling:
                     is_valid = ruling.meta.docket and (int(bool(ruling.meta.date)) + int(bool(ruling.meta.panel))) >= 1
                     if is_valid:
-                        ruling.name = ruling.meta.docket
+                        ruling.name = ruling.meta.docket or "Unknown Ruling"  # Provide fallback
                         f.write(ruling.model_dump_json() + "\n")
 
 

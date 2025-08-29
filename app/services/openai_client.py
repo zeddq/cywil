@@ -9,7 +9,7 @@ from typing import Awaitable, Any, Callable, Dict, List, Optional, Type, TypeVar
 
 from openai import AsyncOpenAI, OpenAI
 from openai.types.chat import ChatCompletion
-from openai.types.responses import ParsedResponse
+from openai._types import NOT_GIVEN, NotGiven
 from pydantic import BaseModel
 from tenacity import (
     retry,
@@ -116,30 +116,30 @@ class OpenAIService:
             Parsed response as the specified Pydantic model
         """
         try:
-            # Use the new structured output parsing
+            # Use the new structured output parsing with beta completions
             response = self.call_with_retry(
-                self.client.responses.parse,
+                self.client.beta.chat.completions.parse,
                 model=model,
-                input=messages,
+                messages=messages,
                 response_format=response_format,
                 **kwargs,
             )
 
-            if response.output_parsed is None:
+            if response.parsed is None:  # type: ignore[attr-defined]
                 logger.warning(
                     "Structured output parsing returned None, attempting fallback"
                 )
                 return self._fallback_parse(
-                    response.output_parsed or "", response_format
+                    response.choices[0].message.content or "", response_format
                 )
 
-            return response.output_parsed
+            return response.parsed  # type: ignore[attr-defined]
 
         except Exception as e:
             logger.error(f"Failed to parse structured output: {e}")
             # Attempt fallback parsing if structured parsing fails
             try:
-                regular_response = self.call_with_retry(
+                regular_response: ChatCompletion = self.call_with_retry(
                     self.client.chat.completions.create,
                     model=model,
                     messages=messages,

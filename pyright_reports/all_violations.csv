@@ -1,22 +1,7 @@
 Rule,File,Line,Column,Severity,Message
-reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/app/validators/document_validator.py,91,53,error,"Argument of type ""Literal[DocumentType.CIVIL_CODE, DocumentType.CIVIL_PROCEDURE, DocumentType.CONTRACT, DocumentType.PLEADING] | None"" cannot be assigned to parameter ""document_type"" of type ""DocumentType"" in function ""_validate_statute_document""
-  Type ""Literal[DocumentType.CIVIL_CODE, DocumentType.CIVIL_PROCEDURE, DocumentType.CONTRACT, DocumentType.PLEADING] | None"" is not assignable to type ""DocumentType""
-    ""None"" is not assignable to ""DocumentType"""
-reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py,76,54,error,"Argument of type ""Literal['keyword']"" cannot be assigned to parameter ""type"" of type ""KeywordIndexType"" in function ""__init__""
-  ""Literal['keyword']"" is not assignable to ""KeywordIndexType"""
-reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py,82,54,error,"Argument of type ""Literal['keyword']"" cannot be assigned to parameter ""type"" of type ""KeywordIndexType"" in function ""__init__""
-  ""Literal['keyword']"" is not assignable to ""KeywordIndexType"""
-reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py,88,54,error,"Argument of type ""Literal['keyword']"" cannot be assigned to parameter ""type"" of type ""KeywordIndexType"" in function ""__init__""
-  ""Literal['keyword']"" is not assignable to ""KeywordIndexType"""
-reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py,309,47,error,"Argument of type ""Literal['text']"" cannot be assigned to parameter ""type"" of type ""TextIndexType"" in function ""__init__""
-  ""Literal['text']"" is not assignable to ""TextIndexType"""
-reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py,321,54,error,"Argument of type ""Literal['keyword']"" cannot be assigned to parameter ""type"" of type ""KeywordIndexType"" in function ""__init__""
-  ""Literal['keyword']"" is not assignable to ""KeywordIndexType"""
-reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/ingest/pdf2chunks.py,226,13,error,"Argument of type ""Dict[str, Any]"" cannot be assigned to parameter ""value"" of type ""str"" in function ""__setitem__""
-  ""Dict[str, Any]"" is not assignable to ""str"""
-reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py,483,49,error,"Argument of type ""Ruling"" cannot be assigned to parameter ""ruling"" of type ""ParsedRuling"" in function ""enhance_entities_with_o3""
-  ""Ruling"" is not assignable to ""ParsedRuling"""
-reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/ingest/sn.py,95,62,error,"Argument of type ""bool"" cannot be assigned to parameter ""whereclause"" of type ""_ColumnExpressionArgument[bool]"" in function ""where""
+reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/app/database.py,15,31,error,"Argument of type ""AppConfig"" cannot be assigned to parameter ""config_service"" of type ""ConfigService"" in function ""__init__""
+  ""AppConfig"" is not assignable to ""ConfigService"""
+reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/ingest/sn.py,100,62,error,"Argument of type ""bool"" cannot be assigned to parameter ""whereclause"" of type ""_ColumnExpressionArgument[bool]"" in function ""where""
   Type ""bool"" is not assignable to type ""_ColumnExpressionArgument[bool]""
     ""bool"" is not assignable to ""ColumnElement[bool]""
     ""bool"" is incompatible with protocol ""_HasClauseElement[bool]""
@@ -26,7 +11,7 @@ reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/ingest/sn.py,95,62,error
     ""bool"" is not assignable to ""TypedColumnsClauseRole[bool]""
     Type ""bool"" is not assignable to type ""() -> ColumnElement[bool]""
   ..."
-reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/ingest/templates.py,101,66,error,"Argument of type ""Any | bool"" cannot be assigned to parameter ""whereclause"" of type ""_ColumnExpressionArgument[bool]"" in function ""where""
+reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/ingest/templates.py,104,66,error,"Argument of type ""Any | bool"" cannot be assigned to parameter ""whereclause"" of type ""_ColumnExpressionArgument[bool]"" in function ""where""
   Type ""Any | bool"" is not assignable to type ""_ColumnExpressionArgument[bool]""
     Type ""bool"" is not assignable to type ""_ColumnExpressionArgument[bool]""
       ""bool"" is not assignable to ""ColumnElement[bool]""
@@ -36,19 +21,9 @@ reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/ingest/templates.py,101,
       ""bool"" is not assignable to ""ExpressionElementRole[bool]""
       ""bool"" is not assignable to ""TypedColumnsClauseRole[bool]""
   ..."
-reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/ingest/templates_preprocess.py,90,35,error,"Argument of type ""(t: Unknown = text) -> CoroutineType[Any, Any, Template | None]"" cannot be assigned to parameter ""object"" of type ""() -> Coroutine[Any, Any, Template]"" in function ""append""
-  Type ""(t: Unknown = text) -> CoroutineType[Any, Any, Template | None]"" is not assignable to type ""() -> Coroutine[Any, Any, Template]""
-    Function return type ""CoroutineType[Any, Any, Template | None]"" is incompatible with type ""Coroutine[Any, Any, Template]""
-      ""CoroutineType[Any, Any, Template | None]"" is not assignable to ""Coroutine[Any, Any, Template]""
-        Type parameter ""_ReturnT_nd_co@Coroutine"" is covariant, but ""Template | None"" is not a subtype of ""Template""
-          Type ""Template | None"" is not assignable to type ""Template"""
-reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/ingest/test_preprocess_o3.py,69,51,error,"Argument of type ""None"" cannot be assigned to parameter ""obj"" of type ""Sized"" in function ""len""
-  ""None"" is incompatible with protocol ""Sized""
-    ""__len__"" is not present"
-reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_ai_functionality.py,111,29,error,"Argument of type ""Any | None"" cannot be assigned to parameter ""embedded_at"" of type ""datetime"" in function ""__init__""
-  Type ""Any | None"" is not assignable to type ""datetime""
-    ""None"" is not assignable to ""datetime"""
-reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py,138,29,error,"Argument of type ""bool"" cannot be assigned to parameter ""onclause"" of type ""_OnClauseArgument | None"" in function ""join""
+reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py,38,39,error,"Argument of type ""AppConfig"" cannot be assigned to parameter ""config_service"" of type ""ConfigService"" in function ""__init__""
+  ""AppConfig"" is not assignable to ""ConfigService"""
+reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py,152,29,error,"Argument of type ""bool"" cannot be assigned to parameter ""onclause"" of type ""_OnClauseArgument | None"" in function ""join""
   Type ""bool"" is not assignable to type ""_OnClauseArgument | None""
     ""bool"" is not assignable to ""ColumnElement[Any]""
     ""bool"" is incompatible with protocol ""_HasClauseElement[Any]""
@@ -58,7 +33,7 @@ reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_a
     ""bool"" is not assignable to ""TypedColumnsClauseRole[Any]""
     Type ""bool"" is not assignable to type ""() -> ColumnElement[Any]""
   ..."
-reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py,139,24,error,"Argument of type ""bool"" cannot be assigned to parameter ""whereclause"" of type ""_ColumnExpressionArgument[bool]"" in function ""where""
+reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py,153,24,error,"Argument of type ""bool"" cannot be assigned to parameter ""whereclause"" of type ""_ColumnExpressionArgument[bool]"" in function ""where""
   Type ""bool"" is not assignable to type ""_ColumnExpressionArgument[bool]""
     ""bool"" is not assignable to ""ColumnElement[bool]""
     ""bool"" is incompatible with protocol ""_HasClauseElement[bool]""
@@ -68,7 +43,7 @@ reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_a
     ""bool"" is not assignable to ""TypedColumnsClauseRole[bool]""
     Type ""bool"" is not assignable to type ""() -> ColumnElement[bool]""
   ..."
-reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py,140,32,error,"Argument of type ""datetime | None"" cannot be assigned to parameter ""column"" of type ""_ColumnExpressionOrStrLabelArgument[_T@desc]"" in function ""desc""
+reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py,154,32,error,"Argument of type ""datetime | None"" cannot be assigned to parameter ""column"" of type ""_ColumnExpressionOrStrLabelArgument[_T@desc]"" in function ""desc""
   Type ""datetime | None"" is not assignable to type ""_ColumnExpressionOrStrLabelArgument[_T@desc]""
     Type ""datetime"" is not assignable to type ""_ColumnExpressionOrStrLabelArgument[_T@desc]""
       ""datetime"" is not assignable to ""LambdaElement""
@@ -78,96 +53,51 @@ reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_a
       ""datetime"" is not assignable to ""SQLCoreOperations[_T@desc]""
       ""datetime"" is not assignable to ""TypedColumnsClauseRole[_T@desc]""
   ..."
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/app/services/openai_client.py,133,30,information,"Cannot access attribute ""choices"" for class ""ParsedResponse[Any]""
-  Attribute ""choices"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/app/services/openai_client.py,136,29,information,"Cannot access attribute ""parsed"" for class ""ParsedResponse[Any]""
+reportArgumentType,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming.py,32,24,error,"Argument of type ""AppConfig"" cannot be assigned to parameter ""config_service"" of type ""ConfigService"" in function ""__init__""
+  ""AppConfig"" is not assignable to ""ConfigService"""
+reportAssignmentType,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,43,34,error,"Type ""Module(""preprocess_sn_o3"")"" is not assignable to declared type ""(stream: bool = True) -> OpenAIService""
+  Type ""Module(""preprocess_sn_o3"")"" is not assignable to type ""(stream: bool = True) -> OpenAIService"""
+reportAssignmentType,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,43,49,error,"Type ""Module(""preprocess_sn_o3"")"" is not assignable to declared type ""type[PromptTemplate]""
+  Type ""Module(""preprocess_sn_o3"")"" is not assignable to type ""type[PromptTemplate]"""
+reportAssignmentType,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,43,65,error,"Type ""Module(""preprocess_sn_o3"")"" is not assignable to declared type ""type[HumanMessage]""
+  Type ""Module(""preprocess_sn_o3"")"" is not assignable to type ""type[HumanMessage]"""
+reportAssignmentType,/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py,324,46,error,"Type ""BaseModel"" is not assignable to declared type ""LegalEntities""
+  ""BaseModel"" is not assignable to ""LegalEntities"""
+reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/app/services/openai_client.py,128,25,information,"Cannot access attribute ""parsed"" for class ""ParsedChatCompletion[Any]""
   Attribute ""parsed"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,236,46,information,"Cannot access attribute ""ilike"" for class ""str""
-  Attribute ""ilike"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,237,51,information,"Cannot access attribute ""ilike"" for class ""str""
-  Attribute ""ilike"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,238,46,information,"Cannot access attribute ""ilike"" for class ""str""
-  Attribute ""ilike"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/ingestion_pipeline.py,24,28,information,"""generate_statute_embeddings"" is unknown import symbol"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/pdf2chunks.py,140,28,information,"Cannot access attribute ""group"" for class ""str""
-  Attribute ""group"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,150,26,information,"Cannot access attribute ""get_response"" for class ""CoroutineType[Any, Any, ParsedResponse[Unknown]]""
-  Attribute ""get_response"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/search_tasks.py,232,43,information,"Cannot access attribute ""get"" for class ""RulingPayload""
-  Attribute ""get"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/search_tasks.py,233,45,information,"Cannot access attribute ""get"" for class ""RulingPayload""
-  Attribute ""get"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/search_tasks.py,234,43,information,"Cannot access attribute ""get"" for class ""RulingPayload""
-  Attribute ""get"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/search_tasks.py,235,51,information,"Cannot access attribute ""get"" for class ""RulingPayload""
-  Attribute ""get"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/search_tasks.py,236,40,information,"Cannot access attribute ""get"" for class ""RulingPayload""
-  Attribute ""get"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/search_tasks.py,237,41,information,"Cannot access attribute ""get"" for class ""RulingPayload""
-  Attribute ""get"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/example_logger_usage.py,4,39,information,"""LOGGING_CONFIG"" is unknown import symbol"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/example_logger_usage.py,7,5,information,"""configure_logging"" is unknown import symbol"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/example_logger_usage.py,8,5,information,"""logger_manager"" is unknown import symbol"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/example_logger_usage.py,9,5,information,"""LOGGING_PRESETS"" is unknown import symbol"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/example_logger_usage.py,10,5,information,"""wrap_all_loggers"" is unknown import symbol"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/example_service_logging.py,4,36,information,"""service_operation_logger"" is unknown import symbol"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py,46,35,information,"Cannot access attribute ""qdrant"" for class ""Dict[Unknown, Unknown]""
-  Attribute ""qdrant"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py,47,35,information,"Cannot access attribute ""qdrant"" for class ""Dict[Unknown, Unknown]""
-  Attribute ""qdrant"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py,48,38,information,"Cannot access attribute ""qdrant"" for class ""Dict[Unknown, Unknown]""
-  Attribute ""qdrant"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py,48,82,information,"Cannot access attribute ""qdrant"" for class ""Dict[Unknown, Unknown]""
-  Attribute ""qdrant"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py,49,39,information,"Cannot access attribute ""qdrant"" for class ""Dict[Unknown, Unknown]""
-  Attribute ""qdrant"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py,50,38,information,"Cannot access attribute ""storage"" for class ""Dict[Unknown, Unknown]""
-  Attribute ""storage"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py,50,62,information,"Cannot access attribute ""storage"" for class ""Dict[Unknown, Unknown]""
-  Attribute ""storage"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py,51,36,information,"Cannot access attribute ""storage"" for class ""Dict[Unknown, Unknown]""
-  Attribute ""storage"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py,51,60,information,"Cannot access attribute ""storage"" for class ""Dict[Unknown, Unknown]""
-  Attribute ""storage"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py,65,44,information,"Cannot access attribute ""postgres"" for class ""Dict[Unknown, Unknown]""
-  Attribute ""postgres"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn.py,74,26,information,"Cannot access attribute ""get_text"" for class ""Page""
-  Attribute ""get_text"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn.py,129,16,information,"""open"" is not a known attribute of module ""fitz"""
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py,133,16,information,"""open"" is not a known attribute of module ""fitz"""
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py,334,42,information,"Cannot access attribute ""entities"" for class ""BaseModel""
-  Attribute ""entities"" is unknown"
+reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/app/services/openai_client.py,136,29,information,"Cannot access attribute ""parsed"" for class ""ParsedChatCompletion[Any]""
+  Attribute ""parsed"" is unknown"
+reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,526,24,information,"Cannot access attribute ""invoke"" for class ""OpenAIService""
+  Attribute ""invoke"" is unknown"
+reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/example_logger_usage.py,127,20,information,"Cannot access attribute ""update_logger_level"" for class ""LoggerManager""
+  Attribute ""update_logger_level"" is unknown"
+reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/example_logger_usage.py,132,27,information,"Cannot access attribute ""get_logger_info"" for class ""LoggerManager""
+  Attribute ""get_logger_info"" is unknown"
+reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/example_logger_usage.py,139,20,information,"Cannot access attribute ""add_handler_to_logger"" for class ""LoggerManager""
+  Attribute ""add_handler_to_logger"" is unknown"
 reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py,442,24,information,"Cannot access attribute ""invoke"" for class ""OpenAIService""
   Attribute ""invoke"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py,492,28,information,"Cannot access attribute ""paragraphs"" for class ""List[bytes]""
+reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py,494,28,information,"Cannot access attribute ""paragraphs"" for class ""List[bytes]""
   Attribute ""paragraphs"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py,656,39,information,"Cannot assign to attribute ""name"" for class ""Ruling""
-  Type ""str | None"" is not assignable to type ""str""
-    ""None"" is not assignable to ""str"""
 reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/refactored_ingest_pipeline.py,298,53,information,"Cannot access attribute ""get_ingestion_status"" for class ""None""
   Attribute ""get_ingestion_status"" is unknown"
 reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/refactored_ingest_pipeline.py,299,49,information,"Cannot access attribute ""get_sn_processing_status"" for class ""None""
   Attribute ""get_sn_processing_status"" is unknown"
 reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/refactored_ingest_pipeline.py,300,56,information,"Cannot access attribute ""get_embedding_statistics"" for class ""None""
   Attribute ""get_embedding_statistics"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/templates_preprocess.py,84,24,information,"""open"" is not a known attribute of module ""fitz"""
+reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/celery/test_celery_integration.py,214,17,information,"""create_case"" is unknown import symbol"
+reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/celery/test_celery_integration.py,215,17,information,"""search_cases"" is unknown import symbol"
+reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/celery/test_celery_integration.py,216,17,information,"""calculate_case_deadlines"" is unknown import symbol"
 reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py,55,22,information,"Cannot access attribute ""close"" for class ""DatabaseManager""
   Attribute ""close"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py,21,26,information,"""AsyncSessionLocal"" is unknown import symbol"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py,21,45,information,"""init_db"" is unknown import symbol"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py,14,5,information,"""initialize_services"" is unknown import symbol"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py,481,48,information,"""cached_query"" is unknown import symbol"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py,16,37,information,"""setup_structured_logging"" is unknown import symbol"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py,17,26,information,"""initialize_services"" is unknown import symbol"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py,190,42,information,"""get"" is not a known attribute of module ""app.core.service_container"""
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py,247,47,information,"""get"" is not a known attribute of module ""app.core.service_container"""
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py,75,21,information,"Cannot assign to attribute ""_embedder"" for class ""StatuteSearchService""
-  Attribute ""_embedder"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py,76,21,information,"Cannot assign to attribute ""_llm"" for class ""StatuteSearchService""
-  Attribute ""_llm"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py,163,21,information,"Cannot assign to attribute ""_llm"" for class ""DocumentGenerationService""
-  Attribute ""_llm"" is unknown"
-reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming.py,16,30,information,"""ParalegalAgent"" is unknown import symbol"
+reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py,75,18,information,"Cannot access attribute ""aclose"" for class ""Redis[Any]""
+  Attribute ""aclose"" is unknown"
+reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py,23,26,information,"""initialize_services"" is unknown import symbol"
+reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py,197,42,information,"""get"" is not a known attribute of module ""app.core.service_container"""
+reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py,255,47,information,"""get"" is not a known attribute of module ""app.core.service_container"""
+reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_openai_integration.py,83,20,information,"""config"" is not a known attribute of module ""pytest"""
+reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_openai_integration.py,111,20,information,"""config"" is not a known attribute of module ""pytest"""
+reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_openai_integration.py,232,20,information,"""config"" is not a known attribute of module ""pytest"""
 reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py,319,19,information,"Cannot assign to attribute ""transform"" for class ""MockStreamProcessor""
   Expression of type ""(event: StreamEvent) -> StreamEvent"" cannot be assigned to attribute ""transform"" of class ""MockStreamProcessor""
     ""FunctionType"" is not assignable to ""None"""
@@ -205,69 +135,643 @@ reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_
   Attribute ""age"" is unknown"
 reportAttributeAccessIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_registry.py,168,25,information,"Cannot access attribute ""active"" for class ""BaseModel""
   Attribute ""active"" is unknown"
-reportCallIssue,/Volumes/code/cywil/ai-paralegal-poc/ingest/templates.py,137,30,error,"Argument missing for parameter ""type"""
-reportCallIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_ai_functionality.py,343,20,error,"Arguments missing for parameters ""date"", ""reasoning"""
-reportCallIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_ai_functionality.py,389,26,error,"Arguments missing for parameters ""case_number"", ""court"", ""date"", ""decision"", ""reasoning"""
-reportCallIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py,296,20,error,"Argument missing for parameter ""config_service"""
-reportCallIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py,397,24,error,"Argument missing for parameter ""config_service"""
-reportCallIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py,71,23,error,"Arguments missing for parameters ""config_service"", ""llm_manager"""
-reportCallIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py,314,13,error,"Arguments missing for parameters ""config_service"", ""llm_manager"""
-reportCallIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py,352,23,error,"Arguments missing for parameters ""config_service"", ""llm_manager"""
-reportCallIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py,23,13,error,"Arguments missing for parameters ""config_service"", ""conversation_manager"", ""tool_executor"""
-reportCallIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py,93,13,error,"Arguments missing for parameters ""config_service"", ""conversation_manager"", ""tool_executor"""
-reportCallIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_integration.py,90,66,error,"Arguments missing for parameters ""request"", ""body"""
-reportCallIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_integration.py,205,28,error,"Arguments missing for parameters ""date"", ""decision"", ""reasoning"""
-reportCallIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_integration.py,217,30,error,"Arguments missing for parameters ""court"", ""date"", ""decision"", ""reasoning"""
-reportCallIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_integration.py,393,20,error,"Arguments missing for parameters ""case_number"", ""court"", ""date"", ""decision"", ""reasoning"""
-reportCallIssue,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_executor.py,31,20,error,"Argument missing for parameter ""config_service"""
-reportIndexIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,388,28,error,"""__getitem__"" method not defined on type ""RulingParagraph"""
-reportIndexIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,389,28,error,"""__getitem__"" method not defined on type ""RulingParagraph"""
-reportIndexIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,390,25,error,"""__getitem__"" method not defined on type ""RulingParagraph"""
-reportIndexIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,399,28,error,"""__getitem__"" method not defined on type ""RulingParagraph"""
-reportIndexIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,400,28,error,"""__getitem__"" method not defined on type ""RulingParagraph"""
-reportIndexIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,401,25,error,"""__getitem__"" method not defined on type ""RulingParagraph"""
-reportIndexIssue,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,402,52,error,"""__getitem__"" method not defined on type ""RulingParagraph"""
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/celery/conftest.py,1,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/celery/test_celery_integration.py,2,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/celery/test_celery_tasks.py,1,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py,5,12,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py,2,12,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_ai_functionality.py,7,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py,2,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_conversation_manager.py,4,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_database_manager.py,4,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_embedding_pipeline.py,6,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py,5,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py,5,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_migration.py,2,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_openai_integration.py,7,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py,5,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming.py,2,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py,4,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/conftest.py,2,12,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py,2,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py,12,6,error,"Import ""app.paralegal_agents.tool_wrappers"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_llm_manager.py,6,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_integration.py,5,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_service.py,6,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_performance_utils.py,4,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_registration_key.py,2,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_executor.py,4,8,error,"Import ""pytest"" could not be resolved"
-reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_tool_registry.py,4,8,error,"Import ""pytest"" could not be resolved"
-reportOptionalMemberAccess,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,391,52,error,"""entities"" is not a known attribute of ""None"""
-reportOptionalMemberAccess,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_ai_functionality.py,155,43,error,"""case_number"" is not a known attribute of ""None"""
-reportOptionalMemberAccess,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_ai_functionality.py,156,58,error,"""parties"" is not a known attribute of ""None"""
-reportOptionalMemberAccess,/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_ai_functionality.py,157,47,error,"""legal_basis"" is not a known attribute of ""None"""
-reportOptionalMemberAccess,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_integration.py,73,34,error,"""case_number"" is not a known attribute of ""None"""
-reportOptionalMemberAccess,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_integration.py,74,34,error,"""court"" is not a known attribute of ""None"""
-reportOptionalMemberAccess,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_integration.py,75,38,error,"""parties"" is not a known attribute of ""None"""
-reportOptionalMemberAccess,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_integration.py,76,49,error,"""parties"" is not a known attribute of ""None"""
-reportOptionalMemberAccess,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_integration.py,77,38,error,"""legal_basis"" is not a known attribute of ""None"""
-reportOptionalMemberAccess,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_integration.py,78,53,error,"""legal_basis"" is not a known attribute of ""None"""
-reportOptionalMemberAccess,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_integration.py,250,34,error,"""case_number"" is not a known attribute of ""None"""
-reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,195,45,error,"""parser"" is not defined"
-reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,319,11,error,"""get_o3_client"" is not defined"
-reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,342,18,error,"""PydanticOutputParser"" is not defined"
-reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,452,11,error,"""get_o3_client"" is not defined"
-reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,454,29,error,"""PromptTemplate"" is not defined"
-reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,491,9,error,"""HumanMessage"" is not defined"
+reportGeneralTypeIssues,/Volumes/code/cywil/ai-paralegal-poc/app/database.py,14,15,error,Expression cannot be assignment target
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/core/logger_manager.py,19,6,error,"Import ""opentelemetry"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/core/logger_manager.py,20,6,error,"Import ""opentelemetry.instrumentation.logging"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/core/logger_manager.py,21,6,error,"Import ""opentelemetry.sdk.resources"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/core/logger_manager.py,22,6,error,"Import ""opentelemetry.sdk.trace"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/core/logger_manager.py,23,6,error,"Import ""opentelemetry.sdk.trace.export"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/core/logger_manager.py,24,6,error,"Import ""opentelemetry.trace"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/embedding_models/embedding_interface.py,55,18,error,"Import ""sentence_transformers"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/embedding_models/embedding_interface.py,184,26,error,"Import ""transformers"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/embedding_models/embedding_interface.py,185,28,error,"Import ""torch"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/embedding_models/embedding_interface.py,207,16,error,"Import ""torch"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/main.py,35,6,error,"Import ""opentelemetry"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/repositories/case_repository.py,12,6,error,"Import ""..dependencies"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/repositories/user_repository.py,8,6,error,"Import ""..dependencies"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/services/supreme_court_service.py,15,6,error,"Import ""sentence_transformers"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/task_processors.py,9,8,error,"Import ""fitz"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/task_processors.py,16,6,error,"Import ""sentence_transformers"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/embed.py,26,6,error,"Import ""sentence_transformers"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/pdf2chunks.py,9,8,error,"Import ""pdfplumber"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,22,6,error,"Import ""agents"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,24,8,error,"Import ""fitz"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/sn.py,11,6,error,"Import ""deepdiff"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/sn.py,14,6,error,"Import ""sentence_transformers"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,132,39,error,"Import ""the"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py,3,6,error,"Import ""sentence_transformers"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/ingest/pdf2chunks.py,3,8,error,"Import ""pdfplumber"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn.py,25,8,error,"Import ""spacy"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn.py,26,6,error,"Import ""spacy.pipeline"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/ingest/sn.py,8,6,error,"Import ""deepdiff"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/ingest/sn.py,14,6,error,"Import ""sentence_transformers"" could not be resolved"
+reportMissingImports,/Volumes/code/cywil/ai-paralegal-poc/ingest/templates.py,15,6,error,"Import ""sentence_transformers"" could not be resolved"
+reportMissingModuleSource,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py,23,8,warning,"Import ""dateparser"" could not be resolved from source"
+reportMissingModuleSource,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/sn.py,9,8,warning,"Import ""dateparser"" could not be resolved from source"
+reportMissingModuleSource,/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn.py,27,8,warning,"Import ""dateparser"" could not be resolved from source"
+reportMissingModuleSource,/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py,24,8,warning,"Import ""dateparser"" could not be resolved from source"
+reportMissingModuleSource,/Volumes/code/cywil/ai-paralegal-poc/ingest/sn.py,10,8,warning,"Import ""dateparser"" could not be resolved from source"
+reportMissingModuleSource,/Volumes/code/cywil/ai-paralegal-poc/schema_cmp.py,23,8,warning,"Import ""psycopg2"" could not be resolved from source"
+reportUnboundVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,221,23,error,"""query"" is unbound"
+reportUnboundVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,223,27,error,"""filters"" is unbound"
+reportUnboundVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,30,25,error,"""stage"" is unbound"
+reportUnboundVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,131,39,error,"""stage"" is unbound"
+reportUnboundVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,132,43,error,"""stage"" is unbound"
+reportUnboundVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,133,25,error,"""stage"" is unbound"
+reportUnboundVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,221,13,error,"""documents"" is unbound"
+reportUnboundVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,224,28,error,"""documents"" is unbound"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/services/openai_client.py,274,10,error,"""ParsedResponse"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/services/openai_client.py,284,10,error,"""ParsedResponse"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,3,1,error,"""Celery"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,3,8,error,"""tasks"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,22,8,error,"""Helper"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,22,15,error,"""to"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,22,18,error,"""run"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,39,5,error,"""Create"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,39,12,error,"""a"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,39,14,error,"""new"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,42,20,error,"""Dictionary"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,42,31,error,"""containing"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,42,47,error,"""information"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,43,18,error,"""ID"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,43,21,error,"""of"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,43,24,error,"""the"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,43,28,error,"""user"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,43,33,error,"""creating"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,43,42,error,"""the"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,46,9,error,"""Result"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,46,16,error,"""dictionary"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,46,32,error,"""created"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,95,5,error,"""Update"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,95,12,error,"""the"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,95,16,error,"""status"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,95,23,error,"""of"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,95,26,error,"""a"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,98,18,error,"""UUID"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,98,23,error,"""of"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,98,26,error,"""the"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,98,35,error,"""to"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,98,38,error,"""update"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,99,21,error,"""New"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,99,25,error,"""status"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,99,32,error,"""value"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,18,error,"""ID"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,21,error,"""of"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,24,error,"""the"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,28,error,"""user"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,33,error,"""making"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,40,error,"""the"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,44,error,"""update"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,103,9,error,"""Result"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,103,16,error,"""dictionary"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,103,32,error,"""update"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,156,5,error,"""Add"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,156,9,error,"""a"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,156,11,error,"""document"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,156,20,error,"""to"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,156,23,error,"""a"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,159,18,error,"""UUID"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,159,23,error,"""of"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,159,26,error,"""the"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,160,24,error,"""Document"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,160,33,error,"""information"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,18,error,"""ID"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,21,error,"""of"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,24,error,"""the"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,28,error,"""user"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,33,error,"""adding"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,40,error,"""the"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,44,error,"""document"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,164,9,error,"""Result"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,164,16,error,"""dictionary"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,164,32,error,"""document"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,218,5,error,"""Search"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,218,12,error,"""cases"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,218,18,error,"""based"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,218,24,error,"""on"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,218,27,error,"""query"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,221,16,error,"""Search"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,221,29,error,"""string"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,222,18,error,"""ID"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,222,21,error,"""of"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,222,24,error,"""the"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,222,28,error,"""user"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,222,33,error,"""performing"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,222,44,error,"""search"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,223,18,error,"""Optional"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,223,36,error,"""status"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,223,44,error,"""date_range"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,226,9,error,"""Search"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,226,16,error,"""results"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,226,29,error,"""matching"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,303,5,error,"""Calculate"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,303,15,error,"""legal"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,303,21,error,"""deadlines"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,306,18,error,"""UUID"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,306,23,error,"""of"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,306,26,error,"""the"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,307,18,error,"""ID"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,307,21,error,"""of"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,307,24,error,"""the"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,307,28,error,"""user"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,310,9,error,"""Dictionary"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,310,25,error,"""calculated"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,5,error,"""Generate"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,16,error,"""comprehensive"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,30,error,"""summary"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,38,error,"""of"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,48,error,"""including"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,62,error,"""documents"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,387,18,error,"""UUID"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,387,23,error,"""of"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,387,26,error,"""the"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,388,18,error,"""ID"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,388,21,error,"""of"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,388,24,error,"""the"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,388,28,error,"""user"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,391,9,error,"""Comprehensive"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,391,28,error,"""summary"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,3,1,error,"""Validation"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,3,12,error,"""tasks"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,5,error,"""Validate"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,14,error,"""a"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,16,error,"""batch"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,22,error,"""of"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,25,error,"""documents"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,35,error,"""at"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,38,error,"""a"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,40,error,"""specific"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,49,error,"""pipeline"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,29,20,error,"""List"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,29,25,error,"""of"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,29,28,error,"""document"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,29,37,error,"""data"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,29,42,error,"""to"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,29,45,error,"""validate"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,30,16,error,"""Pipeline"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,30,31,error,"""name"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,33,9,error,"""Validation"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,33,20,error,"""results"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,33,28,error,"""summary"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,128,5,error,"""Validate"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,128,14,error,"""data"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,128,19,error,"""integrity"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,128,29,error,"""between"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,128,37,error,"""pipeline"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,131,21,error,"""Input"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,131,27,error,"""data"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,131,32,error,"""to"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,132,22,error,"""Output"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,132,29,error,"""data"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,133,16,error,"""Pipeline"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,133,31,error,"""name"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,136,9,error,"""Validation"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,136,20,error,"""result"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,167,5,error,"""Extract"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,167,13,error,"""legal"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,167,19,error,"""information"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,167,36,error,"""fallback"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,170,24,error,"""Document"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,170,33,error,"""data"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,170,38,error,"""to"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,170,41,error,"""process"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,173,9,error,"""Extraction"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,173,20,error,"""result"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,173,32,error,"""fallback"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,221,5,error,"""Process"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,221,28,error,"""comprehensive"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,224,20,error,"""List"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,224,25,error,"""of"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,224,38,error,"""to"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,224,41,error,"""process"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,225,28,error,"""Whether"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,225,36,error,"""to"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,225,39,error,"""enable"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,225,46,error,"""validation"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,226,23,error,"""Whether"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,226,31,error,"""to"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,226,34,error,"""use"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,226,38,error,"""fallback"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,226,47,error,"""parsing"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,229,9,error,"""Processing"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,229,20,error,"""results"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,229,33,error,"""validation"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py,25,27,error,"""Mock"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py,26,33,error,"""Mock"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py,27,26,error,"""Mock"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py,52,18,error,"""SearchSNRulingsParams"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py,57,24,error,"""search_sn_rulings_tool"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py,83,18,error,"""SearchStatuteParams"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py,88,24,error,"""search_statute_tool"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py,98,27,error,"""Mock"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py,99,33,error,"""Mock"" is not defined"
+reportUndefinedVariable,/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_agent_sdk.py,100,26,error,"""Mock"" is not defined"
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,3,1,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,3,8,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,22,8,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,22,15,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,22,18,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,39,5,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,39,12,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,39,14,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,39,18,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,42,31,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,42,42,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,42,47,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,43,21,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,43,24,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,43,28,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,43,33,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,43,42,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,43,46,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,46,9,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,46,16,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,95,5,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,95,12,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,95,16,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,95,23,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,95,26,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,98,23,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,98,26,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,98,30,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,98,35,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,98,38,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,99,25,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,99,32,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,21,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,24,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,28,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,33,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,40,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,44,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,103,9,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,103,16,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,156,5,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,156,9,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,156,11,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,156,20,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,156,23,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,159,23,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,159,26,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,159,30,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,160,33,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,21,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,24,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,28,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,33,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,40,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,44,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,164,9,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,164,16,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,218,5,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,218,12,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,218,18,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,218,24,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,218,27,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,221,23,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,221,29,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,222,21,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,222,24,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,222,28,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,222,33,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,222,44,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,226,9,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,226,16,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,303,5,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,303,15,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,303,21,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,306,23,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,306,26,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,306,30,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,307,21,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,307,24,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,307,28,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,310,9,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,5,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,14,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,16,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,30,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,38,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,41,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,43,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,48,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,58,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,62,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,387,23,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,387,26,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,387,30,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,388,21,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,388,24,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,388,28,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,391,9,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,391,23,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,391,28,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,3,1,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,3,12,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,5,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,14,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,16,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,22,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,25,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,35,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,38,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,40,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,49,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,29,25,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,29,28,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,29,37,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,29,42,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,29,45,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,30,25,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,30,31,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,33,9,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,33,20,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,33,28,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,128,5,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,128,14,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,128,19,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,128,29,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,128,37,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,131,27,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,131,32,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,131,35,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,131,39,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,132,29,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,132,43,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,133,25,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,133,31,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,136,9,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,136,20,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,167,5,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,167,13,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,167,19,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,170,33,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,170,38,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,170,41,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,173,9,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,173,20,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,221,5,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,221,13,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,224,25,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,224,28,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,224,38,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,224,41,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,225,36,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,225,39,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,225,46,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,226,31,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,226,34,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,226,38,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,226,47,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,229,9,warning,Expression value is unused
+reportUnusedExpression,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,229,20,warning,Expression value is unused
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,3,8,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,3,14,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,3,23,error,"Expected ""in"""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,22,8,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,22,15,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,22,18,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,22,22,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,22,22,error,"Expected ""def"", ""with"" or ""for"" to follow ""async"""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,39,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,39,12,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,39,14,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,39,18,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,39,23,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,39,37,error,"Expected attribute name after ""."""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,41,10,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,42,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,42,31,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,42,42,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,42,47,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,43,21,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,43,24,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,43,28,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,43,33,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,43,42,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,43,46,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,45,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,45,13,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,46,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,46,16,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,46,27,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,46,40,error,"Expected "":"""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,47,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,95,12,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,95,16,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,95,23,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,95,26,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,95,28,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,95,32,error,"Expected attribute name after ""."""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,97,10,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,98,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,98,23,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,98,26,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,98,30,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,98,35,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,98,38,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,99,25,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,99,32,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,21,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,24,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,28,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,33,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,40,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,100,44,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,102,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,102,13,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,103,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,103,16,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,103,27,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,103,39,error,"Expected "":"""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,104,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,156,9,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,156,11,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,156,20,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,156,23,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,156,25,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,156,29,error,"Expected attribute name after ""."""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,158,10,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,159,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,159,23,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,159,26,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,159,30,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,160,33,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,21,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,24,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,28,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,33,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,40,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,161,44,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,163,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,163,13,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,164,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,164,16,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,164,27,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,164,41,error,"Expected "":"""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,165,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,218,12,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,218,18,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,218,24,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,218,27,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,218,44,error,"Expected attribute name after ""."""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,220,10,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,221,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,221,23,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,221,29,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,222,21,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,222,24,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,222,28,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,222,33,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,222,44,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,223,27,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,223,35,error,"""("" was not closed"
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,223,59,error,"Expected attribute name after ""."""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,225,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,225,13,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,226,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,226,16,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,226,24,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,226,38,error,"Expected "":"""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,227,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,303,15,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,303,21,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,303,31,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,303,37,error,"Expected ""in"""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,305,10,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,306,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,306,23,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,306,26,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,306,30,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,307,21,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,307,24,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,307,28,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,309,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,309,13,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,310,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,310,20,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,310,36,error,"Expected "":"""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,311,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,14,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,16,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,30,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,38,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,41,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,43,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,48,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,58,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,62,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,384,82,error,"Expected attribute name after ""."""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,386,10,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,387,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,387,23,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,387,26,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,387,30,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,388,21,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,388,24,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,388,28,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,390,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,390,13,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,391,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,391,23,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,391,28,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,392,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,392,5,error,String literal is unterminated
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,468,1,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,468,1,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py,468,1,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,3,12,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,3,18,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,3,26,error,"Expected ""in"""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,14,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,16,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,22,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,25,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,35,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,38,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,40,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,49,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,58,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,26,63,error,"Expected attribute name after ""."""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,28,10,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,29,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,29,25,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,29,28,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,29,37,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,29,42,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,29,45,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,30,25,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,30,31,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,32,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,32,13,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,33,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,33,20,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,33,28,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,34,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,128,14,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,128,19,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,128,29,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,128,37,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,128,46,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,128,52,error,"Expected attribute name after ""."""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,130,10,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,131,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,131,27,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,131,32,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,131,35,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,131,39,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,132,29,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,132,34,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,132,43,error,"Expected ""import"""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,132,43,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,133,25,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,133,31,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,135,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,135,13,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,136,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,136,20,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,137,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,167,13,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,167,19,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,167,31,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,167,45,error,"Expected "":"""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,169,10,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,170,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,170,33,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,170,38,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,170,41,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,172,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,172,13,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,173,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,173,20,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,173,27,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,173,41,error,"Expected "":"""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,174,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,221,13,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,221,23,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,221,42,error,"Expected "":"""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,223,10,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,224,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,224,25,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,224,28,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,224,38,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,224,41,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,225,36,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,225,39,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,225,46,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,226,31,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,226,34,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,226,38,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,226,47,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,228,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,228,13,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,229,1,error,Unexpected indentation
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,229,20,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,229,28,error,Statements must be separated by newlines or semicolons
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,229,44,error,"Expected "":"""
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,230,5,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,230,5,error,String literal is unterminated
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,337,10,error,Unindent not expected
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,337,10,error,Expected expression
+unknown,/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py,337,10,error,Statements must be separated by newlines or semicolons

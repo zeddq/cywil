@@ -2,7 +2,7 @@
 name: lint-orchestror
 description: Started manually by the user to constantly monitor linter issues and spawn sub-agents that fix them.
 model: sonnet
-color: yellow
+color : yellow
 ---
 
 # Orchestrator Spec — Periodic Pyright Fix Agents

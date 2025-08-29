@@ -30,39 +30,35 @@ config = get_config()
 class StatuteIngestionPipeline:
     """Orchestrates the complete statute ingestion process"""
     
-    def __init__(self, config: Optional[Dict] = None):
+    def __init__(self, config_dict: Optional[Dict] = None):
         """
         Initialize pipeline with configuration
         
         Args:
-            config: Optional configuration override
+            config_dict: Optional configuration dictionary override
         """
-        if config is None:
-
-            raise ValueError("Config is required")
-
-
-        self.config = {
-            "qdrant_host": config.qdrant.host,
-            "qdrant_port": config.qdrant.port,
-            "qdrant_api_key": config.qdrant.api_key.get_secret_value() if config.qdrant.api_key else None,
-            "collection_name": config.qdrant.collection_statutes,
-            "chunks_dir": str(config.storage.get_path(config.storage.chunks_dir)),
-            "pdfs_dir": str(config.storage.get_path(config.storage.pdfs_dir))
-        }
+        if config_dict is None:
+            # Use global config object
+            global_config = get_config()
+            self.config = {
+                "qdrant_host": global_config.qdrant.host,
+                "qdrant_port": global_config.qdrant.port,
+                "qdrant_api_key": global_config.qdrant.api_key.get_secret_value() if global_config.qdrant.api_key else None,
+                "collection_name": global_config.qdrant.collection_statutes,
+                "chunks_dir": str(global_config.storage.get_path(global_config.storage.chunks_dir)),
+                "pdfs_dir": str(global_config.storage.get_path(global_config.storage.pdfs_dir))
+            }
+        else:
+            # Use provided dictionary directly
+            self.config = config_dict
         
         # Create directories
         Path(self.config["chunks_dir"]).mkdir(parents=True, exist_ok=True)
         Path(self.config["pdfs_dir"]).mkdir(parents=True, exist_ok=True)
         
-        # Database setup
-
-        
-        if config is None:
-
-        
-            raise ValueError("Config is required for database setup")
-        self.engine = create_engine(config.postgres.sync_url)
+        # Database setup - always use global config for DB connection
+        db_config = get_config()
+        self.engine = create_engine(db_config.postgres.sync_url)
         self.Session = sessionmaker(bind=self.engine)
     
     def download_statutes(self) -> Dict[str, str]:

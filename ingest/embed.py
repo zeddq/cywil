@@ -9,7 +9,8 @@ from qdrant_client.models import (
     Distance, VectorParams, PointStruct,
     Filter, FieldCondition, MatchValue,
     CreateCollection, OptimizersConfigDiff,
-    KeywordIndexParams, TextIndexParams
+    KeywordIndexParams, TextIndexParams,
+    KeywordIndexType, TextIndexType
 )
 from qdrant_client.http.models import models as qmodels
 import logging
@@ -73,19 +74,19 @@ class PolishLegalEmbedder:
             self.client.create_payload_index(
                 collection_name=collection_name,
                 field_name="code",
-                field_schema=KeywordIndexParams(type="keyword")
+                field_schema=KeywordIndexParams(type=KeywordIndexType.KEYWORD)
             )
             
             self.client.create_payload_index(
                 collection_name=collection_name,
                 field_name="article",
-                field_schema=KeywordIndexParams(type="keyword")
+                field_schema=KeywordIndexParams(type=KeywordIndexType.KEYWORD)
             )
             
             self.client.create_payload_index(
                 collection_name=collection_name,
                 field_name="status",
-                field_schema=KeywordIndexParams(type="keyword")
+                field_schema=KeywordIndexParams(type=KeywordIndexType.KEYWORD)
             )
             
             logger.info(f"Created collection '{collection_name}' with indexes")
@@ -306,7 +307,7 @@ def create_hybrid_search_index(
         client.create_payload_index(
             collection_name=collection_name,
             field_name="text",
-            field_schema=TextIndexParams(type="text")
+            field_schema=TextIndexParams(type=TextIndexType.TEXT)
         )
         logger.info("Created text search index")
     except Exception as e:
@@ -318,7 +319,7 @@ def create_hybrid_search_index(
             client.create_payload_index(
                 collection_name=collection_name,
                 field_name=field,
-                field_schema=KeywordIndexParams(type="keyword")
+                field_schema=KeywordIndexParams(type=KeywordIndexType.KEYWORD)
             )
             logger.info(f"Created index for field: {field}")
         except Exception as e:
