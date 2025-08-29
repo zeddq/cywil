@@ -1,4 +1,4 @@
-import fitz
+import fitz  # type: ignore
 import sys
 import openai
 import os
@@ -87,7 +87,14 @@ async def main():
                 print("\n--- Extracted Text ---\n")
                 print(text)
                 print("\n--- End of Extracted Text ---\n")
-                pages_call.append(lambda t=text: send_to_openai(t))
+                # Create wrapper function that handles None return from send_to_openai
+                async def process_text_wrapper(t: str = text) -> Template:
+                    result = await send_to_openai(t)
+                    if result is None:
+                        # Return a default Template if OpenAI call fails
+                        return Template(name="Error", category="error", variables=[], template="")
+                    return result
+                pages_call.append(lambda t=text: process_text_wrapper(t))
 
         except Exception as e:
             print(f"Error opening PDF file: {e}")

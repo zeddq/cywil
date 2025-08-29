@@ -2,17 +2,27 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies and Poetry
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
     libpq-dev \
-    && rm -rf /var/lib/apt/lists/*
+    curl \
+    && rm -rf /var/lib/apt/lists/* && \
+    pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir "poetry>=1.8,<2.0"
 
-# Upgrade pip and install dependencies
-COPY requirements-short.txt .
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements-short.txt
+# Configure Poetry to install into the system environment (no venv inside container)
+ENV POETRY_VIRTUALENVS_CREATE=false
+ENV POETRY_NO_INTERACTION=1
+# Reduce installer concurrency to lower RAM usage during build
+RUN poetry config installer.max-workers 2
+
+# Copy dependency files first for better layer caching
+COPY pyproject.toml poetry.lock ./
+
+# Install only main (non-dev) dependencies, synced to lockfile
+RUN poetry install --only main --no-ansi --no-root --sync
 
 # Copy application code
 COPY . .

@@ -20,6 +20,9 @@ coverage.xml
 
 # Development
 .git/
+.jj/
+.jj-workspaces/
+.serena/
 .gitignore
 .env
 .env.*

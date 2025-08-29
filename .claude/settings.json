@@ -13,7 +13,11 @@
       {
         "hooks": [
           {
-            "command": "source .venv-tests/bin/activate",
+            "command": "source .venv/bin/activate",
+            "type": "command"
+          },
+          {
+            "command": "export BASE_BOOKMARK=\"refactor/ai-sdk-integration-fix\" ",
             "type": "command"
           }
         ],

@@ -137,7 +137,11 @@ class PolishStatuteParser:
         """Try matching any hierarchy element"""
         if text is None:
             return None
-        search_text = text.group() if hasattr(text, 'group') else text
+        # Handle both str and Match objects
+        if isinstance(text, str):
+            search_text = text
+        else:
+            search_text = text.group()
         for element in self.HIERARCHY_ELEMENTS:
             match = element.pattern.search(search_text)
             if match:

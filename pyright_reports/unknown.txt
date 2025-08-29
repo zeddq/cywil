@@ -1,0 +1,261 @@
+Pyright Diagnostic Report: unknown
+================================================================================
+
+Total violations: 250
+
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py (155 violations)
+-------------------------------------------------------------------
+  Line 3:8 [error]: Statements must be separated by newlines or semicolons
+  Line 3:14 [error]: Statements must be separated by newlines or semicolons
+  Line 3:23 [error]: Expected "in"
+  Line 22:8 [error]: Statements must be separated by newlines or semicolons
+  Line 22:15 [error]: Statements must be separated by newlines or semicolons
+  Line 22:18 [error]: Statements must be separated by newlines or semicolons
+  Line 22:22 [error]: Statements must be separated by newlines or semicolons
+  Line 22:22 [error]: Expected "def", "with" or "for" to follow "async"
+  Line 39:1 [error]: Unexpected indentation
+  Line 39:12 [error]: Statements must be separated by newlines or semicolons
+  Line 39:14 [error]: Statements must be separated by newlines or semicolons
+  Line 39:18 [error]: Statements must be separated by newlines or semicolons
+  Line 39:23 [error]: Statements must be separated by newlines or semicolons
+  Line 39:37 [error]: Expected attribute name after "."
+  Line 41:10 [error]: Expected expression
+  Line 42:1 [error]: Unexpected indentation
+  Line 42:31 [error]: Statements must be separated by newlines or semicolons
+  Line 42:42 [error]: Statements must be separated by newlines or semicolons
+  Line 42:47 [error]: Statements must be separated by newlines or semicolons
+  Line 43:21 [error]: Statements must be separated by newlines or semicolons
+  Line 43:24 [error]: Statements must be separated by newlines or semicolons
+  Line 43:28 [error]: Statements must be separated by newlines or semicolons
+  Line 43:33 [error]: Statements must be separated by newlines or semicolons
+  Line 43:42 [error]: Statements must be separated by newlines or semicolons
+  Line 43:46 [error]: Statements must be separated by newlines or semicolons
+  Line 45:5 [error]: Unindent not expected
+  Line 45:13 [error]: Expected expression
+  Line 46:1 [error]: Unexpected indentation
+  Line 46:16 [error]: Statements must be separated by newlines or semicolons
+  Line 46:27 [error]: Statements must be separated by newlines or semicolons
+  Line 46:40 [error]: Expected ":"
+  Line 47:5 [error]: Unindent not expected
+  Line 95:12 [error]: Statements must be separated by newlines or semicolons
+  Line 95:16 [error]: Statements must be separated by newlines or semicolons
+  Line 95:23 [error]: Statements must be separated by newlines or semicolons
+  Line 95:26 [error]: Statements must be separated by newlines or semicolons
+  Line 95:28 [error]: Statements must be separated by newlines or semicolons
+  Line 95:32 [error]: Expected attribute name after "."
+  Line 97:10 [error]: Expected expression
+  Line 98:1 [error]: Unexpected indentation
+  Line 98:23 [error]: Statements must be separated by newlines or semicolons
+  Line 98:26 [error]: Statements must be separated by newlines or semicolons
+  Line 98:30 [error]: Statements must be separated by newlines or semicolons
+  Line 98:35 [error]: Statements must be separated by newlines or semicolons
+  Line 98:38 [error]: Statements must be separated by newlines or semicolons
+  Line 99:25 [error]: Statements must be separated by newlines or semicolons
+  Line 99:32 [error]: Statements must be separated by newlines or semicolons
+  Line 100:21 [error]: Statements must be separated by newlines or semicolons
+  Line 100:24 [error]: Statements must be separated by newlines or semicolons
+  Line 100:28 [error]: Statements must be separated by newlines or semicolons
+  Line 100:33 [error]: Statements must be separated by newlines or semicolons
+  Line 100:40 [error]: Statements must be separated by newlines or semicolons
+  Line 100:44 [error]: Statements must be separated by newlines or semicolons
+  Line 102:5 [error]: Unindent not expected
+  Line 102:13 [error]: Expected expression
+  Line 103:1 [error]: Unexpected indentation
+  Line 103:16 [error]: Statements must be separated by newlines or semicolons
+  Line 103:27 [error]: Statements must be separated by newlines or semicolons
+  Line 103:39 [error]: Expected ":"
+  Line 104:5 [error]: Unindent not expected
+  Line 156:9 [error]: Statements must be separated by newlines or semicolons
+  Line 156:11 [error]: Statements must be separated by newlines or semicolons
+  Line 156:20 [error]: Statements must be separated by newlines or semicolons
+  Line 156:23 [error]: Statements must be separated by newlines or semicolons
+  Line 156:25 [error]: Statements must be separated by newlines or semicolons
+  Line 156:29 [error]: Expected attribute name after "."
+  Line 158:10 [error]: Expected expression
+  Line 159:1 [error]: Unexpected indentation
+  Line 159:23 [error]: Statements must be separated by newlines or semicolons
+  Line 159:26 [error]: Statements must be separated by newlines or semicolons
+  Line 159:30 [error]: Statements must be separated by newlines or semicolons
+  Line 160:33 [error]: Statements must be separated by newlines or semicolons
+  Line 161:21 [error]: Statements must be separated by newlines or semicolons
+  Line 161:24 [error]: Statements must be separated by newlines or semicolons
+  Line 161:28 [error]: Statements must be separated by newlines or semicolons
+  Line 161:33 [error]: Statements must be separated by newlines or semicolons
+  Line 161:40 [error]: Statements must be separated by newlines or semicolons
+  Line 161:44 [error]: Statements must be separated by newlines or semicolons
+  Line 163:5 [error]: Unindent not expected
+  Line 163:13 [error]: Expected expression
+  Line 164:1 [error]: Unexpected indentation
+  Line 164:16 [error]: Statements must be separated by newlines or semicolons
+  Line 164:27 [error]: Statements must be separated by newlines or semicolons
+  Line 164:41 [error]: Expected ":"
+  Line 165:5 [error]: Unindent not expected
+  Line 218:12 [error]: Statements must be separated by newlines or semicolons
+  Line 218:18 [error]: Statements must be separated by newlines or semicolons
+  Line 218:24 [error]: Statements must be separated by newlines or semicolons
+  Line 218:27 [error]: Statements must be separated by newlines or semicolons
+  Line 218:44 [error]: Expected attribute name after "."
+  Line 220:10 [error]: Expected expression
+  Line 221:1 [error]: Unexpected indentation
+  Line 221:23 [error]: Statements must be separated by newlines or semicolons
+  Line 221:29 [error]: Statements must be separated by newlines or semicolons
+  Line 222:21 [error]: Statements must be separated by newlines or semicolons
+  Line 222:24 [error]: Statements must be separated by newlines or semicolons
+  Line 222:28 [error]: Statements must be separated by newlines or semicolons
+  Line 222:33 [error]: Statements must be separated by newlines or semicolons
+  Line 222:44 [error]: Statements must be separated by newlines or semicolons
+  Line 223:27 [error]: Statements must be separated by newlines or semicolons
+  Line 223:35 [error]: "(" was not closed
+  Line 223:59 [error]: Expected attribute name after "."
+  Line 225:5 [error]: Unindent not expected
+  Line 225:13 [error]: Expected expression
+  Line 226:1 [error]: Unexpected indentation
+  Line 226:16 [error]: Statements must be separated by newlines or semicolons
+  Line 226:24 [error]: Statements must be separated by newlines or semicolons
+  Line 226:38 [error]: Expected ":"
+  Line 227:5 [error]: Unindent not expected
+  Line 303:15 [error]: Statements must be separated by newlines or semicolons
+  Line 303:21 [error]: Statements must be separated by newlines or semicolons
+  Line 303:31 [error]: Statements must be separated by newlines or semicolons
+  Line 303:37 [error]: Expected "in"
+  Line 305:10 [error]: Expected expression
+  Line 306:1 [error]: Unexpected indentation
+  Line 306:23 [error]: Statements must be separated by newlines or semicolons
+  Line 306:26 [error]: Statements must be separated by newlines or semicolons
+  Line 306:30 [error]: Statements must be separated by newlines or semicolons
+  Line 307:21 [error]: Statements must be separated by newlines or semicolons
+  Line 307:24 [error]: Statements must be separated by newlines or semicolons
+  Line 307:28 [error]: Statements must be separated by newlines or semicolons
+  Line 309:5 [error]: Unindent not expected
+  Line 309:13 [error]: Expected expression
+  Line 310:1 [error]: Unexpected indentation
+  Line 310:20 [error]: Statements must be separated by newlines or semicolons
+  Line 310:36 [error]: Expected ":"
+  Line 311:5 [error]: Unindent not expected
+  Line 384:14 [error]: Statements must be separated by newlines or semicolons
+  Line 384:16 [error]: Statements must be separated by newlines or semicolons
+  Line 384:30 [error]: Statements must be separated by newlines or semicolons
+  Line 384:38 [error]: Statements must be separated by newlines or semicolons
+  Line 384:41 [error]: Statements must be separated by newlines or semicolons
+  Line 384:43 [error]: Statements must be separated by newlines or semicolons
+  Line 384:48 [error]: Statements must be separated by newlines or semicolons
+  Line 384:58 [error]: Statements must be separated by newlines or semicolons
+  Line 384:62 [error]: Statements must be separated by newlines or semicolons
+  Line 384:82 [error]: Expected attribute name after "."
+  Line 386:10 [error]: Expected expression
+  Line 387:1 [error]: Unexpected indentation
+  Line 387:23 [error]: Statements must be separated by newlines or semicolons
+  Line 387:26 [error]: Statements must be separated by newlines or semicolons
+  Line 387:30 [error]: Statements must be separated by newlines or semicolons
+  Line 388:21 [error]: Statements must be separated by newlines or semicolons
+  Line 388:24 [error]: Statements must be separated by newlines or semicolons
+  Line 388:28 [error]: Statements must be separated by newlines or semicolons
+  Line 390:5 [error]: Unindent not expected
+  Line 390:13 [error]: Expected expression
+  Line 391:1 [error]: Unexpected indentation
+  Line 391:23 [error]: Statements must be separated by newlines or semicolons
+  Line 391:28 [error]: Statements must be separated by newlines or semicolons
+  Line 392:5 [error]: Unindent not expected
+  Line 392:5 [error]: String literal is unterminated
+  Line 468:1 [error]: Unindent not expected
+  Line 468:1 [error]: Expected expression
+  Line 468:1 [error]: Statements must be separated by newlines or semicolons
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py (95 violations)
+-------------------------------------------------------------------------
+  Line 3:12 [error]: Statements must be separated by newlines or semicolons
+  Line 3:18 [error]: Statements must be separated by newlines or semicolons
+  Line 3:26 [error]: Expected "in"
+  Line 26:1 [error]: Unexpected indentation
+  Line 26:14 [error]: Statements must be separated by newlines or semicolons
+  Line 26:16 [error]: Statements must be separated by newlines or semicolons
+  Line 26:22 [error]: Statements must be separated by newlines or semicolons
+  Line 26:25 [error]: Statements must be separated by newlines or semicolons
+  Line 26:35 [error]: Statements must be separated by newlines or semicolons
+  Line 26:38 [error]: Statements must be separated by newlines or semicolons
+  Line 26:40 [error]: Statements must be separated by newlines or semicolons
+  Line 26:49 [error]: Statements must be separated by newlines or semicolons
+  Line 26:58 [error]: Statements must be separated by newlines or semicolons
+  Line 26:63 [error]: Expected attribute name after "."
+  Line 28:10 [error]: Expected expression
+  Line 29:1 [error]: Unexpected indentation
+  Line 29:25 [error]: Statements must be separated by newlines or semicolons
+  Line 29:28 [error]: Statements must be separated by newlines or semicolons
+  Line 29:37 [error]: Statements must be separated by newlines or semicolons
+  Line 29:42 [error]: Statements must be separated by newlines or semicolons
+  Line 29:45 [error]: Statements must be separated by newlines or semicolons
+  Line 30:25 [error]: Statements must be separated by newlines or semicolons
+  Line 30:31 [error]: Statements must be separated by newlines or semicolons
+  Line 32:5 [error]: Unindent not expected
+  Line 32:13 [error]: Expected expression
+  Line 33:1 [error]: Unexpected indentation
+  Line 33:20 [error]: Statements must be separated by newlines or semicolons
+  Line 33:28 [error]: Statements must be separated by newlines or semicolons
+  Line 34:5 [error]: Unindent not expected
+  Line 128:14 [error]: Statements must be separated by newlines or semicolons
+  Line 128:19 [error]: Statements must be separated by newlines or semicolons
+  Line 128:29 [error]: Statements must be separated by newlines or semicolons
+  Line 128:37 [error]: Statements must be separated by newlines or semicolons
+  Line 128:46 [error]: Statements must be separated by newlines or semicolons
+  Line 128:52 [error]: Expected attribute name after "."
+  Line 130:10 [error]: Expected expression
+  Line 131:1 [error]: Unexpected indentation
+  Line 131:27 [error]: Statements must be separated by newlines or semicolons
+  Line 131:32 [error]: Statements must be separated by newlines or semicolons
+  Line 131:35 [error]: Statements must be separated by newlines or semicolons
+  Line 131:39 [error]: Statements must be separated by newlines or semicolons
+  Line 132:29 [error]: Statements must be separated by newlines or semicolons
+  Line 132:34 [error]: Statements must be separated by newlines or semicolons
+  Line 132:43 [error]: Expected "import"
+  Line 132:43 [error]: Statements must be separated by newlines or semicolons
+  Line 133:25 [error]: Statements must be separated by newlines or semicolons
+  Line 133:31 [error]: Statements must be separated by newlines or semicolons
+  Line 135:5 [error]: Unindent not expected
+  Line 135:13 [error]: Expected expression
+  Line 136:1 [error]: Unexpected indentation
+  Line 136:20 [error]: Statements must be separated by newlines or semicolons
+  Line 137:5 [error]: Unindent not expected
+  Line 167:13 [error]: Statements must be separated by newlines or semicolons
+  Line 167:19 [error]: Statements must be separated by newlines or semicolons
+  Line 167:31 [error]: Statements must be separated by newlines or semicolons
+  Line 167:45 [error]: Expected ":"
+  Line 169:10 [error]: Expected expression
+  Line 170:1 [error]: Unexpected indentation
+  Line 170:33 [error]: Statements must be separated by newlines or semicolons
+  Line 170:38 [error]: Statements must be separated by newlines or semicolons
+  Line 170:41 [error]: Statements must be separated by newlines or semicolons
+  Line 172:5 [error]: Unindent not expected
+  Line 172:13 [error]: Expected expression
+  Line 173:1 [error]: Unexpected indentation
+  Line 173:20 [error]: Statements must be separated by newlines or semicolons
+  Line 173:27 [error]: Statements must be separated by newlines or semicolons
+  Line 173:41 [error]: Expected ":"
+  Line 174:5 [error]: Unindent not expected
+  Line 221:13 [error]: Statements must be separated by newlines or semicolons
+  Line 221:23 [error]: Statements must be separated by newlines or semicolons
+  Line 221:42 [error]: Expected ":"
+  Line 223:10 [error]: Expected expression
+  Line 224:1 [error]: Unexpected indentation
+  Line 224:25 [error]: Statements must be separated by newlines or semicolons
+  Line 224:28 [error]: Statements must be separated by newlines or semicolons
+  Line 224:38 [error]: Statements must be separated by newlines or semicolons
+  Line 224:41 [error]: Statements must be separated by newlines or semicolons
+  Line 225:36 [error]: Statements must be separated by newlines or semicolons
+  Line 225:39 [error]: Statements must be separated by newlines or semicolons
+  Line 225:46 [error]: Statements must be separated by newlines or semicolons
+  Line 226:31 [error]: Statements must be separated by newlines or semicolons
+  Line 226:34 [error]: Statements must be separated by newlines or semicolons
+  Line 226:38 [error]: Statements must be separated by newlines or semicolons
+  Line 226:47 [error]: Statements must be separated by newlines or semicolons
+  Line 228:5 [error]: Unindent not expected
+  Line 228:13 [error]: Expected expression
+  Line 229:1 [error]: Unexpected indentation
+  Line 229:20 [error]: Statements must be separated by newlines or semicolons
+  Line 229:28 [error]: Statements must be separated by newlines or semicolons
+  Line 229:44 [error]: Expected ":"
+  Line 230:5 [error]: Unindent not expected
+  Line 230:5 [error]: String literal is unterminated
+  Line 337:10 [error]: Unindent not expected
+  Line 337:10 [error]: Expected expression
+  Line 337:10 [error]: Statements must be separated by newlines or semicolons

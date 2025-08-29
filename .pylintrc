@@ -1,7 +1,7 @@
 [MASTER]
 # Analyze all Python files recursively
 recursive=yes
-ignore=.venv,.venv-tests,venv,__pycache__,node_modules,.git,alembic
+ignore=.venv,.venv-tests,venv,__pycache__,node_modules,.git,alembic,.jj,.jj-workspaces,.serena,.env,.env.local,.env.production,.env.development
 ignore-patterns=.*
 
 [MESSAGES CONTROL]

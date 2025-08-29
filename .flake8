@@ -2,6 +2,7 @@
 max-line-length = 120
 exclude = 
     .git,
+    .jj,
     __pycache__,
     .venv,
     .venv-tests,
@@ -13,7 +14,13 @@ exclude =
     .mypy_cache,
     .pytest_cache,
     node_modules,
-    alembic
+    alembic,
+    .jj-workspaces,
+    .serena,
+    .env,
+    .env.local,
+    .env.production,
+    .env.development
 extend-ignore = E203, W503, E501
 max-complexity = 20
 # Scan all Python files recursively

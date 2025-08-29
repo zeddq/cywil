@@ -17,7 +17,7 @@ The ingestion service consists of:
 app/worker/
 ├── celery_app.py           # Celery configuration
 ├── ingestion_api.py        # FastAPI application
-├── requirements.txt        # Lean dependencies
+├── (uses top-level Poetry) # Dependencies managed via pyproject.toml
 ├── tasks/
 │   ├── __init__.py
 │   ├── example.py          # Example task
@@ -103,15 +103,8 @@ uvicorn app.worker.ingestion_api:app --reload --port 8001
 
 ## Docker Build
 
-The service uses a lean requirements.txt with only necessary dependencies:
-- FastAPI and Uvicorn for the API
-- Celery and Redis for task management
-- OpenAI and LangChain for AI processing
-- Qdrant client for vector storage
-- PDF processing libraries
-- Database connectors
+Dependencies are managed with Poetry from the project lockfile. The ingestion image is built via the Poetry-based Dockerfile:
 
-Build the image:
 ```bash
 docker build -f deployment/docker/Dockerfile.ingestion -t ai-paralegal/ingestion:latest .
 ```

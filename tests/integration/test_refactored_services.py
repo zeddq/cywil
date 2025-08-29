@@ -68,12 +68,14 @@ class TestStatuteSearchService:
     async def service(self, mock_config):
         """Create service instance with mocked dependencies"""
         with patch('app.services.statute_search_service.get_config', return_value=mock_config):
-            service = StatuteSearchService()
+            mock_config_service = Mock()
+            mock_llm_manager = Mock()
+            service = StatuteSearchService(mock_config_service, mock_llm_manager)
             
             # Mock Qdrant client
             service._qdrant_client = AsyncMock()
-            service._embedder = Mock()
-            service._llm = AsyncMock()
+            service._embedder = Mock()  # type: ignore
+            service._llm = AsyncMock()  # type: ignore
             service._initialized = True
             
             return service
@@ -160,7 +162,7 @@ class TestDocumentGenerationService:
             sn_service.get_sn_ruling = AsyncMock(return_value=None)
             
             service = DocumentGenerationService(mock_db_manager, statute_service, sn_service)
-            service._llm = AsyncMock()
+            service._llm = AsyncMock()  # type: ignore
             service._initialized = True
             
             return service
@@ -310,8 +312,10 @@ class TestServiceIntegration:
     async def test_service_health_checks(self, test_container):
         """Test service health check functionality"""
         # Create services with mocked dependencies
+        mock_config_service = Mock()
+        mock_llm_manager = Mock()
         services = [
-            StatuteSearchService(),
+            StatuteSearchService(mock_config_service, mock_llm_manager),
             CaseManagementService(test_container.get(DatabaseManager))
         ]
         
@@ -349,7 +353,9 @@ class TestErrorHandling:
     async def test_service_not_initialized(self, mock_config):
         """Test using uninitialized service"""
         with patch('app.services.statute_search_service.get_config', return_value=mock_config):
-            service = StatuteSearchService()
+            mock_config_service = Mock()
+            mock_llm_manager = Mock()
+            service = StatuteSearchService(mock_config_service, mock_llm_manager)
             # Don't initialize
             
             with pytest.raises(RuntimeError, match="Service not initialized"):

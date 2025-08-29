@@ -1,16 +1,43 @@
 """
 Examples of using the centralized logger manager
 """
-from app.worker.logging_config import LOGGING_CONFIG
-from app.core.logger_manager import (
-    get_logger, 
-    configure_logging, 
-    logger_manager,
-    LOGGING_PRESETS,
-    wrap_all_loggers
-)
+from app.core.logger_manager import get_logger, get_logging_config, LoggingToolExecutor
 import asyncio
 import logging.config
+
+# Define missing functions and constants
+def configure_logging(custom_config=None):
+    """Configure logging using the logger manager's configuration."""
+    if custom_config is None:
+        custom_config = get_logging_config()
+    logging.config.dictConfig(custom_config)
+
+# Define logging presets
+LOGGING_PRESETS = {
+    "development": get_logging_config(level="DEBUG", json_format=False),
+    "production": get_logging_config(level="INFO", json_format=True),
+    "testing": get_logging_config(level="WARNING", json_format=False)
+}
+
+# Define LOGGING_CONFIG
+LOGGING_CONFIG = get_logging_config()
+
+# Mock logger manager for the examples
+class LoggerManager:
+    def get_all_loggers_info(self):
+        """Return information about all active loggers."""
+        return {
+            name: {
+                "level": logging.getLevelName(logger.level),
+                "handlers": [type(h).__name__ for h in logger.handlers],
+                "propagate": logger.propagate
+            }
+            for name, logger in logging.Logger.manager.loggerDict.items()
+            if isinstance(logger, logging.Logger)
+        }
+
+# Create a logger manager instance
+logger_manager = LoggerManager()
 
 # Example 1: Simple usage in a module
 

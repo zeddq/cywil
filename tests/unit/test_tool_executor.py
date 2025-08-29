@@ -28,7 +28,8 @@ def mock_config():
 async def tool_executor(mock_config):
     """Create ToolExecutor instance"""
     with patch('app.core.tool_executor.get_config', return_value=mock_config):
-        executor = ToolExecutor()
+        mock_config_service = Mock()
+        executor = ToolExecutor(mock_config_service)
         yield executor
 
 

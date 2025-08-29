@@ -5,6 +5,7 @@ Unit tests for OpenAI API integration with validation and error handling.
 import pytest
 from unittest.mock import Mock, AsyncMock, patch
 import json
+from datetime import datetime
 from openai import AsyncOpenAI, APIError, RateLimitError, APITimeoutError
 
 from app.embedding_models.pipeline_schemas import (
@@ -70,12 +71,14 @@ class TestOpenAIIntegration:
         
         # Verify extraction results
         assert result.success
-        assert result.extraction.case_number == "II CSK 123/20"
-        assert result.extraction.court == "Sąd Najwyższy"
-        assert len(result.extraction.parties) == 2
-        assert "Jan Nowak" in result.extraction.parties
-        assert len(result.extraction.legal_basis) == 2
-        assert "art. 415 k.c." in result.extraction.legal_basis
+        assert result.extraction is not None
+        extraction = result.extraction
+        assert extraction.case_number == "II CSK 123/20"
+        assert extraction.court == "Sąd Najwyższy"
+        assert len(extraction.parties) == 2
+        assert "Jan Nowak" in extraction.parties
+        assert len(extraction.legal_basis) == 2
+        assert "art. 415 k.c." in extraction.legal_basis
         
         # Verify API was called correctly
         mock_openai_client.chat.completions.create.assert_called_once()
@@ -87,7 +90,9 @@ class TestOpenAIIntegration:
     async def test_api_error_fallback(self, mock_openai_client, sample_legal_document):
         """Test fallback when OpenAI API returns error."""
         # Mock API error
-        mock_openai_client.chat.completions.create.side_effect = APIError("API Error")
+        mock_request = Mock()
+        mock_body = Mock()
+        mock_openai_client.chat.completions.create.side_effect = APIError("API Error", request=mock_request, body=mock_body)
         
         result = await self._extract_with_fallback(
             mock_openai_client,
@@ -206,7 +211,10 @@ class TestOpenAIIntegration:
             case_number="II CSK 123/20",
             court="Sąd Najwyższy",
             parties=["Jan Nowak", "Spółka ABC"],
-            legal_basis=["art. 415 k.c."]
+            legal_basis=["art. 415 k.c."],
+            date=datetime(2020, 10, 15),
+            decision="Test decision",
+            reasoning="Test reasoning"
         )
         
         # Validate using DocumentValidator patterns
@@ -216,7 +224,11 @@ class TestOpenAIIntegration:
         # Invalid extraction - wrong case number format
         invalid_extraction = LegalExtraction(
             case_number="INVALID-123",
-            legal_basis=["invalid_article"]
+            court="Test Court",
+            legal_basis=["invalid_article"],
+            date=datetime(2020, 10, 15),
+            decision="Test decision",
+            reasoning="Test reasoning"
         )
         
         validation = self._validate_extraction(invalid_extraction)
@@ -247,7 +259,9 @@ class TestOpenAIIntegration:
         
         # Should succeed on retry
         assert not result.used_fallback
-        assert result.extraction.case_number == "II CSK 123/20"
+        assert result.extraction is not None
+        extraction = result.extraction  
+        assert extraction.case_number == "II CSK 123/20"
         assert mock_openai_client.chat.completions.create.call_count == 2
     
     def test_batch_processing_limits(self):
@@ -390,7 +404,13 @@ Example:
             )
         except Exception:
             # Return empty extraction on parse error
-            return LegalExtraction()
+            return LegalExtraction(
+                case_number=None,
+                court=None,
+                date=None,
+                decision=None,
+                reasoning=None
+            )
     
     def _validate_extraction(self, extraction: LegalExtraction) -> ValidationResult:
         """Validate extracted legal information."""

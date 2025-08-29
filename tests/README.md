@@ -19,39 +19,39 @@ Comprehensive test suite for the AI Paralegal POC system.
 
 ### Install test dependencies
 ```bash
-pip install -r requirements-test.txt
+poetry install --with dev
 ```
 
 ### Run all tests
 ```bash
-pytest
+poetry run pytest
 ```
 
 ### Run with coverage
 ```bash
-pytest --cov=app --cov-report=html
+poetry run pytest --cov=app --cov-report=html
 ```
 
 ### Run specific test categories
 ```bash
 # Unit tests only
-pytest -m unit
+poetry run pytest -m unit
 
 # Integration tests only  
-pytest -m integration
+poetry run pytest -m integration
 
 # Exclude slow tests
-pytest -m "not slow"
+poetry run pytest -m "not slow"
 ```
 
 ### Run specific test file
 ```bash
-pytest tests/test_database_manager.py
+poetry run pytest tests/test_database_manager.py
 ```
 
 ### Run with verbose output
 ```bash
-pytest -v
+poetry run pytest -v
 ```
 
 ## Test Fixtures

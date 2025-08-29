@@ -222,8 +222,8 @@ class PolishStatuteParser:
             else:
                 metadata = {"status": "active", "type": "article"}
             
-            # Add hierarchy information
-            metadata["hierarchy"] = self._get_hierarchy_metadata()
+            # Add hierarchy information as JSON string
+            metadata["hierarchy"] = json.dumps(self._get_hierarchy_metadata())
             
             # Parse paragraphs within the article
             paragraphs = self._parse_paragraphs(article_text)

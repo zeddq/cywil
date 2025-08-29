@@ -2,20 +2,22 @@
 set -euo pipefail
 
 REPO_DIR="/workspace"
-VENV="/workspace/.venv-test"
 PYTEST_INI="/workspace/tests/pytest.ini"
 PERIODIC_SCRIPT="/workspace/tools/run_tests_periodic.py"
 REPORTS_DIR="/workspace/reports"
 
 cd "$REPO_DIR"
 
-# Ensure2 exists
-if [[ ! -x "$VENV/bin/python" ]]; then
-  echo "Test22222wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww not found at $VENV. Creating..."
-  python3 -m venv "$VENV"
-  "$VENV/bin/python" -m pip install --upgrade pip setuptools wheel
-  "$VENV/bin/python" -m pip install -r "$REPO_DIR/requirements-test.txt"
+if ! command -v poetry >/dev/null 2>&1; then
+  echo "[hourly:test] Poetry not found; installing local user copy"
+  python3 -m pip install --user "poetry>=1.8,<2.0"
+  export PATH="$HOME/.local/bin:$PATH"
 fi
+
+echo "[hourly:test] Ensuring dev dependencies are installed via Poetry"
+cd "$REPO_DIR"
+poetry config virtualenvs.in-project true
+poetry install --with dev --no-ansi
 
 while true; do
   echo "[$(date -u +"%Y-%m-%dT%H:%M:%SZ")] Pulling latest changes..."
@@ -30,13 +32,13 @@ while true; do
 
   echo "[$(date -u +"%Y-%m-%dT%H:%M:%SZ")] Running pytest..."
   set +e
-  "$VENV/bin/pytest" -q -c "$PYTEST_INI"
+  poetry run pytest -q -c "$PYTEST_INI"
   PYTEST_EXIT=$?
   set -e
 
   echo "[$(date -u +"%Y-%m-%dT%H:%M:%SZ")] Running periodic test runner once..."
   set +e
-  "$VENV/bin/python" "$PERIODIC_SCRIPT" --once --reports-dir "$REPORTS_DIR"
+  poetry run python "$PERIODIC_SCRIPT" --once --reports-dir "$REPORTS_DIR"
   PERIODIC_EXIT=$?
   set -e
 

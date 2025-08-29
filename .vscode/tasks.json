@@ -33,7 +33,7 @@
         {
             "label": "Pylint All",
             "type": "shell",
-            "command": "${workspaceFolder}/.venv-tests/bin/pylint",
+            "command": "${workspaceFolder}/.venv/bin/pylint",
             "args": [
                 "--rcfile=${workspaceFolder}/.pylintrc",
                 "--output-format=parseable",
@@ -55,7 +55,7 @@
         {
             "label": "Flake8 All",
             "type": "shell",
-            "command": "${workspaceFolder}/.venv-tests/bin/flake8",
+            "command": "${workspaceFolder}/.venv/bin/flake8",
             "args": [
                 "--config=${workspaceFolder}/.flake8",
                 "--format=%(path)s:%(row)d:%(col)d: %(code)s %(text)s",
@@ -77,7 +77,7 @@
         {
             "label": "Mypy All",
             "type": "shell",
-            "command": "${workspaceFolder}/.venv-tests/bin/mypy",
+            "command": "${workspaceFolder}/.venv/bin/mypy",
             "args": [
                 "--config-file=${workspaceFolder}/mypy.ini",
                 "."

@@ -1,0 +1,19 @@
+Pyright Diagnostic Report: reportUnboundVariable
+================================================================================
+
+Total violations: 8
+
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py (2 violations)
+-------------------------------------------------------------------
+  Line 221:23 [error]: "query" is unbound
+  Line 223:27 [error]: "filters" is unbound
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/validation_tasks.py (6 violations)
+-------------------------------------------------------------------------
+  Line 30:25 [error]: "stage" is unbound
+  Line 131:39 [error]: "stage" is unbound
+  Line 132:43 [error]: "stage" is unbound
+  Line 133:25 [error]: "stage" is unbound
+  Line 221:13 [error]: "documents" is unbound
+  Line 224:28 [error]: "documents" is unbound

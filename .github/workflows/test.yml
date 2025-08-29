@@ -9,9 +9,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: "pip"
-      - run: pip install -r requirements-test.txt
-      - run: pytest -m unit --junitxml=reports/junit.xml
+      - name: Install Poetry
+        run: pip install "poetry>=1.8,<2.0"
+      - name: Install dependencies (dev)
+        run: |
+          poetry config virtualenvs.in-project true
+          poetry install --with dev --no-ansi
+      - name: Run unit tests
+        run: poetry run pytest -m unit --junitxml=reports/junit.xml
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -22,11 +27,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install Poetry
+        run: pip install "poetry>=1.8,<2.0"
+      - name: Install dependencies (dev)
+        run: |
+          poetry config virtualenvs.in-project true
+          poetry install --with dev --no-ansi
       - run: docker compose -f docker-compose.test.yml up -d
       - run: |
           docker compose -f docker-compose.test.yml ps
           docker compose -f docker-compose.test.yml wait
-      - run: pytest -m integration
+      - run: poetry run pytest -m integration
       - if: failure()
         run: docker compose -f docker-compose.test.yml logs
       - if: always()

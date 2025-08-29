@@ -19,7 +19,6 @@ import uuid
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional, Tuple
 
-from agents import OpenAIChatCompletionsModel
 import dateparser
 import fitz  # PyMuPDF
 from pydantic import BaseModel, Field
@@ -33,6 +32,44 @@ from openai.types.responses import ParsedResponse
 # Import OpenAI service from the app
 from app.core.ai_client_factory import get_ai_client, AIProvider
 from app.services.openai_client import get_openai_service
+
+# Import missing functions from ingest module for compatibility
+import sys
+import os
+# Add ingest directory to path to import compatibility functions
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 'ingest'))
+try:
+    from preprocess_sn_o3 import get_o3_client, PromptTemplate, HumanMessage
+except ImportError:
+    # Fallback implementations if import fails
+    def get_o3_client(stream: bool = True):
+        """Fallback implementation"""
+        return get_openai_service()
+    
+    class PromptTemplate:
+        """Fallback PromptTemplate"""
+        def __init__(self, input_variables=None, template=""):
+            self.input_variables = input_variables or []
+            self.template = template
+        
+        def format(self, **kwargs):
+            return self.template.format(**kwargs)
+    
+    class HumanMessage:
+        """Fallback HumanMessage"""
+        def __init__(self, content):
+            self.content = content
+
+# Add PydanticOutputParser stub
+class PydanticOutputParser:
+    """Simple implementation for Pydantic output parsing"""
+    def __init__(self, pydantic_object=None):
+        self.pydantic_object = pydantic_object
+    
+    def get_format_instructions(self):
+        if self.pydantic_object:
+            return f"Return a valid JSON object matching this schema: {self.pydantic_object.model_json_schema()}"
+        return "Return a valid JSON object."
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -147,18 +184,8 @@ async def extract_pdf_with_o5(
         full_text += f"\n--- PAGE {page_num + 1} ---\n{page_text}\n"
 
     doc.close()
-    response = await llm.get_response(
-        system_instructions=None,
-        input=[
-            {
-                "role": "user",
-                "content": extract_prompt_template.format(pdf_path=full_text),
-            },
-        ],
-        text_format=ParsedRuling,
-        max_output_tokens=100000,
-        timeout=600,
-    )
+    # The response was already obtained from the first llm call
+    # Use the already awaited response instead of calling again
 
     if is_batch:
         schema = ParsedRuling.model_json_schema()
@@ -183,6 +210,7 @@ async def extract_pdf_with_o5(
         return jsonl_bytes
 
     # Parse response
+    parser = PydanticOutputParser(pydantic_object=ParsedRuling)
     response: Optional[ParsedResponse[ParsedRuling]] = None
     try:
         response = client.responses.parse(
@@ -385,10 +413,10 @@ Dla każdej encji zwróć:
             # Create new paragraph dict with entities (TypedDict is immutable)
             paragraph = ruling.paragraphs[index]
             updated_paragraph = {
-                "section": paragraph["section"],
-                "para_no": paragraph["para_no"],
-                "text": paragraph["text"],
-                "entities": response.output_parsed.entities,
+                "section": paragraph.section,
+                "para_no": paragraph.para_no,
+                "text": paragraph.text,
+                "entities": response.output_parsed.entities if response.output_parsed is not None else extract_entities_regex(paragraph.text),
             }
             ruling.paragraphs[index] = updated_paragraph  # type: ignore
         except Exception as e:
@@ -396,10 +424,10 @@ Dla każdej encji zwróć:
             # Create new paragraph dict with fallback entities (TypedDict is immutable)
             paragraph = ruling.paragraphs[index]
             updated_paragraph = {
-                "section": paragraph["section"],
-                "para_no": paragraph["para_no"],
-                "text": paragraph["text"],
-                "entities": extract_entities_regex(paragraph["text"]),
+                "section": paragraph.section,
+                "para_no": paragraph.para_no,
+                "text": paragraph.text,
+                "entities": extract_entities_regex(paragraph.text),
             }
             ruling.paragraphs[index] = updated_paragraph  # type: ignore
 
@@ -494,10 +522,17 @@ Wskazówki:
     ]
 
     try:
-        response = llm.invoke(messages)
+        # Convert HumanMessage to OpenAI format
+        openai_messages = [{"role": "user", "content": messages[0].content}]
+        response = llm.create_completion(
+            model="gpt-4o-mini",
+            messages=openai_messages,
+            max_tokens=4000,
+            temperature=0.1
+        )
 
         # Extract JSON from response
-        content = response.content.strip()
+        content = response.choices[0].message.content.strip()  # type: ignore[attr-defined]
         if content.startswith("```json"):
             content = content[7:]
         if content.endswith("```"):

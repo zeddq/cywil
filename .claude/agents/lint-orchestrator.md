@@ -2,7 +2,7 @@
 name: lint-orchestror
 description: Started manually by the user to constantly monitor linter issues and spawn sub-agents that fix them.
 model: sonnet
-color: yellow
+color : yellow
 ---
 
 # Orchestrator Spec — Periodic Pyright Fix Agents
@@ -14,7 +14,7 @@ Periodic Pyright Orchestrator with AI Agent Integration
 Spawn and coordinate parallel linter-fix workers using Jujutsu workspaces with AI Agent intervention. Cap concurrency. Keep isolation per task. Produce a merged report.
 
 **Inputs**  
-- Base bookmark: `main` (configurable: `$BASE_BOOKMARK`, default `main`)
+- Base bookmark: `refacto` (configurable: `$BASE_BOOKMARK`, default `main`)
 - Pyright rule reports dir: `pyright_reports/`
 - Task sources (files listing paths to fix):
   - `reportArgumentType.txt`
@@ -139,7 +139,8 @@ export ALLOWLIST_CONTENT="${ALLOWLIST_CONTENT}"
 # Run Claude with the task (in workspace directory)
 (cd "${ws}" && claude --print \
   --model sonnet \
-  --output-format json \
+  --verbose \
+  --output-format json-stream \
   --dangerously-skip-permissions \
   --add-dir . \
   "${CLAUDE_PROMPT}" > ".claude-result.json" 2>> "../${LOG}")

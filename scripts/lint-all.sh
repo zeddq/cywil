@@ -9,7 +9,8 @@ WORKSPACE_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$WORKSPACE_ROOT"
 
 # Activate virtual environment
-source .venv-tests/bin/activate
+# shellcheck source=/dev/null
+source .venv/bin/activate
 
 echo "Running linters on all Python files..."
 echo "====================================="

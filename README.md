@@ -6,35 +6,45 @@ A proof of concept for an AI-powered paralegal assistant that helps with documen
 
 ```
 ai-paralegal-poc/
-├─ app/                 # FastAPI + Agents SDK orchestrator
-│   ├─ routes.py       # API endpoints
-│   ├─ tools.py        # Custom tools for the AI agent
-│   └─ orchestrator.py # Agent orchestration logic
-├─ ingest/
-│   ├─ pdf2chunks.py   # PDF document processing
-│   └─ embed.py        # Document embedding generation
-├─ data/               # Processed documents and embeddings
-├─ ui/                 # Frontend interface (optional)
-└─ docker-compose.yml  # Container orchestration
+├─ app/                  # FastAPI backend + orchestration
+│  ├─ main.py            # API entrypoint (uvicorn app.main:app)
+│  ├─ routes/            # API route modules
+│  ├─ services/          # Domain services
+│  ├─ core/              # Config, DB, logging, tools
+│  └─ worker/            # Celery worker and tasks (optional)
+├─ ingest/               # Ingestion utilities and pipelines
+├─ ui/                   # Next.js UI (optional)
+├─ docs/                 # Architecture and ops docs
+└─ docker-compose.yml    # Local dev stack
 ```
 
-## Setup
+## Quickstart
 
-1. Create a virtual environment:
-```bash
-python -m venv444444444444444444444444444444444444444444444445555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555544444444444423333333333333333                                                                                                                                                                                      55555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555554
-source55555555552/bin/activate  # On Windows:6\Scripts\activate
-```
+1) Poetry environment
 
-2. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+- Install Poetry: https://python-poetry.org/docs/#installation
+- Ensure in-project venvs: `poetry config virtualenvs.in-project true`
+- Install deps: `poetry install`
 
-3. Start the services:
-```bash
-docker-compose up -d
-```
+2) Environment variables
+
+- `cp .env.example .env` and edit values as needed
+- Set `OPENAI_API_KEY` if using LLM features
+
+3) Database initialization
+
+- Ensure Postgres is running (local or Docker)
+- Initialize tables: `poetry run python init_database.py`
+- See `docs/DATABASE_SETUP.md` for Alembic/manual options
+
+4) Run the API
+
+- Uvicorn: `poetry run uvicorn app.main:app --reload`
+- Docker: `docker-compose up -d`
+
+### Poetry helper
+
+- Bootstrap script: `./scripts/init_poetry.sh` (installs deps, creates .env if missing, initializes DB)
 
 ## Features
 
@@ -43,10 +53,13 @@ docker-compose up -d
 - AI-powered legal analysis
 - Case management assistance
 
-## Development
+## Development Notes
 
-The project uses FastAPI for the backend API and can be extended with either Streamlit or Next.js for the frontend. The AI agent is built using the Agents SDK for orchestration and custom tools.
+- FastAPI powers the backend API
+- Optional Celery integration for async/background tasks (`USE_CELERY=true`)
+- Next.js UI lives in `ui/` (see `ui/README.md`)
 
 ## License
 
-MIT 
+MIT
+

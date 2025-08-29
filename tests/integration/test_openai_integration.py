@@ -79,11 +79,10 @@ class TestOpenAIIntegration:
         assert client is not None
 
     @pytest.mark.integration
-    @pytest.mark.skipif(
-        not pytest.config.getoption("--run-api-tests", default=False),
-        reason="API tests require --run-api-tests flag and valid API key"
-    )
-    def test_document_parsing_with_real_api(self, openai_service, sample_legal_text):
+    def test_document_parsing_with_real_api(self, openai_service, sample_legal_text, request):
+        """Test document parsing with real OpenAI API (requires API key)"""
+        if not request.config.getoption("--run-api-tests", default=False):
+            pytest.skip("API tests require --run-api-tests flag and valid API key")
         """Test document parsing with real OpenAI API (requires API key)"""
         try:
             result = openai_service.parse_structured_output(
@@ -107,12 +106,11 @@ class TestOpenAIIntegration:
             pytest.skip(f"API test skipped due to error: {e}")
 
     @pytest.mark.integration
-    @pytest.mark.skipif(
-        not pytest.config.getoption("--run-api-tests", default=False),
-        reason="API tests require --run-api-tests flag and valid API key"
-    )
     @pytest.mark.asyncio
-    async def test_async_entity_extraction_with_real_api(self, openai_service, sample_legal_text):
+    async def test_async_entity_extraction_with_real_api(self, openai_service, sample_legal_text, request):
+        """Test async entity extraction with real OpenAI API"""
+        if not request.config.getoption("--run-api-tests", default=False):
+            pytest.skip("API tests require --run-api-tests flag and valid API key")
         """Test async entity extraction with real OpenAI API"""
         try:
             result = await openai_service.async_parse_structured_output(
@@ -228,11 +226,10 @@ class TestOpenAIIntegration:
             pytest.skip(f"Document processing test skipped due to error: {e}")
 
     @pytest.mark.integration
-    @pytest.mark.skipif(
-        not pytest.config.getoption("--run-stress-tests", default=False),
-        reason="Stress tests require --run-stress-tests flag"
-    )
-    def test_memory_usage_stability(self, openai_service):
+    def test_memory_usage_stability(self, openai_service, request):
+        """Test memory usage remains stable during batch processing"""
+        if not request.config.getoption("--run-stress-tests", default=False):
+            pytest.skip("Stress tests require --run-stress-tests flag")
         """Test memory usage remains stable during batch processing"""
         import gc
         import psutil

@@ -13,13 +13,26 @@ import os
 # Add the app directory to the Python path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'app'))
 
-from app.orchestrator import ParalegalAgent
+from app.paralegal_agents.refactored_agent_sdk import ParalegalAgentSDK as ParalegalAgent
+from app.core.config_service import get_config, ConfigService
+from app.core.conversation_manager import ConversationManager
+from app.core.tool_executor import ToolExecutor
+from unittest.mock import Mock
 
 async def test_streaming():
     """Test the streaming functionality"""
     print("🚀 Starting streaming test...")
     
-    agent = ParalegalAgent()
+    # Create required dependencies
+    config_service = ConfigService()
+    conversation_manager = Mock(spec=ConversationManager)
+    tool_executor = Mock(spec=ToolExecutor)
+    
+    agent = ParalegalAgent(
+        config_service=config_service,
+        conversation_manager=conversation_manager,
+        tool_executor=tool_executor
+    )
     
     test_message = "Jakie są terminy przedawnienia roszczeń w polskim prawie cywilnym?"
     

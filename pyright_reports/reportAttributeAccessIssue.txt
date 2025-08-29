@@ -1,107 +1,36 @@
 Pyright Diagnostic Report: reportAttributeAccessIssue
 ================================================================================
 
-Total violations: 72
+Total violations: 40
 
 
 /Volumes/code/cywil/ai-paralegal-poc/app/services/openai_client.py (2 violations)
 ------------------------------------------------------------------
-  Line 133:30 [information]: Cannot access attribute "choices" for class "ParsedResponse[Any]"
-  Attribute "choices" is unknown
-  Line 136:29 [information]: Cannot access attribute "parsed" for class "ParsedResponse[Any]"
+  Line 128:25 [information]: Cannot access attribute "parsed" for class "ParsedChatCompletion[Any]"
   Attribute "parsed" is unknown
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py (3 violations)
--------------------------------------------------------------------
-  Line 236:46 [information]: Cannot access attribute "ilike" for class "str"
-  Attribute "ilike" is unknown
-  Line 237:51 [information]: Cannot access attribute "ilike" for class "str"
-  Attribute "ilike" is unknown
-  Line 238:46 [information]: Cannot access attribute "ilike" for class "str"
-  Attribute "ilike" is unknown
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/ingestion_pipeline.py (1 violations)
----------------------------------------------------------------------------
-  Line 24:28 [information]: "generate_statute_embeddings" is unknown import symbol
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/pdf2chunks.py (1 violations)
--------------------------------------------------------------------
-  Line 140:28 [information]: Cannot access attribute "group" for class "str"
-  Attribute "group" is unknown
+  Line 136:29 [information]: Cannot access attribute "parsed" for class "ParsedChatCompletion[Any]"
+  Attribute "parsed" is unknown
 
 /Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (1 violations)
 -------------------------------------------------------------------------
-  Line 150:26 [information]: Cannot access attribute "get_response" for class "CoroutineType[Any, Any, ParsedResponse[Unknown]]"
-  Attribute "get_response" is unknown
+  Line 526:24 [information]: Cannot access attribute "invoke" for class "OpenAIService"
+  Attribute "invoke" is unknown
 
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/search_tasks.py (6 violations)
----------------------------------------------------------------------
-  Line 232:43 [information]: Cannot access attribute "get" for class "RulingPayload"
-  Attribute "get" is unknown
-  Line 233:45 [information]: Cannot access attribute "get" for class "RulingPayload"
-  Attribute "get" is unknown
-  Line 234:43 [information]: Cannot access attribute "get" for class "RulingPayload"
-  Attribute "get" is unknown
-  Line 235:51 [information]: Cannot access attribute "get" for class "RulingPayload"
-  Attribute "get" is unknown
-  Line 236:40 [information]: Cannot access attribute "get" for class "RulingPayload"
-  Attribute "get" is unknown
-  Line 237:41 [information]: Cannot access attribute "get" for class "RulingPayload"
-  Attribute "get" is unknown
-
-/Volumes/code/cywil/ai-paralegal-poc/example_logger_usage.py (5 violations)
+/Volumes/code/cywil/ai-paralegal-poc/example_logger_usage.py (3 violations)
 ------------------------------------------------------------
-  Line 4:39 [information]: "LOGGING_CONFIG" is unknown import symbol
-  Line 7:5 [information]: "configure_logging" is unknown import symbol
-  Line 8:5 [information]: "logger_manager" is unknown import symbol
-  Line 9:5 [information]: "LOGGING_PRESETS" is unknown import symbol
-  Line 10:5 [information]: "wrap_all_loggers" is unknown import symbol
+  Line 127:20 [information]: Cannot access attribute "update_logger_level" for class "LoggerManager"
+  Attribute "update_logger_level" is unknown
+  Line 132:27 [information]: Cannot access attribute "get_logger_info" for class "LoggerManager"
+  Attribute "get_logger_info" is unknown
+  Line 139:20 [information]: Cannot access attribute "add_handler_to_logger" for class "LoggerManager"
+  Attribute "add_handler_to_logger" is unknown
 
-/Volumes/code/cywil/ai-paralegal-poc/example_service_logging.py (1 violations)
+/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py (2 violations)
 ---------------------------------------------------------------
-  Line 4:36 [information]: "service_operation_logger" is unknown import symbol
-
-/Volumes/code/cywil/ai-paralegal-poc/ingest/ingest_pipeline.py (10 violations)
---------------------------------------------------------------
-  Line 46:35 [information]: Cannot access attribute "qdrant" for class "Dict[Unknown, Unknown]"
-  Attribute "qdrant" is unknown
-  Line 47:35 [information]: Cannot access attribute "qdrant" for class "Dict[Unknown, Unknown]"
-  Attribute "qdrant" is unknown
-  Line 48:38 [information]: Cannot access attribute "qdrant" for class "Dict[Unknown, Unknown]"
-  Attribute "qdrant" is unknown
-  Line 48:82 [information]: Cannot access attribute "qdrant" for class "Dict[Unknown, Unknown]"
-  Attribute "qdrant" is unknown
-  Line 49:39 [information]: Cannot access attribute "qdrant" for class "Dict[Unknown, Unknown]"
-  Attribute "qdrant" is unknown
-  Line 50:38 [information]: Cannot access attribute "storage" for class "Dict[Unknown, Unknown]"
-  Attribute "storage" is unknown
-  Line 50:62 [information]: Cannot access attribute "storage" for class "Dict[Unknown, Unknown]"
-  Attribute "storage" is unknown
-  Line 51:36 [information]: Cannot access attribute "storage" for class "Dict[Unknown, Unknown]"
-  Attribute "storage" is unknown
-  Line 51:60 [information]: Cannot access attribute "storage" for class "Dict[Unknown, Unknown]"
-  Attribute "storage" is unknown
-  Line 65:44 [information]: Cannot access attribute "postgres" for class "Dict[Unknown, Unknown]"
-  Attribute "postgres" is unknown
-
-/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn.py (2 violations)
-------------------------------------------------------------
-  Line 74:26 [information]: Cannot access attribute "get_text" for class "Page"
-  Attribute "get_text" is unknown
-  Line 129:16 [information]: "open" is not a known attribute of module "fitz"
-
-/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py (5 violations)
----------------------------------------------------------------
-  Line 133:16 [information]: "open" is not a known attribute of module "fitz"
-  Line 334:42 [information]: Cannot access attribute "entities" for class "BaseModel"
-  Attribute "entities" is unknown
   Line 442:24 [information]: Cannot access attribute "invoke" for class "OpenAIService"
   Attribute "invoke" is unknown
-  Line 492:28 [information]: Cannot access attribute "paragraphs" for class "List[bytes]"
+  Line 494:28 [information]: Cannot access attribute "paragraphs" for class "List[bytes]"
   Attribute "paragraphs" is unknown
-  Line 656:39 [information]: Cannot assign to attribute "name" for class "Ruling"
-  Type "str | None" is not assignable to type "str"
-    "None" is not assignable to "str"
 
 /Volumes/code/cywil/ai-paralegal-poc/ingest/refactored_ingest_pipeline.py (3 violations)
 -------------------------------------------------------------------------
@@ -112,44 +41,30 @@ Total violations: 72
   Line 300:56 [information]: Cannot access attribute "get_embedding_statistics" for class "None"
   Attribute "get_embedding_statistics" is unknown
 
-/Volumes/code/cywil/ai-paralegal-poc/ingest/templates_preprocess.py (1 violations)
--------------------------------------------------------------------
-  Line 84:24 [information]: "open" is not a known attribute of module "fitz"
+/Volumes/code/cywil/ai-paralegal-poc/tests/celery/test_celery_integration.py (3 violations)
+----------------------------------------------------------------------------
+  Line 214:17 [information]: "create_case" is unknown import symbol
+  Line 215:17 [information]: "search_cases" is unknown import symbol
+  Line 216:17 [information]: "calculate_case_deadlines" is unknown import symbol
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py (1 violations)
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py (2 violations)
 ------------------------------------------------------------------
   Line 55:22 [information]: Cannot access attribute "close" for class "DatabaseManager"
   Attribute "close" is unknown
+  Line 75:18 [information]: Cannot access attribute "aclose" for class "Redis[Any]"
+  Attribute "aclose" is unknown
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py (2 violations)
-------------------------------------------------------------------
-  Line 21:26 [information]: "AsyncSessionLocal" is unknown import symbol
-  Line 21:45 [information]: "init_db" is unknown import symbol
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration.py (2 violations)
---------------------------------------------------------------------------
-  Line 14:5 [information]: "initialize_services" is unknown import symbol
-  Line 481:48 [information]: "cached_query" is unknown import symbol
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py (4 violations)
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_integration_refactored.py (3 violations)
 -------------------------------------------------------------------------------------
-  Line 16:37 [information]: "setup_structured_logging" is unknown import symbol
-  Line 17:26 [information]: "initialize_services" is unknown import symbol
-  Line 190:42 [information]: "get" is not a known attribute of module "app.core.service_container"
-  Line 247:47 [information]: "get" is not a known attribute of module "app.core.service_container"
+  Line 23:26 [information]: "initialize_services" is unknown import symbol
+  Line 197:42 [information]: "get" is not a known attribute of module "app.core.service_container"
+  Line 255:47 [information]: "get" is not a known attribute of module "app.core.service_container"
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py (3 violations)
-----------------------------------------------------------------------------------
-  Line 75:21 [information]: Cannot assign to attribute "_embedder" for class "StatuteSearchService"
-  Attribute "_embedder" is unknown
-  Line 76:21 [information]: Cannot assign to attribute "_llm" for class "StatuteSearchService"
-  Attribute "_llm" is unknown
-  Line 163:21 [information]: Cannot assign to attribute "_llm" for class "DocumentGenerationService"
-  Attribute "_llm" is unknown
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming.py (1 violations)
-------------------------------------------------------------------------
-  Line 16:30 [information]: "ParalegalAgent" is unknown import symbol
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_openai_integration.py (3 violations)
+---------------------------------------------------------------------------------
+  Line 83:20 [information]: "config" is not a known attribute of module "pytest"
+  Line 111:20 [information]: "config" is not a known attribute of module "pytest"
+  Line 232:20 [information]: "config" is not a known attribute of module "pytest"
 
 /Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming_handler.py (15 violations)
 --------------------------------------------------------------------------------

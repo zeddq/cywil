@@ -1,45 +1,35 @@
-# Multi-stage build for AI Paralegal Ingestion Service
-FROM python:3.11-slim as builder
+FROM python:3.11-slim
 
-# Install build dependencies
+# Install system dependencies and Poetry
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
     build-essential \
-    && rm -rf /var/lib/apt/lists/*
+    curl \
+    && rm -rf /var/lib/apt/lists/* && \
+    pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir "poetry>=1.8,<2.0"
 
 # Set working directory
 WORKDIR /app
 
-# Copy requirements
-COPY app/worker/requirements.txt .
+# Configure Poetry to install into the system environment
+ENV POETRY_VIRTUALENVS_CREATE=false
+ENV POETRY_NO_INTERACTION=1
+# Reduce installer concurrency to lower RAM usage during build
+RUN poetry config installer.max-workers 2
 
-# Install Python dependencies
-RUN pip install --no-cache-dir --user -r requirements.txt
-
-# Runtime stage
-FROM python:3.11-slim
-
-# Install runtime dependencies
-RUN apt-get update && apt-get install -y \
-    postgresql-client \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+# Copy dependency files and install only main deps
+COPY pyproject.toml poetry.lock ./
+RUN poetry install --only main --no-ansi --no-root --sync
 
 # Create non-root user
 RUN useradd -m -u 1000 appuser
-
-# Set working directory
-WORKDIR /app
-
-# Copy Python packages from builder
-COPY --from=builder /root/.local /home/appuser/.local
 
 # Copy application code
 COPY --chown=appuser:appuser . .
 
 # Set Python path
-ENV PATH=/home/appuser/.local/bin:$PATH
 ENV PYTHONPATH=/app:$PYTHONPATH
 
 # Switch to non-root user

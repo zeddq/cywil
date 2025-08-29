@@ -339,16 +339,17 @@ update_from_working_copy() {
     print_status "Creating build context..."
     cd "$PROJECT_ROOT"
     
-    # Copy necessary files
+    # Copy necessary files for Poetry-based build
     cp -r app "$TEMP_DIR/"
-    cp requirements-short.txt "$TEMP_DIR/requirements.txt"
+    cp pyproject.toml "$TEMP_DIR/pyproject.toml"
+    cp poetry.lock "$TEMP_DIR/poetry.lock"
     cp deployment/docker/Dockerfile "$TEMP_DIR/"
-    cp deployment/docker/.dockerignore "$TEMP_DIR/"
+    cp deployment/docker/.dockerignore "$TEMP_DIR/" 2>/dev/null || true
     
     # Create tarball
     print_status "Creating tarball..."
     tar -czf "$TEMP_DIR/build-context.tar.gz" -C "$TEMP_DIR" \
-        app requirements.txt Dockerfile .dockerignore
+        app pyproject.toml poetry.lock Dockerfile .dockerignore
     
     # Copy to remote host
     print_status "Copying to remote host..."

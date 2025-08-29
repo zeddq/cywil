@@ -1,0 +1,19 @@
+Pyright Diagnostic Report: reportAssignmentType
+================================================================================
+
+Total violations: 4
+
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (3 violations)
+-------------------------------------------------------------------------
+  Line 43:34 [error]: Type "Module("preprocess_sn_o3")" is not assignable to declared type "(stream: bool = True) -> OpenAIService"
+  Type "Module("preprocess_sn_o3")" is not assignable to type "(stream: bool = True) -> OpenAIService"
+  Line 43:49 [error]: Type "Module("preprocess_sn_o3")" is not assignable to declared type "type[PromptTemplate]"
+  Type "Module("preprocess_sn_o3")" is not assignable to type "type[PromptTemplate]"
+  Line 43:65 [error]: Type "Module("preprocess_sn_o3")" is not assignable to declared type "type[HumanMessage]"
+  Type "Module("preprocess_sn_o3")" is not assignable to type "type[HumanMessage]"
+
+/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py (1 violations)
+---------------------------------------------------------------
+  Line 324:46 [error]: Type "BaseModel" is not assignable to declared type "LegalEntities"
+  "BaseModel" is not assignable to "LegalEntities"

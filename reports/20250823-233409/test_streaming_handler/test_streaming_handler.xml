@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="4.694" timestamp="2025-08-23T23:35:32.752586+02:00" hostname="Cezarys-MacBook-Pro.local"><testcase classname="" name="test_streaming_handler" time="0.000"><error message="collection failure">ImportError while importing test module '/Volumes/code/cywil/ai-paralegal-poc/tests/test_streaming_handler.py'.
-Hint: make sure your test modules/packages have valid Python names.
-Traceback:
-/opt/homebrew/Cellar/python@3.11/3.11.13/Frameworks/Python.framework/Versions/3.11/lib/python3.11/importlib/__init__.py:126: in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-tests/test_streaming_handler.py:9: in &lt;module&gt;
-    from app.core.streaming_handler import (
-E   ImportError: cannot import name 'TextAccumulator' from 'app.core.streaming_handler' (/Volumes/code/cywil/ai-paralegal-poc/app/core/streaming_handler.py)</error></testcase></testsuite></testsuites>

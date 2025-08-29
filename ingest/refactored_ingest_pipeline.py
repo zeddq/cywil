@@ -295,9 +295,9 @@ class RefactoredIngestOrchestrator:
             }
         
         # Get ingestion status
-        statute_status = await self.statute_service.get_ingestion_status()
-        court_status = await self.court_service.get_sn_processing_status()
-        embedding_stats = await self.embedding_service.get_embedding_statistics()
+        statute_status = await self.statute_service.get_ingestion_status() if self.statute_service else {"status": "not_initialized"}  # type: ignore[attr-defined]
+        court_status = await self.court_service.get_sn_processing_status() if self.court_service else {"status": "not_initialized"}  # type: ignore[attr-defined]
+        embedding_stats = await self.embedding_service.get_embedding_statistics() if self.embedding_service else {"status": "not_initialized"}  # type: ignore[attr-defined]
         
         validation_results = {
             "timestamp": asyncio.get_event_loop().time(),

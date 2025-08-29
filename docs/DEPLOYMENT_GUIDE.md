@@ -180,28 +180,35 @@ networks:
     external: true
 ```
 
-### 3. Dockerfile
+### 3. Dockerfile (Poetry-based)
 
-Create `Dockerfile`:
+Create `Dockerfile` using Poetry and the lockfile for reproducible installs:
 
 ```dockerfile
 FROM python:3.11-slim
 
-# Install system dependencies
+# Install system dependencies and Poetry
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
     curl \
-    && rm -rf /var/lib/apt/lists/*
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/* && \
+    pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir "poetry>=1.8,<2.0"
 
-# Set working directory
 WORKDIR /app
 
-# Copy requirements
-COPY requirements.txt .
+# Configure Poetry to install into the system env (no venv)
+ENV POETRY_VIRTUALENVS_CREATE=false
+ENV POETRY_NO_INTERACTION=1
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Reduce installer concurrency on low-RAM hosts
+RUN poetry config installer.max-workers 2
+
+# Copy dependency files and install main deps only
+COPY pyproject.toml poetry.lock ./
+RUN poetry install --only main --no-ansi --no-root --sync
 
 # Copy application code
 COPY app/ ./app/
@@ -220,7 +227,7 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
   CMD curl -f http://localhost:8000/health || exit 1
 
 # Run application
-CMD ["uvicorn", "app.main_refactored:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "4"]
 ```
 
 ### 4. Nginx Configuration

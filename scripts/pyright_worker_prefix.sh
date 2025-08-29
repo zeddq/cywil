@@ -17,13 +17,13 @@ Outputs:
   - Exits 0 on success, creates WORKSPACE_READY marker file
 
 Env:
-  BASE_BOOKMARK defaults to "main" if --base not provided.
+  BASE_BOOKMARK defaults to "refactor/ai-sdk-integration-fix" if --base not provided.
 USAGE
 }
 
 # -------- arg parse --------
 WORKSPACE=""
-BASE_BOOKMARK="${BASE_BOOKMARK:-main}"
+BASE_BOOKMARK="${BASE_BOOKMARK:-refactor/ai-sdk-integration-fix}"
 BOOKMARK=""
 ALLOWLIST_FILE=""
 LOG=""
@@ -50,6 +50,7 @@ mkdir -p "$(dirname "${LOG:-/dev/null}")" \
 
 # -------- logging --------
 if [[ -n "$LOG" ]]; then
+  # Redirects both stdout and stderr to the log file, while also displaying output to the console in real time.
   exec 1> >(tee -a "$LOG") 2>&1
 fi
 
