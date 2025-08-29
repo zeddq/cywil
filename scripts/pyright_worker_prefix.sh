@@ -17,13 +17,13 @@ Outputs:
   - Exits 0 on success, creates WORKSPACE_READY marker file
 
 Env:
-  BASE_BOOKMARK defaults to "main" if --base not provided.
+  BASE_BOOKMARK defaults to "refactor/ai-sdk-integration-fix" if --base not provided.
 USAGE
 }
 
 # -------- arg parse --------
 WORKSPACE=""
-BASE_BOOKMARK="${BASE_BOOKMARK:-main}"
+BASE_BOOKMARK="${BASE_BOOKMARK:-refactor/ai-sdk-integration-fix}"
 BOOKMARK=""
 ALLOWLIST_FILE=""
 LOG=""

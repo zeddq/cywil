@@ -87,7 +87,7 @@ class DocumentValidator:
         # Type-specific validation
         if document_type == DocumentType.SUPREME_COURT:
             cls._validate_supreme_court_document(content, errors, warnings)
-        elif document_type in [DocumentType.CIVIL_CODE, DocumentType.CIVIL_PROCEDURE]:
+        elif document_type is not None and document_type in [DocumentType.CIVIL_CODE, DocumentType.CIVIL_PROCEDURE]:
             cls._validate_statute_document(content, document_type, errors, warnings)
         
         # General Polish legal document validation

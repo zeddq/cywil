@@ -1,15 +1,15 @@
 {
   "typeCheckingMode": "basic",
   "venvPath": ".",
-  "venv": ".venv-tests",
+  "venv": ".venv",
   "include": ["**/*.py"],
   "exclude": [
     "**/node_modules",
     "**/__pycache__",
     "**/.*",
-    "venv",
-    ".venv",
-    ".venv-tests",
+    "**/venv",
+    "**/.venv",
+    "**/.venv-tests",
     "alembic"
   ],
   "reportAttributeAccessIssue": "information",

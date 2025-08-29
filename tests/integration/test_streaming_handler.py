@@ -34,7 +34,7 @@ class MockStreamProcessor(StreamProcessor):
     """Mock stream processor for testing"""
     def __init__(self):
         self.events_processed = []
-        self.transform = None
+        self.transform = None  # type: ignore[assignment]
     
     def process_event(self, event: StreamEvent) -> Optional[StreamEvent]:
         self.events_processed.append(event)

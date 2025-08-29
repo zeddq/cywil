@@ -20,10 +20,24 @@ from datetime import datetime, timedelta
 from sqlalchemy import select, desc, and_
 from app.database import AsyncSessionLocal, init_db
 from app.models import Note, Case, FormTemplate
+from app.core.config_service import get_config
+from app.core.database_manager import DatabaseManager
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+# Global database manager for sync engine access
+_db_manager = None
+
+async def get_sync_engine():
+    """Get sync engine for database initialization"""
+    global _db_manager
+    if _db_manager is None:
+        config = get_config()
+        _db_manager = DatabaseManager(config)
+        await _db_manager.initialize()
+    return _db_manager.sync_engine
 
 # --- API Client ---
 
@@ -428,7 +442,8 @@ def demo_conversation_flow(client: ParalegalAPIClient):
 
 async def run_log_retrieval(args: argparse.Namespace):
     """Handle all log retrieval sub-commands"""
-    await init_db()
+    sync_engine = await get_sync_engine()
+    init_db(sync_engine)
     retriever = AuditLogRetriever()
     interactions = []
     
@@ -455,7 +470,8 @@ async def run_log_retrieval(args: argparse.Namespace):
 
 async def list_templates(args: argparse.Namespace):
     """List all available templates from the database"""
-    await init_db()
+    sync_engine = await get_sync_engine()
+    init_db(sync_engine)
     
     templates_data = []
     async with AsyncSessionLocal() as session:

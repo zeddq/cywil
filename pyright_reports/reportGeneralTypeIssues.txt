@@ -1,0 +1,9 @@
+Pyright Diagnostic Report: reportGeneralTypeIssues
+================================================================================
+
+Total violations: 1
+
+
+/Volumes/code/cywil/ai-paralegal-poc/app/database.py (1 violations)
+----------------------------------------------------
+  Line 14:15 [error]: Expression cannot be assignment target

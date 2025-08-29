@@ -22,7 +22,10 @@ from app.paralegal_agents import ParalegalAgentSDK
 @pytest.mark.asyncio
 async def test_agent_initialization():
     """Test that the agent can be initialized."""
-    agent = ParalegalAgentSDK()
+    mock_config_service = Mock()
+    mock_conversation_manager = Mock()
+    mock_tool_executor = Mock()
+    agent = ParalegalAgentSDK(mock_config_service, mock_conversation_manager, mock_tool_executor)
     
     # Mock the service initialization
     with patch('app.agents.refactored_agent_sdk.initialize_services') as mock_init:
@@ -92,7 +95,10 @@ async def test_search_statute_tool():
 @pytest.mark.asyncio
 async def test_agent_streaming():
     """Test basic streaming functionality."""
-    agent = ParalegalAgentSDK()
+    mock_config_service = Mock()
+    mock_conversation_manager = Mock()
+    mock_tool_executor = Mock()
+    agent = ParalegalAgentSDK(mock_config_service, mock_conversation_manager, mock_tool_executor)
     
     # Mock initialization and Runner
     with patch('app.agents.refactored_agent_sdk.initialize_services') as mock_init:

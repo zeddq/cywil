@@ -51,3 +51,4 @@ The wrapper script runs jj with a minimal environment, preserving only essential
 - TERM (for terminal capabilities)
 
 This bypasses any shell customizations that might be causing the parsing error.
+

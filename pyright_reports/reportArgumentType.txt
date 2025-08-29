@@ -1,41 +1,17 @@
 Pyright Diagnostic Report: reportArgumentType
 ================================================================================
 
-Total violations: 16
+Total violations: 8
 
 
-/Volumes/code/cywil/ai-paralegal-poc/app/validators/document_validator.py (1 violations)
--------------------------------------------------------------------------
-  Line 91:53 [error]: Argument of type "Literal[DocumentType.CIVIL_CODE, DocumentType.CIVIL_PROCEDURE, DocumentType.CONTRACT, DocumentType.PLEADING] | None" cannot be assigned to parameter "document_type" of type "DocumentType" in function "_validate_statute_document"
-  Type "Literal[DocumentType.CIVIL_CODE, DocumentType.CIVIL_PROCEDURE, DocumentType.CONTRACT, DocumentType.PLEADING] | None" is not assignable to type "DocumentType"
-    "None" is not assignable to "DocumentType"
-
-/Volumes/code/cywil/ai-paralegal-poc/ingest/embed.py (5 violations)
+/Volumes/code/cywil/ai-paralegal-poc/app/database.py (1 violations)
 ----------------------------------------------------
-  Line 76:54 [error]: Argument of type "Literal['keyword']" cannot be assigned to parameter "type" of type "KeywordIndexType" in function "__init__"
-  "Literal['keyword']" is not assignable to "KeywordIndexType"
-  Line 82:54 [error]: Argument of type "Literal['keyword']" cannot be assigned to parameter "type" of type "KeywordIndexType" in function "__init__"
-  "Literal['keyword']" is not assignable to "KeywordIndexType"
-  Line 88:54 [error]: Argument of type "Literal['keyword']" cannot be assigned to parameter "type" of type "KeywordIndexType" in function "__init__"
-  "Literal['keyword']" is not assignable to "KeywordIndexType"
-  Line 309:47 [error]: Argument of type "Literal['text']" cannot be assigned to parameter "type" of type "TextIndexType" in function "__init__"
-  "Literal['text']" is not assignable to "TextIndexType"
-  Line 321:54 [error]: Argument of type "Literal['keyword']" cannot be assigned to parameter "type" of type "KeywordIndexType" in function "__init__"
-  "Literal['keyword']" is not assignable to "KeywordIndexType"
-
-/Volumes/code/cywil/ai-paralegal-poc/ingest/pdf2chunks.py (1 violations)
----------------------------------------------------------
-  Line 226:13 [error]: Argument of type "Dict[str, Any]" cannot be assigned to parameter "value" of type "str" in function "__setitem__"
-  "Dict[str, Any]" is not assignable to "str"
-
-/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py (1 violations)
----------------------------------------------------------------
-  Line 483:49 [error]: Argument of type "Ruling" cannot be assigned to parameter "ruling" of type "ParsedRuling" in function "enhance_entities_with_o3"
-  "Ruling" is not assignable to "ParsedRuling"
+  Line 15:31 [error]: Argument of type "AppConfig" cannot be assigned to parameter "config_service" of type "ConfigService" in function "__init__"
+  "AppConfig" is not assignable to "ConfigService"
 
 /Volumes/code/cywil/ai-paralegal-poc/ingest/sn.py (1 violations)
 -------------------------------------------------
-  Line 95:62 [error]: Argument of type "bool" cannot be assigned to parameter "whereclause" of type "_ColumnExpressionArgument[bool]" in function "where"
+  Line 100:62 [error]: Argument of type "bool" cannot be assigned to parameter "whereclause" of type "_ColumnExpressionArgument[bool]" in function "where"
   Type "bool" is not assignable to type "_ColumnExpressionArgument[bool]"
     "bool" is not assignable to "ColumnElement[bool]"
     "bool" is incompatible with protocol "_HasClauseElement[bool]"
@@ -48,7 +24,7 @@ Total violations: 16
 
 /Volumes/code/cywil/ai-paralegal-poc/ingest/templates.py (1 violations)
 --------------------------------------------------------
-  Line 101:66 [error]: Argument of type "Any | bool" cannot be assigned to parameter "whereclause" of type "_ColumnExpressionArgument[bool]" in function "where"
+  Line 104:66 [error]: Argument of type "Any | bool" cannot be assigned to parameter "whereclause" of type "_ColumnExpressionArgument[bool]" in function "where"
   Type "Any | bool" is not assignable to type "_ColumnExpressionArgument[bool]"
     Type "bool" is not assignable to type "_ColumnExpressionArgument[bool]"
       "bool" is not assignable to "ColumnElement[bool]"
@@ -59,30 +35,11 @@ Total violations: 16
       "bool" is not assignable to "TypedColumnsClauseRole[bool]"
   ...
 
-/Volumes/code/cywil/ai-paralegal-poc/ingest/templates_preprocess.py (1 violations)
--------------------------------------------------------------------
-  Line 90:35 [error]: Argument of type "(t: Unknown = text) -> CoroutineType[Any, Any, Template | None]" cannot be assigned to parameter "object" of type "() -> Coroutine[Any, Any, Template]" in function "append"
-  Type "(t: Unknown = text) -> CoroutineType[Any, Any, Template | None]" is not assignable to type "() -> Coroutine[Any, Any, Template]"
-    Function return type "CoroutineType[Any, Any, Template | None]" is incompatible with type "Coroutine[Any, Any, Template]"
-      "CoroutineType[Any, Any, Template | None]" is not assignable to "Coroutine[Any, Any, Template]"
-        Type parameter "_ReturnT_nd_co@Coroutine" is covariant, but "Template | None" is not a subtype of "Template"
-          Type "Template | None" is not assignable to type "Template"
-
-/Volumes/code/cywil/ai-paralegal-poc/ingest/test_preprocess_o3.py (1 violations)
------------------------------------------------------------------
-  Line 69:51 [error]: Argument of type "None" cannot be assigned to parameter "obj" of type "Sized" in function "len"
-  "None" is incompatible with protocol "Sized"
-    "__len__" is not present
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_ai_functionality.py (1 violations)
--------------------------------------------------------------------------------
-  Line 111:29 [error]: Argument of type "Any | None" cannot be assigned to parameter "embedded_at" of type "datetime" in function "__init__"
-  Type "Any | None" is not assignable to type "datetime"
-    "None" is not assignable to "datetime"
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py (3 violations)
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py (4 violations)
 ------------------------------------------------------------------
-  Line 138:29 [error]: Argument of type "bool" cannot be assigned to parameter "onclause" of type "_OnClauseArgument | None" in function "join"
+  Line 38:39 [error]: Argument of type "AppConfig" cannot be assigned to parameter "config_service" of type "ConfigService" in function "__init__"
+  "AppConfig" is not assignable to "ConfigService"
+  Line 152:29 [error]: Argument of type "bool" cannot be assigned to parameter "onclause" of type "_OnClauseArgument | None" in function "join"
   Type "bool" is not assignable to type "_OnClauseArgument | None"
     "bool" is not assignable to "ColumnElement[Any]"
     "bool" is incompatible with protocol "_HasClauseElement[Any]"
@@ -92,7 +49,7 @@ Total violations: 16
     "bool" is not assignable to "TypedColumnsClauseRole[Any]"
     Type "bool" is not assignable to type "() -> ColumnElement[Any]"
   ...
-  Line 139:24 [error]: Argument of type "bool" cannot be assigned to parameter "whereclause" of type "_ColumnExpressionArgument[bool]" in function "where"
+  Line 153:24 [error]: Argument of type "bool" cannot be assigned to parameter "whereclause" of type "_ColumnExpressionArgument[bool]" in function "where"
   Type "bool" is not assignable to type "_ColumnExpressionArgument[bool]"
     "bool" is not assignable to "ColumnElement[bool]"
     "bool" is incompatible with protocol "_HasClauseElement[bool]"
@@ -102,7 +59,7 @@ Total violations: 16
     "bool" is not assignable to "TypedColumnsClauseRole[bool]"
     Type "bool" is not assignable to type "() -> ColumnElement[bool]"
   ...
-  Line 140:32 [error]: Argument of type "datetime | None" cannot be assigned to parameter "column" of type "_ColumnExpressionOrStrLabelArgument[_T@desc]" in function "desc"
+  Line 154:32 [error]: Argument of type "datetime | None" cannot be assigned to parameter "column" of type "_ColumnExpressionOrStrLabelArgument[_T@desc]" in function "desc"
   Type "datetime | None" is not assignable to type "_ColumnExpressionOrStrLabelArgument[_T@desc]"
     Type "datetime" is not assignable to type "_ColumnExpressionOrStrLabelArgument[_T@desc]"
       "datetime" is not assignable to "LambdaElement"
@@ -112,3 +69,8 @@ Total violations: 16
       "datetime" is not assignable to "SQLCoreOperations[_T@desc]"
       "datetime" is not assignable to "TypedColumnsClauseRole[_T@desc]"
   ...
+
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_streaming.py (1 violations)
+------------------------------------------------------------------------
+  Line 32:24 [error]: Argument of type "AppConfig" cannot be assigned to parameter "config_service" of type "ConfigService" in function "__init__"
+  "AppConfig" is not assignable to "ConfigService"

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="1" failures="0" skipped="0" tests="1" time="4.654" timestamp="2025-08-23T23:35:09.322562+02:00" hostname="Cezarys-MacBook-Pro.local"><testcase classname="" name="test_integration" time="0.000"><error message="collection failure">ImportError while importing test module '/Volumes/code/cywil/ai-paralegal-poc/tests/test_integration.py'.
-Hint: make sure your test modules/packages have valid Python names.
-Traceback:
-/opt/homebrew/Cellar/python@3.11/3.11.13/Frameworks/Python.framework/Versions/3.11/lib/python3.11/importlib/__init__.py:126: in import_module
-    return _bootstrap._gcd_import(name[level:], package, level)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-tests/test_integration.py:11: in &lt;module&gt;
-    from app.core import (
-E   ImportError: cannot import name 'service_container' from 'app.core' (/Volumes/code/cywil/ai-paralegal-poc/app/core/__init__.py)</error></testcase></testsuite></testsuites>

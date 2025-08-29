@@ -11,9 +11,9 @@ import json
 from app.core import (
     service_container,
     ServiceContainer,
-    initialize_services,
     get_config
 )
+from app.main import initialize_services
 from app.core.database_manager import DatabaseManager
 from app.core.tool_executor import ToolExecutor, CircuitState
 from app.core.conversation_manager import ConversationManager
@@ -293,7 +293,8 @@ class TestCircuitBreakerIntegration:
     @pytest.mark.asyncio
     async def test_circuit_breaker_prevents_cascading_failures(self):
         """Test that circuit breaker prevents cascading failures"""
-        executor = ToolExecutor()
+        mock_config_service = Mock()
+        executor = ToolExecutor(mock_config_service)
         executor._initialized = True
         
         # Mock failing tool
@@ -394,7 +395,8 @@ class TestCacheIntegration:
     async def test_conversation_caching_workflow(self):
         """Test conversation caching between Redis and database"""
         db_manager = Mock()
-        conv_manager = ConversationManager(db_manager)
+        mock_config_service = Mock()
+        conv_manager = ConversationManager(db_manager, mock_config_service)
         
         # Mock Redis available
         conv_manager._redis_client = AsyncMock()
@@ -478,7 +480,7 @@ class TestPerformanceOptimization:
     @pytest.mark.asyncio
     async def test_query_result_caching(self):
         """Test query result caching across multiple requests"""
-        from app.core.performance_utils import cached_query
+        from app.core.performance_utils import cached_result as cached_query
         
         call_count = 0
         
