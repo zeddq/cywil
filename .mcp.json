@@ -15,20 +15,31 @@
       ]
     },
     "ai-paralegal": {
-                        "command": "sh",
-                        "args": [
-                                "-c",
-                                "exec $(which uvx || echo uvx) --from git+https://github.com/BeehiveInnovations/zen-mcp-server.git zen-mcp-server"
-                        ],
-                        "env": {
-                                "OPENAI_API_KEY": "${OPENAI_API_KEY}",
-                                "GOOGLE_API_KEY": "${GOOGLE_API_KEY}",
-                                "REDIS_URL": "${REDIS_URL}",
-                                "XAI_API_KEY": "${XAI_API_KEY}",
-                                "GOOGLE_ALLOWED_MODELS": "gemini-2.5-pro,gemini-2.5-flash",
-                                "OPENAI_ALLOWED_MODELS": "gpt-5,gpt-5-mini,gpt-5-nanoi,o3-pro",
-                                "GROK_ALLOWED_MODELS": "grok-4"
-                        }
-                }
+      "command": "sh",
+      "args": [
+        "-c",
+        "exec $(which uvx || echo uvx) --from git+https://github.com/BeehiveInnovations/zen-mcp-server.git zen-mcp-server"
+      ],
+      "env": {
+        "OPENAI_API_KEY": "${OPENAI_API_KEY}",
+        "GOOGLE_API_KEY": "${GOOGLE_API_KEY}",
+        "REDIS_URL": "${REDIS_URL}",
+        "XAI_API_KEY": "${XAI_API_KEY}",
+        "GOOGLE_ALLOWED_MODELS": "gemini-2.5-pro,gemini-2.5-flash",
+        "OPENAI_ALLOWED_MODELS": "gpt-5,gpt-5-mini,gpt-5-nanoi,o3-pro",
+        "GROK_ALLOWED_MODELS": "grok-4"
+      }
+    },
+    "web-rag": {
+      "command": "sh",
+      "args": [
+        "-c",
+        "cd /Users/cezary/ragger && /Users/cezary/ragger/.venv/bin/python -m rag_mcp.server"
+      ],
+      "env": {
+        "CHROMA_PERSIST_DIR": "/Users/cezary/ragger/data/chroma",
+        "CHROMA_COLLECTION": "web_rag"
+      }
+    }
   }
 }

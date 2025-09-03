@@ -1,0 +1,22 @@
+base_urls:
+  - https://docs.n8n.io/
+  - https://docs.smith.langchain.com/
+
+# Regexes evaluated against absolute URLs
+allow_patterns:
+  - ^https://docs\.n8n\.io/.*
+  - ^https://docs\.smith\.langchain\.com/.*
+deny_patterns:
+  - \.pdf$
+  - \.zip$
+
+max_pages: 300
+concurrency: 8
+chunk_chars: 1200
+chunk_overlap: 200
+out_dir: data/web_rag
+
+# Embedding options: "openai" or "sentence-transformers"
+embedding_provider: openai
+embedding_model: text-embedding-3-small
+

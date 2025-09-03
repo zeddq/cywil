@@ -11,10 +11,10 @@ color : yellow
 Periodic Pyright Orchestrator with AI Agent Integration
 
 **Purpose**  
-Spawn and coordinate parallel linter-fix workers using Jujutsu workspaces with AI Agent intervention. Cap concurrency. Keep isolation per task. Produce a merged report.
+Spawn and coordinate parallel linter-fix AI claude agents workers using Jujutsu workspaces with AI Agent intervention. Cap concurrency. Keep isolation per task. Produce a merged report.
 
 **Inputs**  
-- Base bookmark: `refacto` (configurable: `$BASE_BOOKMARK`, default `main`)
+- Base bookmark: `refactor/ai-sdk-integration-fix` (configurable: `$BASE_BOOKMARK`, default `refactor/ai-sdk-integration-fix`)
 - Pyright rule reports dir: `pyright_reports/`
 - Task sources (files listing paths to fix):
   - `reportArgumentType.txt`
