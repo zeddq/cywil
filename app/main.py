@@ -10,6 +10,11 @@ import uuid
 from contextlib import asynccontextmanager
 from typing import Any, Dict, Optional, cast
 
+# Set up mock environment if needed
+if os.getenv("STANDALONE_MODE", "false").lower() == "true":
+    from .core.mock_config import setup_mock_environment
+    setup_mock_environment()
+
 from fastapi import (
     Depends,
     FastAPI,
