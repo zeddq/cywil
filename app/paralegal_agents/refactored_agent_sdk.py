@@ -12,7 +12,7 @@ import uuid
 from datetime import timedelta
 from typing import Any, AsyncGenerator, Dict, Optional
 
-from agents import (  # type: ignore
+from .pydantic_ai_compat import (  # type: ignore
     Agent,
     RunContextWrapper,
     RunHooks,
