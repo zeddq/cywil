@@ -1,0 +1,47 @@
+# Core dependencies for the application
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.5
+pydantic-settings==2.6.1
+sqlalchemy==2.0.36
+asyncpg==0.30.0
+alembic==1.16.2
+httpx==0.29.0
+aiofiles==24.1.0
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.20
+bcrypt==4.2.1
+
+# AI/ML dependencies
+openai==1.59.5
+google-generativeai==0.8.3
+anthropic==0.42.0
+tiktoken==0.8.0
+numpy==2.2.1
+scikit-learn==1.6.2
+
+# Celery and task queue
+celery[redis]==5.4.0
+redis==5.2.1
+flower==2.1.0
+
+# Logging and monitoring
+structlog==25.1.0
+opentelemetry-api==1.30.0
+opentelemetry-sdk==1.30.0
+opentelemetry-instrumentation-fastapi==0.51b0
+opentelemetry-exporter-otlp==1.30.0
+opentelemetry-instrumentation-sqlalchemy==0.51b0
+
+# Database and ORM
+psycopg2-binary==2.9.10
+
+# PDF processing
+pypdf2==3.0.1
+pdfplumber==0.11.4
+
+# Additional utilities
+python-dotenv==1.0.1
+jinja2==3.1.5
+markdown==3.7
