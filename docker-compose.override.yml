@@ -1,0 +1,10 @@
+version: '3.8'
+
+# This override file uses standard Docker volumes instead of bind mounts
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  qdrant_data:
+    driver: local
