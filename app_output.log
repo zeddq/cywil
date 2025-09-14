@@ -1,0 +1,132 @@
+2025-09-14 07:11:12,238 - [∅] [trace=0 span=] user_id=<anon> - Creating service: ConfigService (service_interface.__init__:52)
+2025-09-14 07:11:12,242 - [∅] [trace=0 span=] user_id=<anon> - Configuration loaded for environment: development (config_service._load_config:225)
+2025-09-14 07:11:12,243 - [∅] [trace=0 span=] user_id=<anon> - registered 'bcrypt' handler: <class 'passlib.handlers.bcrypt.bcrypt'> (registry.register_crypt_handler:296)
+2025-09-14 07:11:12,352 - [∅] [trace=0 span=] user_id=<anon> - Registered tool 'describe_case' in category case_management (tool_registry.decorator:176)
+2025-09-14 07:11:12,352 - [∅] [trace=0 span=] user_id=<anon> - Registered tool 'schedule_reminder' in category case_management (tool_registry.decorator:176)
+2025-09-14 07:11:12,352 - [∅] [trace=0 span=] user_id=<anon> - Registered tool 'compute_deadline' in category case_management (tool_registry.decorator:176)
+2025-09-14 07:11:12,922 - [∅] [trace=0 span=] user_id=<anon> - Registered tool 'search_statute' in category search (tool_registry.decorator:176)
+2025-09-14 07:11:12,922 - [∅] [trace=0 span=] user_id=<anon> - Registered tool 'summarize_passages' in category analysis (tool_registry.decorator:176)
+2025-09-14 07:11:12,923 - [∅] [trace=0 span=] user_id=<anon> - Registered tool 'search_sn_rulings' in category search (tool_registry.decorator:176)
+2025-09-14 07:11:12,923 - [∅] [trace=0 span=] user_id=<anon> - Registered tool 'get_sn_ruling' in category search (tool_registry.decorator:176)
+2025-09-14 07:11:12,924 - [∅] [trace=0 span=] user_id=<anon> - Registered tool 'summarize_sn_rulings' in category analysis (tool_registry.decorator:176)
+2025-09-14 07:11:12,924 - [∅] [trace=0 span=] user_id=<anon> - Registered tool 'list_available_templates' in category document (tool_registry.decorator:176)
+2025-09-14 07:11:12,924 - [∅] [trace=0 span=] user_id=<anon> - Registered tool 'find_template' in category document (tool_registry.decorator:176)
+2025-09-14 07:11:12,924 - [∅] [trace=0 span=] user_id=<anon> - Registered tool 'draft_document' in category document (tool_registry.decorator:176)
+2025-09-14 07:11:12,924 - [∅] [trace=0 span=] user_id=<anon> - Registered tool 'analyze_contract' in category analysis (tool_registry.decorator:176)
+2025-09-14 07:11:12,924 - [∅] [trace=0 span=] user_id=<anon> - Registered tool 'validate_against_statute' in category document (tool_registry.decorator:176)
+Traceback (most recent call last):
+  File "/workspace/.venv/lib/python3.13/site-packages/pydantic/networks.py", line 946, in import_email_validator
+    import email_validator
+ModuleNotFoundError: No module named 'email_validator'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/workspace/.venv/lib/python3.13/site-packages/uvicorn/__main__.py", line 4, in <module>
+    uvicorn.main()
+    ~~~~~~~~~~~~^^
+  File "/workspace/.venv/lib/python3.13/site-packages/click/core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+           ~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/workspace/.venv/lib/python3.13/site-packages/click/core.py", line 1363, in main
+    rv = self.invoke(ctx)
+  File "/workspace/.venv/lib/python3.13/site-packages/click/core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/.venv/lib/python3.13/site-packages/click/core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+  File "/workspace/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 413, in main
+    run(
+    ~~~^
+        app,
+        ^^^^
+    ...<45 lines>...
+        h11_max_incomplete_event_size=h11_max_incomplete_event_size,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/workspace/.venv/lib/python3.13/site-packages/uvicorn/main.py", line 580, in run
+    server.run()
+    ~~~~~~~~~~^^
+  File "/workspace/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/usr/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/workspace/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/workspace/.venv/lib/python3.13/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "/workspace/.venv/lib/python3.13/site-packages/uvicorn/config.py", line 436, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/workspace/.venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1026, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/workspace/app/main.py", line 46, in <module>
+    from .routes.auth import router as auth_router
+  File "/workspace/app/routes/__init__.py", line 5, in <module>
+    from .auth import router as auth_router
+  File "/workspace/app/routes/auth.py", line 36, in <module>
+    class UserRegister(BaseModel):
+    ...<3 lines>...
+        secret_key: str
+  File "/workspace/.venv/lib/python3.13/site-packages/pydantic/_internal/_model_construction.py", line 237, in __new__
+    complete_model_class(
+    ~~~~~~~~~~~~~~~~~~~~^
+        cls,
+        ^^^^
+    ...<3 lines>...
+        create_model_module=_create_model_module,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/workspace/.venv/lib/python3.13/site-packages/pydantic/_internal/_model_construction.py", line 597, in complete_model_class
+    schema = gen_schema.generate_schema(cls)
+  File "/workspace/.venv/lib/python3.13/site-packages/pydantic/_internal/_generate_schema.py", line 711, in generate_schema
+    schema = self._generate_schema_inner(obj)
+  File "/workspace/.venv/lib/python3.13/site-packages/pydantic/_internal/_generate_schema.py", line 1004, in _generate_schema_inner
+    return self._model_schema(obj)
+           ~~~~~~~~~~~~~~~~~~^^^^^
+  File "/workspace/.venv/lib/python3.13/site-packages/pydantic/_internal/_generate_schema.py", line 837, in _model_schema
+    {k: self._generate_md_field_schema(k, v, decorators) for k, v in fields.items()},
+        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/workspace/.venv/lib/python3.13/site-packages/pydantic/_internal/_generate_schema.py", line 1206, in _generate_md_field_schema
+    common_field = self._common_field_schema(name, field_info, decorators)
+  File "/workspace/.venv/lib/python3.13/site-packages/pydantic/_internal/_generate_schema.py", line 1372, in _common_field_schema
+    schema = self._apply_annotations(
+        source_type,
+        annotations + validators_from_decorators,
+    )
+  File "/workspace/.venv/lib/python3.13/site-packages/pydantic/_internal/_generate_schema.py", line 2297, in _apply_annotations
+    schema = get_inner_schema(source_type)
+  File "/workspace/.venv/lib/python3.13/site-packages/pydantic/_internal/_schema_generation_shared.py", line 83, in __call__
+    schema = self._handler(source_type)
+  File "/workspace/.venv/lib/python3.13/site-packages/pydantic/_internal/_generate_schema.py", line 2276, in inner_handler
+    schema = self._generate_schema_from_get_schema_method(obj, source_type)
+  File "/workspace/.venv/lib/python3.13/site-packages/pydantic/_internal/_generate_schema.py", line 900, in _generate_schema_from_get_schema_method
+    schema = get_schema(
+        source, CallbackGetCoreSchemaHandler(self._generate_schema_inner, self, ref_mode=ref_mode)
+    )
+  File "/workspace/.venv/lib/python3.13/site-packages/pydantic/networks.py", line 986, in __get_pydantic_core_schema__
+    import_email_validator()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/workspace/.venv/lib/python3.13/site-packages/pydantic/networks.py", line 948, in import_email_validator
+    raise ImportError('email-validator is not installed, run `pip install pydantic[email]`') from e
+ImportError: email-validator is not installed, run `pip install pydantic[email]`
