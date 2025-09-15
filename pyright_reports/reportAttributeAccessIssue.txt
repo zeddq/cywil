@@ -1,64 +1,38 @@
 Pyright Diagnostic Report: reportAttributeAccessIssue
 ================================================================================
 
-Total violations: 81
+Total violations: 72
 
 
-/Volumes/code/cywil/ai-paralegal-poc/app/services/supreme_court_service.py (5 violations)
---------------------------------------------------------------------------
-  Line 301:91 [information]: Cannot access attribute "astext" for class "str"
-  Attribute "astext" is unknown
-  Line 319:29 [information]: Cannot access attribute "meta" for class "RulingPayload"
-  Attribute "meta" is unknown
-  Line 319:65 [information]: Cannot access attribute "meta" for class "RulingPayload"
-  Attribute "meta" is unknown
-  Line 320:27 [information]: Cannot access attribute "meta" for class "RulingPayload"
-  Attribute "meta" is unknown
-  Line 320:58 [information]: Cannot access attribute "meta" for class "RulingPayload"
-  Attribute "meta" is unknown
-
-/Volumes/code/cywil/ai-paralegal-poc/app/task_processors.py (4 violations)
------------------------------------------------------------
-  Line 301:30 [information]: Cannot assign to attribute "metadata" for class "Document"
-  Expression of type "dict[Any, Any]" cannot be assigned to attribute "metadata" of class "Document"
-    "dict[Any, Any]" is not assignable to "MetaData"
-  Line 303:35 [information]: Cannot access attribute "update" for class "MetaData"
-  Attribute "update" is unknown
-  Line 331:38 [information]: Cannot assign to attribute "metadata" for class "Document"
-  Expression of type "dict[Any, Any]" cannot be assigned to attribute "metadata" of class "Document"
-    "dict[Any, Any]" is not assignable to "MetaData"
-  Line 332:43 [information]: Cannot access attribute "update" for class "MetaData"
-  Attribute "update" is unknown
+/Volumes/code/cywil/ai-paralegal-poc/app/services/openai_client.py (2 violations)
+------------------------------------------------------------------
+  Line 133:30 [information]: Cannot access attribute "choices" for class "ParsedResponse[Any]"
+  Attribute "choices" is unknown
+  Line 136:29 [information]: Cannot access attribute "parsed" for class "ParsedResponse[Any]"
+  Attribute "parsed" is unknown
 
 /Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/case_tasks.py (3 violations)
 -------------------------------------------------------------------
-  Line 234:46 [information]: Cannot access attribute "ilike" for class "str"
-  Attribute "ilike" is unknown
-  Line 235:51 [information]: Cannot access attribute "ilike" for class "str"
-  Attribute "ilike" is unknown
   Line 236:46 [information]: Cannot access attribute "ilike" for class "str"
   Attribute "ilike" is unknown
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/embedding_tasks.py (1 violations)
-------------------------------------------------------------------------
-  Line 255:38 [information]: Cannot access attribute "embedding_service" for class "WorkerServiceRegistry"
-  Attribute "embedding_service" is unknown
+  Line 237:51 [information]: Cannot access attribute "ilike" for class "str"
+  Attribute "ilike" is unknown
+  Line 238:46 [information]: Cannot access attribute "ilike" for class "str"
+  Attribute "ilike" is unknown
 
 /Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/ingestion_pipeline.py (1 violations)
 ---------------------------------------------------------------------------
-  Line 13:28 [information]: "generate_statute_embeddings" is unknown import symbol
+  Line 24:28 [information]: "generate_statute_embeddings" is unknown import symbol
 
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (4 violations)
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/pdf2chunks.py (1 violations)
+-------------------------------------------------------------------
+  Line 140:28 [information]: Cannot access attribute "group" for class "str"
+  Attribute "group" is unknown
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (1 violations)
 -------------------------------------------------------------------------
-  Line 370:38 [information]: Cannot assign to attribute "entities" for class "RulingParagraph"
-  Attribute "entities" is unknown
-  Line 373:38 [information]: Cannot assign to attribute "entities" for class "RulingParagraph"
-  Attribute "entities" is unknown
-  Line 519:28 [information]: Cannot access attribute "paragraphs" for class "List[bytes]"
-  Attribute "paragraphs" is unknown
-  Line 702:39 [information]: Cannot assign to attribute "name" for class "Ruling"
-  Type "str | None" is not assignable to type "str"
-    "None" is not assignable to "str"
+  Line 150:26 [information]: Cannot access attribute "get_response" for class "CoroutineType[Any, Any, ParsedResponse[Unknown]]"
+  Attribute "get_response" is unknown
 
 /Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/search_tasks.py (6 violations)
 ---------------------------------------------------------------------
@@ -74,11 +48,6 @@ Total violations: 81
   Attribute "get" is unknown
   Line 237:41 [information]: Cannot access attribute "get" for class "RulingPayload"
   Attribute "get" is unknown
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/statute_tasks.py (1 violations)
-----------------------------------------------------------------------
-  Line 183:32 [information]: Cannot access attribute "statute_ingestion" for class "WorkerServiceRegistry"
-  Attribute "statute_ingestion" is unknown
 
 /Volumes/code/cywil/ai-paralegal-poc/example_logger_usage.py (5 violations)
 ------------------------------------------------------------
@@ -121,14 +90,16 @@ Total violations: 81
   Attribute "get_text" is unknown
   Line 129:16 [information]: "open" is not a known attribute of module "fitz"
 
-/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py (4 violations)
+/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py (5 violations)
 ---------------------------------------------------------------
-  Line 144:16 [information]: "open" is not a known attribute of module "fitz"
-  Line 333:38 [information]: Cannot assign to attribute "entities" for class "RulingParagraph"
+  Line 133:16 [information]: "open" is not a known attribute of module "fitz"
+  Line 334:42 [information]: Cannot access attribute "entities" for class "BaseModel"
   Attribute "entities" is unknown
-  Line 336:38 [information]: Cannot assign to attribute "entities" for class "RulingParagraph"
-  Attribute "entities" is unknown
-  Line 632:39 [information]: Cannot assign to attribute "name" for class "Ruling"
+  Line 442:24 [information]: Cannot access attribute "invoke" for class "OpenAIService"
+  Attribute "invoke" is unknown
+  Line 492:28 [information]: Cannot access attribute "paragraphs" for class "List[bytes]"
+  Attribute "paragraphs" is unknown
+  Line 656:39 [information]: Cannot assign to attribute "name" for class "Ruling"
   Type "str | None" is not assignable to type "str"
     "None" is not assignable to "str"
 
@@ -143,11 +114,11 @@ Total violations: 81
 
 /Volumes/code/cywil/ai-paralegal-poc/ingest/templates_preprocess.py (1 violations)
 -------------------------------------------------------------------
-  Line 80:24 [information]: "open" is not a known attribute of module "fitz"
+  Line 84:24 [information]: "open" is not a known attribute of module "fitz"
 
 /Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py (1 violations)
 ------------------------------------------------------------------
-  Line 49:22 [information]: Cannot access attribute "close" for class "DatabaseManager"
+  Line 55:22 [information]: Cannot access attribute "close" for class "DatabaseManager"
   Attribute "close" is unknown
 
 /Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_api.py (2 violations)
@@ -167,8 +138,10 @@ Total violations: 81
   Line 190:42 [information]: "get" is not a known attribute of module "app.core.service_container"
   Line 247:47 [information]: "get" is not a known attribute of module "app.core.service_container"
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py (2 violations)
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_refactored_services.py (3 violations)
 ----------------------------------------------------------------------------------
+  Line 75:21 [information]: Cannot assign to attribute "_embedder" for class "StatuteSearchService"
+  Attribute "_embedder" is unknown
   Line 76:21 [information]: Cannot assign to attribute "_llm" for class "StatuteSearchService"
   Attribute "_llm" is unknown
   Line 163:21 [information]: Cannot assign to attribute "_llm" for class "DocumentGenerationService"

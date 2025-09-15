@@ -2,8 +2,13 @@
   "hooks": {
     "Notification": [
       {
-        "command": "osascript -e \"display notification \\\"$(jq -r .message)\\\" with title \\\"$(jq -r .title)\\\" sound name \\\"Glass\\\"\"",
-        "type": "command"
+        "matcher": "*",
+        "hooks": [
+          {
+            "command": "osascript -e \"display notification \\\"$(jq -r .message)\\\" with title \\\"$(jq -r .title)\\\" sound name \\\"Glass\\\"\"",
+            "type": "command"
+          }
+        ]
       }
     ],
     "PostToolUse": [
@@ -18,7 +23,7 @@
             "type": "command"
           }
         ],
-        "matcher": "Write|Edit|MultiEdit"
+        "matcher": "*"
       }
     ],
     "PreToolUse": [
@@ -34,18 +39,23 @@
       {
         "hooks": [
           {
-            "command": "source .venv/bin/activate",
+            "command": "source .venv-tests/bin/activate",
             "type": "command"
           }
         ],
         "matcher": "*"
       }
-    ],
-    "Stop": [
-      {
-        "command": "if grep -q \"All tests passed\" \"$( jq -r .transcript_path )\"; then echo '{\"decision\": \"block\", \"reason\": \"All tests passed. Continue with next task.\"}'; fi",
-        "type": "command"
-      }
     ]
+    // "Stop": [
+    //   {
+    //     "matcher": "*",
+    //     "hooks": [
+    //       {
+    //         "command": "if grep -q \"All tests passed\" \"$( jq -r .transcript_path )\" 2>/dev/null; then echo '{\"decision\": \"allow\"}'; fi",
+    //         "type": "command"
+    //       }
+    //     ]
+    //   }
+    // ]
   }
 }

@@ -1,106 +1,180 @@
-digraph "AI_Paralegal_POC_Detailed_Architecture" {
+digraph AI_Paralegal_Detailed {
+    // Graph settings
     rankdir=TB;
-    node [shape=record, style="rounded,filled", fontname="Arial", fontcolor="black"];
-    edge [fontname="Arial", fontcolor="black"];
+    node [shape=box, style="rounded,filled", fontname="Arial", fontsize=10];
+    edge [fontname="Arial", fontsize=9];
     compound=true;
     
-    // app.core subgraph
-    subgraph cluster_core {
-        label="app.core - Core Infrastructure";
-        style="rounded,dashed";
-        bgcolor="#e8f4f8";
+    // API Layer
+    subgraph cluster_api {
+        label="API Layer";
+        style=filled;
+        fillcolor="#f0f8ff";
         
-        core_config [fillcolor="#b3d9ff", label="{ConfigService|+get_config()\l+get_env_var()\l}"];
-        core_db [fillcolor="#b3d9ff", label="{DatabaseManager|+create_pool()\l+get_connection()\l+execute_query()\l}"];
-        core_logger [fillcolor="#b3d9ff", label="{LoggerManager|+get_logger()\l+correlation_context\l}"];
-        core_llm [fillcolor="#b3d9ff", label="{LLMManager|+generate_response()\l+stream_response()\l}"];
-        core_tools [fillcolor="#b3d9ff", label="{ToolRegistry|+register_tool()\l+get_tool()\l}"];
-        core_service [fillcolor="#b3d9ff", label="{ServiceInterface|+health_check()\l+start()\l+stop()\l}"];
+        subgraph cluster_routes {
+            label="Routes";
+            "auth.py" [label="Authentication\n/api/auth/*"];
+            "case_management_routes.py" [label="Case Management\n/api/cases/*"];
+            "monitoring_routes.py" [label="Monitoring\n/api/monitoring/*"];
+        }
+        
+        "main.py" [label="FastAPI App\nWebSocket/Chat/Health", fillcolor="#4a90e2"];
     }
     
-    // app.services subgraph
-    subgraph cluster_services {
-        label="app.services - Business Logic";
-        style="rounded,dashed";
-        bgcolor="#f0f4ff";
-        
-        svc_case [fillcolor="#99ccff", label="{CaseManagementService|+create_case()\l+update_case()\l+get_case_history()\l}"];
-        svc_doc [fillcolor="#99ccff", label="{DocumentGenerationService|+generate_contract()\l+generate_motion()\l}"];
-        svc_statute [fillcolor="#99ccff", label="{StatuteSearchService|+search_statutes()\l+get_statute_details()\l}"];
-        svc_court [fillcolor="#99ccff", label="{SupremeCourtService|+search_rulings()\l+analyze_precedent()\l}"];
-    }
-    
-    // app.routes subgraph
-    subgraph cluster_routes {
-        label="app.routes - API Endpoints";
-        style="rounded,dashed";
-        bgcolor="#e6f2ff";
-        
-        route_auth [fillcolor="#80bfff", label="{auth|/login\l/register\l/refresh\l}"];
-        route_case [fillcolor="#80bfff", label="{case_management|/cases\l/cases/:id\l/documents\l}"];
-        route_monitor [fillcolor="#80bfff", label="{monitoring|/health\l/metrics\l/status\l}"];
-    }
-    
-    // app.worker subgraph
-    subgraph cluster_worker {
-        label="app.worker - Background Tasks";
-        style="rounded,dashed";
-        bgcolor="#e6e6ff";
-        
-        worker_celery [fillcolor="#66b3ff", label="{CeleryApp|+celery_app\l+task_routes\l}"];
-        worker_tasks [fillcolor="#66b3ff", label="{Tasks|case_tasks\ldocument_tasks\lstatute_tasks\lruling_tasks\l}"];
-    }
-    
-    // app.paralegal_agents subgraph
+    // Agent Layer
     subgraph cluster_agents {
-        label="app.paralegal_agents";
-        style="rounded,dashed";
-        bgcolor="#f0e6ff";
+        label="Agent Layer";
+        style=filled;
+        fillcolor="#f5f5dc";
         
-        agent_sdk [fillcolor="#80bfff", label="{ParalegalAgentSDK|+process_query()\l+execute_tool()\l}"];
-        agent_tools [fillcolor="#80bfff", label="{ToolWrappers|+search_statute()\l+analyze_case()\l+generate_document()\l}"];
+        "refactored_agent_sdk.py" [label="Paralegal Agent SDK\n- Legal Research Agent\n- Error Recovery Agent", fillcolor="#daa520"];
     }
     
-    // Main app
-    app_main [fillcolor="#80bfff", fontcolor="black", label="{app.main|FastAPI Application\l+startup()\l+shutdown()\l+chat_endpoint()\l}"];
+    // Service Layer
+    subgraph cluster_services {
+        label="Service Layer";
+        style=filled;
+        fillcolor="#e6ffe6";
+        
+        "case_management_service.py" [label="Case Management\n- CRUD operations\n- Deadlines\n- Reminders"];
+        "document_generation_service.py" [label="Document Generation\n- Templates\n- Contract Analysis\n- Validation"];
+        "statute_search_service.py" [label="Statute Search\n- Hybrid Search\n- Article Lookup"];
+        "supreme_court_service.py" [label="Supreme Court\n- Ruling Search\n- Docket Lookup"];
+        "openai_client.py" [label="OpenAI Client\n- Structured Output\n- Retry Logic"];
+        "fallback_parser.py" [label="Fallback Parser\n- Regex Patterns\n- Entity Extraction"];
+    }
     
-    // Models
-    app_models [fillcolor="#cce6ff", label="{app.models|Case\lDocument\lUser\lStatuteChunk\lSNRuling\l}"];
+    // Core Infrastructure
+    subgraph cluster_core {
+        label="Core Infrastructure";
+        style=filled;
+        fillcolor="#ffe6e6";
+        
+        "config_service.py" [label="Config Service\n- Environment Config\n- Sub-configs"];
+        "database_manager.py" [label="Database Manager\n- Session Management\n- Transactions"];
+        "llm_manager.py" [label="LLM Manager\n- Embeddings\n- Caching"];
+        "tool_registry.py" [label="Tool Registry\n- Tool Definitions\n- OpenAI Schemas"];
+        "tool_executor.py" [label="Tool Executor\n- Circuit Breaker\n- Retry Logic"];
+        "logger_manager.py" [label="Logger Manager\n- Structured Logs\n- Correlation IDs"];
+        "conversation_manager.py" [label="Conversation Manager\n- State Management\n- History"];
+        "service_interface.py" [label="Service Interface\n- Lifecycle\n- Health Checks"];
+    }
     
-    // Ingest module
-    ingest_module [fillcolor="#ffcc99", label="{ingest|pdf2chunks\lembed\lpreprocess_sn\lingest_pipeline\l}"];
+    // Worker Layer
+    subgraph cluster_worker {
+        label="Celery Worker Layer";
+        style=filled;
+        fillcolor="#fff0e6";
+        
+        subgraph cluster_worker_core {
+            label="Worker Core";
+            "celery_app.py" [label="Celery App"];
+            "service_registry.py" [label="Service Registry\n- Shared Services"];
+            "monitoring.py" [label="Monitoring\n- Metrics\n- Signals"];
+            "config.py" [label="Celery Config\n- Queues\n- Routing"];
+            "base_task.py" [label="Base Task\n- Retry\n- Circuit Breaker"];
+        }
+        
+        subgraph cluster_tasks {
+            label="Task Modules";
+            "case_tasks.py" [label="Case Tasks"];
+            "document_tasks.py" [label="Document Tasks"];
+            "search_tasks.py" [label="Search Tasks"];
+            "embedding_tasks.py" [label="Embedding Tasks"];
+            "statute_tasks.py" [label="Statute Tasks"];
+            "ruling_tasks.py" [label="Ruling Tasks"];
+            "maintenance.py" [label="Maintenance Tasks"];
+        }
+    }
     
-    // External systems
-    postgres [shape=cylinder, fillcolor="#ffffe6", label="PostgreSQL\nDatabase"];
-    redis [shape=cylinder, fillcolor="#ffe6e6", label="Redis\nCache/Queue"];
-    openai [shape=ellipse, fillcolor="#f0e6ff", label="OpenAI API"];
+    // Data Layer
+    subgraph cluster_data {
+        label="Data Layer";
+        style=filled;
+        fillcolor="#e6e6fa";
+        
+        subgraph cluster_models {
+            label="Models";
+            "models.py" [label="SQLModel\n- Case\n- Document\n- User\n- SNRuling"];
+        }
+        
+        subgraph cluster_storage {
+            label="Storage";
+            "PostgreSQL" [shape=cylinder];
+            "Redis" [shape=cylinder];
+            "Qdrant" [shape=cylinder];
+            "File Storage" [shape=folder];
+        }
+    }
     
-    // UI
-    ui_app [fillcolor="#80ff80", label="{UI Frontend|React/TypeScript\l}"];
+    // Embedding Layer
+    subgraph cluster_embeddings {
+        label="Embedding Models";
+        style=filled;
+        fillcolor="#ffefd5";
+        
+        "embedding_interface.py" [label="Embedding Interface\n- LocalEmbedder\n- OpenAIEmbedder"];
+        "embedding_factory.py" [label="Embedding Factory"];
+        "pipeline_schemas.py" [label="Pipeline Schemas\n- Validation"];
+    }
     
-    // Dependencies - simplified for clarity
-    app_main -> core_config [lhead=cluster_core];
-    app_main -> route_auth [lhead=cluster_routes];
-    app_main -> agent_sdk [lhead=cluster_agents];
+    // Connections - API to Services
+    "main.py" -> "auth.py";
+    "main.py" -> "case_management_routes.py";
+    "main.py" -> "monitoring_routes.py";
+    "main.py" -> "refactored_agent_sdk.py";
     
-    svc_case -> core_db [ltail=cluster_services];
-    svc_case -> app_models;
+    // Routes to Services
+    "auth.py" -> "database_manager.py";
+    "case_management_routes.py" -> "case_management_service.py";
+    "monitoring_routes.py" -> "monitoring.py";
     
-    route_case -> svc_case [ltail=cluster_routes];
+    // Agent to Services
+    "refactored_agent_sdk.py" -> "tool_registry.py";
+    "refactored_agent_sdk.py" -> "tool_executor.py";
+    "refactored_agent_sdk.py" -> "conversation_manager.py";
     
-    agent_sdk -> svc_statute [ltail=cluster_agents, lhead=cluster_services];
+    // Service Dependencies
+    "case_management_service.py" -> "database_manager.py";
+    "document_generation_service.py" -> "statute_search_service.py";
+    "document_generation_service.py" -> "supreme_court_service.py";
+    "document_generation_service.py" -> "openai_client.py";
+    "statute_search_service.py" -> "llm_manager.py";
+    "supreme_court_service.py" -> "database_manager.py";
     
-    worker_tasks -> ingest_module;
-    worker_tasks -> core_db;
+    // Core Dependencies
+    "database_manager.py" -> "PostgreSQL";
+    "llm_manager.py" -> "embedding_interface.py";
+    "service_registry.py" -> "config_service.py";
+    "service_registry.py" -> "database_manager.py";
+    "service_registry.py" -> "llm_manager.py";
     
-    core_db -> postgres;
-    worker_celery -> redis;
-    core_llm -> openai;
+    // Worker Task Dependencies
+    "celery_app.py" -> "Redis";
+    "case_tasks.py" -> "service_registry.py";
+    "document_tasks.py" -> "service_registry.py";
+    "search_tasks.py" -> "service_registry.py";
+    "embedding_tasks.py" -> "service_registry.py";
+    "statute_tasks.py" -> "service_registry.py";
+    "ruling_tasks.py" -> "service_registry.py";
+    "maintenance.py" -> "service_registry.py";
     
-    ui_app -> app_main [label="HTTP/REST API"];
+    // Data Flow
+    "statute_search_service.py" -> "Qdrant";
+    "supreme_court_service.py" -> "Qdrant";
+    "embedding_interface.py" -> "Qdrant";
+    "monitoring.py" -> "Redis";
     
-    // Test dependencies (dotted)
-    tests [fillcolor="#d9d9d9", label="{tests|unit/\lintegration/\lcelery/\l}"];
-    tests -> app_main [style=dotted];
-    tests -> core_service [style=dotted, lhead=cluster_core];
+    // Task Flow
+    edge [style=dashed, color=blue];
+    "document_tasks.py" -> "Document Generation Queue" [label="async"];
+    "search_tasks.py" -> "Search Queue" [label="async"];
+    "embedding_tasks.py" -> "Embeddings Queue" [label="async"];
+    "case_tasks.py" -> "Case Management Queue" [label="async"];
+    
+    // Queue definitions (invisible nodes for layout)
+    "Document Generation Queue" [shape=none, label=""];
+    "Search Queue" [shape=none, label=""];
+    "Embeddings Queue" [shape=none, label=""];
+    "Case Management Queue" [shape=none, label=""];
 }

@@ -2,7 +2,13 @@ try:
     import pytest
 except ImportError:
     # pytest not available - likely running static analysis
-    pytest = None
+    class MockPytest:
+        def fixture(self, *args, **kwargs):
+            def decorator(func):
+                return func
+            return decorator
+    
+    pytest = MockPytest()
 import asyncio
 import os
 from typing import AsyncGenerator
@@ -46,7 +52,7 @@ async def test_db_pool(test_config):
     db_manager = DatabaseManager(test_config)
     await db_manager.initialize()
     yield db_manager
-    await db_manager.close()
+    await db_manager.shutdown()
 
 
 @pytest.fixture(scope="function")

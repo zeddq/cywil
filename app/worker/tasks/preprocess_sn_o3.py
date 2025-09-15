@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-End-to-end processor for Polish Supreme-Court rulings (SN) using LangChain o3
+End-to-end processor for Polish Supreme-Court rulings (SN) using OpenAI SDK
 -----------------------------------------------------------------------------
-• Uses o3/o1 chat client for intelligent PDF parsing and structure extraction
-• Leverages LLM for metadata extraction and entity recognition
+• Uses o3-mini for intelligent PDF parsing and structure extraction
+• Leverages OpenAI SDK for metadata extraction and entity recognition
 • Produces structured JSON output with enhanced accuracy
 """
 
@@ -19,107 +19,75 @@ import uuid
 from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional, Tuple
 
+from agents import OpenAIChatCompletionsModel
 import dateparser
 import fitz  # PyMuPDF
-# Langchain removed during migration - using OpenAI SDK directly
-# from langchain.output_parsers import PydanticOutputParser
-# from langchain.prompts import PromptTemplate  
-# from langchain.schema import HumanMessage
-# from langchain_openai import ChatOpenAI
-
-# Temporary placeholders for removed langchain classes - these need proper OpenAI SDK implementation
-class PydanticOutputParser:
-    def __init__(self, pydantic_object):
-        self.pydantic_object = pydantic_object
-    def get_format_instructions(self):
-        return f"Return data as JSON matching this schema: {self.pydantic_object.model_json_schema()}"
-
-class ChatOpenAI:
-    def __init__(self, **kwargs):
-        pass
-    def invoke(self, messages):
-        raise NotImplementedError("This preprocessing script needs to be updated to use OpenAI SDK directly")
-
-class HumanMessage:
-    def __init__(self, content):
-        self.content = content
-
-class PromptTemplate:
-    def __init__(self, input_variables, template):
-        self.input_variables = input_variables
-        self.template = template
-    def format(self, **kwargs):
-        return self.template.format(**kwargs)
-from openai import BaseModel as OpenAIModel
-from openai import OpenAI
-from openai.types.responses import (
-    ParsedResponse,
-)
-from pydantic import Field
+from pydantic import BaseModel, Field
 from tqdm import tqdm
+
+# OpenAI imports
+from openai import OpenAI
+from openai.types.chat.chat_completion import ChatCompletion
+from openai.types.responses import ParsedResponse
+
+# Import OpenAI service from the app
+from app.core.ai_client_factory import get_ai_client, AIProvider
+from app.services.openai_client import get_openai_service
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Get OpenAI service instance
+openai_service = get_openai_service()
+
+# Initialize OpenAI client for direct API usage
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 # ---------- 1  Pydantic models for structured output ----------------------- #
 
 
-class LegalEntity(OpenAIModel):
+class LegalEntity(BaseModel):
     text: str = Field(description="The entity text")
     label: str = Field(description="Entity type: LAW_REF, DOCKET, PERSON, ORG, DATE")
     start: int = Field(description="Start character position")
     end: int = Field(description="End character position")
 
 
-class LegalEntities(OpenAIModel):
+class LegalEntities(BaseModel):
     entities: List[LegalEntity] = Field(description="List of legal entities")
 
 
-class RulingMetadata(OpenAIModel):
+class RulingMetadata(BaseModel):
     docket: Optional[str] = Field(description="Case docket number", default=None)
     date: Optional[str] = Field(description="Decision date in ISO format", default=None)
     panel: Optional[List[str]] = Field(description="List of judges", default=[])
 
 
-class RulingParagraph(OpenAIModel):
-    section: Literal["header", "legal_question", "reasoning", "disposition", "body"] = Field(
-        description="Section type: header, legal_question, reasoning, disposition, body"
+class RulingParagraph(BaseModel):
+    section: Literal["header", "legal_question", "reasoning", "disposition", "body"] = (
+        Field(
+            description="Section type: header, legal_question, reasoning, disposition, body"
+        )
     )
     para_no: int = Field(description="Paragraph number", default=0)
     text: str = Field(description="Paragraph text", default="")
 
 
-class ParsedRuling(OpenAIModel):
-    paragraphs: List[RulingParagraph] = Field(description="List of paragraphs", default=[])
+class ParsedRuling(BaseModel):
+    paragraphs: List[RulingParagraph] = Field(
+        description="List of paragraphs", default=[]
+    )
 
 
 class RulingParagraphEnriched(RulingParagraph):
     entities: List[LegalEntity] = Field(description="Named entities in the paragraph")
 
 
-class Ruling(OpenAIModel):
+class Ruling(BaseModel):
     name: str = Field(description="Ruling name")
     meta: RulingMetadata = Field(default=RulingMetadata())
     paragraphs: List[RulingParagraphEnriched]
-
-
-# ---------- 2  Initialize o3/o1 chat client --------------------------------- #
-
-
-def get_o3_client(stream: bool = True) -> ChatOpenAI:
-    """Initialize o3/o1 chat client with appropriate settings"""
-    # Note: Using o1-preview as o3 may not be available yet
-    # Adjust model name when o3 becomes available
-    return ChatOpenAI(
-        model="o3-mini",
-        max_tokens=20000,
-        timeout=120,
-        max_retries=0,
-        streaming=stream,
-        stream_usage=stream,
-    )
 
 
 # ---------- 3  PDF parsing with o3 ------------------------------------------ #
@@ -148,11 +116,10 @@ Zwróć uwagę na:
 """
 
 
-async def extract_pdf_with_o3(pdf_path: Path, is_batch: bool = False) -> ParsedRuling | bytes:
+async def extract_pdf_with_o5(
+    pdf_path: Path, is_batch: bool = False
+) -> ParsedRuling | bytes:
     """Use o3 to intelligently parse PDF structure and content"""
-
-    # llm = get_o3_client(False)
-    # logger.info(response)
 
     # Extract raw text from PDF first
     doc = fitz.open(pdf_path)  # type: ignore
@@ -165,7 +132,20 @@ async def extract_pdf_with_o3(pdf_path: Path, is_batch: bool = False) -> ParsedR
         full_text += f"\n--- PAGE {page_num + 1} ---\n{page_text}\n"
 
     doc.close()
-    parser = PydanticOutputParser(pydantic_object=ParsedRuling)
+    
+    llm_service = get_openai_service()
+    response = await llm_service.async_responses_parse(
+        model="gpt-5",
+        input=[
+            {
+                "role": "user",
+                "content": extract_prompt_template.format(pdf_path=full_text),
+            },
+        ],
+        text_format=ParsedRuling,
+        max_output_tokens=100000,
+        timeout=600,
+    )
 
     if is_batch:
         schema = ParsedRuling.model_json_schema()
@@ -180,7 +160,7 @@ async def extract_pdf_with_o3(pdf_path: Path, is_batch: bool = False) -> ParsedR
                         "role": "user",
                         "content": extract_prompt_template.format(
                             pdf_path=full_text,
-                            format_instructions=parser.get_format_instructions(),
+                            format_instructions=schema,
                         ),
                     },
                 ],
@@ -207,18 +187,30 @@ async def extract_pdf_with_o3(pdf_path: Path, is_batch: bool = False) -> ParsedR
             max_output_tokens=100000,
             timeout=600,
         )
-        if response.output_parsed is None:
-            logger.warning("o3 response parsing returned None, falling back to simple parsing")
+        if response is None or response.output_parsed is None:
+            logger.warning(
+                "o3 response parsing returned None, falling back to simple parsing"
+            )
             ruling = await fallback_parse(full_text)
-            return ParsedRuling(paragraphs=[RulingParagraph(**p.model_dump()) for p in ruling.paragraphs])
-        return response.output_parsed
+            return ParsedRuling(
+                paragraphs=[
+                    RulingParagraph(**p.model_dump()) for p in ruling.paragraphs
+                ]
+            )
+        return (
+            response.output_parsed
+            if response is not None
+            else ParsedRuling(paragraphs=[])
+        )
     except Exception as e:
         logger.error(f"Failed to parse o3 response: {e}")
         if response is not None:
             logger.debug(f"Response: {response}")
         # Fallback parsing - convert Ruling to ParsedRuling
         ruling = await fallback_parse(full_text)
-        return ParsedRuling(paragraphs=[RulingParagraph(**p.model_dump()) for p in ruling.paragraphs])
+        return ParsedRuling(
+            paragraphs=[RulingParagraph(**p.model_dump()) for p in ruling.paragraphs]
+        )
 
 
 # ---------- 4  Fallback parsing for error cases ----------------------------- #
@@ -294,10 +286,14 @@ async def fallback_parse(text: str) -> Ruling:
             section = "disposition"
 
         ruling_paragraphs.append(
-            RulingParagraphEnriched(section=section, para_no=idx, text=para, entities=[])
+            RulingParagraphEnriched(
+                section=section, para_no=idx, text=para, entities=[]
+            )
         )
 
-    return Ruling(name="Supreme Court Ruling", meta=metadata, paragraphs=ruling_paragraphs)
+    return Ruling(
+        name="Supreme Court Ruling", meta=metadata, paragraphs=ruling_paragraphs
+    )
 
 
 # ---------- 5  Enhanced entity extraction with o3 --------------------------- #
@@ -343,7 +339,11 @@ Dla każdej encji zwróć:
                         {
                             "role": "user",
                             "content": entity_prompt.format(
-                                text=ruling.paragraphs[i].text if ruling and i < len(ruling.paragraphs) else "",
+                                text=(
+                                    ruling.paragraphs[i].text
+                                    if ruling and i < len(ruling.paragraphs)
+                                    else ""
+                                ),
                                 response_format=parser.get_format_instructions(),
                             ),
                         },
@@ -360,24 +360,42 @@ Dla każdej encji zwróć:
                 input=[
                     {
                         "role": "user",
-                        "content": entity_prompt.format(text=ruling.paragraphs[index].text),
+                        "content": entity_prompt.format(
+                            text=ruling.paragraphs[index].text
+                        ),
                     },
                 ],
                 text_format=LegalEntities,
                 max_output_tokens=20000,
                 timeout=600,
             )
-            ruling.paragraphs[index].entities = response.output_parsed.entities
+            # Create new paragraph dict with entities (TypedDict is immutable)
+            paragraph = ruling.paragraphs[index]
+            updated_paragraph = {
+                "section": paragraph["section"],
+                "para_no": paragraph["para_no"],
+                "text": paragraph["text"],
+                "entities": response.output_parsed.entities,
+            }
+            ruling.paragraphs[index] = updated_paragraph  # type: ignore
         except Exception as e:
             logger.warning(f"Failed to parse entities for paragraph {index}: {e}")
-            ruling.paragraphs[index].entities = extract_entities_regex(ruling.paragraphs[index].text)
+            # Create new paragraph dict with fallback entities (TypedDict is immutable)
+            paragraph = ruling.paragraphs[index]
+            updated_paragraph = {
+                "section": paragraph["section"],
+                "para_no": paragraph["para_no"],
+                "text": paragraph["text"],
+                "entities": extract_entities_regex(paragraph["text"]),
+            }
+            ruling.paragraphs[index] = updated_paragraph  # type: ignore
 
     # Convert ParsedRuling to Ruling with enhanced entities
-    enhanced_paragraphs = [RulingParagraphEnriched(**p.model_dump()) for p in ruling.paragraphs]
+    enhanced_paragraphs = [
+        RulingParagraphEnriched(**p.model_dump()) for p in ruling.paragraphs
+    ]
     return Ruling(
-        name=f"ruling-{index}",
-        meta=RulingMetadata(),
-        paragraphs=enhanced_paragraphs
+        name=f"ruling-{index}", meta=RulingMetadata(), paragraphs=enhanced_paragraphs
     )
 
 
@@ -457,7 +475,9 @@ Wskazówki:
         para_texts.append(f"[Paragraf {p.para_no}]\n{preview}")
 
     messages = [
-        HumanMessage(content=classification_prompt.format(paragraphs="\n\n".join(para_texts)))
+        HumanMessage(
+            content=classification_prompt.format(paragraphs="\n\n".join(para_texts))
+        )
     ]
 
     try:
@@ -493,21 +513,45 @@ async def preprocess_sn_rulings(pdf_path: Path) -> List[Dict[str, Any]]:
     try:
         # Step 1: Parse PDF with o3
         logger.info("Step 1: Parsing PDF structure with o3")
-        parsed_ruling = await extract_pdf_with_o3(pdf_path)
+        parsed_ruling = await extract_pdf_with_o5(pdf_path)
         if isinstance(parsed_ruling, bytes):
-            raise ValueError("Failed to parse PDF, received bytes instead of ParsedRuling")
-        
+            raise ValueError(
+                "Failed to parse PDF, received bytes instead of ParsedRuling"
+            )
+
         # Type assertion to help type checker understand parsed_ruling is not bytes here
-        assert not isinstance(parsed_ruling, bytes), "parsed_ruling should not be bytes at this point"
+        assert not isinstance(
+            parsed_ruling, bytes
+        ), "parsed_ruling should not be bytes at this point"
         enriched_paragraphs = [
             RulingParagraphEnriched(**para.model_dump(), entities=[])
             for para in parsed_ruling.paragraphs
         ]
-        ruling = Ruling(name="Supreme Court Ruling", meta=RulingMetadata(), paragraphs=enriched_paragraphs)
+        ruling = Ruling(
+            name="Supreme Court Ruling",
+            meta=RulingMetadata(),
+            paragraphs=enriched_paragraphs,
+        )
 
         # Step 2: Enhance entity extraction
         logger.info("Step 2: Enhancing entity recognition with o3")
-        ruling = await enhance_entities_with_o3(ruling, index=0)
+        # Convert Ruling back to ParsedRuling for the function
+        parsed_ruling_for_enhancement = ParsedRuling(
+            paragraphs=[
+                RulingParagraph(
+                    text=para.text,
+                    para_no=para.para_no,
+                    section=para.section,
+                )
+                for para in ruling.paragraphs
+            ]
+        )
+        enhanced_ruling = await enhance_entities_with_o3(
+            parsed_ruling_for_enhancement, index=0
+        )
+        if isinstance(enhanced_ruling, list):  # bytes list returned for batch mode
+            raise ValueError("Unexpected batch mode result")
+        ruling = enhanced_ruling
 
         # Step 3: Improve section classification
         # logger.info("Step 3: Classifying document sections with o3")
@@ -558,7 +602,7 @@ async def process_batch(
     if not extracted_jsonl and not enriched_jsonl:
         for pdf_path in pdf_files:
             try:
-                jsonl_bytes = await extract_pdf_with_o3(pdf_path, is_batch=True)
+                jsonl_bytes = await extract_pdf_with_o5(pdf_path, is_batch=True)
                 all_jsonl_bytes.append(jsonl_bytes)
                 logger.info(f"Successfully processed {pdf_path}")
 
@@ -596,7 +640,9 @@ async def process_batch(
                     all_records.append(None)
         for i, record in enumerate(all_records):
             if record:
-                all_jsonl_bytes.extend(await enhance_entities_with_o3(record, i, is_batch=True))
+                all_jsonl_bytes.extend(
+                    await enhance_entities_with_o3(record, i, is_batch=True)
+                )
         with open("data/jsonl/batch_input_enriched.jsonl", "w+b") as f:
             f.write(b"\n".join(all_jsonl_bytes))
             f.seek(0)
@@ -613,6 +659,8 @@ async def process_batch(
         logger.info(f"Batch created: {batch_ret}")
 
     else:
+        if extracted_jsonl is None:
+            raise ValueError("extracted_jsonl path is required")
         parsed_rulings = []
         with open(extracted_jsonl, "r", encoding="utf-8") as f:
             for line in f:
@@ -658,7 +706,9 @@ async def process_batch(
                             )
                             if p is not None:
 
-                                p.entities = [LegalEntity(**e) for e in para["entities"]]
+                                p.entities = [
+                                    LegalEntity(**e) for e in para["entities"]
+                                ]
                         else:
                             logger.error(f"Ruling not found for rule {rule_num}")
                     except Exception as e:
@@ -669,7 +719,11 @@ async def process_batch(
             docket = None
             date = None
             panel = []
-            for para in [p for p in ruling.paragraphs if p.section == "header"]:
+            for para in (
+                [p for p in ruling.paragraphs if p.section == "header"]
+                if ruling is not None
+                else []
+            ):
                 d = [e for e in para.entities if e.label == "DOCKET"]
                 if d and not docket:
                     docket = d[0].text
@@ -696,10 +750,11 @@ async def process_batch(
                 if ruling:
                     is_valid = (
                         ruling.meta.docket
-                        and (int(bool(ruling.meta.date)) + int(bool(ruling.meta.panel))) >= 1
+                        and (int(bool(ruling.meta.date)) + int(bool(ruling.meta.panel)))
+                        >= 1
                     )
                     if is_valid:
-                        ruling.name = ruling.meta.docket
+                        ruling.name = ruling.meta.docket or "Unknown"
                         f.write(ruling.model_dump_json() + "\n")
 
 
@@ -788,13 +843,17 @@ async def main():
         help="Number of concurrent workers for o3 calls",
     )
     parser.add_argument("--single-file", type=Path, help="Process a single PDF file")
-    parser.add_argument("--run-async", action="store_true", help="Process asynchronously")
+    parser.add_argument(
+        "--run-async", action="store_true", help="Process asynchronously"
+    )
     parser.add_argument(
         "--merge",
         action="store_true",
         help="Merge all JSONL outputs into a single file",
     )
-    parser.add_argument("--validate", action="store_true", help="Validate output after processing")
+    parser.add_argument(
+        "--validate", action="store_true", help="Validate output after processing"
+    )
     parser.add_argument(
         "--extracted-jsonl",
         type=Path,
@@ -820,14 +879,23 @@ async def main():
         # Process all PDFs in directory asynchronously
         dir_path: Path = args.input_dir
         pdf_files = list(dir_path.glob("*.pdf"))
-        pdf_files = [p for p in pdf_files if p.is_file() and not p.name.endswith("123_05.pdf")]
+        pdf_files = [
+            p for p in pdf_files if p.is_file() and not p.name.endswith("123_05.pdf")
+        ]
         logger.info(f"Found {len(pdf_files)} PDF files to process")
 
         if pdf_files:
             records = await process_async(pdf_files, max_workers=args.workers)
             logger.info(f"Processed {len(records)} PDF files")
             if args.validate:
-                valid_records, invalid_records = validate_output(records)
+                # Flatten the list of records, filtering out None values
+                flattened_records = [
+                    record
+                    for record_list in records
+                    if record_list is not None
+                    for record in record_list
+                ]
+                valid_records, invalid_records = validate_output(flattened_records)
                 logger.info(f"Valid records: {len(valid_records)}")
                 logger.info(f"Invalid records: {len(invalid_records)}")
             if args.merge:
@@ -840,7 +908,9 @@ async def main():
     else:
         # Process all PDFs in directory
         pdf_files = list(args.input_dir.glob("*-ocrd.pdf"))
-        pdf_files = [p for p in pdf_files if p.is_file() and not p.name.endswith("123_05.pdf")]
+        pdf_files = [
+            p for p in pdf_files if p.is_file() and not p.name.endswith("123_05.pdf")
+        ]
         logger.info(f"Found {len(pdf_files)} PDF files to process")
 
         if pdf_files:

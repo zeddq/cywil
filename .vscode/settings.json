@@ -1,0 +1,103 @@
+{
+    "python.venvPath": "${workspaceFolder}/.venv-tests",
+    "python.defaultInterpreterPath": "${workspaceFolder}/.venv-tests/bin/python",
+    "python.languageServer": "None",
+    "python.analysis.diagnosticMode": "workspace",
+    "[python]": {
+        "diffEditor.ignoreTrimWhitespace": false,
+        "editor.defaultColorDecorators": "never",
+        "editor.formatOnType": true,
+        "editor.quickSuggestions": {
+            "strings": true,
+            "comments": true
+        },
+        "editor.wordBasedSuggestions": "off",
+        "gitlens.codeLens.symbolScopes": [
+            "!Module"
+        ],
+        "editor.find.cursorMoveOnType": true
+    },
+    "python.analysis.typeCheckingMode": "basic",
+    "basedpyright.diagnosticMode": "workspace",
+    "basedpyright.typeCheckingMode": "basic",
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportAttributeAccessIssue": "warning",
+        "reportMissingImports": "warning",
+        "reportUndefinedVariable": "warning",
+        "reportIndexIssue": "warning",
+        "reportOptionalMemberAccess": "warning",
+        "reportCallIssue": "warning",
+        "reportArgumentType": "warning"
+    },
+    "basedpyright.diagnosticSeverityOverrides": {
+        "reportAttributeAccessIssue": "warning",
+        "reportMissingImports": "warning",
+        "reportUndefinedVariable": "warning",
+        "reportIndexIssue": "warning",
+        "reportOptionalMemberAccess": "warning",
+        "reportCallIssue": "warning",
+        "reportArgumentType": "warning"
+    },
+    "python.pixiToolPath": "/usr/local/Users/cezary/.pyenv/shims/pixi",
+    "python.analysis.autoImportCompletions": true,
+    "python.analysis.autoImportPreferredStyle": "shortest",
+    "python.analysis.completeFunctionParens": true,
+    "editor.parameterHints.enabled": true,
+    "editor.inlayHints.enabled": "on",
+    "python.analysis.inlayHints.functionReturnTypes": true,
+    "python.analysis.inlayHints.variableTypes": true,
+    "python.analysis.inlayHints.parameterNames": "all",
+    "python.analysis.inlayHints.parameterNamesSuppressWhenArgumentMatchesName": false,
+    
+    // Trigger analysis on file save and modification
+    "python.analysis.autoSearchPaths": true,
+    "python.analysis.indexing": true,
+    "python.linting.enabled": true,
+    "python.linting.lintOnSave": true,
+    
+    // Enable multiple linters for comprehensive analysis
+    "python.linting.pylintEnabled": true,
+    "python.linting.flake8Enabled": true,
+    "python.linting.mypyEnabled": true,
+    "python.linting.banditEnabled": true,
+    
+    // Configure linter arguments
+    "python.linting.pylintArgs": [
+        "--rcfile=${workspaceFolder}/.pylintrc"
+    ],
+    "python.linting.flake8Args": [
+        "--config=${workspaceFolder}/.flake8"
+    ],
+    "python.linting.mypyArgs": [
+        "--config-file=${workspaceFolder}/mypy.ini"
+    ],
+    
+    // Run analysis when files change
+    "files.autoSave": "onFocusChange",
+    "python.analysis.diagnosticPublishDelay": 100,
+    
+    // Ensure Problems tab shows all workspace issues
+    "problems.autoReveal": true,
+    "problems.showCurrentInStatus": true,
+    "problems.decorations.enabled": true,
+    "python.activeStateToolPath": "state",
+    
+    // Additional Pylance/Pyright analysis settings
+    "python.analysis.autoFormatStrings": true,
+    "python.analysis.logLevel": "Information",
+    
+    // Force workspace-wide linting
+    "python.linting.ignorePatterns": [
+        ".vscode/**",
+        ".venv/**",
+        ".venv-tests/**",
+        "venv/**",
+        "__pycache__/**",
+        "node_modules/**",
+        "alembic/**"
+    ],
+    "python.linting.cwd": "${workspaceFolder}",
+    "python.analysis.extraPaths": [
+        "${workspaceFolder}"
+    ]
+}

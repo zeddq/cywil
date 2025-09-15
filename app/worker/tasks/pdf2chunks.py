@@ -4,7 +4,7 @@ import re
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List, Match, Optional, Tuple, Any
+from typing import Any, Dict, List, Optional, Tuple, Union, Match
 
 import pdfplumber
 
@@ -133,10 +133,13 @@ class PolishStatuteParser:
         self.HIERARCHY_MAP = {element.name: element for element in self.HIERARCHY_ELEMENTS}
         self.KEYWORDS = [element.keyword for element in self.HIERARCHY_ELEMENTS]
 
-    def _match_hierarchy_element(self, text: str) -> Optional[Tuple[Match[str], HierarchyElement]]:
-        """Match a hierarchy element in the text"""
+    def _match_hierarchy_element(self, text: Optional[Union[str, Match[str]]]) -> Optional[Tuple[Match[str], HierarchyElement]]:
+        """Try matching any hierarchy element"""
+        if text is None:
+            return None
+        search_text = text.group() if hasattr(text, 'group') else str(text)
         for element in self.HIERARCHY_ELEMENTS:
-            match = element.pattern.search(text)
+            match = element.pattern.search(search_text)
             if match:
                 return match, element
         return None
@@ -155,7 +158,7 @@ class PolishStatuteParser:
             element.current_name = f"{element.keyword} {match_list[1]}"
             if element.level < self.HIERARCHY_MAP[
                 "article"
-            ].level and not self._match_hierarchy_element(next_line):
+            ].level and not self._match_hierarchy_element(next_line.group() if next_line else ""):
                 element.current_title = next_line.group() if next_line else None
             else:
                 element.current_title = None
@@ -237,7 +240,7 @@ class PolishStatuteParser:
 
             # Add hierarchy information
             hierarchy_data = self._get_hierarchy_metadata()
-            metadata["hierarchy"] = hierarchy_data
+            metadata.update(hierarchy_data)
 
             # Parse paragraphs within the article
             paragraphs = self._parse_paragraphs(article_text)
@@ -256,7 +259,7 @@ class PolishStatuteParser:
                             content=para_content,
                             book=self.HIERARCHY_MAP["book"].current_name,
                             part=self.HIERARCHY_MAP["part"].current_name,
-                            title=self.HIERARCHY_MAP["title"].current_name,
+                            title=self.HIERARCHY_MAP["title"].current_name or "",
                             division=self.HIERARCHY_MAP["division"].current_name,
                             chapter=self.HIERARCHY_MAP["chapter"].current_name,
                             subdivision=self.HIERARCHY_MAP["subdivision"].current_name,
@@ -273,7 +276,7 @@ class PolishStatuteParser:
                         content=article_text.strip(),
                         book=self.HIERARCHY_MAP["book"].current_name,
                         part=self.HIERARCHY_MAP["part"].current_name,
-                        title=self.HIERARCHY_MAP["title"].current_name,
+                        title=self.HIERARCHY_MAP["title"].current_name or "",
                         division=self.HIERARCHY_MAP["division"].current_name,
                         chapter=self.HIERARCHY_MAP["chapter"].current_name,
                         subdivision=self.HIERARCHY_MAP["subdivision"].current_name,

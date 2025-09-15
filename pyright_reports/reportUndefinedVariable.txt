@@ -1,0 +1,14 @@
+Pyright Diagnostic Report: reportUndefinedVariable
+================================================================================
+
+Total violations: 6
+
+
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (6 violations)
+-------------------------------------------------------------------------
+  Line 195:45 [error]: "parser" is not defined
+  Line 319:11 [error]: "get_o3_client" is not defined
+  Line 342:18 [error]: "PydanticOutputParser" is not defined
+  Line 452:11 [error]: "get_o3_client" is not defined
+  Line 454:29 [error]: "PromptTemplate" is not defined
+  Line 491:9 [error]: "HumanMessage" is not defined

@@ -1,54 +1,25 @@
 Pyright Diagnostic Report: reportOptionalMemberAccess
 ================================================================================
 
-Total violations: 28
+Total violations: 11
 
 
-/Volumes/code/cywil/ai-paralegal-poc/app/services/supreme_court_service.py (1 violations)
---------------------------------------------------------------------------
-  Line 301:91 [error]: "astext" is not a known attribute of "None"
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/ingestion_pipeline.py (3 violations)
----------------------------------------------------------------------------
-  Line 69:60 [error]: "id" is not a known attribute of "None"
-  Line 137:56 [error]: "id" is not a known attribute of "None"
-  Line 167:60 [error]: "id" is not a known attribute of "None"
-
-/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (2 violations)
+/Volumes/code/cywil/ai-paralegal-poc/app/worker/tasks/preprocess_sn_o3.py (1 violations)
 -------------------------------------------------------------------------
-  Line 370:72 [error]: "entities" is not a known attribute of "None"
-  Line 672:44 [error]: "paragraphs" is not a known attribute of "None"
+  Line 391:52 [error]: "entities" is not a known attribute of "None"
 
-/Volumes/code/cywil/ai-paralegal-poc/ingest/preprocess_sn_o3.py (2 violations)
----------------------------------------------------------------
-  Line 333:72 [error]: "entities" is not a known attribute of "None"
-  Line 609:44 [error]: "paragraphs" is not a known attribute of "None"
+/Volumes/code/cywil/ai-paralegal-poc/tests/integration/test_ai_functionality.py (3 violations)
+-------------------------------------------------------------------------------
+  Line 155:43 [error]: "case_number" is not a known attribute of "None"
+  Line 156:58 [error]: "parties" is not a known attribute of "None"
+  Line 157:47 [error]: "legal_basis" is not a known attribute of "None"
 
-/Volumes/code/cywil/ai-paralegal-poc/tests/conftest.py (10 violations)
-------------------------------------------------------
-  Line 18:9 [error]: "fixture" is not a known attribute of "None"
-  Line 26:9 [error]: "fixture" is not a known attribute of "None"
-  Line 46:9 [error]: "fixture" is not a known attribute of "None"
-  Line 57:9 [error]: "fixture" is not a known attribute of "None"
-  Line 76:9 [error]: "fixture" is not a known attribute of "None"
-  Line 89:9 [error]: "fixture" is not a known attribute of "None"
-  Line 106:9 [error]: "fixture" is not a known attribute of "None"
-  Line 127:9 [error]: "fixture" is not a known attribute of "None"
-  Line 157:9 [error]: "fixture" is not a known attribute of "None"
-  Line 198:24 [error]: "mark" is not a known attribute of "None"
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/integration/conftest.py (6 violations)
-------------------------------------------------------------------
-  Line 23:9 [error]: "fixture" is not a known attribute of "None"
-  Line 31:9 [error]: "fixture" is not a known attribute of "None"
-  Line 43:9 [error]: "fixture" is not a known attribute of "None"
-  Line 52:9 [error]: "fixture" is not a known attribute of "None"
-  Line 64:9 [error]: "fixture" is not a known attribute of "None"
-  Line 72:9 [error]: "fixture" is not a known attribute of "None"
-
-/Volumes/code/cywil/ai-paralegal-poc/tests/unit/conftest.py (4 violations)
------------------------------------------------------------
-  Line 15:9 [error]: "fixture" is not a known attribute of "None"
-  Line 25:9 [error]: "fixture" is not a known attribute of "None"
-  Line 40:9 [error]: "fixture" is not a known attribute of "None"
-  Line 48:9 [error]: "fixture" is not a known attribute of "None"
+/Volumes/code/cywil/ai-paralegal-poc/tests/unit/test_openai_integration.py (7 violations)
+--------------------------------------------------------------------------
+  Line 73:34 [error]: "case_number" is not a known attribute of "None"
+  Line 74:34 [error]: "court" is not a known attribute of "None"
+  Line 75:38 [error]: "parties" is not a known attribute of "None"
+  Line 76:49 [error]: "parties" is not a known attribute of "None"
+  Line 77:38 [error]: "legal_basis" is not a known attribute of "None"
+  Line 78:53 [error]: "legal_basis" is not a known attribute of "None"
+  Line 250:34 [error]: "case_number" is not a known attribute of "None"

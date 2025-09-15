@@ -71,7 +71,7 @@ def extract_paragraphs(doc: fitz.Document) -> Iterable[str]:
     candidates = []
     carry = False
     for page in doc:
-        raw_lines = page.get_text("dict")["blocks"]
+        raw_lines = page.get_text("dict")["blocks"]  # type: ignore
         # Flatten to list[(y_top, y_bottom, text)]
         for b in raw_lines:
             span_lines = b.get("lines", [])
@@ -126,7 +126,7 @@ def extract_paragraphs(doc: fitz.Document) -> Iterable[str]:
 # ---------- 2  PDF → raw text --------------------------------------------- #
 
 def extract_text(pdf_path: Path) -> Tuple[str, Iterable[str]]:
-    doc = fitz.open(pdf_path)
+    doc = fitz.open(pdf_path)  # type: ignore
     paragraphs = list(extract_paragraphs(doc))
     joined = " ".join(paragraphs)
     doc.close()

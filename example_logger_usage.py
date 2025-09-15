@@ -1,13 +1,10 @@
 """
 Examples of using the centralized logger manager
 """
-from app.worker.logging_config import LOGGING_CONFIG
 from app.core.logger_manager import (
-    get_logger, 
-    configure_logging, 
-    logger_manager,
-    LOGGING_PRESETS,
-    wrap_all_loggers
+    get_logger,
+    get_logging_config,
+    service_operation_logger
 )
 import asyncio
 import logging.config

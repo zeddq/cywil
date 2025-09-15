@@ -1,0 +1,14 @@
+[2025-08-28 23:28:16] ERROR: unknown arg: --max-concurrency
+Usage:
+  pyright_worker.sh --workspace PATH --bookmark NAME --allowlist-file FILE
+                    [--base BOOKMARK] [--summary PATH] [--diff PATH]
+                    [--log PATH] [--pr-meta PATH] [--agent-cmd CMD]
+                    [--dry-run] [--timeout SECONDS]
+Env:
+  BASE_BOOKMARK defaults to "main" if --base not provided.
+  RUN_TESTS_CMD optional, e.g. "tools/run_tests_periodic.py".
+Notes:
+  - Runs jj in colocated repo.
+  - Edits outside allowlist are blocked.
+  - No change => no commit, no push.
+  - Use --dry-run to test without making commits.

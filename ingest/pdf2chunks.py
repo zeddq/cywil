@@ -144,7 +144,7 @@ class PolishStatuteParser:
             element.current_name = match_list[0]
         elif len(match_list) == 2:
             element.current_name = f"{element.keyword} {match_list[1]}"
-            if element.level < self.HIERARCHY_MAP['article'].level and not self._match_hierarchy_element(next_line):
+            if element.level < self.HIERARCHY_MAP['article'].level and not self._match_hierarchy_element(next_line.group() if next_line else ""):
                 element.current_title = next_line.group() if next_line else None
             else:
                 element.current_title = None
@@ -223,7 +223,7 @@ class PolishStatuteParser:
                 metadata = {"status": "active", "type": "article"}
             
             # Add hierarchy information
-            metadata.update({"hierarchy": self._get_hierarchy_metadata()})
+            metadata["hierarchy"] = self._get_hierarchy_metadata()
             
             # Parse paragraphs within the article
             paragraphs = self._parse_paragraphs(article_text)
@@ -239,7 +239,7 @@ class PolishStatuteParser:
                         content=para_content,
                         book=self.HIERARCHY_MAP['book'].current_name,
                         part=self.HIERARCHY_MAP['part'].current_name,
-                        title=self.HIERARCHY_MAP['title'].current_name,
+                        title=self.HIERARCHY_MAP['title'].current_name or "",
                         division=self.HIERARCHY_MAP['division'].current_name,
                         chapter=self.HIERARCHY_MAP['chapter'].current_name,
                         subdivision=self.HIERARCHY_MAP['subdivision'].current_name,
@@ -257,7 +257,7 @@ class PolishStatuteParser:
                     content=article_text.strip(),
                     book=self.HIERARCHY_MAP['book'].current_name,
                     part=self.HIERARCHY_MAP['part'].current_name,
-                    title=self.HIERARCHY_MAP['title'].current_name,
+                    title=self.HIERARCHY_MAP['title'].current_name or "",
                     division=self.HIERARCHY_MAP['division'].current_name,
                     chapter=self.HIERARCHY_MAP['chapter'].current_name,
                     subdivision=self.HIERARCHY_MAP['subdivision'].current_name,

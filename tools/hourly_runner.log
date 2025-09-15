@@ -1,0 +1,426 @@
+nohup: ignoring input
+[2025-08-26T06:00:25Z] Pulling latest changes...
+There is no tracking information for the current branch.
+Please specify which branch you want to rebase against.
+See git-pull(1) for details.
+
+    git pull <remote> <branch>
+
+If you wish to set tracking information for this branch you can do so with:
+
+    git branch --set-upstream-to=origin/<branch> cursor/run-tests-hourly-after-pulling-changes-b4fb
+
+There is no tracking information for the current branch.
+Please specify which branch you want to merge with.
+See git-pull(1) for details.
+
+    git pull <remote> <branch>
+
+If you wish to set tracking information for this branch you can do so with:
+
+    git branch --set-upstream-to=origin/<branch> cursor/run-tests-hourly-after-pulling-changes-b4fb
+
+[2025-08-26T06:00:26Z] Running pytest...
+============================= test session starts ==============================
+platform linux -- Python 3.11.13, pytest-8.4.0, pluggy-1.6.0
+rootdir: /workspace/tests
+configfile: pytest.ini
+plugins: anyio-4.10.0, metadata-3.1.1, hypothesis-6.92.1, mock-3.12.0, Faker-20.1.0, cov-5.0.0, asyncio-1.0.0, json-report-1.5.0, timeout-2.2.0, html-4.1.1
+asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+timeout: 30.0s
+timeout method: signal
+timeout func_only: False
+collected 150 items / 16 errors / 5 skipped
+
+==================================== ERRORS ====================================
+__________________ ERROR collecting ingest/test_hierarchy.py ___________________
+ImportError while importing test module '/workspace/ingest/test_hierarchy.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ingest/test_hierarchy.py:6: in <module>
+    from pdf2chunks import PolishStatuteParser
+E   ModuleNotFoundError: No module named 'pdf2chunks'
+________________ ERROR collecting ingest/test_preprocess_o3.py _________________
+ImportError while importing test module '/workspace/ingest/test_preprocess_o3.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ingest/test_preprocess_o3.py:10: in <module>
+    from preprocess_sn_o3 import preprocess_sn_rulings, process_batch
+E   ModuleNotFoundError: No module named 'preprocess_sn_o3'
+__________________ ERROR collecting test_celery_monitoring.py __________________
+ImportError while importing test module '/workspace/test_celery_monitoring.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_celery_monitoring.py:12: in <module>
+    from app.worker.tasks.example import (
+app/worker/tasks/example.py:10: in <module>
+    from app.worker.base_task import BaseTask, RetryableTask, with_task_monitoring
+app/worker/base_task.py:15: in <module>
+    from app.worker.service_registry import get_service
+app/worker/service_registry.py:24: in <module>
+    from app.services.case_management_service import CaseManagementService
+app/services/__init__.py:14: in <module>
+    from .document_generation_service import DocumentGenerationService
+app/services/document_generation_service.py:18: in <module>
+    from .statute_search_service import StatuteSearchServiceDep
+app/services/statute_search_service.py:19: in <module>
+    from ..validators.document_validator import DocumentValidator
+app/validators/document_validator.py:10: in <module>
+    from app.models.pipeline_schemas import (
+E   ModuleNotFoundError: No module named 'app.models.pipeline_schemas'; 'app.models' is not a package
+------------------------------- Captured stdout --------------------------------
+2025-08-26 06:00:28,070 - [∅] [trace=0 span=] user_id=<anon> - Creating service: ConfigService (service_interface.__init__:52)
+2025-08-26 06:00:28,073 - [∅] [trace=0 span=] user_id=<anon> - Configuration loaded for environment: development (config_service._load_config:225)
+{"timestamp": "2025-08-26T06:00:28.075815", "level": "INFO", "name": "root", "message": "Celery logging configured: level=INFO, json=True", "otelSpanID": "0", "otelTraceID": "0", "otelTraceSampled": false, "otelServiceName": "ai-paralegal-backend", "logger": "root", "source": {"file": "/workspace/app/worker/logging_config.py", "line": 245, "function": "configure_celery_logging"}}
+{"timestamp": "2025-08-26T06:00:28.076340", "level": "INFO", "name": "root", "message": "Celery logging configured: level=INFO, json=True", "otelSpanID": "0", "otelTraceID": "0", "otelTraceSampled": false, "otelServiceName": "ai-paralegal-backend", "logger": "root", "source": {"file": "/workspace/app/worker/logging_config.py", "line": 245, "function": "configure_celery_logging"}}
+2025-08-26 06:00:28,077 - [∅] [trace=0 span=] user_id=<anon> - Celery app initialized with comprehensive monitoring, structured logging, and service registry (celery_app.<module>:45)
+2025-08-26 06:00:28,116 - [∅] [trace=0 span=] user_id=<anon> - Registered tool 'describe_case' in category case_management (tool_registry.decorator:176)
+2025-08-26 06:00:28,116 - [∅] [trace=0 span=] user_id=<anon> - Registered tool 'schedule_reminder' in category case_management (tool_registry.decorator:176)
+2025-08-26 06:00:28,116 - [∅] [trace=0 span=] user_id=<anon> - Registered tool 'compute_deadline' in category case_management (tool_registry.decorator:176)
+___________________ ERROR collecting test_celery_refactor.py ___________________
+ImportError while importing test module '/workspace/test_celery_refactor.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_celery_refactor.py:12: in <module>
+    from app.worker.service_registry import get_worker_services
+app/worker/service_registry.py:25: in <module>
+    from app.services.document_generation_service import DocumentGenerationService
+app/services/__init__.py:14: in <module>
+    from .document_generation_service import DocumentGenerationService
+app/services/document_generation_service.py:18: in <module>
+    from .statute_search_service import StatuteSearchServiceDep
+app/services/statute_search_service.py:19: in <module>
+    from ..validators.document_validator import DocumentValidator
+app/validators/document_validator.py:10: in <module>
+    from app.models.pipeline_schemas import (
+E   ModuleNotFoundError: No module named 'app.models.pipeline_schemas'; 'app.models' is not a package
+________________ ERROR collecting test_openai_implementation.py ________________
+ImportError while importing test module '/workspace/test_openai_implementation.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+test_openai_implementation.py:29: in <module>
+    from app.services.openai_client import OpenAIService
+app/services/__init__.py:14: in <module>
+    from .document_generation_service import DocumentGenerationService
+app/services/document_generation_service.py:18: in <module>
+    from .statute_search_service import StatuteSearchServiceDep
+app/services/statute_search_service.py:19: in <module>
+    from ..validators.document_validator import DocumentValidator
+app/validators/document_validator.py:10: in <module>
+    from app.models.pipeline_schemas import (
+E   ModuleNotFoundError: No module named 'app.models.pipeline_schemas'; 'app.models' is not a package
+_________________ ERROR collecting celery/test_celery_tasks.py _________________
+ImportError while importing test module '/workspace/tests/celery/test_celery_tasks.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/celery/test_celery_tasks.py:2: in <module>
+    from app.worker.tasks.statute_tasks import get_statute_ingestion_status
+app/worker/tasks/statute_tasks.py:12: in <module>
+    from app.worker.service_registry import get_worker_services
+app/worker/service_registry.py:25: in <module>
+    from app.services.document_generation_service import DocumentGenerationService
+app/services/__init__.py:14: in <module>
+    from .document_generation_service import DocumentGenerationService
+app/services/document_generation_service.py:18: in <module>
+    from .statute_search_service import StatuteSearchServiceDep
+app/services/statute_search_service.py:19: in <module>
+    from ..validators.document_validator import DocumentValidator
+app/validators/document_validator.py:10: in <module>
+    from app.models.pipeline_schemas import (
+E   ModuleNotFoundError: No module named 'app.models.pipeline_schemas'; 'app.models' is not a package
+________ ERROR collecting fixtures/legal_documents/test_data_loader.py _________
+ImportError while importing test module '/workspace/tests/fixtures/legal_documents/test_data_loader.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/fixtures/legal_documents/test_data_loader.py:8: in <module>
+    from app.models.pipeline_schemas import RawDocument, DocumentType
+E   ModuleNotFoundError: No module named 'app.models.pipeline_schemas'; 'app.models' is not a package
+____________ ERROR collecting integration/test_ai_functionality.py _____________
+ImportError while importing test module '/workspace/tests/integration/test_ai_functionality.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_ai_functionality.py:12: in <module>
+    from app.models.pipeline_schemas import (
+E   ModuleNotFoundError: No module named 'app.models.pipeline_schemas'; 'app.models' is not a package
+___________ ERROR collecting integration/test_embedding_pipeline.py ____________
+ImportError while importing test module '/workspace/tests/integration/test_embedding_pipeline.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_embedding_pipeline.py:12: in <module>
+    from app.services.statute_search_service import StatuteSearchService
+app/services/__init__.py:14: in <module>
+    from .document_generation_service import DocumentGenerationService
+app/services/document_generation_service.py:18: in <module>
+    from .statute_search_service import StatuteSearchServiceDep
+app/services/statute_search_service.py:19: in <module>
+    from ..validators.document_validator import DocumentValidator
+app/validators/document_validator.py:10: in <module>
+    from app.models.pipeline_schemas import (
+E   ModuleNotFoundError: No module named 'app.models.pipeline_schemas'; 'app.models' is not a package
+_______________ ERROR collecting integration/test_integration.py _______________
+ImportError while importing test module '/workspace/tests/integration/test_integration.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_integration.py:11: in <module>
+    from app.core import (
+E   ImportError: cannot import name 'initialize_services' from 'app.core' (/workspace/app/core/__init__.py)
+------------------------------- Captured stdout --------------------------------
+2025-08-26 06:00:29,192 - [∅] [trace=0 span=] user_id=<anon> - Service container initialized (service_interface.__init__:180)
+_________ ERROR collecting integration/test_integration_refactored.py __________
+ImportError while importing test module '/workspace/tests/integration/test_integration_refactored.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_integration_refactored.py:16: in <module>
+    from app.core.logger_manager import setup_structured_logging, correlation_context
+E   ImportError: cannot import name 'setup_structured_logging' from 'app.core.logger_manager' (/workspace/app/core/logger_manager.py)
+___________ ERROR collecting integration/test_openai_integration.py ____________
+ImportError while importing test module '/workspace/tests/integration/test_openai_integration.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_openai_integration.py:12: in <module>
+    from app.services.openai_client import OpenAIService, get_openai_service
+app/services/__init__.py:14: in <module>
+    from .document_generation_service import DocumentGenerationService
+app/services/document_generation_service.py:18: in <module>
+    from .statute_search_service import StatuteSearchServiceDep
+app/services/statute_search_service.py:19: in <module>
+    from ..validators.document_validator import DocumentValidator
+app/validators/document_validator.py:10: in <module>
+    from app.models.pipeline_schemas import (
+E   ModuleNotFoundError: No module named 'app.models.pipeline_schemas'; 'app.models' is not a package
+___________ ERROR collecting integration/test_refactored_services.py ___________
+ImportError while importing test module '/workspace/tests/integration/test_refactored_services.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/integration/test_refactored_services.py:18: in <module>
+    from app.services import (
+app/services/__init__.py:14: in <module>
+    from .document_generation_service import DocumentGenerationService
+app/services/document_generation_service.py:18: in <module>
+    from .statute_search_service import StatuteSearchServiceDep
+app/services/statute_search_service.py:19: in <module>
+    from ..validators.document_validator import DocumentValidator
+app/validators/document_validator.py:10: in <module>
+    from app.models.pipeline_schemas import (
+E   ModuleNotFoundError: No module named 'app.models.pipeline_schemas'; 'app.models' is not a package
+___________________ ERROR collecting unit/test_agent_sdk.py ____________________
+ImportError while importing test module '/workspace/tests/unit/test_agent_sdk.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_agent_sdk.py:11: in <module>
+    from app.paralegal_agents import ParalegalAgentSDK
+app/paralegal_agents/__init__.py:3: in <module>
+    from .refactored_agent_sdk import ParalegalAgentSDK
+app/paralegal_agents/refactored_agent_sdk.py:39: in <module>
+    from ..services import get_tool_schemas
+app/services/__init__.py:14: in <module>
+    from .document_generation_service import DocumentGenerationService
+app/services/document_generation_service.py:18: in <module>
+    from .statute_search_service import StatuteSearchServiceDep
+app/services/statute_search_service.py:19: in <module>
+    from ..validators.document_validator import DocumentValidator
+app/validators/document_validator.py:10: in <module>
+    from app.models.pipeline_schemas import (
+E   ModuleNotFoundError: No module named 'app.models.pipeline_schemas'; 'app.models' is not a package
+_______________ ERROR collecting unit/test_openai_integration.py _______________
+ImportError while importing test module '/workspace/tests/unit/test_openai_integration.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_openai_integration.py:10: in <module>
+    from app.models.pipeline_schemas import (
+E   ModuleNotFoundError: No module named 'app.models.pipeline_schemas'; 'app.models' is not a package
+_________________ ERROR collecting unit/test_openai_service.py _________________
+ImportError while importing test module '/workspace/tests/unit/test_openai_service.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/unit/test_openai_service.py:11: in <module>
+    from app.services.openai_client import OpenAIService, OpenAIError, get_openai_service
+app/services/__init__.py:14: in <module>
+    from .document_generation_service import DocumentGenerationService
+app/services/document_generation_service.py:18: in <module>
+    from .statute_search_service import StatuteSearchServiceDep
+app/services/statute_search_service.py:19: in <module>
+    from ..validators.document_validator import DocumentValidator
+app/validators/document_validator.py:10: in <module>
+    from app.models.pipeline_schemas import (
+E   ModuleNotFoundError: No module named 'app.models.pipeline_schemas'; 'app.models' is not a package
+
+---------- coverage: platform linux, python 3.11.13-final-0 ----------
+Name                                           Stmts   Miss  Cover   Missing
+----------------------------------------------------------------------------
+app/__init__.py                                    0      0   100%
+app/auth.py                                       67     67     0%   1-135
+app/core/__init__.py                               7      0   100%
+app/core/ai_client_factory.py                     62     62     0%   5-204
+app/core/celery_service_wrapper.py               199    199     0%   6-495
+app/core/config_service.py                       177     35    80%   48, 67-69, 74-76, 94, 112, 131-133, 178, 185, 214, 218, 227-229, 236-243, 246, 258-259, 263, 267, 271, 275-277, 289-291
+app/core/conversation_manager.py                 179    133    26%   38, 51, 68-72, 76-87, 91-92, 96-121, 130-143, 149-153, 164-173, 179-206, 210-222, 226-230, 236-257, 262-273, 277-286, 290-297, 301-341, 346-350, 354
+app/core/database_manager.py                     137     97    29%   32-38, 43-90, 94-97, 101-123, 132-143, 150-152, 156-158, 163-165, 170-172, 181-184, 188-189, 193-198, 202-207, 211-216, 221-223, 232, 237-245, 251, 256, 260
+app/core/db_optimizations.py                      82     82     0%   6-324
+app/core/exceptions.py                            97     36    63%   12-14, 27-28, 35, 54-55, 62, 69-71, 78-79, 110-111, 130-132, 139-144, 157-158, 177-179, 192-193, 218-221
+app/core/llm_manager.py                          203    156    23%   28-34, 39-56, 60-67, 72-79, 83-90, 94-100, 114-125, 130-167, 171-184, 188-191, 195-215, 221-224, 232-249, 253-254, 267-287, 297-298, 302-305, 312-320, 326-333, 337-347, 353-362, 366-367, 371-372, 380-381, 389, 396
+app/core/logger_manager.py                       276    177    36%   68-71, 100, 110, 139-144, 152-225, 232-235, 248-256, 273-289, 301-313, 321-326, 334-339, 423-428, 473-520, 528-542, 550-578, 587-593, 600-614, 621-693, 704-740, 744-782, 786
+app/core/logging_utils.py                          2      0   100%
+app/core/performance_utils.py                    220    164    25%   30, 48-62, 66-80, 84-87, 91-94, 118-153, 162-169, 173-174, 178-182, 186-202, 206-209, 213-236, 250-254, 258-263, 267-278, 292-293, 299-309, 313-322, 326-327, 331-336, 345-380, 388, 392, 397-404, 416, 421
+app/core/service_container.py                      3      0   100%
+app/core/service_interface.py                    139     79    43%   36-39, 59-76, 81, 87-102, 107, 113-140, 147, 152, 157, 165, 184-185, 189-190, 195-203, 207-209, 213-214, 218-221, 230, 234-249, 253-255, 259
+app/core/streaming_handler.py                    138     95    31%   64-67, 71, 75-152, 160-193, 201-202, 209, 212-219, 222, 225, 232, 241-252, 255, 258, 271-273, 276-283, 286-288
+app/core/tool_executor.py                        222    163    27%   59-61, 66-68, 75-81, 85-101, 105-115, 119-134, 148-152, 156-165, 174-179, 184-188, 192, 196-228, 232, 236-239, 243, 265-318, 328-336, 340-374, 388-393, 400-410, 416-424, 430-436, 440
+app/core/tool_registry.py                        155     84    46%   42-47, 64-72, 85-105, 156, 182-191, 206, 210-213, 219-222, 226-248, 252-261, 265-269, 291, 299, 310-318, 325
+app/database.py                                    0      0   100%
+app/dependencies.py                                7      2    71%   10-11
+app/embedding_models/__init__.py                   3      0   100%
+app/embedding_models/embedding_factory.py         36     19    47%   28-33, 42-47, 55-60, 64, 68, 72, 76-79
+app/embedding_models/embedding_interface.py      113     79    30%   22, 27, 35, 40, 47-50, 54-59, 69-77, 81-82, 86-91, 95, 102-105, 109-111, 119-132, 136-137, 141, 145, 152-156, 160-175, 183-210, 214-215, 219-222, 226
+app/embedding_models/pipeline_schemas.py         145    145     0%   6-217
+app/main.py                                      275    275     0%   6-643
+app/models.py                                    191      3    98%   13, 249, 285
+app/orchestrator.py                                0      0   100%
+app/paralegal_agents/__init__.py                   2      1    50%   5
+app/paralegal_agents/refactored_agent_sdk.py     147    133    10%   42-466
+app/repositories/case_repository.py               54     35    35%   16, 20-21, 24-30, 33-37, 40-44, 47-53, 56-57, 60-64, 67-75, 79
+app/repositories/user_repository.py               38     22    42%   14, 17-18, 21-23, 26-28, 31-39, 47-54, 58
+app/routes/__init__.py                             3      3     0%   5-8
+app/routes/auth.py                               215    215     0%   6-646
+app/routes/case_management_routes.py              47     47     0%   5-125
+app/routes/monitoring_routes.py                  174    174     0%   5-444
+app/services/__init__.py                          17      8    53%   15-49
+app/services/case_management_service.py          110     75    32%   21-23, 26-27, 30, 33, 38, 41, 44, 47, 63-70, 146-149, 152-156, 160-163, 166, 171-191, 213-230, 256-313, 326
+app/services/document_generation_service.py      143    131     8%   19-403
+app/services/fallback_parser.py                  215    215     0%   6-448
+app/services/openai_client.py                    110    110     0%   5-340
+app/services/optimized_statute_search.py         109    109     0%   5-263
+app/services/statute_search_service.py           188    176     6%   20-429
+app/services/supreme_court_service.py            174    174     0%   5-427
+app/task_processors.py                           188    188     0%   1-355
+app/validator.py                                  22     22     0%   1-195
+app/validators/__init__.py                         0      0   100%
+app/validators/document_validator.py             170    166     2%   20-390
+app/worker/base_task.py                          157    148     6%   17-378
+app/worker/celery_app.py                          13      1    92%   50
+app/worker/config.py                              41      2    95%   200-230
+app/worker/logging_config.py                     113     43    62%   28-32, 79, 89, 134-140, 144-161, 195, 263-281, 299-311, 323-334, 346-357
+app/worker/service_registry.py                   175    162     7%   29-325
+app/worker/tasks/example.py                       44     39    11%   11-119
+app/worker/tasks/statute_tasks.py                 86     79     8%   15-202
+----------------------------------------------------------------------------
+TOTAL                                           5890   4630    21%
+Coverage HTML written to dir htmlcov
+
+FAIL Required test coverage of 80% not reached. Total coverage: 21.39%
+=========================== short test summary info ============================
+SKIPPED [1] tests/celery/test_celery_integration.py:4: Celery integration tests require running workers
+SKIPPED [1] tests/integration/test_api.py:4: API client tests require running server and database
+SKIPPED [1] tests/integration/test_migration.py:4: Migration checks require full environment
+SKIPPED [1] tests/integration/test_streaming.py:4: Streaming test requires running full application
+SKIPPED [1] tests/unit/test_registration_key.py:4: Registration key tests require running API server
+ERROR tests/ingest/test_hierarchy.py
+ERROR tests/ingest/test_preprocess_o3.py
+ERROR tests/test_celery_monitoring.py
+ERROR tests/test_celery_refactor.py
+ERROR tests/test_openai_implementation.py
+ERROR tests/celery/test_celery_tasks.py
+ERROR tests/fixtures/legal_documents/test_data_loader.py
+ERROR tests/integration/test_ai_functionality.py
+ERROR tests/integration/test_embedding_pipeline.py
+ERROR tests/integration/test_integration.py
+ERROR tests/integration/test_integration_refactored.py
+ERROR tests/integration/test_openai_integration.py
+ERROR tests/integration/test_refactored_services.py
+ERROR tests/unit/test_agent_sdk.py
+ERROR tests/unit/test_openai_integration.py
+ERROR tests/unit/test_openai_service.py
+!!!!!!!!!!!!!!!!!!! Interrupted: 16 errors during collection !!!!!!!!!!!!!!!!!!!
+======================== 5 skipped, 16 errors in 3.87s =========================
+[2025-08-26T06:00:31Z] Running periodic test runner once...
+{
+  "run_dir": "/workspace/reports/20250826-060031",
+  "summary": {
+    "total_files": 3,
+    "succeeded": 0,
+    "failed": 3,
+    "aggregate_duration_seconds": 10.659030675888062,
+    "files": [
+      {
+        "test_file": "/workspace/test_celery_monitoring.py",
+        "exit_code": 2,
+        "duration_seconds": 3.691110134124756,
+        "stdout": "============================= test session starts ==============================\nplatform linux -- Python 3.11.13, pytest-8.4.0, pluggy-1.6.0\nrootdir: /workspace/tests\nconfigfile: pytest.ini\nplugins: anyio-4.10.0, metadata-3.1.1, hypothesis-6.92.1, mock-3.12.0, Faker-20.1.0, cov-5.0.0, asyncio-1.0.0, json-report-1.5.0, timeout-2.2.0, html-4.1.1\nasyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ntimeout: 30.0s\ntimeout method: signal\ntimeout func_only: False\ncollected 0 items / 1 error\n\n==================================== ERRORS ====================================\n________________________ ERROR collecting test session _________________________\nImportError while importing test module '/workspace/test_celery_monitoring.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntest_celery_monitoring.py:12: in <module>\n    from app.worker.tasks.example import (\napp/worker/tasks/example.py:10: in <module>\n    from app.worker.base_task import BaseTask, RetryableTask, with_task_monitoring\napp/worker/base_task.py:15: in <module>\n    from app.worker.service_registry import get_service\napp/worker/service_registry.py:24: in <module>\n    from app.services.case_management_service import CaseManagementService\napp/services/__init__.py:14: in <module>\n    from .document_generation_service import DocumentGenerationService\napp/services/document_generation_service.py:18: in <module>\n    from .statute_search_service import StatuteSearchServiceDep\napp/services/statute_search_service.py:19: in <module>\n    from ..validators.document_validator import DocumentValidator\napp/validators/document_validator.py:10: in <module>\n    from app.models.pipeline_schemas import (\nE   ModuleNotFoundError: No module named 'app.models.pipeline_schemas'; 'app.models' is not a package\n------------------------------- Captured stdout --------------------------------\n2025-08-26 06:00:32,661 - [\u2205] [trace=0 span=] user_id=<anon> - Creating service: ConfigService (service_interface.__init__:52)\n2025-08-26 06:00:32,664 - [\u2205] [trace=0 span=] user_id=<anon> - Configuration loaded for environment: development (config_service._load_config:225)\n{\"timestamp\": \"2025-08-26T06:00:32.666210\", \"level\": \"INFO\", \"name\": \"root\", \"message\": \"Celery logging configured: level=INFO, json=True\", \"otelSpanID\": \"0\", \"otelTraceID\": \"0\", \"otelTraceSampled\": false, \"otelServiceName\": \"ai-paralegal-backend\", \"logger\": \"root\", \"source\": {\"file\": \"/workspace/app/worker/logging_config.py\", \"line\": 245, \"function\": \"configure_celery_logging\"}}\n{\"timestamp\": \"2025-08-26T06:00:32.666655\", \"level\": \"INFO\", \"name\": \"root\", \"message\": \"Celery logging configured: level=INFO, json=True\", \"otelSpanID\": \"0\", \"otelTraceID\": \"0\", \"otelTraceSampled\": false, \"otelServiceName\": \"ai-paralegal-backend\", \"logger\": \"root\", \"source\": {\"file\": \"/workspace/app/worker/logging_config.py\", \"line\": 245, \"function\": \"configure_celery_logging\"}}\n2025-08-26 06:00:32,667 - [\u2205] [trace=0 span=] user_id=<anon> - Celery app initialized with comprehensive monitoring, structured logging, and service registry (celery_app.<module>:45)\n2025-08-26 06:00:32,711 - [\u2205] [trace=0 span=] user_id=<anon> - Registered tool 'describe_case' in category case_management (tool_registry.decorator:176)\n2025-08-26 06:00:32,711 - [\u2205] [trace=0 span=] user_id=<anon> - Registered tool 'schedule_reminder' in category case_management (tool_registry.decorator:176)\n2025-08-26 06:00:32,711 - [\u2205] [trace=0 span=] user_id=<anon> - Registered tool 'compute_deadline' in category case_management (tool_registry.decorator:176)\n- generated xml file: /workspace/reports/20250826-060031/test_celery_monitoring/test_celery_monitoring.xml -\n--------------------------------- JSON report ----------------------------------\nreport saved to: /workspace/reports/20250826-060031/test_celery_monitoring/test_celery_monitoring.json\n\n---------- coverage: platform linux, python 3.11.13-final-0 ----------\nName                                           Stmts   Miss  Cover   Missing\n----------------------------------------------------------------------------\napp/__init__.py                                    0      0   100%\napp/auth.py                                       67     67     0%   1-135\napp/core/__init__.py                               7      0   100%\napp/core/ai_client_factory.py                     62     62     0%   5-204\napp/core/celery_service_wrapper.py               199    199     0%   6-495\napp/core/config_service.py                       177     35    80%   48, 67-69, 74-76, 94, 112, 131-133, 178, 185, 214, 218, 227-229, 236-243, 246, 258-259, 263, 267, 271, 275-277, 289-291\napp/core/conversation_manager.py                 179    133    26%   38, 51, 68-72, 76-87, 91-92, 96-121, 130-143, 149-153, 164-173, 179-206, 210-222, 226-230, 236-257, 262-273, 277-286, 290-297, 301-341, 346-350, 354\napp/core/database_manager.py                     137     97    29%   32-38, 43-90, 94-97, 101-123, 132-143, 150-152, 156-158, 163-165, 170-172, 181-184, 188-189, 193-198, 202-207, 211-216, 221-223, 232, 237-245, 251, 256, 260\napp/core/db_optimizations.py                      82     82     0%   6-324\napp/core/exceptions.py                            97     36    63%   12-14, 27-28, 35, 54-55, 62, 69-71, 78-79, 110-111, 130-132, 139-144, 157-158, 177-179, 192-193, 218-221\napp/core/llm_manager.py                          203    156    23%   28-34, 39-56, 60-67, 72-79, 83-90, 94-100, 114-125, 130-167, 171-184, 188-191, 195-215, 221-224, 232-249, 253-254, 267-287, 297-298, 302-305, 312-320, 326-333, 337-347, 353-362, 366-367, 371-372, 380-381, 389, 396\napp/core/logger_manager.py                       276    177    36%   68-71, 100, 110, 139-144, 152-225, 232-235, 248-256, 273-289, 301-313, 321-326, 334-339, 423-428, 473-520, 528-542, 550-578, 587-593, 600-614, 621-693, 704-740, 744-782, 786\napp/core/logging_utils.py                          2      2     0%   5-7\napp/core/performance_utils.py                    220    220     0%   5-421\napp/core/service_container.py                      3      3     0%   6-11\napp/core/service_interface.py                    139     83    40%   36-39, 59-76, 81, 87-102, 107, 113-140, 147, 152, 157, 165, 177-180, 184-185, 189-190, 195-203, 207-209, 213-214, 218-221, 230, 234-249, 253-255, 259\napp/core/streaming_handler.py                    138    138     0%   6-288\napp/core/tool_executor.py                        222    163    27%   59-61, 66-68, 75-81, 85-101, 105-115, 119-134, 148-152, 156-165, 174-179, 184-188, 192, 196-228, 232, 236-239, 243, 265-318, 328-336, 340-374, 388-393, 400-410, 416-424, 430-436, 440\napp/core/tool_registry.py                        155     84    46%   42-47, 64-72, 85-105, 156, 182-191, 206, 210-213, 219-222, 226-248, 252-261, 265-269, 291, 299, 310-318, 325\napp/database.py                                    0      0   100%\napp/dependencies.py                                7      2    71%   10-11\napp/embedding_models/__init__.py                   3      0   100%\napp/embedding_models/embedding_factory.py         36     19    47%   28-33, 42-47, 55-60, 64, 68, 72, 76-79\napp/embedding_models/embedding_interface.py      113     79    30%   22, 27, 35, 40, 47-50, 54-59, 69-77, 81-82, 86-91, 95, 102-105, 109-111, 119-132, 136-137, 141, 145, 152-156, 160-175, 183-210, 214-215, 219-222, 226\napp/embedding_models/pipeline_schemas.py         145    145     0%   6-217\napp/main.py                                      275    275     0%   6-643\napp/models.py                                    191      3    98%   13, 249, 285\napp/orchestrator.py                                0      0   100%\napp/paralegal_agents/__init__.py                   2      2     0%   3-5\napp/paralegal_agents/refactored_agent_sdk.py     147    147     0%   7-466\napp/repositories/case_repository.py               54     35    35%   16, 20-21, 24-30, 33-37, 40-44, 47-53, 56-57, 60-64, 67-75, 79\napp/repositories/user_repository.py               38     22    42%   14, 17-18, 21-23, 26-28, 31-39, 47-54, 58\napp/routes/__init__.py                             3      3     0%   5-8\napp/routes/auth.py                               215    215     0%   6-646\napp/routes/case_management_routes.py              47     47     0%   5-125\napp/routes/monitoring_routes.py                  174    174     0%   5-444\napp/services/__init__.py                          17      8    53%   15-49\napp/services/case_management_service.py          110     75    32%   21-23, 26-27, 30, 33, 38, 41, 44, 47, 63-70, 146-149, 152-156, 160-163, 166, 171-191, 213-230, 256-313, 326\napp/services/document_generation_service.py      143    131     8%   19-403\napp/services/fallback_parser.py                  215    215     0%   6-448\napp/services/openai_client.py                    110    110     0%   5-340\napp/services/optimized_statute_search.py         109    109     0%   5-263\napp/services/statute_search_service.py           188    176     6%   20-429\napp/services/supreme_court_service.py            174    174     0%   5-427\napp/task_processors.py                           188    188     0%   1-355\napp/validator.py                                  22     22     0%   1-195\napp/validators/__init__.py                         0      0   100%\napp/validators/document_validator.py             170    166     2%   20-390\napp/worker/base_task.py                          157    148     6%   17-378\napp/worker/celery_app.py                          13      1    92%   50\napp/worker/config.py                              41      2    95%   200-230\napp/worker/logging_config.py                     113     43    62%   28-32, 79, 89, 134-140, 144-161, 195, 263-281, 299-311, 323-334, 346-357\napp/worker/service_registry.py                   175    163     7%   25-325\napp/worker/tasks/example.py                       44     39    11%   11-119\n----------------------------------------------------------------------------\nTOTAL                                           5804   4675    19%\nCoverage HTML written to dir htmlcov\n\nFAIL Required test coverage of 80% not reached. Total coverage: 19.45%\n- Generated html report: file:///workspace/reports/20250826-060031/test_celery_monitoring/test_celery_monitoring.html -\n=========================== short test summary info ============================\nERROR tests\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n=============================== 1 error in 2.95s ===============================\n",
+        "stderr": "",
+        "junit_xml": "/workspace/reports/20250826-060031/test_celery_monitoring/test_celery_monitoring.xml",
+        "html_report": "/workspace/reports/20250826-060031/test_celery_monitoring/test_celery_monitoring.html",
+        "json_report": "/workspace/reports/20250826-060031/test_celery_monitoring/test_celery_monitoring.json"
+      },
+      {
+        "test_file": "/workspace/test_celery_refactor.py",
+        "exit_code": 2,
+        "duration_seconds": 3.5667884349823,
+        "stdout": "============================= test session starts ==============================\nplatform linux -- Python 3.11.13, pytest-8.4.0, pluggy-1.6.0\nrootdir: /workspace/tests\nconfigfile: pytest.ini\nplugins: anyio-4.10.0, metadata-3.1.1, hypothesis-6.92.1, mock-3.12.0, Faker-20.1.0, cov-5.0.0, asyncio-1.0.0, json-report-1.5.0, timeout-2.2.0, html-4.1.1\nasyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ntimeout: 30.0s\ntimeout method: signal\ntimeout func_only: False\ncollected 0 items / 1 error\n\n==================================== ERRORS ====================================\n________________________ ERROR collecting test session _________________________\nImportError while importing test module '/workspace/test_celery_refactor.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntest_celery_refactor.py:12: in <module>\n    from app.worker.service_registry import get_worker_services\napp/worker/service_registry.py:24: in <module>\n    from app.services.case_management_service import CaseManagementService\napp/services/__init__.py:14: in <module>\n    from .document_generation_service import DocumentGenerationService\napp/services/document_generation_service.py:18: in <module>\n    from .statute_search_service import StatuteSearchServiceDep\napp/services/statute_search_service.py:19: in <module>\n    from ..validators.document_validator import DocumentValidator\napp/validators/document_validator.py:10: in <module>\n    from app.models.pipeline_schemas import (\nE   ModuleNotFoundError: No module named 'app.models.pipeline_schemas'; 'app.models' is not a package\n------------------------------- Captured stdout --------------------------------\n2025-08-26 06:00:36,334 - [\u2205] [trace=0 span=] user_id=<anon> - Creating service: ConfigService (service_interface.__init__:52)\n2025-08-26 06:00:36,337 - [\u2205] [trace=0 span=] user_id=<anon> - Configuration loaded for environment: development (config_service._load_config:225)\n{\"timestamp\": \"2025-08-26T06:00:36.339388\", \"level\": \"INFO\", \"name\": \"root\", \"message\": \"Celery logging configured: level=INFO, json=True\", \"otelSpanID\": \"0\", \"otelTraceID\": \"0\", \"otelTraceSampled\": false, \"otelServiceName\": \"ai-paralegal-backend\", \"logger\": \"root\", \"source\": {\"file\": \"/workspace/app/worker/logging_config.py\", \"line\": 245, \"function\": \"configure_celery_logging\"}}\n{\"timestamp\": \"2025-08-26T06:00:36.339832\", \"level\": \"INFO\", \"name\": \"root\", \"message\": \"Celery logging configured: level=INFO, json=True\", \"otelSpanID\": \"0\", \"otelTraceID\": \"0\", \"otelTraceSampled\": false, \"otelServiceName\": \"ai-paralegal-backend\", \"logger\": \"root\", \"source\": {\"file\": \"/workspace/app/worker/logging_config.py\", \"line\": 245, \"function\": \"configure_celery_logging\"}}\n2025-08-26 06:00:36,340 - [\u2205] [trace=0 span=] user_id=<anon> - Celery app initialized with comprehensive monitoring, structured logging, and service registry (celery_app.<module>:45)\n2025-08-26 06:00:36,376 - [\u2205] [trace=0 span=] user_id=<anon> - Registered tool 'describe_case' in category case_management (tool_registry.decorator:176)\n2025-08-26 06:00:36,376 - [\u2205] [trace=0 span=] user_id=<anon> - Registered tool 'schedule_reminder' in category case_management (tool_registry.decorator:176)\n2025-08-26 06:00:36,376 - [\u2205] [trace=0 span=] user_id=<anon> - Registered tool 'compute_deadline' in category case_management (tool_registry.decorator:176)\n- generated xml file: /workspace/reports/20250826-060031/test_celery_refactor/test_celery_refactor.xml -\n--------------------------------- JSON report ----------------------------------\nreport saved to: /workspace/reports/20250826-060031/test_celery_refactor/test_celery_refactor.json\n\n---------- coverage: platform linux, python 3.11.13-final-0 ----------\nName                                           Stmts   Miss  Cover   Missing\n----------------------------------------------------------------------------\napp/__init__.py                                    0      0   100%\napp/auth.py                                       67     67     0%   1-135\napp/core/__init__.py                               7      0   100%\napp/core/ai_client_factory.py                     62     62     0%   5-204\napp/core/celery_service_wrapper.py               199    199     0%   6-495\napp/core/config_service.py                       177     35    80%   48, 67-69, 74-76, 94, 112, 131-133, 178, 185, 214, 218, 227-229, 236-243, 246, 258-259, 263, 267, 271, 275-277, 289-291\napp/core/conversation_manager.py                 179    133    26%   38, 51, 68-72, 76-87, 91-92, 96-121, 130-143, 149-153, 164-173, 179-206, 210-222, 226-230, 236-257, 262-273, 277-286, 290-297, 301-341, 346-350, 354\napp/core/database_manager.py                     137     97    29%   32-38, 43-90, 94-97, 101-123, 132-143, 150-152, 156-158, 163-165, 170-172, 181-184, 188-189, 193-198, 202-207, 211-216, 221-223, 232, 237-245, 251, 256, 260\napp/core/db_optimizations.py                      82     82     0%   6-324\napp/core/exceptions.py                            97     36    63%   12-14, 27-28, 35, 54-55, 62, 69-71, 78-79, 110-111, 130-132, 139-144, 157-158, 177-179, 192-193, 218-221\napp/core/llm_manager.py                          203    156    23%   28-34, 39-56, 60-67, 72-79, 83-90, 94-100, 114-125, 130-167, 171-184, 188-191, 195-215, 221-224, 232-249, 253-254, 267-287, 297-298, 302-305, 312-320, 326-333, 337-347, 353-362, 366-367, 371-372, 380-381, 389, 396\napp/core/logger_manager.py                       276    177    36%   68-71, 100, 110, 139-144, 152-225, 232-235, 248-256, 273-289, 301-313, 321-326, 334-339, 423-428, 473-520, 528-542, 550-578, 587-593, 600-614, 621-693, 704-740, 744-782, 786\napp/core/logging_utils.py                          2      2     0%   5-7\napp/core/performance_utils.py                    220    220     0%   5-421\napp/core/service_container.py                      3      3     0%   6-11\napp/core/service_interface.py                    139     83    40%   36-39, 59-76, 81, 87-102, 107, 113-140, 147, 152, 157, 165, 177-180, 184-185, 189-190, 195-203, 207-209, 213-214, 218-221, 230, 234-249, 253-255, 259\napp/core/streaming_handler.py                    138    138     0%   6-288\napp/core/tool_executor.py                        222    163    27%   59-61, 66-68, 75-81, 85-101, 105-115, 119-134, 148-152, 156-165, 174-179, 184-188, 192, 196-228, 232, 236-239, 243, 265-318, 328-336, 340-374, 388-393, 400-410, 416-424, 430-436, 440\napp/core/tool_registry.py                        155     84    46%   42-47, 64-72, 85-105, 156, 182-191, 206, 210-213, 219-222, 226-248, 252-261, 265-269, 291, 299, 310-318, 325\napp/database.py                                    0      0   100%\napp/dependencies.py                                7      2    71%   10-11\napp/embedding_models/__init__.py                   3      0   100%\napp/embedding_models/embedding_factory.py         36     19    47%   28-33, 42-47, 55-60, 64, 68, 72, 76-79\napp/embedding_models/embedding_interface.py      113     79    30%   22, 27, 35, 40, 47-50, 54-59, 69-77, 81-82, 86-91, 95, 102-105, 109-111, 119-132, 136-137, 141, 145, 152-156, 160-175, 183-210, 214-215, 219-222, 226\napp/embedding_models/pipeline_schemas.py         145    145     0%   6-217\napp/main.py                                      275    275     0%   6-643\napp/models.py                                    191      3    98%   13, 249, 285\napp/orchestrator.py                                0      0   100%\napp/paralegal_agents/__init__.py                   2      2     0%   3-5\napp/paralegal_agents/refactored_agent_sdk.py     147    147     0%   7-466\napp/repositories/case_repository.py               54     35    35%   16, 20-21, 24-30, 33-37, 40-44, 47-53, 56-57, 60-64, 67-75, 79\napp/repositories/user_repository.py               38     22    42%   14, 17-18, 21-23, 26-28, 31-39, 47-54, 58\napp/routes/__init__.py                             3      3     0%   5-8\napp/routes/auth.py                               215    215     0%   6-646\napp/routes/case_management_routes.py              47     47     0%   5-125\napp/routes/monitoring_routes.py                  174    174     0%   5-444\napp/services/__init__.py                          17      8    53%   15-49\napp/services/case_management_service.py          110     75    32%   21-23, 26-27, 30, 33, 38, 41, 44, 47, 63-70, 146-149, 152-156, 160-163, 166, 171-191, 213-230, 256-313, 326\napp/services/document_generation_service.py      143    131     8%   19-403\napp/services/fallback_parser.py                  215    215     0%   6-448\napp/services/openai_client.py                    110    110     0%   5-340\napp/services/optimized_statute_search.py         109    109     0%   5-263\napp/services/statute_search_service.py           188    176     6%   20-429\napp/services/supreme_court_service.py            174    174     0%   5-427\napp/task_processors.py                           188    188     0%   1-355\napp/validator.py                                  22     22     0%   1-195\napp/validators/__init__.py                         0      0   100%\napp/validators/document_validator.py             170    166     2%   20-390\napp/worker/celery_app.py                          13      1    92%   50\napp/worker/config.py                              41      2    95%   200-230\napp/worker/logging_config.py                     113     43    62%   28-32, 79, 89, 134-140, 144-161, 195, 263-281, 299-311, 323-334, 346-357\napp/worker/service_registry.py                   175    163     7%   25-325\n----------------------------------------------------------------------------\nTOTAL                                           5603   4488    20%\nCoverage HTML written to dir htmlcov\n\nFAIL Required test coverage of 80% not reached. Total coverage: 19.90%\n- Generated html report: file:///workspace/reports/20250826-060031/test_celery_refactor/test_celery_refactor.html -\n=========================== short test summary info ============================\nERROR tests\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n=============================== 1 error in 2.86s ===============================\n",
+        "stderr": "",
+        "junit_xml": "/workspace/reports/20250826-060031/test_celery_refactor/test_celery_refactor.xml",
+        "html_report": "/workspace/reports/20250826-060031/test_celery_refactor/test_celery_refactor.html",
+        "json_report": "/workspace/reports/20250826-060031/test_celery_refactor/test_celery_refactor.json"
+      },
+      {
+        "test_file": "/workspace/test_openai_implementation.py",
+        "exit_code": 2,
+        "duration_seconds": 3.401132106781006,
+        "stdout": "============================= test session starts ==============================\nplatform linux -- Python 3.11.13, pytest-8.4.0, pluggy-1.6.0\nrootdir: /workspace/tests\nconfigfile: pytest.ini\nplugins: anyio-4.10.0, metadata-3.1.1, hypothesis-6.92.1, mock-3.12.0, Faker-20.1.0, cov-5.0.0, asyncio-1.0.0, json-report-1.5.0, timeout-2.2.0, html-4.1.1\nasyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ntimeout: 30.0s\ntimeout method: signal\ntimeout func_only: False\ncollected 0 items / 1 error\n\n==================================== ERRORS ====================================\n________________________ ERROR collecting test session _________________________\nImportError while importing test module '/workspace/test_openai_implementation.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\ntest_openai_implementation.py:29: in <module>\n    from app.services.openai_client import OpenAIService\napp/services/__init__.py:14: in <module>\n    from .document_generation_service import DocumentGenerationService\napp/services/document_generation_service.py:18: in <module>\n    from .statute_search_service import StatuteSearchServiceDep\napp/services/statute_search_service.py:19: in <module>\n    from ..validators.document_validator import DocumentValidator\napp/validators/document_validator.py:10: in <module>\n    from app.models.pipeline_schemas import (\nE   ModuleNotFoundError: No module named 'app.models.pipeline_schemas'; 'app.models' is not a package\n------------------------------- Captured stdout --------------------------------\n2025-08-26 06:00:39,838 - [\u2205] [trace=0 span=] user_id=<anon> - Registered tool 'describe_case' in category case_management (tool_registry.decorator:176)\n2025-08-26 06:00:39,838 - [\u2205] [trace=0 span=] user_id=<anon> - Registered tool 'schedule_reminder' in category case_management (tool_registry.decorator:176)\n2025-08-26 06:00:39,838 - [\u2205] [trace=0 span=] user_id=<anon> - Registered tool 'compute_deadline' in category case_management (tool_registry.decorator:176)\n- generated xml file: /workspace/reports/20250826-060031/test_openai_implementation/test_openai_implementation.xml -\n--------------------------------- JSON report ----------------------------------\nreport saved to: /workspace/reports/20250826-060031/test_openai_implementation/test_openai_implementation.json\n\n---------- coverage: platform linux, python 3.11.13-final-0 ----------\nName                                           Stmts   Miss  Cover   Missing\n----------------------------------------------------------------------------\napp/__init__.py                                    0      0   100%\napp/auth.py                                       67     67     0%   1-135\napp/core/__init__.py                               7      0   100%\napp/core/ai_client_factory.py                     62     62     0%   5-204\napp/core/celery_service_wrapper.py               199    199     0%   6-495\napp/core/config_service.py                       177     61    66%   48, 67-69, 74-76, 92-94, 111-113, 131-133, 177-179, 183-186, 199-201, 205-210, 214, 218, 223-229, 234-243, 246, 253-254, 258-259, 263, 267, 271, 275-277, 289-291\napp/core/conversation_manager.py                 179    133    26%   38, 51, 68-72, 76-87, 91-92, 96-121, 130-143, 149-153, 164-173, 179-206, 210-222, 226-230, 236-257, 262-273, 277-286, 290-297, 301-341, 346-350, 354\napp/core/database_manager.py                     137     97    29%   32-38, 43-90, 94-97, 101-123, 132-143, 150-152, 156-158, 163-165, 170-172, 181-184, 188-189, 193-198, 202-207, 211-216, 221-223, 232, 237-245, 251, 256, 260\napp/core/db_optimizations.py                      82     82     0%   6-324\napp/core/exceptions.py                            97     36    63%   12-14, 27-28, 35, 54-55, 62, 69-71, 78-79, 110-111, 130-132, 139-144, 157-158, 177-179, 192-193, 218-221\napp/core/llm_manager.py                          203    156    23%   28-34, 39-56, 60-67, 72-79, 83-90, 94-100, 114-125, 130-167, 171-184, 188-191, 195-215, 221-224, 232-249, 253-254, 267-287, 297-298, 302-305, 312-320, 326-333, 337-347, 353-362, 366-367, 371-372, 380-381, 389, 396\napp/core/logger_manager.py                       276    177    36%   68-71, 100, 110, 139-144, 152-225, 232-235, 248-256, 273-289, 301-313, 321-326, 334-339, 423-428, 473-520, 528-542, 550-578, 587-593, 600-614, 621-693, 704-740, 744-782, 786\napp/core/logging_utils.py                          2      2     0%   5-7\napp/core/performance_utils.py                    220    220     0%   5-421\napp/core/service_container.py                      3      3     0%   6-11\napp/core/service_interface.py                    139     87    37%   36-39, 49-52, 59-76, 81, 87-102, 107, 113-140, 147, 152, 157, 165, 177-180, 184-185, 189-190, 195-203, 207-209, 213-214, 218-221, 230, 234-249, 253-255, 259\napp/core/streaming_handler.py                    138    138     0%   6-288\napp/core/tool_executor.py                        222    163    27%   59-61, 66-68, 75-81, 85-101, 105-115, 119-134, 148-152, 156-165, 174-179, 184-188, 192, 196-228, 232, 236-239, 243, 265-318, 328-336, 340-374, 388-393, 400-410, 416-424, 430-436, 440\napp/core/tool_registry.py                        155     84    46%   42-47, 64-72, 85-105, 156, 182-191, 206, 210-213, 219-222, 226-248, 252-261, 265-269, 291, 299, 310-318, 325\napp/database.py                                    0      0   100%\napp/dependencies.py                                7      2    71%   10-11\napp/embedding_models/__init__.py                   3      0   100%\napp/embedding_models/embedding_factory.py         36     19    47%   28-33, 42-47, 55-60, 64, 68, 72, 76-79\napp/embedding_models/embedding_interface.py      113     79    30%   22, 27, 35, 40, 47-50, 54-59, 69-77, 81-82, 86-91, 95, 102-105, 109-111, 119-132, 136-137, 141, 145, 152-156, 160-175, 183-210, 214-215, 219-222, 226\napp/embedding_models/pipeline_schemas.py         145    145     0%   6-217\napp/main.py                                      275    275     0%   6-643\napp/models.py                                    191      3    98%   13, 249, 285\napp/orchestrator.py                                0      0   100%\napp/paralegal_agents/__init__.py                   2      2     0%   3-5\napp/paralegal_agents/refactored_agent_sdk.py     147    147     0%   7-466\napp/repositories/case_repository.py               54     35    35%   16, 20-21, 24-30, 33-37, 40-44, 47-53, 56-57, 60-64, 67-75, 79\napp/routes/__init__.py                             3      3     0%   5-8\napp/routes/auth.py                               215    215     0%   6-646\napp/routes/case_management_routes.py              47     47     0%   5-125\napp/routes/monitoring_routes.py                  174    174     0%   5-444\napp/services/__init__.py                          17      8    53%   15-49\napp/services/case_management_service.py          110     75    32%   21-23, 26-27, 30, 33, 38, 41, 44, 47, 63-70, 146-149, 152-156, 160-163, 166, 171-191, 213-230, 256-313, 326\napp/services/document_generation_service.py      143    131     8%   19-403\napp/services/fallback_parser.py                  215    215     0%   6-448\napp/services/openai_client.py                    110    110     0%   5-340\napp/services/optimized_statute_search.py         109    109     0%   5-263\napp/services/statute_search_service.py           188    176     6%   20-429\napp/services/supreme_court_service.py            174    174     0%   5-427\napp/task_processors.py                           188    188     0%   1-355\napp/validator.py                                  22     22     0%   1-195\napp/validators/__init__.py                         0      0   100%\napp/validators/document_validator.py             170    166     2%   20-390\n----------------------------------------------------------------------------\nTOTAL                                           5223   4287    18%\nCoverage HTML written to dir htmlcov\n\nFAIL Required test coverage of 80% not reached. Total coverage: 17.92%\n- Generated html report: file:///workspace/reports/20250826-060031/test_openai_implementation/test_openai_implementation.html -\n=========================== short test summary info ============================\nERROR tests\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n=============================== 1 error in 2.69s ===============================\n",
+        "stderr": "",
+        "junit_xml": "/workspace/reports/20250826-060031/test_openai_implementation/test_openai_implementation.xml",
+        "html_report": "/workspace/reports/20250826-060031/test_openai_implementation/test_openai_implementation.html",
+        "json_report": "/workspace/reports/20250826-060031/test_openai_implementation/test_openai_implementation.json"
+      }
+    ]
+  }
+}
+[2025-08-26T06:00:41Z] Cycle complete. pytest=2 periodic=1
+

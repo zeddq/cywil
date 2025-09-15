@@ -1,16 +1,27 @@
 """
-Celery tasks for orchestrating the complete ingestion pipeline.
+Celery tasks for orchestrating the complete ingestion pipeline with validation.
 """
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, List
 
 from celery import chain, chord, group
 
 from app.core.logger_manager import get_logger
 from app.worker.celery_app import celery_app
+from app.embedding_models.pipeline_schemas import (
+    RawDocument, 
+    ProcessedChunk, 
+    EmbeddedChunk, 
+    ValidationResult,
+    BatchProcessingResult,
+    PipelineMetrics,
+    DocumentType
+)
+from app.validators.document_validator import DocumentValidator
+from app.services.fallback_parser import FallbackParser
 
 from .ruling_tasks import process_ruling_batch
-from .statute_tasks import generate_statute_embeddings, ingest_all_statutes
+from .statute_tasks import ingest_all_statutes
 
 logger = get_logger(__name__)
 
@@ -62,11 +73,11 @@ def run_full_pipeline(
         # This would need the JSONL output path from ruling processing
         # For now, we'll run the parallel tasks
         result = chord(parallel_tasks)(aggregate_pipeline_results.s())
-        return {"status": "started", "task_id": str(result.id) if hasattr(result, 'id') else "unknown"}
+        return {"status": "started", "task_id": str(result.id) if result is not None and hasattr(result, 'id') else "unknown"}
     else:
         # Just run statute pipeline
         result = statute_chain.apply_async()
-        return {"status": "started", "task_id": str(result.id) if hasattr(result, 'id') else "unknown"}
+        return {"status": "started", "task_id": str(result.id) if result is not None and hasattr(result, 'id') else "unknown"}
 
 
 @celery_app.task(name="ingestion_pipeline.aggregate_pipeline_results")
@@ -134,7 +145,7 @@ def run_statute_pipeline(force_update: bool = False) -> Dict[str, Any]:
     )
 
     result = pipeline.apply_async()
-    return {"status": "started", "task_id": str(result.id) if hasattr(result, 'id') else "unknown"}
+    return {"status": "started", "task_id": str(result.id) if result is not None and hasattr(result, 'id') else "unknown"}
 
 
 @celery_app.task(name="ingestion_pipeline.run_ruling_pipeline")
@@ -164,10 +175,10 @@ def run_ruling_pipeline(
     if len(tasks) > 1:
         pipeline = chain(*tasks)
         result = pipeline.apply_async()
-        return {"status": "started", "task_id": str(result.id) if hasattr(result, 'id') else "unknown"}
+        return {"status": "started", "task_id": str(result.id) if result is not None and hasattr(result, 'id') else "unknown"}
     else:
         result = tasks[0].apply_async()
-        return {"status": "started", "task_id": str(result.id) if hasattr(result, 'id') else "unknown"}
+        return {"status": "started", "task_id": str(result.id) if result is not None and hasattr(result, 'id') else "unknown"}
 
 
 @celery_app.task(name="ingestion_pipeline.get_pipeline_status")

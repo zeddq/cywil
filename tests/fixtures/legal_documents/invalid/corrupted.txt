@@ -1,0 +1,19 @@
+Sygn. akt ��� INVALID CASE NUMBER
+
+WYROK ���
+
+Sąd ��� w składzie:
+��� przewodniczący
+��� sędziowie ���
+
+Document with many unicode replacement characters indicating 
+corruption or encoding issues during PDF parsing.
+
+Art. ��� k.c. - invalid article reference
+Kwota ��� zł - corrupted amount
+
+��������������������������������������������������
+This line contains only replacement characters
+��������������������������������������������������
+
+Missing required sections and corrupted legal references.

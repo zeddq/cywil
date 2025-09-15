@@ -17,7 +17,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from ingest.pdf2chunks import process_statute_pdf
 from ingest.embed import process_and_embed_statutes, create_hybrid_search_index
-from app.core.config_service import get_config
+from app.core.config_service import get_config, ConfigService
 from app.models import StatuteChunk
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -30,7 +30,7 @@ config = get_config()
 class StatuteIngestionPipeline:
     """Orchestrates the complete statute ingestion process"""
     
-    def __init__(self, config: Optional[Dict] = None):
+    def __init__(self, config: Optional[ConfigService] = None):
         """
         Initialize pipeline with configuration
         
@@ -38,8 +38,7 @@ class StatuteIngestionPipeline:
             config: Optional configuration override
         """
         if config is None:
-
-            raise ValueError("Config is required")
+            config = get_config()
 
 
         self.config = {
@@ -56,12 +55,6 @@ class StatuteIngestionPipeline:
         Path(self.config["pdfs_dir"]).mkdir(parents=True, exist_ok=True)
         
         # Database setup
-
-        
-        if config is None:
-
-        
-            raise ValueError("Config is required for database setup")
         self.engine = create_engine(config.postgres.sync_url)
         self.Session = sessionmaker(bind=self.engine)
     
@@ -142,7 +135,7 @@ class StatuteIngestionPipeline:
                     paragraph=metadata.get("paragraph"),
                     text=chunk["text"],
                     embedding_id=chunk["chunk_id"],
-                    metadata=metadata
+                    statute_metadata=metadata
                 )
                 
                 session.add(db_chunk)

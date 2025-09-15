@@ -1,117 +1,112 @@
-digraph "AI_Paralegal_POC_Module_Architecture" {
+digraph AI_Paralegal_Architecture {
+    // Graph settings
     rankdir=TB;
-    node [shape=box, style="rounded,filled", fontname="Arial", fontcolor="black"];
-    edge [fontname="Arial", fontcolor="black"];
+    node [shape=box, style="rounded,filled", fontname="Arial"];
+    edge [fontname="Arial"];
     
-    // Define subgraphs for better organization
-    subgraph cluster_app {
-        label="app - Main Application";
-        style="rounded,dashed";
-        bgcolor="#e8f4f8";
+    // Color scheme
+    node [fillcolor="#e8f4fd"];
+    
+    // Subgraphs for layers
+    subgraph cluster_api {
+        label="API Layer";
+        style=filled;
+        fillcolor="#f0f8ff";
         
-        // Core modules
-        "app.core" [fillcolor="#b3d9ff", label="core\n(config, database, logging,\nllm, tools, services)"];
-        
-        // Service layer
-        "app.services" [fillcolor="#99ccff", label="services\n(case_management,\ndocument_generation,\nstatute_search,\nsupreme_court)"];
-        
-        // API layer
-        "app.routes" [fillcolor="#80bfff", label="routes\n(auth, case_management,\nmonitoring)"];
-        
-        // Data layer
-        "app.repositories" [fillcolor="#99ccff", label="repositories\n(case, user)"];
-        
-        // Agent layer
-        "app.paralegal_agents" [fillcolor="#80bfff", label="paralegal_agents\n(agent_sdk,\ntool_wrappers)"];
-        
-        // Worker layer
-        "app.worker" [fillcolor="#66b3ff", label="worker\n(celery_app, tasks,\nservice_registry)"];
-        
-        // Base modules
-        "app.models" [fillcolor="#cce6ff", label="models"];
-        "app.auth" [fillcolor="#cce6ff", label="auth"];
-        "app.main" [fillcolor="#80bfff", fontcolor="black", label="main\n(FastAPI app)"];
+        "FastAPI Main" [fillcolor="#4a90e2"];
+        "Auth Routes" [fillcolor="#87ceeb"];
+        "Case Routes" [fillcolor="#87ceeb"];
+        "Monitoring Routes" [fillcolor="#87ceeb"];
     }
     
-    subgraph cluster_ingest {
-        label="ingest - Data Ingestion";
-        style="rounded,dashed";
-        bgcolor="#fff0e6";
+    subgraph cluster_agents {
+        label="Agent Layer";
+        style=filled;
+        fillcolor="#f5f5dc";
         
-        "ingest" [fillcolor="#ffcc99", label="ingest\n(pdf2chunks, embed,\npreprocess, pipeline)"];
+        "Paralegal Agent SDK" [fillcolor="#daa520"];
     }
     
-    subgraph cluster_tests {
-        label="tests";
-        style="rounded,dashed";
-        bgcolor="#f0f0f0";
+    subgraph cluster_services {
+        label="Service Layer";
+        style=filled;
+        fillcolor="#e6ffe6";
         
-        "tests" [fillcolor="#d9d9d9", label="tests\n(unit, integration,\ncelery)"];
+        "Case Management" [fillcolor="#90ee90"];
+        "Document Generation" [fillcolor="#90ee90"];
+        "Statute Search" [fillcolor="#90ee90"];
+        "Supreme Court" [fillcolor="#90ee90"];
+        "OpenAI Client" [fillcolor="#90ee90"];
     }
     
-    subgraph cluster_infra {
-        label="Infrastructure & Tools";
-        style="rounded,dashed";
-        bgcolor="#e6ffe6";
+    subgraph cluster_core {
+        label="Core Infrastructure";
+        style=filled;
+        fillcolor="#ffe6e6";
         
-        "deployment" [fillcolor="#99ff99", label="deployment\n(docker, k8s,\nansible, terraform)"];
-        "scripts" [fillcolor="#b3ffb3", label="scripts\n(utilities)"];
-        "ui" [fillcolor="#80ff80", label="ui\n(frontend)"];
+        "Config Service" [fillcolor="#ffb6c1"];
+        "Database Manager" [fillcolor="#ffb6c1"];
+        "LLM Manager" [fillcolor="#ffb6c1"];
+        "Tool Registry" [fillcolor="#ffb6c1"];
+        "Logger Manager" [fillcolor="#ffb6c1"];
     }
     
-    // External dependencies
-    "PostgreSQL" [shape=cylinder, fillcolor="#ffffe6"];
-    "Redis" [shape=cylinder, fillcolor="#ffe6e6"];
-    "External APIs" [shape=ellipse, fillcolor="#f0e6ff"];
+    subgraph cluster_worker {
+        label="Celery Worker Layer";
+        style=filled;
+        fillcolor="#fff0e6";
+        
+        "Celery App" [fillcolor="#ffa500"];
+        "Service Registry" [fillcolor="#ffa500"];
+        "Task Monitoring" [fillcolor="#ffa500"];
+        "Worker Tasks" [fillcolor="#ffcc99"];
+    }
     
-    // Define dependencies
-    // Core dependencies
-    "app.main" -> "app.core";
-    "app.main" -> "app.routes";
-    "app.main" -> "app.paralegal_agents";
-    "app.main" -> "app.services";
-    "app.main" -> "app.auth";
-    "app.main" -> "app.models";
+    subgraph cluster_data {
+        label="Data Layer";
+        style=filled;
+        fillcolor="#e6e6fa";
+        
+        "PostgreSQL" [shape=cylinder, fillcolor="#9370db"];
+        "Redis" [shape=cylinder, fillcolor="#9370db"];
+        "Qdrant" [shape=cylinder, fillcolor="#9370db"];
+    }
     
-    // Service dependencies
-    "app.services" -> "app.core";
-    "app.services" -> "app.models";
-    "app.services" -> "app.repositories";
+    // Connections
+    "FastAPI Main" -> "Auth Routes";
+    "FastAPI Main" -> "Case Routes";
+    "FastAPI Main" -> "Monitoring Routes";
+    "FastAPI Main" -> "Paralegal Agent SDK";
     
-    // Routes dependencies
-    "app.routes" -> "app.core";
-    "app.routes" -> "app.auth";
-    "app.routes" -> "app.models";
-    "app.routes" -> "app.services";
+    "Auth Routes" -> "Database Manager";
+    "Case Routes" -> "Case Management";
+    "Monitoring Routes" -> "Celery App";
     
-    // Repository dependencies
-    "app.repositories" -> "app.models";
-    "app.repositories" -> "app.core";
+    "Paralegal Agent SDK" -> "Tool Registry";
+    "Paralegal Agent SDK" -> "Case Management";
+    "Paralegal Agent SDK" -> "Document Generation";
     
-    // Agent dependencies
-    "app.paralegal_agents" -> "app.core";
-    "app.paralegal_agents" -> "app.services";
+    "Case Management" -> "Database Manager";
+    "Document Generation" -> "Statute Search";
+    "Document Generation" -> "Supreme Court";
+    "Document Generation" -> "OpenAI Client";
     
-    // Worker dependencies
-    "app.worker" -> "app.core";
-    "app.worker" -> "app.models";
-    "app.worker" -> "ingest" [style=dashed, color="orange"];
+    "Statute Search" -> "LLM Manager";
+    "Statute Search" -> "Qdrant";
+    "Supreme Court" -> "Database Manager";
+    "Supreme Court" -> "Qdrant";
     
-    // Ingest dependencies
-    "ingest" -> "app.core";
-    "ingest" -> "app.models";
+    "Database Manager" -> "PostgreSQL";
+    "Config Service" -> "Redis";
+    "LLM Manager" -> "OpenAI Client";
     
-    // Test dependencies
-    "tests" -> "app.core" [style=dotted, color="gray"];
-    "tests" -> "app.models" [style=dotted, color="gray"];
-    "tests" -> "app.services" [style=dotted, color="gray"];
-    "tests" -> "app.paralegal_agents" [style=dotted, color="gray"];
+    "Celery App" -> "Service Registry";
+    "Celery App" -> "Redis";
+    "Service Registry" -> "Config Service";
+    "Service Registry" -> "Database Manager";
+    "Service Registry" -> "LLM Manager";
     
-    // External dependencies
-    "app.core" -> "PostgreSQL";
-    "app.core" -> "Redis";
-    "app.core" -> "External APIs";
-    
-    // UI dependencies
-    "ui" -> "app.main" [label="HTTP/API", style=dashed, color="blue"];
+    "Worker Tasks" -> "Service Registry";
+    "Worker Tasks" -> "Task Monitoring";
+    "Task Monitoring" -> "Redis";
 }

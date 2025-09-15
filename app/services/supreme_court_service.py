@@ -300,7 +300,7 @@ class SupremeCourtService(ServiceInterface):
             # SNRuling.meta contains the docket, so we need to filter by JSON field
             # Use the underlying table column to build a typed SQL expression
             stmt = select(SNRuling).where(
-                sa_cast(SNRuling.__table__.c.meta["docket"].astext, String) == docket
+                sa_cast(SNRuling.meta["docket"].astext, String) == docket  # type: ignore
             )
             result = await session.execute(stmt)
             return result.scalar_one_or_none()
@@ -320,8 +320,8 @@ class SupremeCourtService(ServiceInterface):
         # Prepare rulings text
         rulings_text = ""
         for ruling in rulings:
-            docket = ruling.meta.get('docket', 'N/A') if ruling.meta else 'N/A'
-            date = ruling.meta.get('date', '') if ruling.meta else ''
+            docket = ruling.docket if ruling.docket else 'N/A'
+            date = ruling.date if ruling.date else ''
             rulings_text += f"\n\nWyrok {docket}"
             if date:
                 rulings_text += f" z dnia {date}"

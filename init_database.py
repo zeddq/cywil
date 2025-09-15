@@ -13,6 +13,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 
 from sqlmodel import SQLModel
+from sqlalchemy import text
 from app.core.database_manager import DatabaseManager
 from app.core.config_service import ConfigService
 from app.models import (
@@ -47,11 +48,11 @@ async def create_tables():
         # List created tables
         async with db_manager.async_engine.connect() as conn:
             result = await conn.execute(
-                """
+                text("""
                 SELECT tablename FROM pg_tables 
                 WHERE schemaname = 'public' 
                 ORDER BY tablename;
-                """
+                """)
             )
             tables = result.fetchall()
             
@@ -75,11 +76,11 @@ async def check_existing_tables():
         
         async with db_manager.async_engine.connect() as conn:
             result = await conn.execute(
-                """
+                text("""
                 SELECT tablename FROM pg_tables 
                 WHERE schemaname = 'public' 
                 ORDER BY tablename;
-                """
+                """)
             )
             tables = result.fetchall()
             

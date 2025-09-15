@@ -229,12 +229,12 @@ def find_similar_cases(self, case_description: str, limit: int = 5) -> Dict[str,
             for ruling in similar_rulings:
                 patterns.append(
                     {
-                        "case_id": ruling.get("id"),
-                        "signature": ruling.get("signature"),
-                        "summary": ruling.get("summary", ""),
-                        "relevance_score": ruling.get("score", 0.0),
-                        "date": ruling.get("date"),
-                        "court": ruling.get("court"),
+                        "case_id": getattr(ruling, "id", None),
+                        "signature": getattr(ruling, "signature", ruling.docket),
+                        "summary": getattr(ruling, "summary", ""),
+                        "relevance_score": ruling.score,
+                        "date": ruling.date,
+                        "court": getattr(ruling, "court", ""),
                     }
                 )
 

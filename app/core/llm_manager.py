@@ -2,79 +2,127 @@
 Centralized LLM and embedding management with caching and retry logic.
 """
 
+import asyncio
 import hashlib
+from pathlib import Path
 from typing import Annotated, Any, Dict, List, Optional
 
 import numpy as np
 from fastapi import Depends, Request
 from openai import AsyncOpenAI
-from sentence_transformers import SentenceTransformer
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 from ..core.logger_manager import get_logger
+from ..embedding_models import EmbeddingModel, embedding_factory
 from .config_service import ConfigService
 from .logger_manager import service_operation_logger
 from .service_interface import HealthCheckResult, ServiceInterface, ServiceStatus
 
 logger = get_logger(__name__)
 
-
-class EmbeddingCache:
-    """Simple in-memory cache for embeddings"""
-
-    def __init__(self, max_size: int = 1000):
-        self._cache: Dict[str, List[float]] = {}
-        self._max_size = max_size
-        self._access_order: List[str] = []
-
-    def get(self, text: str) -> Optional[List[float]]:
-        """Get embedding from cache"""
-        key = self._hash_text(text)
-        if key in self._cache:
+# Simple two-tier cache without external dependencies
+class TwoTierCache:
+    """Two-tier caching system with memory (LRU) and basic disk persistence."""
+    
+    def __init__(self, memory_size: int = 1000, cache_dir: Optional[Path] = None):
+        self._memory_cache: Dict[str, Any] = {}
+        self._memory_access_order: List[str] = []
+        self._memory_max_size = memory_size
+        
+        # Basic disk cache directory (without external dependency)
+        self._cache_dir = cache_dir or Path(".embedding_cache")
+        self._cache_dir.mkdir(exist_ok=True)
+    
+    def get(self, key: str) -> Optional[np.ndarray]:
+        """Get from cache, checking memory first, then basic disk cache."""
+        # Check memory cache
+        if key in self._memory_cache:
             # Move to end (most recently used)
-            self._access_order.remove(key)
-            self._access_order.append(key)
-            return self._cache[key]
+            self._memory_access_order.remove(key)
+            self._memory_access_order.append(key)
+            return self._memory_cache[key]
+        
+        # Check simple disk cache
+        try:
+            cache_file = self._cache_dir / f"{key}.npy"
+            if cache_file.exists():
+                embedding = np.load(cache_file)
+                # Promote to memory cache
+                self._put_memory(key, embedding)
+                return embedding
+        except Exception as e:
+            logger.warning(f"Disk cache read error: {e}")
+        
         return None
-
-    def put(self, text: str, embedding: List[float]):
-        """Store embedding in cache"""
-        key = self._hash_text(text)
-
+    
+    def put(self, key: str, embedding: np.ndarray) -> None:
+        """Store in both memory and basic disk cache."""
+        self._put_memory(key, embedding)
+        
+        # Store in basic disk cache
+        try:
+            cache_file = self._cache_dir / f"{key}.npy"
+            np.save(cache_file, embedding)
+        except Exception as e:
+            logger.warning(f"Disk cache write error: {e}")
+    
+    def _put_memory(self, key: str, embedding: np.ndarray) -> None:
+        """Store in memory cache with LRU eviction."""
         # Evict oldest if at capacity
-        if len(self._cache) >= self._max_size and key not in self._cache:
-            oldest = self._access_order.pop(0)
-            del self._cache[oldest]
-
-        self._cache[key] = embedding
-        if key in self._access_order:
-            self._access_order.remove(key)
-        self._access_order.append(key)
-
-    @staticmethod
-    def _hash_text(text: str) -> str:
-        """Create hash key for text"""
-        return hashlib.md5(text.encode()).hexdigest()
-
-    def clear(self):
-        """Clear the cache"""
-        self._cache.clear()
-        self._access_order.clear()
+        if len(self._memory_cache) >= self._memory_max_size and key not in self._memory_cache:
+            oldest = self._memory_access_order.pop(0)
+            del self._memory_cache[oldest]
+        
+        self._memory_cache[key] = embedding
+        if key in self._memory_access_order:
+            self._memory_access_order.remove(key)
+        self._memory_access_order.append(key)
+    
+    def clear(self) -> None:
+        """Clear both caches."""
+        self._memory_cache.clear()
+        self._memory_access_order.clear()
+        # Clear disk cache files
+        try:
+            for cache_file in self._cache_dir.glob("*.npy"):
+                cache_file.unlink()
+        except Exception as e:
+            logger.warning(f"Error clearing disk cache: {e}")
+    
+    def get_stats(self) -> Dict[str, Any]:
+        """Get cache statistics."""
+        disk_files = 0
+        try:
+            disk_files = len(list(self._cache_dir.glob("*.npy")))
+        except:
+            pass
+        
+        return {
+            "memory_size": len(self._memory_cache),
+            "memory_max_size": self._memory_max_size,
+            "disk_size": disk_files,
+        }
 
 
 class LLMManager(ServiceInterface):
     """
     Centralized manager for LLM and embedding operations.
-    Provides caching, retry logic, and model management.
+    Provides caching, retry logic, and model management with async patterns.
     """
 
     def __init__(self, config_service: ConfigService):
         super().__init__("LLMManager")
         self._config = config_service.config
-        self._llm_clients: Dict[str, Dict[str, Any]] = {}  # Store model configs instead of clients
+        self._llm_clients: Dict[str, Dict[str, Any]] = {}
         self._openai_client: Optional[AsyncOpenAI] = None
-        self._embedders: Dict[str, SentenceTransformer] = {}
-        self._embedding_cache = EmbeddingCache(max_size=5000)
+        
+        # Centralized embedding management
+        self._embedding_models: Dict[str, EmbeddingModel] = {}
+        self._embedding_cache = TwoTierCache(memory_size=5000)
+        
+        # Concurrency control
+        self._embedding_semaphore = asyncio.Semaphore(10)
+        self._model_locks: Dict[str, asyncio.Lock] = {}
 
     async def _initialize_impl(self) -> None:
         """Initialize LLM clients and embedding models"""
@@ -88,32 +136,66 @@ class LLMManager(ServiceInterface):
 
         # Store model configurations
         self._llm_clients["orchestrator"] = {"model": self._config.openai.orchestrator_model}
-
         self._llm_clients["summary"] = {"model": self._config.openai.summary_model}
-
         self._llm_clients["default"] = {"model": self._config.openai.llm_model}
 
-        # Initialize embedding models
+        # Initialize embedding models using factory (single instances)
         logger.info("Loading embedding models")
-        self._embedders["multilingual"] = SentenceTransformer(
-            "paraphrase-multilingual-mpnet-base-v2"
+        
+        # Multilingual model for general use
+        self._embedding_models["multilingual"] = embedding_factory.create_local_embedder(
+            "paraphrase-multilingual-mpnet-base-v2",
+            cache_key="multilingual"
         )
-        self._embedders["legal"] = SentenceTransformer("Stern5497/sbert-legal-xlm-roberta-base")
+        
+        # Legal-specific model
+        self._embedding_models["legal"] = embedding_factory.create_local_embedder(
+            "Stern5497/sbert-legal-xlm-roberta-base",
+            cache_key="legal"
+        )
+        
+        # OpenAI embedder option
+        self._embedding_models["openai"] = embedding_factory.create_openai_embedder(
+            api_key,
+            "text-embedding-3-small",
+            cache_key="openai"
+        )
 
-        logger.info("LLM Manager initialized with models")
+        # Warm up models
+        await self._warmup_models()
+        
+        logger.info("LLM Manager initialized with centralized embedding models")
+
+    async def _warmup_models(self) -> None:
+        """Warm up embedding models by running test inferences."""
+        logger.info("Warming up embedding models...")
+        warmup_tasks = []
+        
+        for name, model in self._embedding_models.items():
+            async def warmup_model(model_name: str, embedding_model: EmbeddingModel):
+                try:
+                    await embedding_model.warmup()
+                    logger.info(f"Warmed up {model_name} embedding model")
+                except Exception as e:
+                    logger.warning(f"Failed to warm up {model_name}: {e}")
+            
+            warmup_tasks.append(warmup_model(name, model))
+        
+        await asyncio.gather(*warmup_tasks, return_exceptions=True)
 
     async def _shutdown_impl(self) -> None:
         """Cleanup resources"""
         self._embedding_cache.clear()
         self._llm_clients.clear()
-        self._embedders.clear()
+        self._embedding_models.clear()
+        self._model_locks.clear()
 
     async def _health_check_impl(self) -> HealthCheckResult:
         """Check service health"""
         try:
             # Test embedding generation
-            test_embedding = self.get_embedding("test", "multilingual")
-            logger.info(f"Test embedding: {test_embedding}")
+            test_embedding = await self.get_embeddings(["test"], "multilingual", use_cache=False)
+            logger.info(f"Test embedding shape: {test_embedding.shape}")
 
             # Test LLM availability
             test_prompt = "Respond with 'OK'"
@@ -125,8 +207,8 @@ class LLMManager(ServiceInterface):
                 message="LLM Manager is healthy",
                 details={
                     "llm_models": list(self._llm_clients.keys()),
-                    "embedding_models": list(self._embedders.keys()),
-                    "cache_size": len(self._embedding_cache._cache),
+                    "embedding_models": list(self._embedding_models.keys()),
+                    "cache_stats": self._embedding_cache.get_stats(),
                 },
             )
         except Exception as e:
@@ -166,82 +248,89 @@ class LLMManager(ServiceInterface):
 
         return response.choices[0].message.content
 
+    def _get_cache_key(self, texts: List[str], model_name: str) -> str:
+        """Generate cache key for text batch."""
+        text_hash = hashlib.sha256('||'.join(texts).encode()).hexdigest()
+        return f"{model_name}_{text_hash}"
+
     @service_operation_logger("LLMManager")
+    async def get_embeddings(
+        self,
+        texts: List[str],
+        model_name: str = "multilingual",
+        use_cache: bool = True,
+        batch_size: int = 32
+    ) -> np.ndarray:
+        """
+        Main entry point for all embedding requests with centralized caching.
+        """
+        async with self._embedding_semaphore:  # Limit concurrent requests
+            # Check cache first
+            if use_cache:
+                cache_key = self._get_cache_key(texts, model_name)
+                cached = self._embedding_cache.get(cache_key)
+                if cached is not None:
+                    logger.debug(f"Returning cached embeddings for {len(texts)} texts")
+                    return cached
+
+            # Get model
+            model = self._get_embedding_model(model_name)
+            
+            # Generate embeddings
+            logger.debug(f"Generating embeddings for {len(texts)} texts with {model_name}")
+            embeddings = await model.create_embeddings(texts, batch_size)
+            
+            # Cache results
+            if use_cache:
+                self._embedding_cache.put(cache_key, embeddings)
+            
+            return embeddings
+
+    @service_operation_logger("LLMManager")
+    async def get_embedding_single(
+        self,
+        text: str,
+        model_name: str = "multilingual",
+        use_cache: bool = True
+    ) -> np.ndarray:
+        """Get embedding for single text."""
+        result = await self.get_embeddings([text], model_name, use_cache)
+        return result[0]
+
+    def _get_embedding_model(self, model_name: str) -> EmbeddingModel:
+        """Get embedding model by name with fallback."""
+        if model_name not in self._embedding_models:
+            logger.warning(f"Unknown embedding model '{model_name}', using multilingual")
+            model_name = "multilingual"
+        return self._embedding_models[model_name]
+
+    # Backward compatibility methods
     def get_embedding(
         self, text: str, model_type: str = "multilingual", use_cache: bool = True
     ) -> List[float]:
-        """Get text embedding with caching"""
-        # Check cache first
-        if use_cache:
-            cached = self._embedding_cache.get(text)
-            if cached is not None:
-                logger.debug("Returning cached embedding")
-                return cached
+        """Get text embedding with caching (backward compatibility)"""
+        import asyncio
+        
+        try:
+            embedding = asyncio.run(self.get_embedding_single(text, model_type, use_cache))
+        except RuntimeError:
+            # Already in event loop
+            raise RuntimeError("Use await get_embedding_single() from async context")
+        
+        return embedding.tolist()
 
-        # Generate embedding
-        if model_type not in self._embedders:
-            logger.warning(f"Unknown embedder type '{model_type}', using multilingual")
-            model_type = "multilingual"
-
-        embedder = self._embedders[model_type]
-        embedding = embedder.encode(text).tolist()
-
-        # Cache the result
-        if use_cache:
-            self._embedding_cache.put(text, embedding)
-
-        return embedding
-
-    @service_operation_logger("LLMManager")
     def get_embeddings_batch(
         self, texts: List[str], model_type: str = "multilingual", use_cache: bool = True
     ) -> List[List[float]]:
-        """Get embeddings for multiple texts efficiently"""
-        embeddings = []
-        texts_to_encode = []
-        cache_indices = []
-
-        # Check cache for each text
-        for i, text in enumerate(texts):
-            if use_cache:
-                cached = self._embedding_cache.get(text)
-                if cached is not None:
-                    embeddings.append(cached)
-                else:
-                    texts_to_encode.append(text)
-                    cache_indices.append(i)
-            else:
-                texts_to_encode.append(text)
-
-        # Batch encode uncached texts
-        if texts_to_encode:
-            embedder = self._embedders.get(model_type, self._embedders["multilingual"])
-            new_embeddings = embedder.encode(texts_to_encode).tolist()
-
-            # Cache new embeddings
-            if use_cache:
-                for text, embedding in zip(texts_to_encode, new_embeddings):
-                    self._embedding_cache.put(text, embedding)
-
-            # Merge with cached embeddings in correct order
-            if use_cache and cache_indices:
-                result: List[List[float]] = [[] for _ in range(len(texts))]
-                cached_idx = 0
-                new_idx = 0
-
-                for i in range(len(texts)):
-                    if i in cache_indices:
-                        result[i] = new_embeddings[new_idx]
-                        new_idx += 1
-                    else:
-                        result[i] = embeddings[cached_idx]
-                        cached_idx += 1
-
-                return result
-            else:
-                return new_embeddings
-
-        return embeddings
+        """Get embeddings for multiple texts efficiently (backward compatibility)"""
+        import asyncio
+        
+        try:
+            embeddings = asyncio.run(self.get_embeddings(texts, model_type, use_cache))
+        except RuntimeError:
+            raise RuntimeError("Use await get_embeddings() from async context")
+        
+        return embeddings.tolist()
 
     def compute_similarity(self, embedding1: List[float], embedding2: List[float]) -> float:
         """Compute cosine similarity between two embeddings"""
@@ -279,11 +368,28 @@ class LLMManager(ServiceInterface):
 
     def get_cache_stats(self) -> Dict[str, Any]:
         """Get cache statistics"""
+        base_stats = self._embedding_cache.get_stats()
         return {
-            "size": len(self._embedding_cache._cache),
-            "max_size": self._embedding_cache._max_size,
-            "hit_rate": "Not tracked",  # Could be enhanced to track hits/misses
+            **base_stats,
+            "models_loaded": list(self._embedding_models.keys()),
+            "factory_models": embedding_factory.list_models(),
         }
+
+    def get_embedding_model_info(self, model_name: str) -> Dict[str, Any]:
+        """Get information about specific embedding model."""
+        model = self._get_embedding_model(model_name)
+        return {
+            "name": model_name,
+            "type": type(model).__name__,
+            "dimension": model.get_dimension(),
+        }
+
+    def list_embedding_models(self) -> List[Dict[str, Any]]:
+        """List all available embedding models."""
+        return [
+            self.get_embedding_model_info(name) 
+            for name in self._embedding_models.keys()
+        ]
 
 
 def get_llm_manager(request: Request) -> LLMManager:

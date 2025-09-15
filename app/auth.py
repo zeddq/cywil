@@ -10,7 +10,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from .core.config_service import get_config
 from .core.logger_manager import get_logger, set_user_id
-from .dependencies import get_db
+from .core.database_manager import get_database_manager
 from .models import User
 
 logger = get_logger(__name__)
@@ -35,13 +35,17 @@ def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
-def create_access_token(data: Dict[str, Any], expires_delta: Optional[timedelta] = None) -> str:
+def create_access_token(
+    data: Dict[str, Any], expires_delta: Optional[timedelta] = None
+) -> str:
     """Create a JWT access token."""
     to_encode = data.copy()
     if expires_delta:
         expire = datetime.now(UTC) + expires_delta
     else:
-        expire = datetime.now(UTC) + timedelta(minutes=config.security.access_token_expire_minutes)
+        expire = datetime.now(UTC) + timedelta(
+            minutes=config.security.access_token_expire_minutes
+        )
 
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(
@@ -58,7 +62,9 @@ def create_session_token() -> str:
 
 
 async def get_current_user(
-    request: Request, token: str = Depends(oauth2_scheme), session: AsyncSession = Depends(get_db)
+    request: Request,
+    token: str = Depends(oauth2_scheme),
+    session: AsyncSession = Depends(get_database_manager),
 ) -> User:
     """Get the current authenticated user from JWT token."""
     credentials_exception = HTTPException(
@@ -88,19 +94,25 @@ async def get_current_user(
     set_user_id(request, str(user.id))
 
     if not user.is_active:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Inactive user")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Inactive user"
+        )
 
     return user
 
 
-async def get_current_active_user(current_user: User = Depends(get_current_user)) -> User:
+async def get_current_active_user(
+    current_user: User = Depends(get_current_user),
+) -> User:
     """Get current active user."""
     if not current_user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
 
 
-def check_user_permissions(required_roles: Optional[list[str]] = None, allow_own_resource: bool = False):
+def check_user_permissions(
+    required_roles: Optional[list[str]] = None, allow_own_resource: bool = False
+):
     """Dependency to check user permissions."""
 
     async def permission_checker(
@@ -108,7 +120,11 @@ def check_user_permissions(required_roles: Optional[list[str]] = None, allow_own
         resource_owner_id: Optional[str] = None,
     ) -> User:
         # If allowing own resource access and user owns the resource
-        if allow_own_resource and resource_owner_id and str(current_user.id) == resource_owner_id:
+        if (
+            allow_own_resource
+            and resource_owner_id
+            and str(current_user.id) == resource_owner_id
+        ):
             return current_user
 
         # Check role-based permissions

@@ -1,3 +1,4 @@
+from ast import keyword
 import hashlib
 import json
 import logging
@@ -9,15 +10,19 @@ import numpy as np
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance,
-    FieldCondition,
-    Filter,
-    KeywordIndexParams,
-    MatchValue,
-    OptimizersConfigDiff,
-    PointStruct,
-    TextIndexParams,
     VectorParams,
+    PointStruct,
+    Filter,
+    TextIndexType,
+    KeywordIndexParams,
+    KeywordIndexType,
+    MatchValue,
+    CreateCollection,
+    OptimizersConfigDiff,
+    KeywordIndexParams,
+    TextIndexParams,
 )
+from qdrant_client.http.models import models as qmodels
 from sentence_transformers import SentenceTransformer
 
 logging.basicConfig(level=logging.INFO)
@@ -72,19 +77,19 @@ class PolishLegalEmbedder:
             self.client.create_payload_index(
                 collection_name=collection_name,
                 field_name="code",
-                field_schema=KeywordIndexParams(),
+                field_schema=KeywordIndexParams(type=KeywordIndexType.KEYWORD   ),
             )
 
             self.client.create_payload_index(
                 collection_name=collection_name,
                 field_name="article",
-                field_schema=KeywordIndexParams(),
+                field_schema=KeywordIndexParams(type=KeywordIndexType.KEYWORD),
             )
 
             self.client.create_payload_index(
                 collection_name=collection_name,
                 field_name="status",
-                field_schema=KeywordIndexParams(),
+                field_schema=KeywordIndexParams(type=KeywordIndexType.KEYWORD),
             )
 
             logger.info(f"Created collection '{collection_name}' with indexes")
@@ -305,7 +310,7 @@ def create_hybrid_search_index(
     # Create text search index
     try:
         client.create_payload_index(
-            collection_name=collection_name, field_name="text", field_schema=TextIndexParams()
+            collection_name=collection_name, field_name="text", field_schema=TextIndexParams(type=TextIndexType.TEXT)
         )
         logger.info("Created text search index")
     except Exception as e:
@@ -317,7 +322,7 @@ def create_hybrid_search_index(
             client.create_payload_index(
                 collection_name=collection_name,
                 field_name=field,
-                field_schema=KeywordIndexParams(),
+                field_schema=KeywordIndexParams(type=KeywordIndexType.KEYWORD),
             )
             logger.info(f"Created index for field: {field}")
         except Exception as e:
@@ -356,7 +361,7 @@ def search_statutes(
     search_filter = None
     if code_filter:
         search_filter = Filter(
-            must=[FieldCondition(key="code", match=MatchValue(value=code_filter))]
+            must=[qmodels.FieldCondition(key="code", match=MatchValue(value=code_filter))]
         )
 
     # Search

@@ -1,0 +1,50 @@
+Pyright reportOptionalCall Issues Fixed - 2025-08-26
+
+Original Issues (from pyright_reports/reportOptionalCall.txt):
+==========================================================
+Total violations: 2
+
+File: /Volumes/code/cywil/ai-paralegal-poc/app/embedding_models/embedding_interface.py
+- Line 189:26 [error]: Object of type "None" cannot be called  
+- Line 196:27 [error]: Object of type "None" cannot be called
+
+Root Cause Analysis:
+==================
+The issues occurred in the HuggingFaceEmbedder.create_embeddings method within the nested _encode_batch function. Despite calling _ensure_model_loaded() before defining the function, the type checker could not guarantee that self._tokenizer and self._model were not None within the nested function scope.
+
+Specific problematic lines:
+- Line 189: self._tokenizer(...) - _tokenizer could be None
+- Line 196: self._model(**inputs) - _model could be None  
+
+Solution Applied:
+================
+Added explicit null checks at the beginning of the _encode_batch function:
+
+```python
+def _encode_batch(batch_texts):
+    with torch.no_grad():
+        if self._tokenizer is None or self._model is None:
+            raise RuntimeError("Model or tokenizer not initialized")
+        
+        inputs = self._tokenizer(...)  # Now safe
+        outputs = self._model(**inputs)  # Now safe
+```
+
+This ensures that if somehow the model or tokenizer is None (which should never happen after _ensure_model_loaded()), a clear error is raised rather than attempting to call None.
+
+Verification:
+============
+✓ Ran pyright on the fixed file - no reportOptionalCall issues remain
+✓ The fix addresses the specific problem without changing logic
+✓ Error handling is appropriate and informative
+
+Files Modified:
+==============
+- /Volumes/code/cywil/ai-paralegal-poc/app/embedding_models/embedding_interface.py
+
+Impact:
+=======
+- Fixed 2 reportOptionalCall violations
+- Improved error handling for edge cases
+- No functional changes to the embedding logic
+- Type checker now correctly validates optional call safety

@@ -6,7 +6,10 @@ import asyncio
 from datetime import datetime
 from typing import Any, Dict, Optional
 
-from app.core.logger_manager import get_logger
+from sqlalchemy import or_, select
+from sqlalchemy.orm import selectinload
+
+import get_logger
 from app.models import Case, Document
 from app.worker.celery_app import celery_app
 from app.worker.service_registry import get_worker_services
@@ -25,7 +28,10 @@ def run_async(coro):
 
 
 @celery_app.task(
-    name="worker.tasks.case_tasks.create_case", bind=True, max_retries=3, default_retry_delay=60
+    name="worker.tasks.case_tasks.create_case",
+    bind=True,
+    max_retries=3,
+    default_retry_delay=60,
 )
 def create_case(self, case_data: Dict[str, Any], user_id: str) -> Dict[str, Any]:
     """
@@ -50,7 +56,7 @@ def create_case(self, case_data: Dict[str, Any], user_id: str) -> Dict[str, Any]
 
             # Create case object
             case = Case(**case_data)
-            case.user_id = user_id
+            case.created_by_id = user_id
             case.created_at = datetime.utcnow()
             case.updated_at = datetime.utcnow()
 
@@ -78,8 +84,12 @@ def create_case(self, case_data: Dict[str, Any], user_id: str) -> Dict[str, Any]
     return run_async(_process())
 
 
-@celery_app.task(name="worker.tasks.case_tasks.update_case_status", bind=True, max_retries=3)
-def update_case_status(self, case_id: str, new_status: str, user_id: str) -> Dict[str, Any]:
+@celery_app.task(
+    name="worker.tasks.case_tasks.update_case_status", bind=True, max_retries=3
+)
+def update_case_status(
+    self, case_id: str, new_status: str, user_id: str
+) -> Dict[str, Any]:
     """
     Update the status of a case.
 
@@ -135,7 +145,9 @@ def update_case_status(self, case_id: str, new_status: str, user_id: str) -> Dic
     return run_async(_process())
 
 
-@celery_app.task(name="worker.tasks.case_tasks.add_document_to_case", bind=True, max_retries=3)
+@celery_app.task(
+    name="worker.tasks.case_tasks.add_document_to_case", bind=True, max_retries=3
+)
 def add_document_to_case(
     self, case_id: str, document_data: Dict[str, Any], user_id: str
 ) -> Dict[str, Any]:
@@ -172,7 +184,6 @@ def add_document_to_case(
                 # Create document
                 document = Document(**document_data)
                 document.case_id = case_id
-                document.uploaded_by = user_id
                 document.created_at = datetime.utcnow()
                 document.updated_at = datetime.utcnow()
 
@@ -225,15 +236,19 @@ def search_cases(
             async with db_manager.get_session() as session:
 
                 # Base query
-                stmt = select(Case).where(Case.user_id == user_id)  # type: ignore
+                stmt = select(Case).where(Case.created_by_id == user_id)  # type: ignore
 
                 # Add text search
                 if query:
                     stmt = stmt.where(  # type: ignore
                         or_(  # type: ignore
-                            Case.description.ilike(f"%{query}%") if Case.description else False,
-                            Case.reference_number.ilike(f"%{query}%"),
-                            Case.client_name.ilike(f"%{query}%"),
+                            (
+                                Case.description.ilike(f"%{query}%")  # type: ignore
+                                if Case.description
+                                else False
+                            ),
+                            Case.reference_number.ilike(f"%{query}%"),  # type: ignore
+                            Case.client_name.ilike(f"%{query}%"),  # type: ignore
                         )
                     )
 
@@ -263,7 +278,9 @@ def search_cases(
                             "status": case.status,
                             "case_type": case.case_type,
                             "client_name": case.client_name,
-                            "created_at": case.created_at.isoformat(),
+                            "created_at": (
+                                case.created_at.isoformat() if case.created_at else None
+                            ),
                         }
                         for case in cases
                     ],
@@ -382,14 +399,12 @@ def generate_case_summary(self, case_id: str, user_id: str) -> Dict[str, Any]:
         try:
 
             async with db_manager.get_session() as session:
-                from sqlalchemy import select
-                from sqlalchemy.orm import selectinload
 
                 # Fetch case with related data
                 stmt = (
                     select(Case)
-                    .where(Case.id == case_id, Case.created_by_id == user_id) # type: ignore[reportArgumentType]
-                    .options(selectinload(Case.documents)) # type: ignore[reportArgumentType]
+                    .where(Case.id == case_id, Case.created_by_id == user_id)  # type: ignore[reportArgumentType]
+                    .options(selectinload(Case.documents))  # type: ignore[reportArgumentType]
                 )
 
                 result = await session.execute(stmt)
@@ -412,17 +427,29 @@ def generate_case_summary(self, case_id: str, user_id: str) -> Dict[str, Any]:
                         "opposing_party": case.opposing_party,
                         "court_name": case.court_name,
                         "court_case_number": case.court_case_number,
-                        "created_at": case.created_at.isoformat() if case.created_at else None,
-                        "updated_at": case.updated_at.isoformat() if case.updated_at else None,
-                        "documents_count": len(case.documents) if hasattr(case, "documents") else 0,
+                        "created_at": (
+                            case.created_at.isoformat() if case.created_at else None
+                        ),
+                        "updated_at": (
+                            case.updated_at.isoformat() if case.updated_at else None
+                        ),
+                        "documents_count": (
+                            len(case.documents) if hasattr(case, "documents") else 0
+                        ),
                         "documents": [
                             {
                                 "id": str(doc.id),
                                 "document_type": doc.document_type,
                                 "title": doc.title,
-                                "created_at": doc.created_at.isoformat() if doc.created_at else None,
+                                "created_at": (
+                                    doc.created_at.isoformat()
+                                    if doc.created_at
+                                    else None
+                                ),
                             }
-                            for doc in (case.documents if hasattr(case, "documents") else [])
+                            for doc in (
+                                case.documents if hasattr(case, "documents") else []
+                            )
                         ],
                     },
                 }

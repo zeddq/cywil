@@ -5,7 +5,20 @@ try:
     import pytest
 except ImportError:
     # pytest not available - likely running in non-test environment
-    pytest = None
+    class MockPytest:
+        def fixture(self, *args, **kwargs):
+            def decorator(func):
+                return func
+            return decorator
+        
+        class mark:
+            @staticmethod
+            def skip(*args, **kwargs):
+                def decorator(func):
+                    return func
+                return decorator
+    
+    pytest = MockPytest()
 import asyncio
 from unittest.mock import Mock, patch
 import sys

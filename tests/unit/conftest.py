@@ -2,7 +2,13 @@ try:
     import pytest
 except ImportError:
     # pytest not available - likely running static analysis
-    pytest = None
+    class MockPytest:
+        def fixture(self, *args, **kwargs):
+            def decorator(func):
+                return func
+            return decorator
+    
+    pytest = MockPytest()
 from unittest.mock import Mock, AsyncMock
 from types import SimpleNamespace
 

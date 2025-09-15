@@ -18,7 +18,7 @@ from datetime import datetime, timedelta
 
 # Database imports for audit log retrieval
 from sqlalchemy import select, desc, and_
-from app.database import AsyncSessionLocal, init_db
+from app.core.database_manager import DatabaseManager
 from app.models import Note, Case, FormTemplate
 
 # Set up logging
