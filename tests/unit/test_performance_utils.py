@@ -3,6 +3,7 @@ Comprehensive tests for performance utilities including caching and batching.
 """
 import pytest
 import asyncio
+import numpy as np
 from unittest.mock import Mock, AsyncMock, patch
 from datetime import datetime, timedelta
 from typing import List, Any
@@ -442,8 +443,12 @@ class TestEmbeddingBatcher:
     @pytest.mark.asyncio
     async def test_embedding_generation_single(self):
         """Test single embedding generation"""
+        # Clear cache to ensure clean test environment
+        await embedding_cache.clear()
+        
         mock_embedder = Mock()
-        mock_embedder.aembed_documents = AsyncMock(return_value=[[0.1, 0.2, 0.3]])
+        # Mock the encode method that returns numpy-like arrays
+        mock_embedder.encode = Mock(return_value=np.array([[0.1, 0.2, 0.3]]))
         
         batcher = EmbeddingBatcher(mock_embedder)
         
@@ -454,7 +459,7 @@ class TestEmbeddingBatcher:
             embedding = await batcher.get_embedding("test text")
             
             assert embedding == [0.1, 0.2, 0.3]
-            mock_embedder.aembed_documents.assert_called_once_with(["test text"])
+            mock_embedder.encode.assert_called_once_with(["test text"], batch_size=1)
             
         finally:
             await batcher.stop()
@@ -462,15 +467,18 @@ class TestEmbeddingBatcher:
     @pytest.mark.asyncio
     async def test_embedding_caching(self):
         """Test embedding caching"""
+        # Clear cache to ensure clean test environment
+        await embedding_cache.clear()
+        
         mock_embedder = Mock()
         call_count = 0
         
-        async def mock_embed(texts):
+        def mock_encode(texts, batch_size=None):
             nonlocal call_count
             call_count += 1
-            return [[0.1 * i, 0.2 * i, 0.3 * i] for i in range(len(texts))]
+            return np.array([[0.1 * i, 0.2 * i, 0.3 * i] for i in range(len(texts))])
         
-        mock_embedder.aembed_documents = mock_embed
+        mock_embedder.encode = mock_encode
         
         batcher = EmbeddingBatcher(mock_embedder)
         await batcher.start()
@@ -491,14 +499,17 @@ class TestEmbeddingBatcher:
     @pytest.mark.asyncio
     async def test_embedding_batch_processing(self):
         """Test batch processing of embeddings"""
+        # Clear cache to ensure clean test environment
+        await embedding_cache.clear()
+        
         mock_embedder = Mock()
         processed_batches = []
         
-        async def mock_embed(texts):
+        def mock_encode(texts, batch_size=None):
             processed_batches.append(texts)
-            return [[0.1 * i, 0.2 * i, 0.3 * i] for i in range(len(texts))]
+            return np.array([[0.1 * i, 0.2 * i, 0.3 * i] for i in range(len(texts))])
         
-        mock_embedder.aembed_documents = mock_embed
+        mock_embedder.encode = mock_encode
         
         batcher = EmbeddingBatcher(mock_embedder, batch_size=3)
         await batcher.start()
