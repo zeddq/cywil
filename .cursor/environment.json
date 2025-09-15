@@ -1,8 +1,8 @@
 {
-  "snapshot": "POPULATED_FROM_SETTINGS",
   "agentCanUpdateSnapshot": true,
   "install": "pip install -r requirements.txt",
   "start": "sudo service docker start",
+  "name": "POPULATED_FROM_SETTINGS",
   "terminals": [
     {
       "name": "API Server",
@@ -12,9 +12,5 @@
       "name": "Celery Worker",
       "command": "celery -A app.worker.celery_app worker --loglevel=info"
     }
-  ],
-  "build": {
-    "context": ".",
-    "dockerfile": "Dockerfile"
-  }
+  ]
 }

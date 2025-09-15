@@ -11,3 +11,4 @@ nginx/certificates/
 **/*.jsonl
 .venv*/
 htmlcov/
+.DS_Store

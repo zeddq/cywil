@@ -1,15 +1,11 @@
 {
-    "typeCheckingMode": "basic",
-    "venvPath": ".",
-    "reportAttributeAccessIssue":"information",
-    "executionEnvironments": [
-      {
-        "root": ".",          // everything under tests/*
-        "venv": ".venv-tests"     // resolve imports using .venv-tests
-      },
-      {
-        "root": "app",
-        "venv": ".venv"           // resolve imports using .venv
-      }
-    ]
-  }
+  "typeCheckingMode": "basic",
+  "venvPath": ".venv",
+  "reportAttributeAccessIssue": "information",
+  "executionEnvironments": [
+    {
+      "root": ".",
+      "pythonVersion": "3.11"
+    }
+  ]
+}
