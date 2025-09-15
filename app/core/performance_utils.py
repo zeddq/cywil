@@ -167,15 +167,22 @@ class BatchProcessor:
         self._timer_task: Optional[asyncio.Task] = None
         self._running = False
         self._stop_event = asyncio.Event()
+        self._ready_event = asyncio.Event()
 
     async def start(self):
         """Start the batch processor"""
         self._running = True
         self._stop_event.clear()
+        self._ready_event.set()
+
+    async def wait_until_ready(self):
+        """Wait until the processor is ready to accept items"""
+        await self._ready_event.wait()
 
     async def stop(self):
         """Stop the batch processor and process any remaining items"""
         self._running = False
+        self._ready_event.clear()
         async with self._lock:
             if self._pending_items:
                 await self._process_batch()
