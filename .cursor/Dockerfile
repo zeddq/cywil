@@ -57,6 +57,7 @@ EXPOSE 8000
 
 # Add a startup script
 RUN echo '#!/bin/bash\n\
+cd /workspace && \
 pip install --upgrade pip && \
     pip install -r requirements.txt && \
     # Install additional dependencies that were added during testing

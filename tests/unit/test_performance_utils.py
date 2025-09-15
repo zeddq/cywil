@@ -240,6 +240,7 @@ class TestBatchProcessor:
         
         # Start processor
         process_task = asyncio.create_task(processor.start())
+        await processor.wait_until_ready()
         
         try:
             # Add items to trigger batch
@@ -276,6 +277,7 @@ class TestBatchProcessor:
         
         # Start processor
         process_task = asyncio.create_task(processor.start())
+        await processor.wait_until_ready()
         
         try:
             # Add items (not enough to trigger by size)
@@ -309,6 +311,7 @@ class TestBatchProcessor:
         )
         
         process_task = asyncio.create_task(processor.start())
+        await processor.wait_until_ready()
         
         try:
             # Add items including error trigger
@@ -341,6 +344,7 @@ class TestBatchProcessor:
         )
         
         process_task = asyncio.create_task(processor.start())
+        await processor.wait_until_ready()
         
         # Add items (not enough to trigger)
         futures = []
