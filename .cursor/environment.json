@@ -1,7 +1,9 @@
 {
+  "agentCanUpdateSnapshot": true,
+  "user": "developer",
   "build": {
-    "context": ".",
+    "context": "..",
     "dockerfile": "Dockerfile"
   },
-  "start": "pip install -r requirement-test.txt"
+  "start": "/home/developer/startup.sh"
 }

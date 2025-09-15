@@ -400,7 +400,8 @@ class EmbeddingBatcher:
             return cached_embedding
         
         # Use batch processor for uncached embeddings
-        result = await self._batch_processor.add_item(text)
+        future = await self._batch_processor.add_item(text)
+        result = await future
         return result
 
 

@@ -1,0 +1,43 @@
+[orchestrator] Phase 1 complete for MissingImports
+[orchestrator] Starting Phase 2: Claude AI for MissingImports
+[orchestrator] Phase 2 complete for MissingImports
+[postfix] loading state from: reports/20250830T014824Z/tasks/MissingImports.state
+[postfix] ws=.jj-workspaces/ws-MissingImports-20250830T014824Z base=refactor/ai-sdk-integration-fix bookmark=task/MissingImports-20250830T014824Z
+[postfix] allowlist=/Volumes/code/cywil/ai-paralegal-poc/.jj-workspaces/ws-MissingImports-20250830T014824Z/pyright_reports/reportMissingImports.txt
+[postfix] checking for AI agent changes
+Error: The working copy is stale (not updated since operation c70aa873945b).
+Hint: Run `jj workspace update-stale` to update it.
+See https://jj-vcs.github.io/jj/latest/working-copy/#stale-working-copy for more information.
+[postfix] changes detected, validating against allowlist
+Error: The working copy is stale (not updated since operation c70aa873945b).
+Hint: Run `jj workspace update-stale` to update it.
+See https://jj-vcs.github.io/jj/latest/working-copy/#stale-working-copy for more information.
+[postfix] allowlist validation passed
+[postfix] running scripts/pyright_report_by_rule.py
+Running pyright analysis...
+
+Found 13 different rules with violations
+Creating reports in: /Volumes/code/cywil/ai-paralegal-poc/.jj-workspaces/ws-MissingImports-20250830T014824Z/pyright_reports
+  Created report for: reportMissingImports (150 violations)
+  Created report for: reportMissingModuleSource (13 violations)
+  Created report for: reportGeneralTypeIssues (10 violations)
+  Created report for: reportCallIssue (10 violations)
+  Created report for: reportUndefinedVariable (186 violations)
+  Created report for: reportOptionalMemberAccess (5 violations)
+  Created report for: reportUnusedExpression (159 violations)
+  Created report for: unknown (250 violations)
+  Created report for: reportUnboundVariable (8 violations)
+  Created report for: reportAssignmentType (4 violations)
+  Created report for: reportAttributeAccessIssue (27 violations)
+  Created report for: reportArgumentType (5 violations)
+  Created report for: reportOperatorIssue (1 violations)
+
+Created summary report: pyright_reports/SUMMARY.txt
+Created CSV report: pyright_reports/all_violations.csv
+Saved raw JSON output: pyright_reports/raw_pyright_output.json
+
+All reports generated in: /Volumes/code/cywil/ai-paralegal-poc/.jj-workspaces/ws-MissingImports-20250830T014824Z/pyright_reports
+[postfix] committing changes
+Error: The working copy is stale (not updated since operation c70aa873945b).
+Hint: Run `jj workspace update-stale` to update it.
+See https://jj-vcs.github.io/jj/latest/working-copy/#stale-working-copy for more information.

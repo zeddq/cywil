@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  # Development environment with all tools installed
+  dev-env:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    image: ai-paralegal-dev-env:latest
+    container_name: ai-paralegal-dev
+    volumes:
+      # Mount the entire workspace
+      - .:/workspace
+      # Mount Docker socket to allow Docker-in-Docker
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://paralegal:paralegal@postgres:5432/paralegal
+      - REDIS_URL=redis://redis:6379/0
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - USE_CELERY=false
+      - ENVIRONMENT=development
+    ports:
+      - "8000:8000"  # API port
+    networks:
+      - ai-paralegal-network
+    stdin_open: true
+    tty: true
+    command: /home/developer/startup.sh
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: paralegal-postgres-dev
+    environment:
+      POSTGRES_USER: paralegal
+      POSTGRES_PASSWORD: paralegal
+      POSTGRES_DB: paralegal
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - ai-paralegal-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U paralegal"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: paralegal-redis-dev
+    ports:
+      - "6379:6379"
+    networks:
+      - ai-paralegal-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Qdrant Vector Database
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: paralegal-qdrant-dev
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - ai-paralegal-network
+
+networks:
+  ai-paralegal-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  qdrant_data:

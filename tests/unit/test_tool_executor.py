@@ -18,18 +18,18 @@ from app.core.service_interface import ServiceStatus
 
 
 @pytest.fixture
-def mock_config():
-    """Mock configuration for testing"""
-    config = Mock()
-    return config
+def mock_config_service():
+    """Mock ConfigService for testing"""
+    config_service = Mock()
+    config_service.config = Mock()
+    return config_service
 
 
 @pytest.fixture
-async def tool_executor(mock_config):
+async def tool_executor(mock_config_service):
     """Create ToolExecutor instance"""
-    with patch('app.core.tool_executor.get_config', return_value=mock_config):
-        executor = ToolExecutor()
-        yield executor
+    executor = ToolExecutor(mock_config_service)
+    yield executor
 
 
 @pytest.fixture
