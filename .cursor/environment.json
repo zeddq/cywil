@@ -2,7 +2,7 @@
   "agentCanUpdateSnapshot": true,
   "install": "pip install -r requirements.txt",
   "start": "sudo service docker start",
-  "name": "POPULATED_FROM_SETTINGS",
+  "name": "cywil",
   "terminals": [
     {
       "name": "API Server",
