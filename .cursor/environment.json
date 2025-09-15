@@ -1,5 +1,14 @@
 {
+<<<<<<< HEAD
   "snapshot": "ai-paralegal-basic",
   "agentCanUpdateSnapshot": true,
   "install": "pip install -r requirements.txt"
+=======
+  "agentCanUpdateSnapshot": true,
+  "build": {
+    "context": "../",
+    "dockerfile": ".cursor/Dockerfile.dev"
+  },
+  "start": "pip install -r requirements.txt"
+>>>>>>> a59bff6 (feat: Set up development environment and fix tests)
 }
