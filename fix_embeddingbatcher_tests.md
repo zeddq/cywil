@@ -30,6 +30,10 @@ The EmbeddingBatcher returns Futures that need to be awaited, but the tests are 
 3. Ensure the batch processor inside EmbeddingBatcher starts correctly
 4. Fix the `process_embeddings` function to handle the mock return value properly
 
+**Environment Note**:
+- Docker commands must be run with `sudo` (e.g., `sudo docker ps`, `sudo docker compose up`)
+- The virtual environment is at `.venv` and should be activated before running tests
+
 **Test Command**:
 ```bash
 cd /workspace && source .venv/bin/activate

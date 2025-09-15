@@ -30,6 +30,10 @@ The tests are trying to use `await processor.add_item(i)` immediately after crea
 2. Update the tests to ensure the processor is running before adding items
 3. Consider adding an `await processor.wait_until_ready()` method or similar
 
+**Environment Note**:
+- Docker commands must be run with `sudo` (e.g., `sudo docker ps`, `sudo docker compose up`)
+- The virtual environment is at `.venv` and should be activated before running tests
+
 **Test Command**:
 ```bash
 cd /workspace && source .venv/bin/activate

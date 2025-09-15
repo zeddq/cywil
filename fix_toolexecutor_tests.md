@@ -25,6 +25,10 @@ The test fixtures are trying to patch `app.core.tool_executor.get_config`, but t
 2. Update the test fixture to properly mock the configuration
 3. Ensure all test setups use the correct mocking approach
 
+**Environment Note**:
+- Docker commands must be run with `sudo` (e.g., `sudo docker ps`, `sudo docker compose up`)
+- The virtual environment is at `.venv` and should be activated before running tests
+
 **Test Command**:
 ```bash
 cd /workspace && source .venv/bin/activate

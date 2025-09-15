@@ -28,6 +28,10 @@ The ParalegalAgentSDK constructor has changed to require dependency injection of
 2. Create appropriate mock objects for config_service, conversation_manager, and tool_executor
 3. Ensure the mocks have the necessary methods/attributes that the SDK expects
 
+**Environment Note**:
+- Docker commands must be run with `sudo` (e.g., `sudo docker ps`, `sudo docker compose up`)
+- The virtual environment is at `.venv` and should be activated before running tests
+
 **Test Command**:
 ```bash
 cd /workspace && source .venv/bin/activate

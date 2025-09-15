@@ -38,6 +38,10 @@ def test_tool():
     pass
 ```
 
+**Environment Note**:
+- Docker commands must be run with `sudo` (e.g., `sudo docker ps`, `sudo docker compose up`)
+- The virtual environment is at `.venv` and should be activated before running tests
+
 **Test Command**:
 ```bash
 cd /workspace && source .venv/bin/activate
