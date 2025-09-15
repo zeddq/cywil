@@ -12,5 +12,9 @@
       "name": "Celery Worker",
       "command": "celery -A app.worker.celery_app worker --loglevel=info"
     }
-  ]
+  ],
+  "build": {
+    "context": ".",
+    "dockerfile": "Dockerfile"
+  }
 }
