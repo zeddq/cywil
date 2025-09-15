@@ -1,3 +1,9 @@
 {
-  "agentCanUpdateSnapshot": true
+  "agentCanUpdateSnapshot": true,
+  "user": "developer",
+  "build": {
+    "context": "..",
+    "dockerfile": "Dockerfile"
+  },
+  "start": "/home/developer/startup.sh"
 }
