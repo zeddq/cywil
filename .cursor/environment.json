@@ -1,7 +1,5 @@
 {
-  "build": {
-    "context": ".",
-    "dockerfile": "Dockerfile"
-  },
-  "start": "pip install -r requirement-test.txt"
+  "snapshot": "ai-paralegal-basic",
+  "agentCanUpdateSnapshot": true,
+  "install": "pip install -r requirements.txt"
 }
