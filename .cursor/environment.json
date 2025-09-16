@@ -1,16 +1,20 @@
 {
   "agentCanUpdateSnapshot": true,
-  "install": "pip install -r requirements.txt",
-  "start": "sudo service docker start",
+  "install": "pip install -r requirements.txt && bash .cursor/setup-docker.sh",
+  "start": "export DOCKER_HOST=unix://$HOME/.docker/docker.sock && (docker ps > /dev/null 2>&1 || bash .cursor/setup-docker.sh)",
   "name": "cywil",
   "terminals": [
     {
-      "name": "API Server",
-      "command": "python -m uvicorn app.main:app --reload"
+      "name": "Docker Status",
+      "command": "export DOCKER_HOST=unix://$HOME/.docker/docker.sock && docker ps -a"
     },
     {
-      "name": "Celery Worker",
-      "command": "celery -A app.worker.celery_app worker --loglevel=info"
+      "name": "Docker Compose",
+      "command": "export DOCKER_HOST=unix://$HOME/.docker/docker.sock && cd .cursor && docker-compose up"
+    },
+    {
+      "name": "API Server",
+      "command": "python -m uvicorn app.main:app --reload"
     }
   ]
 }

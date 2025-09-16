@@ -1,0 +1,50 @@
+version: '3.8'
+
+# Docker Compose configuration for Cursor background agents
+# Uses host networking to avoid iptables requirements
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    network_mode: host
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ai_paralegal
+      PGPORT: 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    network_mode: host
+    command: redis-server --port 6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: ..
+    network_mode: host
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/ai_paralegal
+      REDIS_URL: redis://localhost:6379
+      PYTHONUNBUFFERED: 1
+    volumes:
+      - ..:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  postgres_data:
