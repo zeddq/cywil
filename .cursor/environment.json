@@ -1,7 +1,7 @@
 {
   "agentCanUpdateSnapshot": true,
-  "install": "pip install -r requirements.txt && bash .cursor/setup-docker.sh",
-  "start": "export DOCKER_HOST=unix://$HOME/.docker/docker.sock && (docker ps > /dev/null 2>&1 || bash .cursor/setup-docker.sh)",
+  "install": "bash .cursor/setup-env.sh && bash .cursor/setup-docker.sh",
+  "start": "source ~/.venv/bin/activate && export DOCKER_HOST=unix://$HOME/.docker/docker.sock && (docker ps > /dev/null 2>&1 || bash .cursor/setup-docker.sh)",
   "name": "cywil",
   "terminals": [
     {
@@ -14,7 +14,11 @@
     },
     {
       "name": "API Server",
-      "command": "python -m uvicorn app.main:app --reload"
+      "command": "source ~/.venv/bin/activate && python -m uvicorn app.main:app --reload"
+    },
+    {
+      "name": "Celery Worker",
+      "command": "source ~/.venv/bin/activate && celery -A app.worker.celery_app worker --loglevel=info"
     }
   ]
 }
